@@ -2,6 +2,14 @@
 
 ## Функционал
 
+### Установленные плагины:
+
+
+- [laravel-sluggable](https://github.com/spatie/laravel-sluggable) - автоматические slug(uri) к страницам
+- [laravel-query-builder](https://github.com/spatie/laravel-query-builder) - сортировка на основе get запросов для каталога
+- [laravel-medialibrary](https://github.com/spatie/laravel-medialibrary) - Медиа-библиотека
+
+
 ### Сайт
 
 - [ ] Каталог браслетов
