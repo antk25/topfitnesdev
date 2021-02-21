@@ -16,3 +16,31 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::name('user.')->group(function () {
+
+    Route::view('/private', 'private')->middleware('auth')->name('private');
+
+    Route::get('/login', function() {
+        if(Auth::check()){
+            return redirect(route('user.private'));
+        }
+        return view('auth.login');
+    })->name('login');
+
+    Route::post('/login', 'App\Http\Controllers\Auth\LoginController@login');
+
+    Route::get('/logout', function(){
+        Auth::logout();
+        return redirect('/');
+    })->name('logout');
+
+    Route::get('/registration', function() {
+        if(Auth::check()){
+            return redirect(route('user.private'));
+        }
+        return view('auth.registration');
+    })->name('registration');
+
+    Route::post('/registration', 'App\Http\Controllers\Auth\RegisterController@save');
+});
