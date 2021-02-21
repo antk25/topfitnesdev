@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRatingsTable extends Migration
+class CreateBrandsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateRatingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ratings', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->id();
             $table->boolean('published')->default(1);
-            $table->string('slug')->unique();
-            $table->string('title', 200);
+            $table->string('slug');
+            $table->string('title', 200)->nullable();
             $table->string('subtitle', 200)->nullable();
             $table->string('description', 300)->nullable();
-            $table->text('text')->nullable();
+            $table->string('name')->unique();
+            $table->text('about')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateRatingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ratings');
+        Schema::dropIfExists('brands');
     }
 }
