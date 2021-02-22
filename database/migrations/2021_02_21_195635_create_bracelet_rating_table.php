@@ -18,6 +18,8 @@ class CreateBraceletRatingTable extends Migration
             $table->integer('bracelet_id')->unsinged();
             $table->integer('rating_id')->unsinged();
             $table->timestamps();
+
+            $table->index(["bracelet_id", "rating_id"]);
         });
     }
 
