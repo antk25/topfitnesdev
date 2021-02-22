@@ -7,5 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'published',
+        'title',
+        'description',
+        'name',
+        'about'
+    ];
+    // Связь с моделями браслетов
+    public function bracelets() {
+        return $this->hasMany(Bracelet::class);
+    }
+
 }
