@@ -44,3 +44,13 @@ Route::name('user.')->group(function () {
 
     Route::post('/registration', 'App\Http\Controllers\Auth\RegisterController@save');
 });
+
+// шаблоны страниц
+
+Route::get('bracelets', 'App\Http\Controllers\BraceletsController@index')->name('bracelets.index');
+
+Route::get('bracelets/{slug}', 'App\Http\Controllers\BraceletsController@show')->name('bracelets.show');
+
+Route::post('/bracelets/{bracelet}/review', 'App\Http\Controllers\ReviewsController@store');
+
+Route::get('/bracelets/{bracelet}/reviews', 'App\Http\Controllers\ReviewsController@index');

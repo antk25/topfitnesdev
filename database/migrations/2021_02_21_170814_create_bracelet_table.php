@@ -91,6 +91,6 @@ class CreateBraceletTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bracelet');
+        Schema::dropIfExists('bracelets');
     }
 }
