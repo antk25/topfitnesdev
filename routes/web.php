@@ -54,3 +54,11 @@ Route::get('bracelets/{slug}', 'App\Http\Controllers\BraceletsController@show')-
 Route::post('/bracelets/{bracelet}/review', 'App\Http\Controllers\ReviewsController@store');
 
 Route::get('/bracelets/{bracelet}/reviews', 'App\Http\Controllers\ReviewsController@index');
+
+// Админка
+
+Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin'], function () {
+    Route::get('/', 'MainController@index')->name('admin.index');
+    Route::resource('/brands', 'BrandsController');
+    Route::resource('/bracelets', 'BraceletsController');
+});

@@ -16,14 +16,15 @@
     <noscript>
       <link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">
     </noscript>
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.css') }}">
+    <title>CMS Topfitnesbracelet</title>
 </head>
 <body>
     <div class="app-ui js-app-ui">
         <!-- header -->
         <header class="app-ui__header shadow-xs padding-x-md padding-x-0@md">
           <div class="app-ui__logo-wrapper padding-x-sm@md">
-            <a href="#0" class="app-ui__logo">
+            <a href="/" class="app-ui__logo">
               <svg width="104" height="30" viewBox="0 0 104 30" fill="var(--color-contrast-higher)">
                 <title>Go to homepage</title>
                 <circle cx="15" cy="15" r="15" fill="var(--color-contrast-lower)" />
@@ -95,7 +96,7 @@
               <div class="dropdown inline-block js-dropdown">
                 <div class="dropdown__wrapper">
                   <a class="app-ui__user-btn js-dropdown__trigger js-tab-focus" href="#0">
-                    <img src="../../../app/assets/img/author-img-1.jpg" alt="Author picture">
+                    <img src="" alt="Author picture">
                   </a>
       
                   <ul class="dropdown__menu js-dropdown__menu" aria-label="dropdown">
@@ -200,14 +201,14 @@
               </li>
       
               <li class="sidenav__item sidenav__item--expanded">
-                <a href="#0" class="sidenav__link" aria-current="page">
+                <a href="{{ route('brands.index') }}" class="sidenav__link" aria-current="page">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
                       <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
                       <rect y="1" width="16" height="4"></rect>
                     </g>
                   </svg>
-                  <span class="sidenav__text text-sm@md">Products</span>
+                  <span class="sidenav__text text-sm@md">Бренды</span>
                 </a>
       
                 <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
@@ -217,16 +218,37 @@
       
                 <ul class="sidenav__list">
                   <li class="sidenav__item">
-                    <a href="#0" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Add new</span>
+                    <a href="{{ route('brands.create') }}" class="sidenav__link">
+                      <span class="sidenav__text text-sm@md">Добавить новый</span>
                     </a>
                   </li>
+
+                </ul>
+              </li>
+
+              <li class="sidenav__item sidenav__item--expanded">
+                <a href="{{ route('bracelets.index') }}" class="sidenav__link" aria-current="page">
+                  <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
+                      <rect y="1" width="16" height="4"></rect>
+                    </g>
+                  </svg>
+                  <span class="sidenav__text text-sm@md">Браслеты</span>
+                </a>
       
+                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
+                  <svg class="icon" viewBox="0 0 12 12">
+                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
+                </button>
+      
+                <ul class="sidenav__list">
                   <li class="sidenav__item">
-                    <a href="#0" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Categories</span>
+                    <a href="{{ route('bracelets.create') }}" class="sidenav__link">
+                      <span class="sidenav__text text-sm@md">Добавить новый</span>
                     </a>
                   </li>
+
                 </ul>
               </li>
       
@@ -282,16 +304,15 @@
             <button class="btn btn--primary width-100% text-sm@md">Button</button>
           </div>
         </div>
-      
-        <!-- main content -->
-        <main class="app-ui__body padding-md">
-          <div class="text-component">
-            <h1 class="text-lg">Main Content</h1>
-            <p class="text-sm color-contrast-medium">This is the main dashboard content.</p>
-          </div>
-        </main>
-      </div>
 
-    <script src="{{ asset("js/scripts.js") }}"></script>
-</body>
+        <main class="app-ui__body padding-md">
+        @section('content')
+        @show
+        </main>
+        
+      </div>
+@section('scripts')
+<script src="{{ asset("js/admin/scripts.js") }}"></script>
+@show
+  </body>
 </html>

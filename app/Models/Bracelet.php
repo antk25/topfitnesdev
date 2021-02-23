@@ -39,7 +39,12 @@ class Bracelet extends Model
         'sensors',
         'capacity_battery',
         'standby_time',
-        'model'
+        'model',
+        'slug',
+        'brand_id',
+        'name',
+        'compatibility',
+        'assistant_app'
     ];
 
     protected $casts = [
@@ -68,4 +73,22 @@ class Bracelet extends Model
     public function brands() {
         return $this->belongsTo(Brand::class);
     }
+
+    // 3. Функция от админки для получения уже имеющихся атрибутов из БД и отметка соответствующих флажков https://twill.io/docs/#multiselect-with-static-values
+    public function getMaterialAttribute($value)
+    {
+        return collect(json_decode($value))->map(function($item) {
+            return ['id' => $item];
+        })->all();
+    }
+
+    public function setMaterialAttribute($value)
+    {
+    $this->attributes['material'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+    // protected function asJson($value)
+    // {
+    //     return json_encode($value, JSON_UNESCAPED_UNICODE);
+    // }
 }
