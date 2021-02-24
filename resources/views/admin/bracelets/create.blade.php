@@ -18,7 +18,8 @@
 
 @section('content')
 
-<form class="form-template-v3" method="POST" action="{{ route('bracelets.store') }}">
+<div class="container max-width-md">
+  <form class="form-template-v3" method="POST" action="{{ route('bracelets.store') }}">
     @csrf
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
       <div class="text-component margin-bottom-md text-center">
@@ -229,7 +230,6 @@
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
             </div>
           </div>
-    
         <div>
           <div class="grid gap-xxs items-center@md">
             <div class="col-4@md">
@@ -262,6 +262,8 @@
       <button type="submit" class="btn btn--primary">Отправить</button>
     </div>
   </form>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -278,12 +280,5 @@
         mode: 'text/html',
         autoCloseTags: true
       });
-
-      var customSelect = document.getElementsByClassName('js-multi-select');
-  if( customSelect.length > 0 ) {
-    var selectArray = ["силикон","кожа"];
-    for( var i = 0; i < customSelect.length; i++) {
-      (function(i){selectArray.push(new MultiCustomSelect(customSelect[i]));})(i);
-    }
-    </script>    
+    </script>
 @endsection

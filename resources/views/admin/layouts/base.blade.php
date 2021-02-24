@@ -17,6 +17,7 @@
       <link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">
     </noscript>
     <link rel="stylesheet" href="{{ asset('css/admin/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/app.css') }}">
     <title>CMS Topfitnesbracelet</title>
 </head>
 <body>
@@ -312,6 +313,7 @@
         
       </div>
 @section('scripts')
+
 <script src="{{ asset("js/admin/scripts.js") }}"></script>
 @show
   </body>

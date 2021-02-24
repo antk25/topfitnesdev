@@ -17,8 +17,9 @@ class BraceletsController extends Controller
      */
     public function index()
     {
+        
         $bracelets = Bracelet::with('brands')->paginate(20);
-
+        // dd($bracelets);
         return view('admin.bracelets.index', compact('bracelets'));
     }
 
@@ -84,7 +85,13 @@ class BraceletsController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.bracelets.edit');
+        $bracelet = Bracelet::find($id);
+
+        $braceletbrand = Brand::where('id', $bracelet->brand_id)->select('name')->first();
+
+        $brands = Brand::pluck('name', 'id')->all();
+
+        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand'));
     }
 
     /**
@@ -94,16 +101,25 @@ class BraceletsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BraceletRequest $request, $id)
     {
-        $slug = $request->slug;
+        $bracelet = Bracelet::find($id);
 
+        $slug = $request->slug;
         $slug = Str::slug($slug, '-');
 
-        Bracelet::create([
-           
+        $bracelet->update([
+            'name' => request('name'),
+            'slug' => $slug,
+            'title' => request('title'),
+            'description' => request('description'),
+            'brand_id' => request('brand_id'),
+            'year' => request('year'),
+            'country' => request('country'),
+            'compatibility' => request('compatibility'),
+            'assistant_app' => request('assistant_app'),
+            'material' => request('material')
         ]);
-
 
         return redirect()->route('bracelets.index');
     }

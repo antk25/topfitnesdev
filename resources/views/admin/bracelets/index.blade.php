@@ -219,7 +219,11 @@
               <td class="int-table__cell">{{ $bracelet->id }}</td>
               <td class="int-table__cell"><a href="{{ route('bracelets.edit', ['bracelet' => $bracelet->id]) }}">{{ $bracelet->name }}</a></td>
               <td class="int-table__cell">{{ $bracelet->slug }}</td>
-              <td class="int-table__cell max-width-xxxxs">{{ $bracelet->brands }}</td>
+              <td class="int-table__cell max-width-xxxxs">
+                @foreach ($bracelet->material as $material)
+                  {{ $material }}
+                @endforeach
+              </td>
               <td class="int-table__cell">{{ $bracelet->created_at->diffForHumans() }}</td>
               <td class="int-table__cell">
 

@@ -75,12 +75,12 @@ class Bracelet extends Model
     }
 
     // 3. Функция от админки для получения уже имеющихся атрибутов из БД и отметка соответствующих флажков https://twill.io/docs/#multiselect-with-static-values
-    public function getMaterialAttribute($value)
-    {
-        return collect(json_decode($value))->map(function($item) {
-            return ['id' => $item];
-        })->all();
-    }
+    // public function getMaterialAttribute($value)
+    // {
+    //     return collect(json_decode($value))->map(function($item) {
+    //         return ['id' => $item];
+    //     })->all();
+    // }
 
     public function setMaterialAttribute($value)
     {
