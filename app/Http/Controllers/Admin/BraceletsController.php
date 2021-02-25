@@ -43,24 +43,37 @@ class BraceletsController extends Controller
      */
     public function store(BraceletRequest $request)
     {
-
+        
         $slug = $request->slug;
 
         $slug = Str::slug($slug, '-');
 
+        
 
-        Bracelet::create([
-            'name' => request('name'),
-            'slug' => $slug,
-            'title' => request('title'),
-            'description' => request('description'),
-            'brand_id' => request('brand_id'),
-            'year' => request('year'),
-            'country' => request('country'),
-            'compatibility' => request('compatibility'),
-            'assistant_app' => request('assistant_app'),
-            'material' => request('material')
-        ]);
+        $bracelet = Bracelet::create([
+                    'name' => request('name'),
+                    'slug' => $slug,
+                    'title' => request('title'),
+                    'description' => request('description'),
+                    'brand_id' => request('brand_id'),
+                    'year' => request('year'),
+                    'country' => request('country'),
+                    'compatibility' => request('compatibility'),
+                    'assistant_app' => request('assistant_app'),
+                    'material' => request('material')
+                ]);
+
+        $files = request('files');
+
+        
+
+        $lastbracelet = Bracelet::find($bracelet->id);
+
+        foreach ($files as $file) {
+            $lastbracelet->addMedia($file)
+                ->toMediaCollection();
+        }
+
 
 
         return redirect()->route('bracelets.index');

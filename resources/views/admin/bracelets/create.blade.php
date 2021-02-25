@@ -19,7 +19,7 @@
 @section('content')
 
 <div class="container max-width-md">
-  <form class="form-template-v3" method="POST" action="{{ route('bracelets.store') }}">
+  <form class="form-template-v3" method="POST" action="{{ route('bracelets.store') }}"  enctype="multipart/form-data">
     @csrf
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
       <div class="text-component margin-bottom-md text-center">
@@ -257,17 +257,27 @@
           </div>
         </div>
       </fieldset>
+
+      <input type="file" multiple name="files[]">
+
+
+      
+      
+      
   
     <div class="text-right">
       <button type="submit" class="btn btn--primary">Отправить</button>
     </div>
   </form>
+ 
+
 </div>
 
 @endsection
 
 @section('scripts')
 @parent
+
 <script src="{{ asset("js/admin/codemirror.js") }}"></script>
     <script src="{{ asset("js/admin/closetag.js") }}"></script>
     <script src="{{ asset("js/admin/htmlmixed.js") }}"></script>
@@ -280,5 +290,7 @@
         mode: 'text/html',
         autoCloseTags: true
       });
+
+
     </script>
 @endsection

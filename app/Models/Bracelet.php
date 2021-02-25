@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Bracelet extends Model
+class Bracelet extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = [
         'published',
         'title',
@@ -85,6 +90,12 @@ class Bracelet extends Model
     public function setMaterialAttribute($value)
     {
     $this->attributes['material'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+              ->format('webp');
     }
 
     // protected function asJson($value)

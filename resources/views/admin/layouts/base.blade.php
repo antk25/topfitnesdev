@@ -18,6 +18,7 @@
     </noscript>
     <link rel="stylesheet" href="{{ asset('css/admin/codemirror.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/app.css') }}">
+    
     <title>CMS Topfitnesbracelet</title>
 </head>
 <body>
