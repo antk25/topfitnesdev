@@ -19,7 +19,7 @@ class RatingsController extends Controller
     {
 
         $ratings = Rating::paginate(20);
-        // dd($ratings);
+        
         return view('admin.ratings.index', compact('ratings'));
     }
 
@@ -44,7 +44,7 @@ class RatingsController extends Controller
      */
     public function store(RatingRequest $request)
     {
-        
+
         $slug = $request->slug;
 
         $slug = Str::slug($slug, '-');
@@ -62,9 +62,6 @@ class RatingsController extends Controller
         $position = $request->input('position', []);
 
         $text_rating = $request->input('text_rating', []);
-        
-
-        
 
         for ($bracelet=0; $bracelet < count($bracelets); $bracelet++) {
             if ($bracelets[$bracelet] != '') {
@@ -98,8 +95,6 @@ class RatingsController extends Controller
     {
         $rating = Rating::with('bracelets')->find($id);
 
-        // dd($rating->bracelets);
-
         $bracelets = Bracelet::pluck('name', 'id')->all();
 
         return view('admin.ratings.edit', compact('rating', 'bracelets'));
@@ -128,11 +123,7 @@ class RatingsController extends Controller
             return ['position' => $p, 'text_rating' => $r];
         }, $position, $text_rating);
 
-        // dd($extra);
-
         $data = array_combine($bracelets, $extra);
-
-        // dd($data);
 
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
@@ -145,7 +136,7 @@ class RatingsController extends Controller
             'text' => request('text')
         ]);
 
-        
+
 
         $rating->bracelets()->sync($data);
 
