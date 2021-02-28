@@ -85,6 +85,12 @@ class Bracelet extends Model implements HasMedia
         return $this->belongsToMany(Grade::class)->withPivot('position', 'value');
     }
 
+    // Связываем с продавцами
+
+    public function sellers() {
+        return $this->belongsToMany(Seller::class)->withPivot('link', 'price', 'old_price');
+    }
+
     // 3. Функция от админки для получения уже имеющихся атрибутов из БД и отметка соответствующих флажков https://twill.io/docs/#multiselect-with-static-values
     // public function getMaterialAttribute($value)
     // {

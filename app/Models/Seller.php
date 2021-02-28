@@ -20,6 +20,6 @@ class Seller extends Model
 
     // Связь с моделями браслетов
     public function bracelets() {
-        return $this->hasMany(Bracelet::class);
+        return $this->belongsToMany(Bracelet::class)->withPivot('link', 'price', 'old_price');
     }
 }

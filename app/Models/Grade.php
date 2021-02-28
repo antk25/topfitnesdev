@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 {
     protected $fillable = [
-        'grade_name',
-        'grade_about'
+        'name',
+        'about'
     ];
 
     // Связь с моделями браслетов
