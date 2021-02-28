@@ -88,7 +88,7 @@
                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
               </div>
             </td>
-            <td class="table__cell  text-left" role="cell">
+            <td class="table__cell" role="cell">
               <input x-model="field.position" class="form-control" type="number" name="position[]" min="0" max="20" step="1">
             </td>
             <td class="table__cell" role="cell">

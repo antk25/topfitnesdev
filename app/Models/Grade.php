@@ -7,5 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grade extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'grade_name',
+        'grade_about'
+    ];
+
+    // Связь с моделями браслетов
+    public function bracelets() {
+        return $this->hasMany(Bracelet::class);
+    }
 }

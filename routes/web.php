@@ -62,4 +62,5 @@ Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin'],
     Route::resource('/brands', 'BrandsController');
     Route::resource('/bracelets', 'BraceletsController');
     Route::resource('/ratings', 'RatingsController');
+    Route::resource('/grades', 'GradesController');
 });
