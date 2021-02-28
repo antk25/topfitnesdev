@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GradeRequest extends FormRequest
+class SellerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -39,7 +39,7 @@ class GradeRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'Название оценки',
+            'name' => 'Название продавца',
         ];
     }
 }

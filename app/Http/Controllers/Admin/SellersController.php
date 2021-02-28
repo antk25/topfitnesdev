@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Seller;
+use App\Http\Requests\Admin\SellerRequest;
+use Illuminate\Support\Str;
+
 
 class SellersController extends Controller
 {
@@ -14,7 +17,8 @@ class SellersController extends Controller
      */
     public function index()
     {
-        //
+        $sellers = Seller::paginate(20);
+        return view('admin.sellers.index', compact('sellers'));
     }
 
     /**
@@ -24,7 +28,7 @@ class SellersController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.sellers.create');
     }
 
     /**
@@ -33,20 +37,20 @@ class SellersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SellerRequest $request)
     {
-        //
-    }
+        Seller::create([
+            'name' => request('name'),
+            'slug' => request('slug'),
+            'title' => request('title'),
+            'subtitle' => request('subtitle'),
+            'description' => request('description'),
+            'rating' => request('rating'),
+            'about' => request('about')
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect()->route('sellers.index');
+
     }
 
     /**
@@ -57,7 +61,9 @@ class SellersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $seller = Seller::find($id);
+
+        return view('admin.sellers.edit', compact('seller'));
     }
 
     /**
@@ -67,9 +73,22 @@ class SellersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SellerRequest $request, $id)
     {
-        //
+        $seller = Seller::find($id);
+
+        $seller->update([
+            'name' => request('name'),
+            'slug' => request('slug'),
+            'title' => request('title'),
+            'subtitle' => request('subtitle'),
+            'description' => request('description'),
+            'rating' => request('rating'),
+            'about' => request('about')
+        ]);
+
+        return redirect()->route('sellers.index');
+
     }
 
     /**
@@ -80,6 +99,8 @@ class SellersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Seller::destroy($id);
+
+        return redirect()->route('sellers.index');
     }
 }

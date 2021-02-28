@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Bracelet;
 use App\Models\Rating;
 use App\Models\Grade;
+use App\Models\Seller;
 use Illuminate\Support\Str;
 use App\Http\Requests\Admin\BraceletRequest;
 
@@ -38,7 +39,9 @@ class BraceletsController extends Controller
 
         $grades = Grade::pluck('name', 'id')->all();
 
-        return view('admin.bracelets.create', compact('brands', 'ratings', 'grades'));
+        $sellers = Seller::pluck('name', 'id')->all();
+
+        return view('admin.bracelets.create', compact('brands', 'ratings', 'grades', 'sellers'));
     }
 
     /**
@@ -92,6 +95,16 @@ class BraceletsController extends Controller
         $value = $request->input('value', []);
 
 
+
+        $sellers = $request->input('sellers', []);
+
+        $link = $request->input('link', []);
+
+        $price = $request->input('price', []);
+
+        $old_price = $request->input('old_price', []);
+
+
         for ($rating=0; $rating < count($ratings); $rating++) {
             if ($ratings[$rating] != '') {
                 $bracelet->ratings()->attach($ratings[$rating], ['position' => $position[$rating], 'text_rating' => $text_rating[$rating]]);
@@ -101,6 +114,12 @@ class BraceletsController extends Controller
         for ($grade=0; $grade < count($grades); $grade++) {
             if ($grades[$grade] != '') {
                 $bracelet->grades()->attach($grades[$grade], ['position' => $position_grade[$grade], 'value' => $value[$grade]]);
+            }
+        }
+
+        for ($seller=0; $seller < count($sellers); $seller++) {
+            if ($sellers[$seller] != '') {
+                $bracelet->sellers()->attach($sellers[$seller], ['link' => $link[$seller], 'price' => $price[$seller], 'old_price' => $old_price[$seller]]);
             }
         }
 
@@ -137,7 +156,9 @@ class BraceletsController extends Controller
 
         $grades = Grade::pluck('name', 'id')->all();
 
-        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings', 'grades'));
+        $sellers = Seller::pluck('name', 'id')->all();
+
+        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings', 'grades', 'sellers'));
     }
 
     /**
@@ -157,11 +178,21 @@ class BraceletsController extends Controller
 
         $text_rating = $request->text_rating;
 
+
         $grades = $request->grades;
 
         $value = $request->value;
 
         $position_grade = $request->position_grade;
+
+
+        $sellers = $request->sellers;
+
+        $link = $request->link;
+
+        $price = $request->price;
+
+        $old_price = $request->old_price;
 
         if ($ratings != '') {
 
@@ -182,6 +213,16 @@ class BraceletsController extends Controller
             $data2 = array_combine($grades, $extra2);
 
             $bracelet->grades()->sync($data2);
+        }
+
+        if ($sellers != '') {
+            $extra3 = array_map(function($p, $r, $s){
+                return ['link' => $p, 'price' => $r, 'old_price' => $s];
+            }, $link, $price, $old_price);
+
+            $data3 = array_combine($sellers, $extra3);
+
+            $bracelet->sellers()->sync($data3);
         }
 
 
