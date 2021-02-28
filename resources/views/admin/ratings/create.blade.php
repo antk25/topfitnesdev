@@ -105,7 +105,7 @@
           </tfoot>
         </table>
       </div>
-      </div>
+    </div>
 
     <div class="text-right">
       <button type="submit" class="btn btn--primary">Отправить</button>
@@ -133,13 +133,14 @@
         autoCloseTags: true
       });
 
-      function handler() {
+  function handler() {
     return {
       fields: [],
       addNewField() {
           this.fields.push({
               bracelets: '',
-              position: ''
+              position: '',
+              text_rating: ''
            });
         },
         removeField(index) {

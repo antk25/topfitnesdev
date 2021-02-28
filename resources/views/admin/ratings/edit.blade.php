@@ -134,7 +134,7 @@
         autoCloseTags: true
       });
 
-      function handler() {
+  function handler() {
     return {
       fields: [
         @foreach ($rating->bracelets as $item)

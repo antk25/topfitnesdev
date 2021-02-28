@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Bracelet;
+use App\Models\Rating;
 use Illuminate\Support\Str;
 use App\Http\Requests\Admin\BraceletRequest;
 
@@ -32,7 +33,9 @@ class BraceletsController extends Controller
     {   
         $brands = Brand::pluck('name', 'id')->all();
 
-        return view('admin.bracelets.create', compact('brands'));
+        $ratings = Rating::pluck('title', 'id')->all();
+
+        return view('admin.bracelets.create', compact('brands', 'ratings'));
     }
 
     /**
@@ -47,8 +50,6 @@ class BraceletsController extends Controller
         $slug = $request->slug;
 
         $slug = Str::slug($slug, '-');
-
-        
 
         $bracelet = Bracelet::create([
                     'name' => request('name'),
@@ -74,8 +75,17 @@ class BraceletsController extends Controller
         }
         }
 
-        
+        $ratings = $request->input('ratings', []);
 
+        $position = $request->input('position', []);
+
+        $text_rating = $request->input('text_rating', []);
+
+        for ($rating=0; $rating < count($ratings); $rating++) {
+            if ($ratings[$rating] != '') {
+                $bracelet->ratings()->attach($ratings[$rating], ['position' => $position[$rating], 'text_rating' => $text_rating[$rating]]);
+            }
+        }
 
 
         return redirect()->route('bracelets.index');
@@ -106,7 +116,9 @@ class BraceletsController extends Controller
 
         $brands = Brand::pluck('name', 'id')->all();
 
-        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand'));
+        $ratings = Rating::pluck('title', 'id')->all();
+
+        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings'));
     }
 
     /**
@@ -119,6 +131,18 @@ class BraceletsController extends Controller
     public function update(BraceletRequest $request, $id)
     {
         $bracelet = Bracelet::find($id);
+
+        $ratings = $request->ratings;
+
+        $position = $request->position;
+
+        $text_rating = $request->text_rating;
+
+        $extra = array_map(function($p, $r){
+            return ['position' => $p, 'text_rating' => $r];
+        }, $position, $text_rating);
+
+        $data = array_combine($ratings, $extra);
 
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
@@ -135,6 +159,8 @@ class BraceletsController extends Controller
             'assistant_app' => request('assistant_app'),
             'material' => request('material')
         ]);
+
+        $bracelet->ratings()->sync($data);
 
         return redirect()->route('bracelets.index');
     }
