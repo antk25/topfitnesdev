@@ -16,6 +16,7 @@ class CreateBraceletGradeTable extends Migration
         Schema::create('bracelet_grade', function (Blueprint $table) {
             $table->foreignId('bracelet_id')->constrained();
             $table->foreignId('grade_id')->constrained();
+            $table->float('value', 3, 2);
             $table->integer('position')->unsinged()->nullable();
             $table->index(["bracelet_id", "grade_id"]);
         });
