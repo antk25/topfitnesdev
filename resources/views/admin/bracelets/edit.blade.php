@@ -60,7 +60,9 @@
                         <!-- select -->
                         <select name="brand_id" id="brand_id" class="js-select-auto__select">
                             @foreach ($brands as $k => $v)
-                            <option value="{{ $k }}" >{{ $v }}</option>
+                            <option value="{{ $k }}" @if ($braceletbrand->name == $v)
+                              selected
+                            @endif>{{ $v }}</option>
                             @endforeach
     
                         </select>

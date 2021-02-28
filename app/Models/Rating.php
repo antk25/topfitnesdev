@@ -7,5 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rating extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'published',
+        'title',
+        'description',
+        'subtitle',
+        'text',
+        'slug'
+    ];
+
+    public function bracelets() {
+        return $this->belongsToMany(Bracelet::class)->withPivot('position');
+    }
 }

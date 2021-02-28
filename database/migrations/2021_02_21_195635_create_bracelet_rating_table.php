@@ -17,6 +17,7 @@ class CreateBraceletRatingTable extends Migration
             $table->foreignId('bracelet_id')->constrained();
             $table->foreignId('rating_id')->constrained();
             $table->integer('position')->unsinged()->nullable();
+            $table->text('text_rating')->nullable();
             $table->timestamps();
 
             $table->index(["bracelet_id", "rating_id"]);
