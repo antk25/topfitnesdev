@@ -63,7 +63,7 @@ class Bracelet extends Model implements HasMedia
     // Связываем с Рейтингами
 
     public function ratings() {
-        return $this->belongsToMany(Rating::class)->withPivot('position');
+        return $this->belongsToMany(Rating::class)->withPivot('position', 'text_rating');
     }
 
     // Связываем с отзывами

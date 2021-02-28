@@ -44,7 +44,7 @@ class RatingsController extends Controller
      */
     public function store(RatingRequest $request)
     {
-
+        
         $slug = $request->slug;
 
         $slug = Str::slug($slug, '-');
@@ -61,9 +61,14 @@ class RatingsController extends Controller
 
         $position = $request->input('position', []);
 
+        $text_rating = $request->input('text_rating', []);
+        
+
+        
+
         for ($bracelet=0; $bracelet < count($bracelets); $bracelet++) {
             if ($bracelets[$bracelet] != '') {
-                $rating->bracelets()->attach($bracelets[$bracelet], ['position' => $position[$bracelet]]);
+                $rating->bracelets()->attach($bracelets[$bracelet], ['position' => $position[$bracelet], 'text_rating' => $text_rating[$bracelet]]);
             }
         }
 
@@ -113,6 +118,22 @@ class RatingsController extends Controller
     {
         $rating = Rating::find($id);
 
+        $bracelets = $request->bracelets;
+
+        $position = $request->position;
+
+        $text_rating = $request->text_rating;
+
+        $extra = array_map(function($p, $r){
+            return ['position' => $p, 'text_rating' => $r];
+        }, $position, $text_rating);
+
+        // dd($extra);
+
+        $data = array_combine($bracelets, $extra);
+
+        // dd($data);
+
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
 
@@ -124,15 +145,7 @@ class RatingsController extends Controller
             'text' => request('text')
         ]);
 
-        $bracelets = $request->bracelets;
-
-        $position = $request->position;
-
-        $extra = array_map(function($bracelets){
-            return ['position' => $bracelets];
-        }, $position);
-
-        $data = array_combine($bracelets, $extra);
+        
 
         $rating->bracelets()->sync($data);
 

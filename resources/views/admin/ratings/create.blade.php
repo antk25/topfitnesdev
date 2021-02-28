@@ -62,43 +62,48 @@
 
     <div class="row" x-data="handler()">
       <div class="col">
-      <table class="table table-bordered align-items-center table-sm">
-        <thead class="thead-light">
-         <tr>
-            <th>#</th>
-            <th>Браслет</th>
-            <th>Позиция в рейтинге</th>
-            <th>Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template x-for="(field, index) in fields" :key="index">
-           <tr>
-            <td x-text="index + 1"></td>
-            <td>
-              <div class="select" x-model="field.bracelets">
-                <select class="select__input form-control" name="bracelets[]">
-                  @foreach ($bracelets as $k => $v)
-                  <option value="{{ $k }}">{{ $v }}</option>
-                  @endforeach
-                </select>
-                
-                <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-              </div>
-            </td>
-            <td>
-              <input x-model="field.position" class="form-control js-number-input__value " type="number" name="position[]" min="0" max="20" step="1" value="1">
-            </td>
-             <td><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
-          </tr>
-         </template>
-        </tbody>
-        <tfoot>
-           <tr>
-             <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить браслет</button></td>
-          </tr>
-        </tfoot>
-      </table>
+
+        <table class="table table--expanded@xs position-relative z-index-1 width-100% js-table">
+          <thead class="table__header">
+            <tr class="table__row">
+              <th class="table__cell text-left" scope="col">#</th>
+              <th class="table__cell text-left" scope="col">Браслет</th>
+              <th class="table__cell text-right" scope="col">Позиция</th>
+              <th class="table__cell text-right" scope="col">Текст</th>
+              <th class="table__cell text-right" scope="col">Удалить</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <template x-for="(field, index) in fields" :key="index">
+            <tr class="table__row">
+              <td x-text="index + 1"></td>
+              <td class="table__cell" role="cell">
+                <div class="select">
+                  <select class="select__input form-control" name="bracelets[]"  x-model="field.bracelets">
+                    @foreach ($bracelets as $k => $v)
+                      <option value="{{ $k }}">{{ $v }}</option>
+                    @endforeach
+                  </select>
+                  
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+              </td>
+              <td class="table__cell  text-left" role="cell">
+                <input x-model="field.position" class="form-control" type="number" name="position[]" min="0" max="20" step="1">
+              </td>
+              <td class="table__cell" role="cell">
+                <textarea class="form-control width-100%" name="text_rating[]" id="code"></textarea>
+              </td>
+               <td class="table__cell" role="cell"><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
+            </tr>
+           </template>
+          </tbody>
+          <tfoot>
+            <tr class="table__row">
+               <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить браслет</button></td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
       </div>
 
@@ -107,9 +112,6 @@
     </div>
   </form>
 
-
-  
- 
 
 </div>
 

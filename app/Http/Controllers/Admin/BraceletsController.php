@@ -65,14 +65,16 @@ class BraceletsController extends Controller
 
         $files = request('files');
 
-        
-
-        $lastbracelet = Bracelet::find($bracelet->id);
+        if ($files != '') {
+            $lastbracelet = Bracelet::find($bracelet->id);
 
         foreach ($files as $file) {
             $lastbracelet->addMedia($file)
                 ->toMediaCollection();
         }
+        }
+
+        
 
 
 
