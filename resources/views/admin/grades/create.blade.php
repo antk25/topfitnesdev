@@ -13,11 +13,11 @@
       <div class="margin-bottom-xs">
         <div class="grid gap-xxs items-center@md">
           <div class="col-4@md">
-            <label class="form-label" for="grade_name">Название оценки</label>
+            <label class="form-label" for="name">Название оценки</label>
           </div>
           
           <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="grade_name" id="grade_name" required>
+            <input class="form-control width-100%" type="text" name="name" id="name" required>
           </div>
         </div>
       </div>
@@ -25,12 +25,12 @@
       <div>
         <div class="grid gap-xxs items-center@md">
           <div class="col-4@md">
-            <label class="form-label" for="grade_about">Описание</label>
+            <label class="form-label" for="about">Описание</label>
             <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
           </div>
           
           <div class="col-8@md">
-            <textarea class="form-control width-100%" name="grade_about" id="code"></textarea>
+            <textarea class="form-control width-100%" name="about" id="code"></textarea>
           </div>
         </div>
       </div>

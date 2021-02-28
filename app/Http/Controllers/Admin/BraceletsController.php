@@ -36,7 +36,7 @@ class BraceletsController extends Controller
 
         $ratings = Rating::pluck('title', 'id')->all();
 
-        $grades = Grade::pluck('grade_name', 'id')->all();
+        $grades = Grade::pluck('name', 'id')->all();
 
         return view('admin.bracelets.create', compact('brands', 'ratings', 'grades'));
     }
@@ -135,7 +135,7 @@ class BraceletsController extends Controller
 
         $ratings = Rating::pluck('title', 'id')->all();
 
-        $grades = Grade::pluck('grade_name', 'id')->all();
+        $grades = Grade::pluck('name', 'id')->all();
 
         return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings', 'grades'));
     }

@@ -21,6 +21,7 @@ class CreateBraceletRatingTable extends Migration
             $table->timestamps();
 
             $table->index(["bracelet_id", "rating_id"]);
+
         });
     }
 

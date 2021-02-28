@@ -190,8 +190,8 @@
                 </div>
               </th>
               <td class="int-table__cell">{{ $grade->id }}</td>
-              <td class="int-table__cell"><a href="{{ route('grades.edit', ['grade' => $grade->id]) }}">{{ $grade->grade_name }}</a></td>
-              <td class="int-table__cell max-width-xxxxs">{{ $grade->grade_about }}</td>
+              <td class="int-table__cell"><a href="{{ route('grades.edit', ['grade' => $grade->id]) }}">{{ $grade->name }}</a></td>
+              <td class="int-table__cell max-width-xxxxs">{{ $grade->about }}</td>
               <td class="int-table__cell">{{ $grade->created_at->diffForHumans() }}</td>
               <td class="int-table__cell">
 

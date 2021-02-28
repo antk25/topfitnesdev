@@ -7,18 +7,18 @@
     @method('PUT')
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
       <div class="text-component margin-bottom-md text-center">
-        <h2>Изменить оценку {{ $grade->grade_name }}</h2>
+        <h2>Изменить оценку {{ $grade->name }}</h2>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
       </div>
   
       <div class="margin-bottom-xs">
         <div class="grid gap-xxs items-center@md">
           <div class="col-2@md">
-            <label class="form-label" for="grade_name">Название оценки</label>
+            <label class="form-label" for="name">Название оценки</label>
           </div>
           
           <div class="col-10@md">
-            <input class="form-control width-100%" type="text" name="grade_name" id="grade_name" value="{{ $grade->grade_name }}">
+            <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $grade->name }}">
           </div>
         </div>
       </div>
@@ -26,12 +26,12 @@
       <div>
         <div class="grid gap-xxs items-center@md">
           <div class="col-2@md">
-            <label class="form-label" for="grade_about">Описание</label>
+            <label class="form-label" for="about">Описание</label>
             <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
           </div>
           
           <div class="col-10@md">
-            <textarea class="form-control width-100%" name="grade_about" id="code">{{ $grade->grade_about }}</textarea>
+            <textarea class="form-control width-100%" name="about" id="code">{{ $grade->about }}</textarea>
           </div>
         </div>
       </div>

@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Grade;
-use App\Http\Requests\Admin\GradeRequest;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
-
-class GradesController extends Controller
+class SellersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +14,7 @@ class GradesController extends Controller
      */
     public function index()
     {
-        $grades = Grade::paginate(20);
-        return view('admin.grades.index', compact('grades'));
+        //
     }
 
     /**
@@ -28,7 +24,7 @@ class GradesController extends Controller
      */
     public function create()
     {
-        return view('admin.grades.create');
+        //
     }
 
     /**
@@ -37,15 +33,20 @@ class GradesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(GradeRequest $request)
+    public function store(Request $request)
     {
-        Grade::create([
-            'name' => request('name'),
-            'about' => request('about')
-        ]);
+        //
+    }
 
-        return redirect()->route('grades.index');
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -56,9 +57,7 @@ class GradesController extends Controller
      */
     public function edit($id)
     {
-        $grade = Grade::find($id);
-
-        return view('admin.grades.edit', compact('grade'));
+        //
     }
 
     /**
@@ -68,17 +67,9 @@ class GradesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GradeRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $grade = Grade::find($id);
-
-        $grade->update([
-            'name' => request('name'),
-            'about' => request('about')
-        ]);
-
-        return redirect()->route('grades.index');
-
+        //
     }
 
     /**
@@ -89,8 +80,6 @@ class GradesController extends Controller
      */
     public function destroy($id)
     {
-        Grade::destroy($id);
-
-        return redirect()->route('grades.index');
+        //
     }
 }

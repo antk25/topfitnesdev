@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBraceletTable extends Migration
+class CreateBraceletsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,12 @@ class CreateBraceletTable extends Migration
     {
         Schema::create('bracelets', function (Blueprint $table) {
             $table->id();            
-            $table->boolean('published')->default(1);
+            $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->integer('brand_id')->unsinged();
             $table->string('title', 200);
             $table->string('subtitle', 200)->nullable();
             $table->text('description')->nullable();
-            $table->string('name')->unique();
+            $table->integer('brand_id')->unsinged();
             $table->integer('position')->unsigned()->nullable();
             $table->float('rating_bracelet', 4, 2)->unsinged()->nullable();
             $table->json('plus')->nullable();
@@ -80,10 +79,11 @@ class CreateBraceletTable extends Migration
             $table->string('real_time')->nullable();
             $table->integer('full_charge_time')->nullable()->unsinged();
             $table->string('charger')->nullable();
+            $table->boolean('published')->default(1);
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
