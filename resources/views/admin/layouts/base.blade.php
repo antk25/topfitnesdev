@@ -296,6 +296,32 @@
 
                 </ul>
               </li>
+
+              <li class="sidenav__item sidenav__item">
+                <a href="{{ route('reviews.index') }}" class="sidenav__link">
+                  <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
+                      <rect y="1" width="16" height="4"></rect>
+                    </g>
+                  </svg>
+                  <span class="sidenav__text text-sm@md">Отзывы</span>
+                </a>
+      
+                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
+                  <svg class="icon" viewBox="0 0 12 12">
+                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
+                </button>
+      
+                <ul class="sidenav__list">
+                  <li class="sidenav__item">
+                    <a href="{{ route('reviews.create') }}" class="sidenav__link">
+                      <span class="sidenav__text text-sm@md">Добавить отзыв</span>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
             </ul>
       
             <div class="sidenav__divider margin-y-xs" role="presentation"></div>

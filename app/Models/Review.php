@@ -7,5 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'bracelet_id',
+        'name',
+        'email',
+        'period_use',
+        'rating_user',
+        'review_text',
+        'what_like',
+        'what_nolike'
+    ];
+
+    public function bracelets() {
+        return $this->belongsTo(Bracelet::class);
+    }
 }

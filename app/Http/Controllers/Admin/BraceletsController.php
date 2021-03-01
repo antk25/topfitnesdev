@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Bracelet;
 use App\Models\Rating;
+use App\Models\Review;
 use App\Models\Grade;
 use App\Models\Seller;
 use Illuminate\Support\Str;
@@ -146,7 +147,7 @@ class BraceletsController extends Controller
      */
     public function edit($id)
     {
-        $bracelet = Bracelet::find($id);
+        $bracelet = Bracelet::with('reviews')->find($id);
 
         $braceletbrand = Brand::where('id', $bracelet->brand_id)->select('name')->first();
 
@@ -158,7 +159,9 @@ class BraceletsController extends Controller
 
         $sellers = Seller::pluck('name', 'id')->all();
 
-        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings', 'grades', 'sellers'));
+        $reviews = $bracelet->reviews()->paginate(20);
+
+        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings', 'grades', 'sellers', 'reviews'));
     }
 
     /**
