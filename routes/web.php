@@ -65,4 +65,5 @@ Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin'],
     Route::resource('/grades', 'GradesController');
     Route::resource('/sellers', 'SellersController');
     Route::resource('/reviews', 'ReviewsController');
+    Route::resource('/posts', 'PostsController');
 });

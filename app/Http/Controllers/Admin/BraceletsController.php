@@ -76,10 +76,10 @@ class BraceletsController extends Controller
         if ($files != '') {
             $lastbracelet = Bracelet::find($bracelet->id);
 
-        foreach ($files as $file) {
-            $lastbracelet->addMedia($file)
-                ->toMediaCollection();
-        }
+            foreach ($files as $file) {
+                $lastbracelet->addMedia($file)
+                    ->toMediaCollection();
+            }
         }
 
         $ratings = $request->input('ratings', []);
