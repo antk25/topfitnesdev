@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin/codemirror.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/app.css') }}">
     
-    <title>CMS Topfitnesbracelet</title>
+    <title>Управление сайтом Topfitnesbraslet</title>
 </head>
 <body>
     <div class="app-ui js-app-ui">
@@ -88,7 +88,7 @@
                   </ul>
                 </div>
 
-                <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
+                <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> ничего не найдено.</p>
               </div>
 
               <button class="reset modal__close-btn modal__close-btn--outer display@md js-modal__close js-tab-focus">

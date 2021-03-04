@@ -18,7 +18,7 @@
 
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
-        <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $post->slug }}" disabled>
+        <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $post->slug }}">
         <p class="text-xs color-contrast-medium margin-top-xxs">При редактировании статьи отключен</p>
         </div>
       </div>
@@ -141,9 +141,6 @@
             </div>
           </div>
         </form>
-
-
-
         </td>
         <td class="tbl__cell" role="cell">
           <pre class="code-snippet margin-y-sm">
@@ -176,7 +173,8 @@
     <script>
       var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         mode: 'text/html',
-        autoCloseTags: true
+        autoCloseTags: true,
+        lineWrapping: true
       });
 
 
@@ -197,15 +195,6 @@
 
       }
   }
-
-
-
-      // var text = document.getElementById('p1').innerHTML;
-      // text = text.replace("<","&lt;");
-      // text = text.replace(">","&gt;");
-      // text = text.replace("          ","");
-
-      // document.getElementById('p1').innerHTML = text;
 
     </script>
 @endsection

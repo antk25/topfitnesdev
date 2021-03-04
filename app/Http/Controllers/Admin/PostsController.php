@@ -58,11 +58,14 @@ class PostsController extends Controller
 
         $files = request('files');
 
+        $nameimg = request('nameimg');
+        
         if ($files != '') {
             $lastpost = Post::find($post->id);
-
+            $i = 0;
             foreach ($files as $file) {
                 $lastpost->addMedia($file)
+                    ->usingName($nameimg[$i++])
                     ->toMediaCollection('images');
             }
         }
@@ -111,12 +114,19 @@ class PostsController extends Controller
         $files = request('files');
         $nameimg = request('nameimg');
         
-        if ($files != '') {
+        if ($files != '' && $nameimg[0] != '') {
             $lastpost = Post::find($post->id);
             $i = 0;
             foreach ($files as $file) {
                 $lastpost->addMedia($file)
                     ->usingName($nameimg[$i++])
+                    ->toMediaCollection('images');
+            }
+        }
+        elseif ($files != '') {
+            $lastpost = Post::find($post->id);
+            foreach ($files as $file) {
+                $lastpost->addMedia($file)
                     ->toMediaCollection('images');
             }
         }
@@ -140,7 +150,10 @@ class PostsController extends Controller
     public function imgdelete(Request $request) {
         
         $imgid = $request->imgid;
-        Media::where('id', $imgid)->delete();
+
+        $mediaItems = Media::find($imgid);
+
+        $mediaItems->delete();
 
         return back();
     
