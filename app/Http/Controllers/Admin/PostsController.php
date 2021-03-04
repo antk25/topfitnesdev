@@ -6,6 +6,7 @@ use App\Models\Post;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\QueryBuilder;
 
 
 class PostsController extends Controller
@@ -17,7 +18,9 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(20);
+        $posts = QueryBuilder::for(Post::class)
+                ->allowedFilters(['name', 'slug'])
+                ->paginate(20);
 
         return view('admin.posts.index', compact('posts'));
     }

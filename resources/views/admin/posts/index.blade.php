@@ -9,6 +9,19 @@
     <a class="btn btn--success text-sm" href="{{ route('posts.create') }}">Добавить статью</a>
 @if (count($posts))
 <div class="tbl text-sm">
+<form action="" method="GET">
+  <div class="grid gap-xxs margin-top-md">
+    <div class="col-2@md">
+      <div class="search-input search-input--icon-right">
+        <input class="search-input__input form-control" type="search" name="filter[name]" id="search-input" placeholder="Поиск по заголовку..." aria-label="Search">
+        <button class="search-input__btn">
+          <svg class="icon" viewBox="0 0 24 24"><title>Submit</title><g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" stroke="currentColor" fill="none" stroke-miterlimit="10"><line x1="22" y1="22" x2="15.656" y2="15.656"></line><circle cx="10" cy="10" r="8"></circle></g></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
 <table class="tbl__table border-bottom border-2" aria-label="Table Example">
     <thead class="tbl__header border-bottom border-2">
     <tr class="tbl__row">

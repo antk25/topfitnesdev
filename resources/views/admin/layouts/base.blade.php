@@ -53,111 +53,54 @@
       
           <!-- (desktop-only) header menu -->
           <div class="display@md flex flex-grow height-100% items-center justify-between padding-x-sm">
-            <form class="expandable-search text-sm@md js-expandable-search">
-              <label class="sr-only" for="expandable-search">Search</label>
-              <input class="reset expandable-search__input js-expandable-search__input" type="search" name="expandable-search" id="expandable-search" placeholder="Search...">
-              <button class="reset expandable-search__btn">
-                <svg class="icon" viewBox="0 0 20 20">
-                  <title>Search</title>
-                  <g fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
-                    <circle cx="8" cy="8" r="6" />
-                    <line x1="12.243" y1="12.243" x2="18" y2="18" />
-                  </g>
-                </svg>
-              </button>
-            </form>
-      
-            <div class="flex gap-xxxxs">
-              <a class="app-ui__header-btn js-tab-focus" href="#0">
-                <svg class="icon" viewBox="0 0 20 20">
-                  <title>Notifications</title>
-                  <path d="M16,12V7a6,6,0,0,0-6-6h0A6,6,0,0,0,4,7v5L2,16H18Z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" />
-                  <path d="M7.184,18a2.982,2.982,0,0,0,5.632,0Z" />
-                </svg>
-      
-                <span class="app-ui__notification-indicator"><i class="sr-only">You have 6 notifications</i></span>
-              </a>
-      
-              <a class="app-ui__header-btn js-tab-focus" href="#0">
-                <svg class="icon" viewBox="0 0 20 20">
-                  <title>Settings</title>
-                  <g fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                    <line x1="3" y1="10" x2="2" y2="10" />
-                    <line x1="18" y1="10" x2="7" y2="10" />
-                    <line x1="7" y1="12" x2="7" y2="8" />
-                    <line x1="17" y1="4" x2="18" y2="4" />
-                    <line x1="2" y1="4" x2="13" y2="4" />
-                    <line x1="13" y1="2" x2="13" y2="6" />
-                    <line x1="17" y1="16" x2="18" y2="16" />
-                    <line x1="2" y1="16" x2="13" y2="16" />
-                    <line x1="13" y1="14" x2="13" y2="18" />
-                  </g>
-                </svg>
-              </a>
-      
-              <div class="dropdown inline-block js-dropdown">
-                <div class="dropdown__wrapper">
-                  <a class="app-ui__user-btn js-dropdown__trigger js-tab-focus" href="#0">
-                    <img src="" alt="Author picture">
-                  </a>
-      
-                  <ul class="dropdown__menu js-dropdown__menu" aria-label="dropdown">
-                    <li>
-                      <a class="dropdown__item" href="#0">Item One</a>
+            <button class="btn btn--primary" aria-controls="modal-explorer">Быстрый доступ</button>
+
+            <div class="modal modal--animate-fade bg-contrast-higher bg-opacity-90% padding-x-md padding-y-lg js-modal" id="modal-explorer" data-modal-first-focus=".js-autocomplete__input">
+              <div class="modal__content explorer width-100% max-width-xs max-height-100% overflow-auto margin-x-auto flex flex-column bg radius-md shadow-md js-explorer" data-autocomplete-dropdown-visible-class="explorer--results-visible" data-autocomplete-searching-class="explorer--searching" id="explorer-link-variation">
+                <div class="explorer__input-wrapper flex-shrink-0">
+                  <input class="reset explorer__input width-100% js-autocomplete__input" type="text" name="autocomplete-input" id="autocomplete-input" placeholder="Type Project..." autocomplete="off">
+
+                  <div class="explorer__loader position-absolute top-0 right-0 padding-right-sm height-100% flex items-center" aria-hidden="true">
+                    <div class="circle-loader circle-loader--v1">
+                      <div class="circle-loader__circle"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="explorer__results flex-grow js-autocomplete__results">
+                  <ul class="explorer__list js-autocomplete__list">
+                    <!-- no results item template -->
+                    <li class="js-autocomplete__item is-hidden" data-autocomplete-template="no-results">
+                      <button class="reset explorer__result explorer__result--none">
+                        <span class="text-sm color-contrast-medium" data-autocomplete-label></span>
+                      </button>
                     </li>
-      
-                    <li>
-                      <a class="dropdown__item" href="#0">Item Two</a>
-                    </li>
-      
-                    <li class="dropdown__sub-wrapper js-dropdown__sub-wrapper">
-                      <a class="dropdown__item" href="#0">
-                        Item Three
-                        <svg class="icon" aria-hidden="true" viewBox="0 0 12 12">
-                          <polyline stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" points="3.5 0.5 9.5 6 3.5 11.5"></polyline>
-                        </svg>
+
+                    <!-- link item template -->
+                    <li class="js-autocomplete__item is-hidden" data-autocomplete-template="link">
+                      <a class="explorer__result" data-autocomplete-url>
+                        <span class="flex flex-column items-start">
+                          <i data-autocomplete-label></i>
+                          <i class="explorer__label" data-autocomplete-category></i>
+                        </span>
                       </a>
-      
-                      <ul class="dropdown__menu js-dropdown__menu" aria-label="submenu">
-                        <li><a class="dropdown__item" href="#0">Sub Item One</a></li>
-                        <li><a class="dropdown__item" href="#0">Sub Item Two</a></li>
-                        <li><a class="dropdown__item" href="#0">Sub Item Three</a></li>
-                      </ul>
-                    </li>
-      
-                    <li>
-                      <a class="dropdown__item" href="#0">Item Four</a>
-                    </li>
-      
-                    <hr class="dropdown__separator" role="separator">
-      
-                    <li>
-                      <a class="dropdown__item" href="#0">Item Five</a>
                     </li>
                   </ul>
                 </div>
+
+                <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
               </div>
+
+              <button class="reset modal__close-btn modal__close-btn--outer display@md js-modal__close js-tab-focus">
+                <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Close modal window</title><g fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="3" x2="21" y2="21"/><line x1="21" y1="3" x2="3" y2="21"/></g></svg>
+              </button>
             </div>
           </div>
         </header>
       
         <!-- navigation -->
         <div class="app-ui__nav js-app-ui__nav" id="app-ui-navigation">
-          <!-- (mobile-only) search -->
-          <div class="padding-x-md padding-top-md hide@md">
-            <div class="search-input search-input--icon-right">
-              <input class="search-input__input form-control" type="search" name="search-input" id="search-input" placeholder="Search..." aria-label="Search">
-              <button class="search-input__btn">
-                <svg class="icon" viewBox="0 0 24 24">
-                  <title>Submit</title>
-                  <g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" stroke="currentColor" fill="none" stroke-miterlimit="10">
-                    <line x1="22" y1="22" x2="15.656" y2="15.656"></line>
-                    <circle cx="10" cy="10" r="8"></circle>
-                  </g>
-                </svg>
-              </button>
-            </div>
-          </div>
+          
       
           <!-- side navigation -->
           <nav class="sidenav padding-y-sm js-sidenav">
@@ -167,187 +110,89 @@
       
             <ul class="sidenav__list">
       
-              <li class="sidenav__item sidenav__item">
-                <a href="{{ route('brands.index') }}" class="sidenav__link">
+              <li class="sidenav__item">
+                <a href="{{ route('brands.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'brands') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
-                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
-                      <rect y="1" width="16" height="4"></rect>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
                     </g>
                   </svg>
                   <span class="sidenav__text text-sm@md">Бренды</span>
                 </a>
-      
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12">
-                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-      
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('brands.create') }}" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Добавить новый</span>
-                    </a>
-                  </li>
-
-                </ul>
               </li>
 
-              <li class="sidenav__item sidenav__item">
-                <a href="{{ route('bracelets.index') }}" class="sidenav__link">
+              <li class="sidenav__item">
+                <a href="{{ route('bracelets.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'bracelets') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
-                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
-                      <rect y="1" width="16" height="4"></rect>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
                     </g>
                   </svg>
                   <span class="sidenav__text text-sm@md">Браслеты</span>
                 </a>
-      
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12">
-                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-      
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('bracelets.create') }}" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Добавить новый</span>
-                    </a>
-                  </li>
-
-                </ul>
               </li>
-      
-              <li class="sidenav__item sidenav__item--expanded">
-                <a href="{{ route('ratings.index') }}" class="sidenav__link" aria-current="page">
+
+              <li class="sidenav__item">
+                <a href="{{ route('ratings.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'ratings') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
-                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
-                      <rect y="1" width="16" height="4"></rect>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
                     </g>
                   </svg>
                   <span class="sidenav__text text-sm@md">Рейтинги</span>
                 </a>
-      
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12">
-                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-      
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('ratings.create') }}" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Добавить новый</span>
-                    </a>
-                  </li>
-
-                </ul>
               </li>
 
-              <li class="sidenav__item sidenav__item">
-                <a href="{{ route('grades.index') }}" class="sidenav__link">
+              <li class="sidenav__item">
+                <a href="{{ route('grades.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'grades') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
-                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
-                      <rect y="1" width="16" height="4"></rect>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
                     </g>
                   </svg>
                   <span class="sidenav__text text-sm@md">Оценки</span>
                 </a>
-      
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12">
-                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-      
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('grades.create') }}" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Добавить новый</span>
-                    </a>
-                  </li>
-
-                </ul>
               </li>
 
-              <li class="sidenav__item sidenav__item">
-                <a href="{{ route('sellers.index') }}" class="sidenav__link">
+              <li class="sidenav__item">
+                <a href="{{ route('sellers.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'sellers') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
-                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
-                      <rect y="1" width="16" height="4"></rect>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
                     </g>
                   </svg>
                   <span class="sidenav__text text-sm@md">Продавцы</span>
                 </a>
-      
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12">
-                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-      
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('sellers.create') }}" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Добавить продавца</span>
-                    </a>
-                  </li>
-
-                </ul>
               </li>
 
-              <li class="sidenav__item sidenav__item">
-                <a href="{{ route('reviews.index') }}" class="sidenav__link">
+              <li class="sidenav__item">
+                <a href="{{ route('reviews.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'reviews') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
-                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
-                      <rect y="1" width="16" height="4"></rect>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
                     </g>
                   </svg>
                   <span class="sidenav__text text-sm@md">Отзывы</span>
                 </a>
-      
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12">
-                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-      
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('reviews.create') }}" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Добавить отзыв</span>
-                    </a>
-                  </li>
-
-                </ul>
               </li>
 
-              <li class="sidenav__item sidenav__item">
-                <a href="{{ route('posts.index') }}" class="sidenav__link">
+              <li class="sidenav__item">
+                <a href="{{ route('posts.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'posts') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
-                      <path d="M14,7H2v7c0,0.6,0.4,1,1,1h10c0.6,0,1-0.4,1-1V7z"></path>
-                      <rect y="1" width="16" height="4"></rect>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
                     </g>
                   </svg>
                   <span class="sidenav__text text-sm@md">Статьи блога</span>
                 </a>
-      
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12">
-                    <polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-      
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('posts.create') }}" class="sidenav__link">
-                      <span class="sidenav__text text-sm@md">Добавить статью</span>
-                    </a>
-                  </li>
-
-                </ul>
-              </li>
+              </li>        
             </ul>
       
             <div class="sidenav__divider margin-y-xs" role="presentation"></div>
@@ -397,6 +242,66 @@
 @section('scripts')
 
 <script src="{{ asset("js/admin/scripts.js") }}"></script>
+
+<script>
+  if(document.getElementById('explorer-link-variation')) { // --link variation
+    // use different results for the --link variation 
+    explorerQuickLinks = [
+      { 
+        label: 'Добавить бренд', 
+        class: 'js-explorer__link',
+        url: '{{ route('brands.create') }}',
+        category: 'Бренды',
+        template: 'link'
+      },
+      { 
+        label: 'Добавить браслет', 
+        class: 'js-explorer__link',
+        url: '{{ route('bracelets.create') }}',
+        category: 'Браслеты',
+        template: 'link'
+      },
+      { 
+        label: 'Добавить рейтинг', 
+        class: 'js-explorer__link',
+        url: '{{ route('ratings.create') }}',
+        category: 'Рейтинги',
+        template: 'link'
+      },
+      { 
+        label: 'Добавить статью в блог', 
+        class: 'js-explorer__link',
+        url: '{{ route('posts.create') }}',
+        category: 'Блог',
+        template: 'link'
+      }
+    ];
+  
+    explorerAdditionalLinks = [
+      { 
+        label: 'Добавить оценку', 
+        class: 'js-explorer__link',
+        url: '{{ route('grades.create') }}',
+        category: 'Оценки',
+        template: 'link'
+      },
+      { 
+        label: 'Добавить продавца', 
+        class: 'js-explorer__link',
+        url: '{{ route('sellers.create') }}',
+        category: 'Продавцы',
+        template: 'link'
+      },
+      { 
+        label: 'Добавить отзыв', 
+        class: 'js-explorer__link',
+        url: '{{ route('reviews.create') }}',
+        category: 'Отзывы',
+        template: 'link'
+      }
+    ];
+  }
+</script>
 @show
   </body>
 </html>
