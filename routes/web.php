@@ -67,3 +67,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin'],
     Route::resource('/reviews', 'ReviewsController');
     Route::resource('/posts', 'PostsController');
 });
+
+Route::post('admin/posts/delimg', 'App\Http\Controllers\Admin\PostsController@imgdelete')->name('posts.delimg');
+Route::post('admin/posts/updimg', 'App\Http\Controllers\Admin\PostsController@imgupdate')->name('posts.updimg');

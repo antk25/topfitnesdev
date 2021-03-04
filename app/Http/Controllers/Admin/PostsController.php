@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
 
 class PostsController extends Controller
 {
@@ -58,10 +60,9 @@ class PostsController extends Controller
 
             foreach ($files as $file) {
                 $lastpost->addMedia($file)
-                    ->toMediaCollection();
+                    ->toMediaCollection('images');
             }
         }
-
 
         return redirect()->route('posts.index');
     }
@@ -76,7 +77,7 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
 
-        $media = $post->getFirstMedia();
+        $media = $post->getMedia('images');
         
         return view('admin.posts.edit', compact('post', 'media'));
     }
@@ -104,6 +105,19 @@ class PostsController extends Controller
             'content' => request('content')
         ]);
 
+        $files = request('files');
+        $nameimg = request('nameimg');
+        
+        if ($files != '') {
+            $lastpost = Post::find($post->id);
+            $i = 0;
+            foreach ($files as $file) {
+                $lastpost->addMedia($file)
+                    ->usingName($nameimg[$i++])
+                    ->toMediaCollection('images');
+            }
+        }
+
         return redirect()->route('posts.index');
     }
 
@@ -118,5 +132,27 @@ class PostsController extends Controller
         Post::destroy($id);
         
         return redirect()->route('posts.index');
+    }
+
+    public function imgdelete(Request $request) {
+        
+        $imgid = $request->imgid;
+        Media::where('id', $imgid)->delete();
+
+        return back();
+    
+    }
+
+    public function imgupdate(Request $request) {
+        $id = $request->imgid;
+        $image = Media::find($id);
+
+        $image->update([
+            'name' => request('nameimg')
+        ]);
+
+        
+        return back();
+    
     }
 }

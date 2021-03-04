@@ -24,8 +24,13 @@ class Post extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('post')
-              ->withResponsiveImages()
-              ->format('webp');
+        $this->addMediaConversion('320')
+            ->width(320);
+        
+        $this->addMediaConversion('640')
+            ->width(640);
+
     }
+
+    
 }
