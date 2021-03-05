@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -21,7 +20,7 @@
 </head>
 <body>
     <div class="container max-width-xxs padding-y-lg">
-        <form class="login-form" method="POST" action="{{ route('login') }}">
+        <form class="login-form" method="POST" action="{{ route('user.login') }}">
             @csrf
             <div class="text-component text-center margin-bottom-sm">
               <h1>Вход</h1>
@@ -39,23 +38,13 @@
             <div class="margin-bottom-sm">
               <div class="flex justify-between margin-bottom-xxxs">
                 <label class="form-label" for="password">Пароль</label>
-                @if (Route::has('password.request'))
-                <span class="text-sm"><a href="{{ route('password.request') }}">Забыли пароль?</a></span>
-                @endif
+                <span class="text-sm"><a href="#0">Забыли пароль?</a></span>
               </div>
 
               <input class="form-control width-100%" type="password" name="password" id="password">
               @error('password')
               <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
               @enderror
-            </div>
-            
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-              <label class="form-check-label" for="remember">
-                  {{ __('Remember Me') }}
-              </label>
             </div>
 
             <div class="margin-bottom-sm">

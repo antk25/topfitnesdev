@@ -33,8 +33,11 @@
             </div>
           
             <div class="user-cell__cta">
-              <a href="{{ route('user.logout') }}" class='btn btn--subtle'>Выйти</a>
+              <a href="{{ route('logout') }}" class='btn btn--subtle' onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выйти</a>
             </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+              @csrf
+          </form>
           </div>
     </div>
 
