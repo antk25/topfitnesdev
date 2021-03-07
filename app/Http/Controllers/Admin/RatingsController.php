@@ -51,6 +51,7 @@ class RatingsController extends Controller
 
         $rating = Rating::create([
                     'subtitle' => request('subtitle'),
+                    'name' => request('name'),
                     'slug' => $slug,
                     'title' => request('title'),
                     'description' => request('description'),

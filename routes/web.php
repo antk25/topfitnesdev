@@ -30,16 +30,17 @@ Route::get('/bracelets/{bracelet}/reviews', 'App\Http\Controllers\ReviewsControl
 
 // Админка
 
-Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin'], function () {
+Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::get('/', 'MainController@index')->name('admin.index');
-    Route::resource('/brands', 'BrandsController')->middleware(['auth']);
+    Route::resource('/brands', 'BrandsController');
     Route::resource('/bracelets', 'BraceletsController');
     Route::resource('/ratings', 'RatingsController');
     Route::resource('/grades', 'GradesController');
     Route::resource('/sellers', 'SellersController');
     Route::resource('/reviews', 'ReviewsController');
     Route::resource('/posts', 'PostsController');
+    Route::post('/posts/delimg', 'PostsController@imgdelete')->name('posts.delimg');
+    Route::post('/posts/updimg', 'PostsController@imgupdate')->name('posts.updimg');
+    Route::resource('/comments', 'CommentsController');
+    Route::post('/comments/reply', 'CommentsController@replyStore')->name('comments.reply');
 });
-
-Route::post('admin/posts/delimg', 'App\Http\Controllers\Admin\PostsController@imgdelete')->name('posts.delimg');
-Route::post('admin/posts/updimg', 'App\Http\Controllers\Admin\PostsController@imgupdate')->name('posts.updimg');

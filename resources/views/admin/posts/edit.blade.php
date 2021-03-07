@@ -9,6 +9,17 @@
       <div class="text-component margin-bottom-md text-center">
         <h2>Изменить статью "{{ $post->name }}"</h2>
       </div>
+      <div class="margin-bottom-xs">
+        <div class="select">
+          <select class="select__input form-control" name="user_id">
+            @foreach ($users as $k => $v)
+              <option value="{{ $k }}">{{ $v }}</option>
+            @endforeach
+          </select>
+          
+          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+        </div>
+      </div>
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название</label>

@@ -19,8 +19,19 @@ class Post extends Model implements HasMedia
         'subtitle',
         'description',
         'content',
-        'published'
+        'published',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
+    }
 
     public function registerMediaConversions(Media $media = null): void
     {

@@ -11,6 +11,7 @@ class Rating extends Model
         'published',
         'title',
         'description',
+        'name',
         'subtitle',
         'text',
         'slug'
@@ -18,5 +19,9 @@ class Rating extends Model
 
     public function bracelets() {
         return $this->belongsToMany(Bracelet::class)->withPivot('position', 'text_rating');
+    }
+
+    public function comments() {
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 }

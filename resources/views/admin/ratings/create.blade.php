@@ -10,54 +10,47 @@
         <h2>Новый рейтинг</h2>
         <p>Создание страниц рейтингов.</p>
       </div>
-  
+
+      <div class="grid gap-xxs margin-bottom-xs">
+        <div class="col-6@md">
+          <label class="form-label margin-bottom-xxs" for="name">Название рейтинга</label>
+          <input class="form-control width-100%" type="text" name="name" id="name">
+          <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
+        </div>
+
+        <div class="col-6@md">
+          <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
+        <input class="form-control width-100%" type="text" name="slug" id="slug">
+        </div>
+      </div>
+
       <div class="margin-bottom-xs">
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-4@md">
-            <label class="form-label" for="subtitle">Название рейтинга (h1)</label>
-          </div>
-          
-          <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="subtitle" id="subtitle" required>
+        <label class="form-label margin-bottom-xxs" for="title">Title</label>
+        <input class="form-control width-100%" type="text" name="title" id="title">
+      </div>
+
+      <div class="grid gap-xxs margin-bottom-xs">
+        <div class="col-6@md">
+          <label class="form-label margin-bottom-xxs" for="subtitle">Subtitle (h1)</label>
+          <input class="form-control width-100%" type="text" name="subtitle" id="subtitle">
+        </div>
+        <div class="col-6@md">
+          <div class="character-count js-character-count">
+            <label class="form-label margin-bottom-xxs" for="textareaName">Description:</label>
+            <textarea class="form-control width-100% js-character-count__input" name="description" id="description" maxlength="300"></textarea>
+            <div class="character-count__helper character-count__helper--dynamic text-sm margin-top-xxxs" aria-live="polite" aria-atomic="true">
+              Осталось <span class="js-character-count__counter"></span> символов
+            </div>
+            <div class="character-count__helper character-count__helper--static text-sm margin-top-xxxs">Макс 300 символов</div>
           </div>
         </div>
       </div>
-  
+
       <div class="margin-bottom-xs">
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-4@md">
-            <label class="form-label" for="slug">URI (SLUG)</label>
-          </div>
-          
-          <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="slug" id="slug" required>
-          </div>
-        </div>
-      </div>
-  
-      <div class="margin-bottom-xs">
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-4@md">
-            <label class="form-label" for="title">Title</label>
-          </div>
-          
-          <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="title" id="title">
-          </div>
-        </div>
-      </div>
-  
-      <div>
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-4@md">
-            <label class="form-label" for="text">Основной контент</label>
-          </div>
-          
-          <div class="col-8@md">
+        <label class="form-label margin-bottom-xxs" for="text">Основной контент</label>
             <textarea class="form-control width-100%" name="text" id="code"></textarea>
-          </div>
-        </div>
       </div>
+            
     </fieldset>
 
     <div class="row" x-data="handler()">

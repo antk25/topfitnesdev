@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\User;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -32,7 +33,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $users = User::pluck('email', 'id')->all();
+        return view('admin.posts.create', compact('users'));
     }
 
     /**
@@ -48,6 +50,7 @@ class PostsController extends Controller
         $slug = Str::slug($slug, '-');
 
         $post = Post::create([
+            'user_id' => request('user_id'),
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
@@ -83,9 +86,11 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
 
+        $users = User::pluck('email', 'id')->all();
+
         $media = $post->getMedia('images');
         
-        return view('admin.posts.edit', compact('post', 'media'));
+        return view('admin.posts.edit', compact('post', 'media', 'users'));
     }
 
     /**
@@ -103,6 +108,7 @@ class PostsController extends Controller
         $slug = Str::slug($slug, '-');
 
         $post->update([
+            'user_id' => request('user_id'),
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
