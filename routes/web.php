@@ -20,13 +20,13 @@ Route::get('/', function () {
 
 // шаблоны страниц
 
-Route::get('bracelets', 'App\Http\Controllers\BraceletsController@index')->name('bracelets.index');
+Route::get('katalog', 'App\Http\Controllers\BraceletsController@index')->name('bracelets.index');
 
-Route::get('bracelets/{slug}', 'App\Http\Controllers\BraceletsController@show')->name('bracelets.show');
+Route::get('katalog/{slug}', 'App\Http\Controllers\BraceletsController@show')->name('bracelets.show');
 
-Route::post('/bracelets/{bracelet}/review', 'App\Http\Controllers\ReviewsController@store');
+Route::post('/katalog/{bracelet}/review', 'App\Http\Controllers\ReviewsController@store');
 
-Route::get('/bracelets/{bracelet}/reviews', 'App\Http\Controllers\ReviewsController@index');
+Route::get('/katalog/{bracelet}/reviews', 'App\Http\Controllers\ReviewsController@index');
 
 // Админка
 
@@ -41,6 +41,8 @@ Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admi
     Route::resource('/posts', 'PostsController');
     Route::post('/posts/delimg', 'PostsController@imgdelete')->name('posts.delimg');
     Route::post('/posts/updimg', 'PostsController@imgupdate')->name('posts.updimg');
+    Route::post('/bracelets/delimg', 'BraceletsController@imgdelete')->name('bracelets.delimg');
+    Route::post('/bracelets/updimg', 'BraceletsController@imgupdate')->name('bracelets.updimg');
     Route::resource('/comments', 'CommentsController');
     Route::post('/comments/reply', 'CommentsController@replyStore')->name('comments.reply');
 });

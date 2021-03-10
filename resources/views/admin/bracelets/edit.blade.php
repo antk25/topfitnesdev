@@ -7,6 +7,7 @@
     <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
       <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Браслет</a></li>
       <li><a href="#tab1Panel2" class="tabs__control">Отзывы</a></li>
+      <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
     </ul>
 
     <div class="js-tabs__panels">
@@ -20,51 +21,53 @@
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             </div>
   
-            <div class="margin-bottom-xs">
-              <div class="grid gap-xxs items-center@md">
-                <div class="col-4@md">
-                  <label class="form-label" for="name">Название браслета</label>
-                </div>
-  
-                <div class="col-8@md">
-                  <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $bracelet->name }}" required>
-                </div>
+            <div class="margin-y-sm">
+              <input class="checkbox" type="checkbox" id="popular" name="popular" @if ($bracelet->popular == 1)checked @endif>
+              <label for="popular">Популярный</label>&nbsp;&nbsp;&nbsp;
+              <input class="checkbox" type="checkbox" id="published" name="published" @if ($bracelet->published == 1)checked @endif>
+              <label for="published">Опубликован</label>&nbsp;&nbsp;&nbsp;
+            </div>
+      
+            <div class="grid gap-xxs margin-bottom-xs">
+              <div class="col-6@md">
+                <label class="form-label margin-bottom-xxs" for="name">Название модели</label>
+                <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $bracelet->name }}">
+                <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
+              </div>
+      
+              <div class="col-6@md">
+                <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
+              <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $bracelet->slug }}">
               </div>
             </div>
-  
+      
             <div class="margin-bottom-xs">
-              <div class="grid gap-xxs items-center@md">
-                <div class="col-4@md">
-                  <label class="form-label" for="slug">URI (SLUG)</label>
-                </div>
-  
-                <div class="col-8@md">
-                  <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $bracelet->slug }}" required>
+              <label class="form-label margin-bottom-xxs" for="title">Title</label>
+              <input class="form-control width-100%" type="text" name="title" id="title" value="{{ $bracelet->title }}">
+            </div>
+      
+            <div class="grid gap-xxs margin-bottom-xs">
+              <div class="col-6@md">
+                <label class="form-label margin-bottom-xxs" for="subtitle">Subtitle (h1)</label>
+                <input class="form-control width-100%" type="text" name="subtitle" id="subtitle" value="{{ $bracelet->subtitle }}">
+              </div>
+              <div class="col-6@md">
+                <div class="character-count js-character-count">
+                  <label class="form-label margin-bottom-xxs" for="textareaName">Description:</label>
+                  <textarea class="form-control width-100% js-character-count__input" name="description" id="description" maxlength="300">{{ $bracelet->description }}</textarea>
+                  <div class="character-count__helper character-count__helper--dynamic text-sm margin-top-xxxs" aria-live="polite" aria-atomic="true">
+                    Осталось <span class="js-character-count__counter"></span> символов
+                  </div>
+                  <div class="character-count__helper character-count__helper--static text-sm margin-top-xxxs">Макс 300 символов</div>
                 </div>
               </div>
-            </div>
-  
-            <div class="margin-bottom-xs">
-              <div class="grid gap-xxs items-center@md">
-                <div class="col-4@md">
-                  <label class="form-label" for="title">Title</label>
-                </div>
-  
-                <div class="col-8@md">
-                  <input class="form-control width-100%" type="text" name="title" id="title" value="{{ $bracelet->title }}">
-                </div>
-              </div>
-            </div>
-  
-            <div class="margin-bottom-xs">
-              <div class="grid gap-xxs items-center@md">
-                  <div class="col-4@md">
-                      <label class="form-label" for="brand_id">Бренд</label>
-                    </div>
-                  <div class="col-8@md">
-                      <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
-                          <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Start typing Weasley:</label>
-  
+            </div> 
+
+            <div class="grid gap-xxs margin-bottom-xs">
+              <div class="col-6@md">
+                <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
+                          <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать бренд:</label>
+      
                           <!-- select -->
                           <select name="brand_id" id="brand_id" class="js-select-auto__select">
                               @foreach ($brands as $k => $v)
@@ -72,20 +75,20 @@
                                 selected
                               @endif>{{ $v }}</option>
                               @endforeach
-  
+      
                           </select>
-  
+      
                           <!-- input -->
                           <div class="select-auto__input-wrapper">
                             <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать бренд" autocomplete="off" value="{{ $braceletbrand->name }}">
-  
+      
                             <div class="select-auto__input-icon-wrapper">
                               <!-- arrow icon -->
                               <svg class="icon" viewBox="0 0 16 16">
                                 <title>Open selection</title>
                                 <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                               </svg>
-  
+      
                               <!-- close X icon -->
                               <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
                                 <svg class="icon" viewBox="0 0 16 16">
@@ -95,123 +98,223 @@
                               </button>
                             </div>
                           </div>
-  
+      
                           <!-- dropdown -->
                           <div class="autocomplete__results select-auto__results js-autocomplete__results">
                             <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
                               <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
                                 <span class="text-truncate text-sm" data-autocomplete-label></span>
                               </li>
-  
+      
                               <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
                                 <span class="is-hidden" data-autocomplete-value></span>
                                 <div class="text-truncate" data-autocomplete-label></div>
                               </li>
-  
+      
                               <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
                             </ul>
                           </div>
-  
+      
                           <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
                         </div>
-                  </div>
+              </div>
+      
+              <div class="col-6@md">
+                <label class="form-label margin-bottom-xxs" for="position">Позиция для каталога</label>
+              <input class="form-control width-100%" type="number" name="position" id="position" min="0" max="300" step="1" value="{{ $bracelet->position }}">
               </div>
             </div>
   
-            <div>
-              <div class="grid gap-xxs items-center@md">
-                <div class="col-4@md">
-                  <label class="form-label" for="description">Описание</label>
-                  <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
-                </div>
   
-                <div class="col-8@md">
-                  <textarea class="form-control width-100%" name="description" id="code">{{ $bracelet->description }}</textarea>
-                </div>
-              </div>
+            <div class="margin-bottom-xs">
+              <label class="form-label margin-bottom-xxs" for="about">Описание</label>
+              <textarea class="form-control width-100%" name="about" id="code">{{ $bracelet->about }}</textarea>
             </div>
           </fieldset>
-  
-  
-          <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
+          <fieldset>
+            <div class="text-component margin-bottom-md text-center">
+              <h2>Плюсы - Минусы</h2>
+            </div>
+             <div class="grid gap-xs margin-y-xs">
+              <div class="col-6@md">
+                <div class="js-repeater" data-repeater-input-name="plus[n]">
+                <ul class="grid gap-xs js-repeater__list">
+                  @foreach ($bracelet->plus as $plus)
+                  <li class="js-repeater__item">
+                    <div class="grid gap-xs">
+                      <input class="form-control col" type="text" name="plus[{{ $loop->index }}]" id="plus[{{ $loop->index }}]" value="{{ $plus }}">
+        
+                      <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove" type="button">
+                        <svg class="icon" viewBox="0 0 20 20">
+                          <title>Remove item</title>
+        
+                          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <line x1="1" y1="5" x2="19" y2="5"/>
+                            <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                            <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                          </g>
+                        </svg>
+                      </button>
+                    </div>
+                  </li>
+                  @endforeach
+                </ul>
+        
+                <button class="btn btn--success width-100% margin-top-xs js-repeater__add" type="button">+ Плюс</button>
+              </div>
+              </div>
+              <div class="col-6@md">
+                <div class="js-repeater" data-repeater-input-name="minus[n]">
+                <ul class="grid gap-xs js-repeater__list">
+                  @foreach ($bracelet->minus as $minus)
+                  <li class="js-repeater__item">
+                    <div class="grid gap-xs">
+                      <input class="form-control col" type="text" name="minus[{{ $loop->index }}]" id="minus[{{ $loop->index }}]" value="{{ $minus }}">
+        
+                      <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove" type="button">
+                        <svg class="icon" viewBox="0 0 20 20">
+                          <title>Remove item</title>
+        
+                          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <line x1="1" y1="5" x2="19" y2="5"/>
+                            <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                            <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                          </g>
+                        </svg>
+                      </button>
+                    </div>
+                  </li>
+                  @endforeach
+                </ul>
+        
+                <button class="btn btn--accent width-100% margin-top-xs js-repeater__add" type="button">+ Минус</button>
+              </div>
+              </div>
+        
+            </div>
+        <div class="text-component margin-bottom-md text-center">
+                  <h2>Покупателям нравится</h2>
+                </div>
+            <div class="js-repeater" data-repeater-input-name="buyers_like[n]">
+              <ul class="grid gap-xs js-repeater__list">
+                @foreach ($bracelet->buyers_like as $buyers_like)
+                <li class="js-repeater__item">
+                  <div class="grid gap-xs">
+                    <input class="form-control col" type="text" name="buyers_like[{{ $loop->index }}]" id="buyers_like[{{ $loop->index }}]" value="{{ $buyers_like }}">
+        
+                    <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove" type="button">
+                      <svg class="icon" viewBox="0 0 20 20">
+                        <title>Remove item</title>
+        
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                          <line x1="1" y1="5" x2="19" y2="5"/>
+                          <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                          <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                        </g>
+                      </svg>
+                    </button>
+                  </div>
+                </li>
+                @endforeach
+              </ul>
+        
+              <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить поле</button>
+            </div>
+            </fieldset>
+
+
+            <fieldset class="margin-y-md padding-bottom-md border-bottom">
               <div class="text-component margin-bottom-md text-center">
                 <h2>Общие</h2>
               </div>
-  
-              <div class="margin-bottom-xs">
-                  <div class="grid gap-xxs items-center@md">
-                    <div class="col-4@md">
-                      <label class="form-label" for="year">Год выпуска</label>
-                    </div>
-  
-                    <div class="col-8@md">
-                      <input class="form-control width-100%" type="text" name="year" id="year">
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="margin-bottom-xs">
-                  <div class="grid gap-xxs items-center@md">
-                    <div class="col-4@md">
-                      <label class="form-label" for="country">Страна</label>
-                    </div>
-  
-                    <div class="col-8@md">
-                      <input class="form-control width-100%" type="text" name="country" id="country">
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="margin-bottom-xs">
-                  <div class="grid gap-xxs items-center@md">
-                    <div class="col-4@md">
-                      <label class="form-label" for="compatibility">Совместимость</label>
-                    </div>
-  
-                    <div class="col-8@md">
-                      <input class="form-control width-100%" type="text" name="compatibility" id="compatibility">
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="margin-bottom-xs">
-                  <div class="grid gap-xxs items-center@md">
-                    <div class="col-4@md">
-                      <label class="form-label" for="assistant_app">Приложение ассистент</label>
-                    </div>
-  
-                    <div class="col-8@md">
-                      <input class="form-control width-100%" type="text" name="assistant_app" id="assistant_app">
-                    </div>
-                  </div>
-                </div>
-  
-              <div class="margin-bottom-md">
-                <div class="grid gap-xxs items-center@md">
-                  <div class="col-4@md">
-                    <div class="form-label">Make a choice</div>
-                  </div>
-  
-                  <div class="col-8@md">
-                    <ul class="flex flex-wrap gap-md">
-                      <li>
-                        <input class="radio" type="radio" name="radioButton" id="radio1" checked>
-                        <label for="radio1">Option 1</label>
-                      </li>
-  
-                      <li>
-                        <input class="radio" type="radio" name="radioButton" id="radio2">
-                        <label for="radio2">Option 2</label>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+      
+            <div class="grid gap-xxs margin-bottom-xs">
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="year">Год выпуска</label>
+                <input class="form-control width-100%" type="number" name="year" id="year" min="2010" max="2022" step="1" value="{{ $bracelet->year }}">
               </div>
-  
-              <div class="flex flex-column items-start">
-                  <label class="form-label margin-bottom-xxxs" for="material">Select one or multiple options:</label>
-  
-                  <div class="multi-select inline-block js-multi-select" data-trigger-class="btn btn--subtle justify-between" data-no-select-text="Материал" data-multi-select-text="{n} выбрано" data-inset-label="on">
+              <div class="col-4@md">
+                <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
+                          <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать страну:</label>
+      
+                          <!-- select -->
+                          <select name="country" id="country" class="js-select-auto__select">
+                            <option value="Китай" @if ($bracelet->country == 'Китай')selected @endif>Китай</option>
+                            <option value="США" @if ($bracelet->country == 'США')selected @endif>США</option>
+                            <option value="Россия" @if ($bracelet->country == 'Россия')selected @endif>Россия</option>
+                            <option value="Южная Корея" @if ($bracelet->country == 'Южная Корея')selected @endif>Южная Корея</option>
+                            <option value="Япония" @if ($bracelet->country == 'Япония')selected @endif>Япония</option>
+                            <option value="Тайвань" @if ($bracelet->country == 'Тайвань')selected @endif>Тайвань</option>
+                            <option value="Германия" @if ($bracelet->country == 'Германия')selected @endif>Германия</option>
+                            <option value="Канада" @if ($bracelet->country == 'Канада')selected @endif>Канада</option>
+                            <option value="Нидерланды" @if ($bracelet->country == 'Нидерланды')selected @endif>Нидерланды</option>
+                            <option value="Финляндия" @if ($bracelet->country == 'Финляндия')selected @endif>Финляндия</option>
+                            <option value="Швейцария" @if ($bracelet->country == 'Швейцария')selected @endif>Швейцария</option>
+                          </select>
+      
+                          <!-- input -->
+                          <div class="select-auto__input-wrapper">
+                            <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать страну" autocomplete="off" value="{{ $bracelet->country }}">
+      
+                            <div class="select-auto__input-icon-wrapper">
+                              <!-- arrow icon -->
+                              <svg class="icon" viewBox="0 0 16 16">
+                                <title>Open selection</title>
+                                <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                              </svg>
+      
+                              <!-- close X icon -->
+                              <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
+                                <svg class="icon" viewBox="0 0 16 16">
+                                  <title>Reset selection</title>
+                                  <path d="M8,0a8,8,0,1,0,8,8A8,8,0,0,0,8,0Zm3.707,10.293a1,1,0,1,1-1.414,1.414L8,9.414,5.707,11.707a1,1,0,0,1-1.414-1.414L6.586,8,4.293,5.707A1,1,0,0,1,5.707,4.293L8,6.586l2.293-2.293a1,1,0,1,1,1.414,1.414L9.414,8Z" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+      
+                          <!-- dropdown -->
+                          <div class="autocomplete__results select-auto__results js-autocomplete__results">
+                            <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
+                              <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
+                                <span class="text-truncate text-sm" data-autocomplete-label></span>
+                              </li>
+      
+                              <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
+                                <span class="is-hidden" data-autocomplete-value></span>
+                                <div class="text-truncate" data-autocomplete-label></div>
+                              </li>
+      
+                              <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
+                            </ul>
+                          </div>
+      
+                          <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
+                        </div>
+              </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="compatibility">Совместимость</label>
+                <input class="form-control width-100%" type="text" name="compatibility" id="compatibility" value="{{ $bracelet->compatibility }}">
+              </div>
+            </div>
+            <div class="grid gap-xxs">
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="assistant_app">Приложение ассистент</label>
+                <input class="form-control width-100%" type="text" name="assistant_app" id="assistant_app" value="{{ $bracelet->assistant_app }}">
+              </div>
+      
+            </div>
+          </fieldset>
+
+
+          <fieldset class="margin-y-md padding-bottom-md border-bottom">
+            <div class="text-component margin-bottom-md text-center">
+              <h2>Конструкция</h2>
+            </div>
+            <div class="grid gap-xxs">
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="material">Материал браслета/ремешка</label>
+                  <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
                     <select name="material[]" id="material[]" multiple>
                       <option value="силикон" @if(in_array('силикон', $bracelet->material)) selected @endif>силикон</option>
                       <option value="металл" @if(in_array('металл', $bracelet->material)) selected @endif>металл</option>
@@ -221,37 +324,337 @@
                       <option value="текстиль" @if(in_array('текстиль', $bracelet->material)) selected @endif>текстиль</option>
                       <option value="нейлон" @if(in_array('нейлон', $bracelet->material)) selected @endif>нейлон</option>
                     </select>
-  
+      
                     <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                   </div>
-                </div>
-              <div>
-                <div class="grid gap-xxs items-center@md">
-                  <div class="col-4@md">
-                    <div class="form-label">Choose 1+ options</div>
+              </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="colors">Возможные цвета</label>
+                  <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                    <select name="colors[]" id="colors[]" multiple>
+                      <option value="белый" @if(in_array('белый', $bracelet->colors)) selected @endif>белый</option>
+                      <option value="голубой" @if(in_array('голубой', $bracelet->colors)) selected @endif>голубой</option>
+                      <option value="желтый" @if(in_array('желтый', $bracelet->colors)) selected @endif>желтый</option>
+                      <option value="зеленый" @if(in_array('зеленый', $bracelet->colors)) selected @endif>зеленый</option>
+                      <option value="коричневый" @if(in_array('коричневый', $bracelet->colors)) selected @endif>коричневый</option>
+                      <option value="красный" @if(in_array('красный', $bracelet->colors)) selected @endif>красный</option>
+                      <option value="оранжевый" @if(in_array('оранжевый', $bracelet->colors)) selected @endif>оранжевый</option>
+                      <option value="розовый" @if(in_array('розовый', $bracelet->colors)) selected @endif>розовый</option>
+                      <option value="серый" @if(in_array('серый', $bracelet->colors)) selected @endif>серый</option>
+                      <option value="синий" @if(in_array('синий', $bracelet->colors)) selected @endif>синий</option>
+                      <option value="фиолетовый" @if(in_array('фиолетовый', $bracelet->colors)) selected @endif>фиолетовый</option>
+                      <option value="черный" @if(in_array('черный', $bracelet->colors)) selected @endif>черный</option>
+                    </select>
+                    <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                   </div>
-  
-                  <div class="col-8@md">
-                    <ul class="flex flex-wrap gap-md">
-                      <li>
-                        <input class="checkbox" type="checkbox" id="checkbox1">
-                        <label for="checkbox1">Option 1</label>
-                      </li>
-  
-                      <li>
-                        <input class="checkbox" type="checkbox" id="checkbox2">
-                        <label for="checkbox2">Option 2</label>
-                      </li>
-  
-                      <li>
-                        <input class="checkbox" type="checkbox" id="checkbox3">
-                        <label for="checkbox3">Option 3</label>
-                      </li>
-                    </ul>
+              </div>
+            </div>
+      
+            <div class="grid gap-xxs margin-y-md">
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="protect_stand">Стандарты защиты</label>
+                  <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                    <select name="protect_stand[]" id="protect_stand[]" multiple>
+                      <option value="IP4" @if(in_array('IP4', $bracelet->protect_stand)) selected @endif>IP4</option>
+                      <option value="WR0" @if(in_array('WR0', $bracelet->protect_stand)) selected @endif>WR0</option>
+                    </select>
+      
+                    <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                   </div>
+              </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="terms_of_use">Допустимые условия использования</label>
+                  <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                    <select name="terms_of_use[]" id="terms_of_use[]" multiple>
+                      <option value="душ" @if(in_array('душ', $bracelet->terms_of_use)) selected @endif>душ</option>
+                      <option value="мытье рук" @if(in_array('мытье рук', $bracelet->terms_of_use)) selected @endif>мытье рук</option>
+                      <option value="плавание" @if(in_array('плавание', $bracelet->terms_of_use)) selected @endif>плавание</option>
+                      <option value="ныряние" @if(in_array('ныряние', $bracelet->terms_of_use)) selected @endif>ныряние</option>
+                    </select>
+                    <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                  </div>
+              </div>
+            </div>
+      
+            <div class="margin-y-sm">
+              <input class="checkbox" type="checkbox" id="replaceable_strap" name="replaceable_strap" @if ($bracelet->replaceable_strap == 1)
+                 checked 
+              @endif>
+              <label for="replaceable_strap">Сменный браслет/ремешок</label>&nbsp;&nbsp;&nbsp;
+              <input class="checkbox" type="checkbox" id="lenght_adj" name="lenght_adj" @if ($bracelet->lenght_adj == 1)
+              checked 
+              @endif>
+              <label for="lenght_adj">Регулировка длины ремешка</label>&nbsp;&nbsp;&nbsp;
+            </div>
+      
+            <div class="grid gap-xxs">
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="lenght">Длина</label>
+                <input class="form-control width-100%" type="number" name="dimensions[lenght]" value="{{ $bracelet->dimensions['lenght'] }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="width">Ширина</label>
+                <input class="form-control width-100%" type="number" name="dimensions[width]" value="{{ $bracelet->dimensions['width'] }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="height">Высота (толщина)</label>
+                <input class="form-control width-100%" type="number" name="dimensions[height]" value="{{ $bracelet->dimensions['height'] }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="weight">Вес</label>
+                <input class="form-control width-100%" type="number" name="dimensions[weight]" value="{{ $bracelet->dimensions['weight'] }}">
+              </div>
+            </div>
+          </fieldset>
+          
+          <fieldset class="margin-y-md padding-bottom-md border-bottom">
+            <div class="text-component margin-bottom-md text-center">
+              <h2>Дисплей</h2>
+            </div>
+      
+            <div class="grid gap-xxs">
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="disp_tech">Технология дисплея:</label>
+                <div class="select">
+                  <select class="select__input form-control" name="disp_tech" id="disp_tech">
+                      <option value="">Выбрать из списка</option>
+                      <option value="AMOLED" @if ($bracelet->disp_tech == 'AMOLED')selected @endif>AMOLED</option>
+                      <option value="IPS" @if ($bracelet->disp_tech == 'IPS')selected @endif>IPS</option>
+                      <option value="TFT" @if ($bracelet->disp_tech == 'TFT')selected @endif>TFT</option>
+                      <option value="LED" @if ($bracelet->disp_tech == 'LED')selected @endif>LED</option>
+                      <option value="OLED" @if ($bracelet->disp_tech == 'OLED')selected @endif>OLED</option>
+                      <option value="TN" @if ($bracelet->disp_tech == 'TN')selected @endif>TN</option>
+                  </select>
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
                 </div>
               </div>
-            </fieldset>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="disp_resolution">Разрешение (width)</label>
+                <input class="form-control width-100%" type="number" name="disp_resolution[width]" value="{{ $bracelet->disp_resolution['width'] }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="lenght">Разрешение (height)</label>
+                <input class="form-control width-100%" type="number" name="disp_resolution[height]" value="{{ $bracelet->disp_resolution['height'] }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="disp_ppi">Плотность пикселей (PPI)</label>
+                <input class="form-control width-100%" type="number" name="disp_ppi" value="{{ $bracelet->disp_ppi }}">
+              </div>
+            </div>
+      
+            <div class="grid gap-xxs margin-y-sm">
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="disp_brightness">Яркость (нит)</label>
+                <input class="form-control width-100%" type="number" name="disp_brightness" value="{{ $bracelet->disp_brightness }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="disp_col_depth">Глубина цвета (бит)</label>
+                <input class="form-control width-100%" type="number" name="disp_col_depth" value="{{ $bracelet->disp_col_depth }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="disp_diag">Диагональ (дюймы)</label>
+                <input class="form-control width-100%" type="number" name="disp_diag" value="{{ $bracelet->disp_diag }}">
+              </div>
+              <div class="col-3@md"></div>
+            </div>
+      
+            <div class="margin-y-sm">
+              <input class="checkbox" type="checkbox" id="disp_sens" name="disp_sens" @if ($bracelet->disp_sens == 1) checked @endif>
+              <label for="disp_sens">Сенсорный</label>&nbsp;&nbsp;&nbsp;
+              <input class="checkbox" type="checkbox" id="disp_color" name="disp_color" @if ($bracelet->disp_color == 1) checked @endif>
+              <label for="disp_color">Цветной</label>&nbsp;&nbsp;&nbsp;
+              <input class="checkbox" type="checkbox" id="disp_aod" name="disp_aod" @if ($bracelet->disp_aod == 1) checked @endif>
+              <label for="disp_aod">Always on Display (AoD)</label>
+            </div>
+      
+          </fieldset>
+      
+          <fieldset class="margin-y-md padding-bottom-md border-bottom">
+            <div class="text-component margin-bottom-md text-center">
+              <h2>Модули и датчики</h2>
+            </div>
+      
+            <div class="grid gap-xxs margin-y-sm">
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxs" for="sensors">Датчики</label>
+                <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                  <select name="sensors[]" id="sensors[]" multiple>
+                    <option value="акселерометр" @if(in_array('акселерометр', $bracelet->sensors)) selected @endif>акселерометр</option>
+                    <option value="пульсометр" @if(in_array('пульсометр', $bracelet->sensors)) selected @endif>пульсометр</option>
+                    <option value="гироскоп" @if(in_array('гироскоп', $bracelet->sensors)) selected @endif>гироскоп</option>
+                  </select>
+                  <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                </div>
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxs" for="other_interfaces">Другие интерфейсы</label>
+                <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                  <select name="other_interfaces[]" id="other_interfaces[]" multiple>
+                    <option value="интерфейс1" @if(in_array('интерфейс1', $bracelet->other_interfaces)) selected @endif>интерфейс1</option>
+                    <option value="интерфейс2" @if(in_array('интерфейс2', $bracelet->other_interfaces)) selected @endif>интерфейс2</option>
+                  </select>
+                  <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                </div>
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="nfc">NFC</label>
+                <input class="form-control width-100%" type="text" name="nfc" value="{{ $bracelet->nfc }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="blue_ver">Версия Bluetooth</label>
+                <input class="form-control width-100%" type="number" name="blue_ver" value="{{ $bracelet->blue_ver }}">
+              </div>
+            </div>
+      
+            <div class="margin-y-sm">
+              <input class="checkbox" type="checkbox" id="gps" name="gps" @if ($bracelet->gps == 1) checked @endif>
+              <label for="gps">Встроенный GPS</label>&nbsp;&nbsp;&nbsp;
+              <input class="checkbox" type="checkbox" id="vibration" name="vibration" @if ($bracelet->vibration == 1) checked @endif>
+              <label for="vibration">Вибромотор</label>&nbsp;&nbsp;&nbsp;
+            </div>
+      
+          </fieldset>
+      
+          <fieldset class="margin-y-md padding-bottom-md border-bottom">
+            <div class="text-component margin-bottom-md text-center">
+              <h2>Связь</h2>
+            </div>
+      
+            <div class="grid gap-xxs margin-y-sm">
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="phone_calls">Телефонные звонки</label>
+                <input class="form-control width-100%" type="text" name="phone_calls" value="{{ $bracelet->phone_calls }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="notification">Уведомления</label>
+                <input class="form-control width-100%" type="text" name="notification" value="{{ $bracelet->notification }}">
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="send_messages">Отправка сообщений с браслета</label>
+                <input class="form-control width-100%" type="text" name="send_messages" value="{{ $bracelet->send_messages }}">
+              </div>
+              <div class="col-3@md"></div>
+            </div>
+      
+          </fieldset>
+      
+          <fieldset class="margin-y-md padding-bottom-md border-bottom">
+            <div class="text-component margin-bottom-md text-center">
+              <h2>Функционал</h2>
+            </div>
+            <div class="grid gap-xxs margin-y-sm">
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxs" for="monitoring">Мониторинг</label>
+                <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                  <select name="monitoring[]" id="monitoring[]" multiple>
+                    <option value="пульса" @if(in_array('пульса', $bracelet->monitoring)) selected @endif>пульса</option>
+                    <option value="сна" @if(in_array('сна', $bracelet->monitoring)) selected @endif>сна</option>
+                    <option value="калорий" @if(in_array('калорий', $bracelet->monitoring)) selected @endif>калорий</option>
+                    <option value="физической активности" @if(in_array('физической активности', $bracelet->monitoring)) selected @endif>физической активности</option>
+                    <option value="стресса" @if(in_array('стресса', $bracelet->monitoring)) selected @endif>стресса</option>
+                  </select>
+                  <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                </div>
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxs" for="training_modes">Тренировочные режимы</label>
+                <div class="multi-select js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                  <select name="training_modes[]" id="training_modes[]" multiple>
+                    <option value="режим1" @if(in_array('режим1', $bracelet->training_modes)) selected @endif>режим1</option>
+                    <option value="режим2" @if(in_array('режим2', $bracelet->training_modes)) selected @endif>режим2</option>
+                    <option value="режим3" @if(in_array('режим3', $bracelet->training_modes)) selected @endif>режим3</option>
+                  </select>
+                  <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                </div>
+              </div>
+              <div class="col-3@md">
+                <label class="form-label margin-bottom-xxxs" for="additional_info">Дополнительная информация</label>
+                <textarea class="form-control width-100%" name="additional_info" id="additional_info">{{ $bracelet->additional_info }}</textarea>
+              </div>
+              <div class="col-3@md">
+      
+              </div>
+            </div>
+      
+            <div class="grid gap-xxs margin-y-sm">
+              <div class="col-6@md">
+                <input class="checkbox" type="checkbox" id="heart_rate" name="heart_rate">
+                <label for="heart_rate">Постоянное измерение пульса</label><br>
+                <input class="checkbox" type="checkbox" id="bood_oxy" name="bood_oxy" @if ($bracelet->bood_oxy == 1) checked @endif>
+                <label for="bood_oxy">Измерение кислорода в крови</label><br>
+                <input class="checkbox" type="checkbox" id="blood_pressure" name="blood_pressure" @if ($bracelet->blood_pressure == 1) checked @endif>
+                <label for="blood_pressure">Измерение артериального давления</label><br>
+                <input class="checkbox" type="checkbox" id="stress" name="stress" @if ($bracelet->stress == 1) checked @endif>
+                <label for="stress">Измерение стресса</label><br>
+                <input class="checkbox" type="checkbox" id="workout_recognition" name="workout_recognition" @if ($bracelet->workout_recognition == 1) checked @endif>
+                <label for="workout_recognition">Автоматическое распознавание тренировки</label><br>
+                <input class="checkbox" type="checkbox" id="inactivity_reminder" name="inactivity_reminder" @if ($bracelet->inactivity_reminder == 1) checked @endif>
+                <label for="inactivity_reminder">Напоминание об отсутствии активности</label><br>
+                <input class="checkbox" type="checkbox" id="search_smartphone" name="search_smartphone" @if ($bracelet->search_smartphone == 1) checked @endif>
+                <label for="search_smartphone">Поиск смартфона/браслета</label>
+              </div>
+              <div class="col-6@md">
+                <input class="checkbox" type="checkbox" id="smart_alarm" name="smart_alarm" @if ($bracelet->smart_alarm == 1) checked @endif>
+                <label for="smart_alarm">Умный будильник</label><br>
+                <input class="checkbox" type="checkbox" id="camera_control" name="camera_control" @if ($bracelet->camera_control == 1) checked @endif>
+                <label for="camera_control">Управление камерой смартфона</label><br>
+                <input class="checkbox" type="checkbox" id="player_control" name="player_control" @if ($bracelet->player_control == 1) checked @endif>
+                <label for="player_control">Управление плеером смартфона</label><br>
+                <input class="checkbox" type="checkbox" id="timer" name="timer" @if ($bracelet->timer == 1) checked @endif>
+                <label for="timer">Таймер</label><br>
+                <input class="checkbox" type="checkbox" id="stopwatch" name="stopwatch" @if ($bracelet->stopwatch == 1) checked @endif>
+                <label for="stopwatch">Секундомер</label><br>
+                <input class="checkbox" type="checkbox" id="women_calendar" name="women_calendar" @if ($bracelet->women_calendar == 1) checked @endif>
+                <label for="women_calendar">Женский календарь</label><br>
+                <input class="checkbox" type="checkbox" id="weather_forecast" name="weather_forecast" @if ($bracelet->weather_forecast == 1) checked @endif>
+                <label for="weather_forecast">Прогноз погоды</label><br>
+              </div>
+            </div>
+          </fieldset>
+      
+          <fieldset class="margin-y-md padding-bottom-md border-bottom">
+            <div class="text-component margin-bottom-md text-center">
+              <h2>Аккумулятор</h2>
+            </div>
+            <div class="grid gap-xxs margin-y-sm">
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxxs" for="type_battery">Тип:</label>
+                <div class="select">
+                  <select class="select__input form-control" name="type_battery" id="type_battery">
+                      <option value="">Выбрать из списка</option>
+                      <option value="Li-Ion" @if ($bracelet->type_battery == 'Li-Ion') selected @endif>Li-Ion</option>
+                      <option value="Li-Pol" @if ($bracelet->type_battery == 'Li-Pol') selected @endif>Li-Pol</option>
+                  </select>
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+              </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxxs" for="capacity_battery">Емкость (мАч)</label>
+                <input class="form-control width-100%" type="number" name="capacity_battery" value="{{ $bracelet->capacity_battery }}">
+              </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxxs" for="standby_time">Время работы в режиме ожидания (часов)</label>
+                <input class="form-control width-100%" type="number" name="standby_time" value="{{ $bracelet->standby_time }}">
+              </div>
+            </div>
+            
+            <div class="grid gap-xxs margin-y-sm">
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxxs" for="real_time">Реальное время работы (дней)</label>
+                <input class="form-control width-100%" type="number" name="real_time" value="{{ $bracelet->real_time }}">
+              </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxxs" for="full_charge_time">Время полной зарядки</label>
+                <input class="form-control width-100%" type="number" name="full_charge_time" value="{{ $bracelet->full_charge_time }}">
+              </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxxs" for="charger">Зарядное устройство</label>
+                <input class="form-control width-100%" type="text" name="charger" value="{{ $bracelet->charger }}">
+              </div>
+            </div>
+      
+          </fieldset>
+          
             <h2>Рейтинги</h2>
             <div class="row" x-data="handler()">
               <div class="col">
@@ -655,41 +1058,68 @@
               <p class="text-sm">450 results</p>
           
               {{ $reviews->links() }}
-              {{-- <nav class="pagination text-sm" aria-label="Pagination">
-                <ul class="pagination__list flex flex-wrap gap-xxxs">
-                  <li>
-                    <a href="#0" class="pagination__item">
-                      <svg class="icon" viewBox="0 0 16 16">
-                        <title>Go to previous page</title>
-                        <g stroke-width="1.5" stroke="currentColor">
-                          <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="9.5,3.5 5,8 9.5,12.5 "></polyline>
-                        </g>
-                      </svg>
-                    </a>
-                  </li>
-          
-                  <li>
-                    <span class="pagination__jumper flex items-center">
-                      <input aria-label="Page number" class="form-control" type="text" id="pageNumber" name="pageNumber" value="1">
-                      <em>of 50</em>
-                    </span>
-                  </li>
-          
-                  <li>
-                    <a href="#0" class="pagination__item">
-                      <svg class="icon" viewBox="0 0 16 16">
-                        <title>Go to next page</title>
-                        <g stroke-width="1.5" stroke="currentColor">
-                          <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline>
-                        </g>
-                      </svg>
-                    </a>
-                  </li>
-                </ul>
-              </nav> --}}
+              
             </div>
           </div>
         </div>
+      </section>
+
+      <section id="tab1Panel3" class="padding-top-md js-tabs__panel">
+        <p class="color-contrast-medium margin-bottom-sm">Все картинки статьи</p>
+
+  <table class="tbl__table border-bottom border-2" aria-label="Table Example">
+    <thead class="tbl__header border-bottom border-2">
+      <tr class="tbl__row">
+        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span></th>
+        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span></th>
+        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span></th>
+        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Код для вставки</span></th>
+        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span></th>
+      </tr>
+    </thead>
+    <tbody class="tbl__body">
+      @foreach ($media as $image)
+      <tr class="tbl__row">
+        <td>{{ $image->id }}</td>
+        <td class="tbl__cell" role="cell">
+          <img width="200px" src="{{ $image->getFullUrl('320') }}" alt=""><br>
+          <strong>{{ $image->human_readable_size }}</strong>
+         </td>
+        <td class="tbl__cell  text-left" role="cell">
+          <form method="POST" action="{{ route('bracelets.updimg') }}">
+            @csrf
+          <div class="margin-bottom-md">
+            <input type="text" hidden value="{{ $image->id }}" name="imgid">
+            <div class="input-group">
+              <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
+              <button class="btn btn--success" type="submit">
+                <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
+                  <g>
+                    <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
+                    <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </form>
+        </td>
+        <td class="tbl__cell" role="cell">
+          <pre class="code-snippet margin-y-sm">
+            <code>&lt;img src="{{ $image->getFullUrl() }}"<br> srcset="{{ $image->getFullUrl('320') }} 320w,<br> {{ $image->getFullUrl('640') }} 640w"<br> alt="{{ $image->name }}"&gt;</code>
+          </pre>
+        </td>
+         <td class="tbl__cell" role="cell">
+          <form method="POST" action="{{ route('bracelets.delimg') }}">
+            @csrf
+            <input type="text" hidden value="{{ $image->id }}" name="imgid">
+            <button type="submit" class="btn btn--accent text-sm">&times;</button>
+          </form>
+          </td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
       </section>
     </div>
 </div>
@@ -784,6 +1214,23 @@
             this.fields.splice(index, 1);
           }
         }
+  }
+
+  function handler4() {
+    return {
+      fields: [],
+      addNewField() {
+          this.fields.push({
+              files: '',
+              nameimg: '',
+              sizeimg: '',
+           });
+        },
+        removeField(index) {
+           this.fields.splice(index, 1);
+         }
+
+      }
   }
     </script>
 @endsection

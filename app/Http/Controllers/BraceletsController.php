@@ -9,7 +9,7 @@ class BraceletsController extends Controller
 {
     public function index() {
 
-        $bracelets = Bracelet::all()->paginate(15);
+        $bracelets = Bracelet::paginate(15);
 
         return view('bracelets.index', compact('bracelets'));
     }

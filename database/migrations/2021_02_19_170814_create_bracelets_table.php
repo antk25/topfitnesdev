@@ -19,7 +19,8 @@ class CreateBraceletsTable extends Migration
             $table->string('slug')->unique();
             $table->string('title', 200);
             $table->string('subtitle', 200)->nullable();
-            $table->text('description')->nullable();
+            $table->string('description')->nullable();
+            $table->text('about')->nullable();
             $table->integer('brand_id')->unsinged();
             $table->integer('position')->unsigned()->nullable();
             $table->float('rating_bracelet', 4, 2)->unsinged()->nullable();
@@ -32,13 +33,13 @@ class CreateBraceletsTable extends Migration
             $table->string('compatibility')->nullable();
             $table->string('assistant_app')->nullable();
             $table->json('material')->nullable();
-            $table->boolean('replaceable_strap')->default();
-            $table->boolean('length_adj')->default(0);
+            $table->boolean('replaceable_strap')->default(0);
+            $table->boolean('lenght_adj')->default(0);
             $table->json('colors')->nullable();
             $table->json('protect_stand')->nullable();
             $table->json('terms_of_use')->nullable();
             $table->json('dimensions')->nullable();
-            $table->float('weight', 4, 1)->unsinged()->nullable();
+            //$table->float('weight', 4, 1)->unsinged()->nullable();
             $table->float('disp_diag', 4, 1)->unsinged()->nullable();
             $table->string('disp_tech', 100)->nullable();
             $table->json('disp_resolution')->nullable();
@@ -57,7 +58,7 @@ class CreateBraceletsTable extends Migration
             $table->string('phone_calls')->nullable();
             $table->string('notification')->nullable();
             $table->string('send_messages')->nullable();
-            $table->string('monitoring')->nullable();
+            $table->json('monitoring')->nullable();
             $table->boolean('heart_rate')->default(false);
             $table->boolean('blood_oxy')->default(false);
             $table->boolean('blood_pressure')->default(false);
@@ -69,7 +70,8 @@ class CreateBraceletsTable extends Migration
             $table->boolean('smart_alarm')->default(0);
             $table->boolean('camera_control')->default(0);
             $table->boolean('player_control')->default(0);
-            $table->json('timer_stopwatch')->nullable();
+            $table->boolean('timer')->default(0);
+            $table->boolean('stopwatch')->default(0);
             $table->boolean('women_calendar')->default(0);
             $table->boolean('weather_forecast')->default(0);
             $table->string('additional_info')->nullable();

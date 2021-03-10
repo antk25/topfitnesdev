@@ -7,57 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Str;
 
 class Bracelet extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
-    protected $fillable = [
-        'published',
-        'title',
-        'subtitle',
-        'description',
-        'position',
-        'country',
-        'notification',
-        'vibration',
-        'disp_tech',
-        'year',
-        'material',
-        'year',
-        'length_adj',
-        'ppi',
-        'monitoring',
-        'replaceable_strap',
-        'protect_stand',
-        'diagonal',
-        'resolution',
-        'color_disp',
-        'sensory',
-        'smart_alarm',
-        'blood_pressure',
-        'heart_rate',
-        'blood_oxy',
-        'camera_control',
-        'player_control',
-        'gps',
-        'sensors',
-        'capacity_battery',
-        'standby_time',
-        'model',
-        'slug',
-        'brand_id',
-        'name',
-        'compatibility',
-        'assistant_app'
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'material' => 'array',
-        'notification' => 'array',
         'monitoring' => 'array',
         'sensors' => 'array',
-        'resolution' => 'array',
+        'plus' => 'array',
+        'minus' => 'array',
+        'buyers_like' => 'array',
+        'colors' => 'array',
+        'protect_stand' => 'array',
+        'terms_of_use' => 'array',
+        'dimensions' => 'array',
+        'disp_resolution' => 'array',
+        'other_interfaces' => 'array',
+        'training_modes' => 'array',
     ];
 
     // Связываем с Рейтингами
@@ -101,17 +72,72 @@ class Bracelet extends Model implements HasMedia
 
     public function setMaterialAttribute($value)
     {
-    $this->attributes['material'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+        $this->attributes['material'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+    
+    public function setPlusAttribute($value)
+    {
+        $this->attributes['plus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+    
+    public function setMinusAttribute($value)
+    {
+        $this->attributes['minus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+    
+    public function setBuyersLikeAttribute($value)
+    {
+        $this->attributes['buyers_like'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+    
+    public function setColorsAttribute($value)
+    {
+        $this->attributes['colors'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+    public function setProtectStandAttribute($value)
+    {
+        $this->attributes['protect_stand'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+    public function setTermsOfUseAttribute($value)
+    {
+        $this->attributes['terms_of_use'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+    
+    public function setSensorsAttribute($value)
+    {
+        $this->attributes['sensors'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+   
+    public function setOtherInterfacesAttribute($value)
+    {
+        $this->attributes['other_interfaces'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+    
+    public function setMonitoringAttribute($value)
+    {
+        $this->attributes['monitoring'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+    public function setTrainingModesAttribute($value)
+    {
+        $this->attributes['training_modes'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb')
-              ->format('webp');
+        $this->addMediaConversion('320')
+            ->width(320);
+        
+        $this->addMediaConversion('640')
+            ->width(640);
+
     }
 
-    // protected function asJson($value)
-    // {
-    //     return json_encode($value, JSON_UNESCAPED_UNICODE);
-    // }
+    public function setSlugAttribute($value)
+    {
+        $this->attributes['slug'] = Str::slug($value, '-');
+    }
+
 }

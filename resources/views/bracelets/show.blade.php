@@ -133,5 +133,82 @@
 </div>
 @endsection
 
+@section('footerScripts')
+@parent
+<script>
+
+  function reviewForm() {
+    return {
+      formData: {
+        name: '',
+        email: '',
+        rating_user: '',
+        period_use: '',
+        review_text: ''
+      },
+      
+      message: '',
+      errorsName: '',
+      errorsEmail: '',
+      errorsRating: '',
+      errorsReview: '',
+
+      submitData() {
+
+        axios
+        ({
+          url: '/katalog/{{ $bracelet->id }}/review',
+          method: 'post',
+          headers: { 'X-CSRFToken': '{{ csrf_token() }}' },
+          data: this.formData
+        }).catch(error => {
+                    if (error.response.status === 422) {
+                        this.errorsName = error.response.data.errors.name;
+                        this.errorsEmail = error.response.data.errors.email;
+                        this.errorsRating = error.response.data.errors.rating_user;
+                        this.errorsReview = error.response.data.errors.review_text;                        
+                        // document.getElementById('revi').remove();
+                        // console.log(error.response.data.errors);
+                        // this.errors.title = error.response.data.errors.title
+                        // this.errors.description = error.response.data.errors.description
+                    }
+                }).then(response => {
+                  if (response.status === 200) {
+                    this.formData = '';
+                    this.message = 'Form sucessfully submitted!';
+                    let event = new CustomEvent("toggle");
+                        window.dispatchEvent(event);
+                  }
+                  })
+              },
+
+            }
+          }
+
+        function allReviews() {
+          
+          // lastUpdate: Date.now();
+
+            return {
+              
+            reviews: '',
+            
+            submitReviews() {
+              
+                axios
+              ({
+                url: '/katalog/{{ $bracelet->id }}/reviews',
+                method: 'get',
+                responseType: 'text',
+              }).then(response => {
+                  this.reviews = response.data,
+                  console.log(response.data);
+                })
+
+              }
+            }
+          }
+        </script>
+@endsection
 
 
