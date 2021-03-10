@@ -35,9 +35,9 @@
                   <div class="padding-sm">
                       <form action="/bracelets" method="get" id="braceletsFilter">
                           <div class="flex flex-column items-start margin-y-sm padding-x-md padding-x-xs@md">
-                              <label class="form-label margin-bottom-xxxs text-bold" for="title">Название</label>
-                              <input class="form-control width-100%" type="text" name="title" id="title"
-                                  value="{{ request()->title }}">
+                              <label class="form-label margin-bottom-xxxs text-bold" for="name">Название</label>
+                              <input class="form-control width-100%" type="text" name="name" id="name"
+                                  value="{{ request()->name }}">
                           </div>
 
                           <div class="padding-top-xxxs padding-x-md padding-bottom-sm padding-x-xs@md">
@@ -158,7 +158,7 @@
                           <div class="card-v10 card-v10--state-1 height-100% js-grid-switch__content">
                               <a class="card-v10__img-link radius-lg shadow-lg"
                                   href="bracelets/{{ $bracelet->slug }}">
-                                  <img src="assets/img/169-500x300.jpg" alt="Image description">
+                                  <img src="{{ $bracelet->getFirstMediaUrl('bracelet') }}">
                               </a>
 
                               <div class="card-v10__content-wrapper">
@@ -169,7 +169,7 @@
 
                                           <div class="text-component">
                                               <h1 class="card-v10__title"><a class="color-contrast-higher"
-                                                      href="bracelets/{{ $bracelet->slug }}"> {{
+                                                      href="katalog/{{ $bracelet->slug }}"> {{
                                                       $bracelet->subtitle }}</a></h1>
                                               <p class="card-v10__excerpt color-contrast-medium">{{
                                                   $bracelet->oxy_permanent == '1' ? 'Измерение уровня кислорода' :

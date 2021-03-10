@@ -353,14 +353,14 @@ class BraceletsController extends Controller
             foreach ($files as $file) {
                 $lastbracelet->addMedia($file)
                     ->usingName($nameimg[$i++])
-                    ->toMediaCollection('bracelets');
+                    ->toMediaCollection('bracelet');
             }
         }
         elseif ($files != '') {
             $lastbracelet = Bracelet::find($bracelet->id);
             foreach ($files as $file) {
                 $lastbracelet->addMedia($file)
-                    ->toMediaCollection('bracelets');
+                    ->toMediaCollection('bracelet');
             }
         }
 
@@ -377,6 +377,7 @@ class BraceletsController extends Controller
     public function destroy($id)
     {
         Bracelet::destroy($id);
+
         return redirect()->route('bracelets.index');
     }
     

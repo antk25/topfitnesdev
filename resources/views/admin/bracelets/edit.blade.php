@@ -12,7 +12,7 @@
 
     <div class="js-tabs__panels">
       <section id="tab1Panel1" class="padding-top-md js-tabs__panel">
-        <form class="form-template-v3" method="POST" action="{{ route('bracelets.update', ['bracelet' => $bracelet->id]) }}">
+        <form class="form-template-v3" method="POST" action="{{ route('bracelets.update', ['bracelet' => $bracelet->id]) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
@@ -805,6 +805,55 @@
             </table>
           </div>
         </div>
+        
+        <section class="bg bg-white padding-sm">
+          <p class="color-contrast-medium margin-bottom-sm">Добавить картинки</p>
+                  <div class="row" x-data="handler4()">
+                    <table class="tbl__table border-bottom border-2" aria-label="Table Example">
+                        <thead class="tbl__header border-bottom border-2">
+                          <tr class="tbl__row">
+                            <th class="tbl__cell text-left" scope="col">
+                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span>
+                              </th>
+      
+                              <th class="tbl__cell text-left" scope="col">
+                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span>
+                              </th>
+      
+                              <th class="tbl__cell text-left" scope="col">
+                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span>
+                              </th>
+      
+                              <th class="tbl__cell" scope="col">
+                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
+                              </th>
+                          </tr>
+                        </thead>
+                        <tbody class="tbl__body">
+                          <template x-for="(field, index) in fields" :key="index">
+                          <tr class="tbl__row">
+                            <td x-text="index + 1"></td>
+                            <td class="tbl__cell" role="cell">
+      
+      
+                                <input type="file" class="file-upload__input" name="files[]">
+      
+                             </td>
+                            <td class="tbl__cell" role="cell">
+                              <input x-model="field.nameimg" class="form-control" type="text" name="nameimg[]">
+                            </td>
+                             <td class="tbl__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
+                          </tr>
+                         </template>
+                        </tbody>
+                        <tfoot>
+                          <tr class="tbl__cell">
+                             <td colspan="4" class="text-left"><button type="button" class="btn btn--success text-sm" @click="addNewField()">+ Добавить картинку</button></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                  </div>
+                </section>
   
           <div class="text-right">
             <button type="submit" class="btn btn--primary">Отправить</button>
