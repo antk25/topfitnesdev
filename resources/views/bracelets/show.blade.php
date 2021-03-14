@@ -2,21 +2,93 @@
 
 @section('content')
 <div class="container max-width-adaptive-lg padding-top-md">
+  <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
+    <ol class="flex flex-wrap gap-xxs">
+      <li class="breadcrumbs__item">
+        <a href="/" class="color-inherit"><svg class="icon margin-right-xxxs" viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke-width="1" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points=" 15.5,7.5 8,0.5 0.5,7.5 "></polyline><polyline points="2.5,8.5 2.5,15.5 6.5,15.5 6.5,11.5 9.5,11.5 9.5,15.5 13.5,15.5 13.5,8.5 "></polyline></g></svg></a>
+        <svg class="icon margin-left-xxxs color-contrast-medium" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline></g></svg>
+      </li>
+  
+      <li class="breadcrumbs__item">
+        <a href="{{ route('pub.bracelets.index') }}" class="color-inherit">Каталог</a>
+        <svg class="icon margin-left-xxxs color-contrast-medium" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline></g></svg>
+      </li>
+  
+      <li class="breadcrumbs__item" aria-current="page">{{ $bracelet->name }}</li>
+    </ol>
+  </nav>
+<div class="margin-y-sm text-component">
+  <h1>{{ $bracelet->name }}</h1>
+</div>
 
-  <h1>{{ $bracelet->title }}</h1>
-
-  <img src="{{ $bracelet->image('bracelet_shot', 'flexible') }}">
-
-  <ul class="exp-gallery grid gap-xs js-exp-gallery" data-controls="expLightbox" data-placeholder="assets/img/expandable-img-gallery-placeholder.svg">
-   @foreach ($bracelet->images('gallery') as $gallery)
+  <div class="grid gap-xxs">
+    <div class="col-6@md">
+<ul class="exp-gallery grid gap-xs js-exp-gallery" data-controls="expLightbox" data-placeholder="assets/img/expandable-img-gallery-placeholder.svg">
+   @foreach ($media as $image)
    <li class="col-4 col-3@sm js-exp-gallery__item">
      <figure class="aspect-ratio-1:1">
-       <img src="{{ $gallery }}" data-modal-src="{{ $gallery }}" alt="Image Description">
+       <img src="{{ $image->getFullUrl('320') }}" data-modal-src="{{ $image->getFullUrl('320') }}" alt="Image Description">
        <figcaption class="sr-only js-exp-gallery__caption">Image caption</figcaption>
      </figure>
    </li>
    @endforeach
   </ul>
+    </div>
+    <div class="col-6@md">
+
+<div class="table-card bg radius-md padding-md shadow-xs">
+  <div class="margin-bottom-md">
+    <div class="flex items-baseline justify-between">
+      <p class="color-contrast-medium">Оценки</p>
+      <p>Общая оценка <span class="text-md color-primary font-bold">14.3</span></p>
+    </div>
+  </div>
+
+  <div class="tbl text-sm">
+    <table class="tbl__table" aria-label="Таблица оценок">
+      <thead class="tbl__header sr-only">
+        <tr class="tbl__row">
+          <th class="tbl__cell text-left" scope="col">
+            <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Оценка</span>
+          </th>
+
+          <th class="tbl__cell text-right" scope="col">
+            <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Значение</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="tbl__body">
+        @foreach ($bracelet->grades as $grade)
+        <tr class="tbl__row">
+          <td class="tbl__cell" role="cell"><span class="tooltip-trigger js-tooltip-trigger" title="{{ $grade->about }}">{{ $grade->name }}</span></td>
+
+
+          <td class="tbl__cell" role="cell">
+            <div class="flex justify-end">
+
+              <div class="progress-bar inline-flex items-center js-progress-bar">
+                <p class="sr-only" aria-live="polite" aria-atomic="true">Progress value is <span class="js-progress-bar__aria-value">{{ $grade->pivot->value * 10 }}%</span></p>
+
+                <span class="progress-bar__value margin-left-xs order-2 font-bold" aria-hidden="true">
+                     {{ number_format($grade->pivot->value, 1) }}
+                </span>
+
+                <div class="progress-bar__bg order-1" aria-hidden="true">
+                  <div class="progress-bar__fill color-success" style="width: {{ $grade->pivot->value * 10 }}%;"></div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
+</div>
+    </div>
+  </div>
+  
 
   <div id="expLightbox" class="modal exp-lightbox bg js-modal js-exp-lightbox" data-animation="on" data-modal-first-focus=".js-exp-lightbox__body">
    <div class="exp-lightbox__content pointer-events-none">
@@ -58,7 +130,6 @@
  </div>
 
 
-
  <table class="prop-table width-100%" aria-label="Характеристики {{ $bracelet->title }}">
    <tbody class="prop-table__body">
 
@@ -75,7 +146,7 @@
        <th class="prop-table__cell prop-table__cell--th">Материал ремешка</th>
        <td class="prop-table__cell">
          @foreach ($bracelet->material as $material)
-         {{ $material['id'] }}<br>
+         {{ $material }}<br>
          @endforeach
        </td>
      </tr>

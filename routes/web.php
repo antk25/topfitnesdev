@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 // шаблоны страниц
 
-Route::get('katalog', 'App\Http\Controllers\BraceletsController@index')->name('bracelets.index');
+Route::get('katalog', 'App\Http\Controllers\BraceletsController@index')->name('pub.bracelets.index');
 
 Route::get('katalog/{slug}', 'App\Http\Controllers\BraceletsController@show')->name('bracelets.show');
 

@@ -578,7 +578,7 @@
       
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-6@md">
-                <input class="checkbox" type="checkbox" id="heart_rate" name="heart_rate">
+                <input class="checkbox" type="checkbox" id="heart_rate" name="heart_rate" @if ($bracelet->heart_rate == 1) checked @endif>
                 <label for="heart_rate">Постоянное измерение пульса</label><br>
                 <input class="checkbox" type="checkbox" id="bood_oxy" name="bood_oxy" @if ($bracelet->bood_oxy == 1) checked @endif>
                 <label for="bood_oxy">Измерение кислорода в крови</label><br>

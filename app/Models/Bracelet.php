@@ -8,6 +8,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Support\Str;
+use App\ResourceFiltering\QueryFilters;
 
 class Bracelet extends Model implements HasMedia
 {
@@ -104,6 +105,10 @@ class Bracelet extends Model implements HasMedia
     {
         $this->attributes['terms_of_use'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
+    // public function getTermsOfUseAttribute($value)
+    // {
+    //     $this->attributes['terms_of_use'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    // }
     
     public function setSensorsAttribute($value)
     {
@@ -140,4 +145,10 @@ class Bracelet extends Model implements HasMedia
         $this->attributes['slug'] = Str::slug($value, '-');
     }
 
+    
+    public function scopeFilter($query, QueryFilters $filters)
+    {
+        return $filters->apply($query);
+    }
+    
 }

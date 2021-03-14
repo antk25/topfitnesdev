@@ -30,38 +30,70 @@
                   </button>
               </header>
 
-              <div class="position-relative z-index-1">
+              <div class="position-rel-index-1">
                   <!-- start sidebar content -->
                   <div class="padding-sm">
-                      <form action="/bracelets" method="get" id="braceletsFilter">
+                      <form action="/katalog" method="get">
                           <div class="flex flex-column items-start margin-y-sm padding-x-md padding-x-xs@md">
                               <label class="form-label margin-bottom-xxxs text-bold" for="name">Название</label>
-                              <input class="form-control width-100%" type="text" name="name" id="name"
-                                  value="{{ request()->name }}">
+                              <input class="form-control width-100%" type="text" name="search" id="search"
+                                  value="{{ request()->search }}">
                           </div>
 
                           <div class="padding-top-xxxs padding-x-md padding-bottom-sm padding-x-xs@md">
                               <ul class="flex flex-column gap-xxxs">
                                   <li>
-                                      <input class="checkbox" type="checkbox" name="pulse_permanent"
-                                          id="pulse_permanent" value="1" {{ request()->pulse_permanent == 1 ?
+                                      <input class="checkbox" type="checkbox" name="heart_rate"
+                                          id="heart_rate" value="1" {{ request()->heart_rate == 1 ?
                                       'checked' : false }}>
-                                      <label for="pulse_permanent">Постоянное измерение пульса</label>
+                                      <label for="heart_rate">Постоянное измерение пульса</label>
                                   </li>
                                   <li>
-                                      <input class="checkbox" type="checkbox" name="oxy_permanent"
-                                          id="oxy_permanent" value="1" {{ request()->oxy_permanent == 1 ?
+                                      <input class="checkbox" type="checkbox" name="blood_oxy"
+                                          id="blood_oxy" value="1" {{ request()->blood_oxy == 1 ?
                                       'checked' : false }}>
-                                      <label for="oxy_permanent">Измерение уровня кислорода</label>
+                                      <label for="blood_oxy">Измерение уровня кислорода</label>
                                   </li>
                                   <li>
-                                      <input class="checkbox" type="checkbox" name="ad_permanent"
-                                          id="ad_permanent" value="1" {{ request()->ad_permanent == 1 ? 'checked'
+                                      <input class="checkbox" type="checkbox" name="blood_pressure"
+                                          id="blood_pressure" value="1" {{ request()->blood_pressure == 1 ? 'checked'
                                       : false }}>
-                                      <label for="ad_permanent">Измерение АД</label>
+                                      <label for="blood_pressure">Измерение АД</label>
                                   </li>
-                              </ul>
+                                  <li>
+                                      <input class="checkbox" type="checkbox" name="nfc"
+                                          id="nfc" value="1" {{ request()->nfc == 1 ? 'checked'
+                                      : false }}>
+                                      <label for="nfc">NFC</label>
+                                  </li>
+                                  <li>
+                                      <input class="checkbox" type="checkbox" name="smart_alarm"
+                                          id="smart_alarm" value="1" {{ request()->smart_alarm == 1 ? 'checked'
+                                      : false }}>
+                                      <label for="smart_alarm">Умный будильник</label>
+                                  </li>
+                                  <li>
+                                      <input class="checkbox" type="checkbox" name="disp_sens"
+                                          id="disp_sens" value="1" {{ request()->disp_sens == 1 ? 'checked'
+                                      : false }}>
+                                      <label for="disp_sens">Сенсорный дисплей</label>
+                                  </li>
+                                  <li>
+                                      <input class="checkbox" type="checkbox" name="gps"
+                                          id="gps" value="1" {{ request()->gps == 1 ? 'checked'
+                                      : false }}>
+                                    <label for="gps">GPS</label>
+                                  </li>
+                                </ul>
                           </div>
+                    <label class="form-label margin-bottom-xxs" for="terms_of_use">Допустимые условия использования </label>
+                    <div class="multi-select inline-block js-multi-select" data-trigger-class="btn btn--subtle justify-between" data-no-select-text="Выбрать значение" data-multi-select-text="{n} items selected" data-n-multi-select="2">
+                    <select name="terms_of_use[]" id="terms_of_use" multiple>
+                      <option value="swimming" @if (request('terms_of_use') != ''){{ in_array('swimming', request('terms_of_use')) ? 'selected' : '' }}@endif>плавание</option>
+                      <option value="hand washing" @if (request('terms_of_use') != ''){{ in_array('hand washing', request('terms_of_use')) ? 'selected' : '' }}@endif>мытье рук</option>
+                    </select>
+                    <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                  </div>
 
                           <label class="form-label margin-bottom-xxxs text-bold" for="disp_tech">Технология
                               дисплея:</label>
@@ -91,13 +123,33 @@
                                   </g>
                               </svg>
                           </div>
+                          <fieldset>
+                            <legend class="sr-only">Select a value in the interval:</legend>
+                            
+                            <div class="slider slider--multi-value js-slider">
+                              <div class="slider__range">
+                                <label class="sr-only" for="min_price">Slider min value</label>
+                                <input class="slider__input" type="range" id="min_price" name="min_price" min="0" max="6000" step="100" @if (request()->min_price != '')value="{{ request()->min_price }}" @else value="0" @endif>
+                              </div>
+                          
+                              <div class="slider__range">
+                                <label class="sr-only" for="max_price">Slider max value</label>
+                                <input class="slider__input" type="range" id="max_price" name="max_price" min="0" max="6000" step="100" @if (request()->max_price != '')value="{{ request()->max_price }}" @else value="6000" @endif>
+                              </div>
+                          
+                              <div class="margin-top-xs text-center" aria-hidden="true">
+                                <span class="slider__value"><span class="js-slider__value">0</span> р. - <span class="js-slider__value">100</span> р.</span>
+                              </div>
+                            </div>
+                          </fieldset>
                           <div class="margin-top-xs">
                             <div class="btns gap-xs">
                               <button type="submit" class="btn btn--primary btn--sm">Применить</button>
-                              <button type="reset" class="btn btn--subtle btn--sm">Сбросить</button>
+                              <a href="?" type="reset" class="btn btn--subtle btn--sm">Сбросить</a>
                             </div>
                           </div>
                       </form>
+                      <button  onclick="sanitizeURL()">dfdfdfd</button>
                   </div>
                   <!-- end sidebar content -->
               </div>
@@ -150,6 +202,13 @@
                           </div>
                       </div>
                   </div>
+                  @if (request() != '')
+                 <div class="margin-y-md">
+                    {!! request()->nfc != '' ? '<span class="badge badge--primary-light text-sm">С NFC</span>' : '' !!}
+                    {!! request()->heart_rate != '' ? '<span class="badge badge--primary-light text-sm">Постоянное измерение пульса</span>' : '' !!}
+                    <a href="?" class="btn btn-primary btn--sm">Сбросить</a>
+                 </div> 
+                 @endif
 
                   <ul class="grid gap-md">
                       @foreach ($bracelets as $bracelet)
@@ -181,6 +240,15 @@
                                                   $bracelet->ad_permanent == '1' ? 'Измерение АД' : '' }}</p>
                                               <p class="card-v10__excerpt color-contrast-medium">
                                                   <strong>Технология дисплея:</strong> {{ $bracelet->disp_tech }}
+                                              </p>
+                                              <p>@foreach ($bracelet->sellers as $item)
+                                                       {{ $item->name }}: {{ $item->pivot->price }}
+                                                        @endforeach
+                                              </p>
+                                              <p>
+                                                  @foreach ($bracelet->terms_of_use as $item)
+                                                  {{ $item }}<br>
+                                                  @endforeach
                                               </p>
                                           </div>
                                       </div>
@@ -250,4 +318,8 @@
   </div>
 </div>
 </section>
+@endsection
+@section('footerScripts')
+   @parent
+    
 @endsection

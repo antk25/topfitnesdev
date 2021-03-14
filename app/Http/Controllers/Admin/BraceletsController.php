@@ -220,6 +220,7 @@ class BraceletsController extends Controller
      */
     public function update(BraceletRequest $request, $id)
     {
+
         $bracelet = Bracelet::find($id);
 
         $ratings = $request->ratings;
@@ -275,6 +276,8 @@ class BraceletsController extends Controller
             $bracelet->sellers()->sync($data3);
         }
 
+        $avg_price = collect($request->price);
+        $avg_price = $avg_price->avg();
 
         $bracelet->update([
            'name' => request('name'),
@@ -342,6 +345,7 @@ class BraceletsController extends Controller
            'real_time' => request('real_time'),
            'full_charge_time' => request('full_charge_time'),
            'charger' => request('charger'),
+           'avg_price' => $avg_price
         ]);
 
         $files = request('files');
