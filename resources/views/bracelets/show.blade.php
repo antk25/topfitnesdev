@@ -128,8 +128,9 @@
      </div>
    </div>
  </div>
-
-
+<div class="margin-y-sm text-component">
+ <h2>Характеристики</h2>
+</div>
  <table class="prop-table width-100%" aria-label="Характеристики {{ $bracelet->title }}">
    <tbody class="prop-table__body">
 
@@ -141,16 +142,276 @@
        <th class="prop-table__cell prop-table__cell--th">Год выпуска</th>
        <td class="prop-table__cell">{{ $bracelet->year }}</td>
      </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Страна-производитель</th>
+       <td class="prop-table__cell">{{ $bracelet->country }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Совместимость</th>
+       <td class="prop-table__cell">{{ $bracelet->compatibility }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Приложение-ассистент</th>
+       <td class="prop-table__cell">{{ $bracelet->assistant_app }}</td>
+     </tr>
 
+
+     <tr class="text-md text-bold">
+       <th class="text-center color-primary padding-y-sm" colspan="2">Конструкция</th>
+     </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Материал ремешка</th>
        <td class="prop-table__cell">
          @foreach ($bracelet->material as $material)
-         {{ $material }}<br>
+          @if ($loop->last)
+              {{ $material }}
+          @else
+          {{ $material }}, 
+          @endif
          @endforeach
        </td>
      </tr>
 
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Сменный браслет/ремешок</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->replaceable_strap == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Регулировка длины браслета</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->lenght_adj == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Возможные цвета браслета</th>
+      <td class="prop-table__cell">
+        <fieldset class="color-swatches  js-color-swatches">
+          <legend class="color-swatches__legend text-sm color-contrast-medium margin-bottom-xs" aria-live="polite" aria-atomic="true">Цвет: <span class="color-swatches__color color-contrast-high js-color-swatches__color">Выбрать</span></legend>
+          <select class="js-color-swatches__select" aria-label="Select a color">
+            @foreach ($bracelet->colors as $color)
+              @switch($color)
+                @case('голубой')
+                <option value="голубой" data-style="background-color: #00bfff;">Голубой</option>
+                @break
+                @case('желтый')
+                <option value="желтый" data-style="background-color: #ffff00;">Желтый</option>
+                @break
+                @case('красный')
+                <option value="красный" data-style="background-color: #ff0000;">Красный</option>
+                @break
+                @case('оранжевый')
+                <option value="оранжевый" data-style="background-color: #ffa500;">Оранжевый</option>
+                @break
+                @case('розовый')
+                <option value="розовый" data-style="background-color: #ffc0cb;">Розовый</option>
+                @break
+                @case('серый')
+                <option value="серый" data-style="background-color: #808080;">Серый</option>
+                @break
+                @case('фиолетовый')
+                <option value="фиолетовый" data-style="background-color: #8b00ff;">Фиолетовый</option>
+                @break
+                @default
+              @endswitch
+            @endforeach
+          </select>
+        </fieldset>
+      </td>
+    </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Стандарты защиты</th>
+      <td class="prop-table__cell">
+        @foreach ($bracelet->protect_stand as $protect_stand)
+         @if ($loop->last)
+             {{ $protect_stand }}
+         @else
+         {{ $protect_stand }}, 
+         @endif
+        @endforeach
+      </td>
+    </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Допустимые условия использования</th>
+      <td class="prop-table__cell">
+        @foreach ($bracelet->terms_of_use as $terms_of_use)
+         @if ($loop->last)
+             {{ $terms_of_use }}
+         @else
+         {{ $terms_of_use }}, 
+         @endif
+        @endforeach
+      </td>
+    </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Габариты и вес</th>
+      <td class="prop-table__cell">
+        @foreach ($bracelet->dimensions as $k => $v)
+         @if ($loop->last)
+             &nbsp;&nbsp;{{ $v }} г.
+         @else
+         {{ $v }} x 
+         @endif
+        @endforeach
+      </td>
+    </tr>
+     <tr class="text-md text-bold">
+       <th class="text-center color-primary padding-y-sm" colspan="2">Дисплей</th>
+     </tr>
+
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Диагональ</th>
+       <td class="prop-table__cell">{{ $bracelet->disp_diag }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Технология</th>
+       <td class="prop-table__cell">{{ $bracelet->disp_tech }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Разрешение</th>
+       <td class="prop-table__cell">
+         @foreach ($bracelet->disp_resolution as $k => $v)
+         @if ($loop->last)
+            {{ $v }} px 
+         @else
+         {{ $v }}x
+         @endif
+        @endforeach
+      </td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">PPI (плотность пикселей)</th>
+       <td class="prop-table__cell">{{ $bracelet->disp_ppi }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Яркость</th>
+       <td class="prop-table__cell">{{ $bracelet->disp_brightness }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Глубина цвета</th>
+       <td class="prop-table__cell">{{ $bracelet->disp_col_depth }}</td>
+     </tr>
+     
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Сенсорный</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->disp_sens == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Цветной</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->disp_color == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Always on Display (AoD)</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->disp_aod == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="text-md text-bold">
+       <th class="text-center color-primary padding-y-sm" colspan="2">Модули и датчики</th>
+     </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Датчики</th>
+      <td class="prop-table__cell">
+        @foreach ($bracelet->sensors as $sensors)
+         @if ($loop->last)
+             {{ $sensors }}
+         @else
+         {{ $sensors }}, 
+         @endif
+        @endforeach
+      </td>
+    </tr>
+    <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Встроенный GPS</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->gps == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Вибромотор</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->vibration == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Версия Bluetooth</th>
+       <td class="prop-table__cell">{{ $bracelet->blue_ver }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">NFC</th>
+       <td class="prop-table__cell">{{ $bracelet->nfc }}</td>
+     </tr>
+
+    <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Другие интерфейсы</th>
+      <td class="prop-table__cell">
+        @foreach ($bracelet->other_interfaces as $other_interfaces)
+         @if ($loop->last)
+             {{ $other_interfaces }}
+         @else
+         {{ $other_interfaces }}, 
+         @endif
+        @endforeach
+      </td>
+    </tr>
+     <tr class="text-md text-bold">
+       <th class="text-center color-primary padding-y-sm" colspan="2">Связь</th>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Телефонные звонки</th>
+       <td class="prop-table__cell">{{ $bracelet->phone_calls }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Уведомления</th>
+       <td class="prop-table__cell">{{ $bracelet->notification }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Отправка сообщений с браслета</th>
+       <td class="prop-table__cell">{{ $bracelet->send_messages }}</td>
+     </tr>
+     <tr class="text-md text-bold">
+       <th class="text-center color-primary padding-y-sm" colspan="2">Функционал</th>
+     </tr>
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Мониторинг</th>
+      <td class="prop-table__cell">
+        @foreach ($bracelet->monitoring as $monitoring)
+         @if ($loop->last)
+             {{ $monitoring }}
+         @else
+         {{ $monitoring }}, 
+         @endif
+        @endforeach
+      </td>
+    </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Постоянное измерение
          пульса</th>
@@ -160,9 +421,169 @@
          @else
          <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
           @endif
-
      </tr>
-
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Измерение кислорода в крови</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->blood_oxy == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Измерение артериального давления</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->blood_pressure == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Измерение стресса</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->stress == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     
+     <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Тренировочные режимы</th>
+      <td class="prop-table__cell">
+        @foreach ($bracelet->training_modes as $training_modes)
+         @if ($loop->last)
+             {{ $training_modes }}
+         @else
+         {{ $training_modes }}, 
+         @endif
+        @endforeach
+      </td>
+    </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Автоматическое распознавание тренировки</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->workout_recognition == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Напоминание об отсутствии активности</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->inactivity_reminder == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Поиск смартфона/браслета</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->search_smartphone == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Умный будильник</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->smart_alarm == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Управление камерой смартфона</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->camera_control == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Управление плеером смартфона</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->player_control == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Секундомер</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->stopwatch == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Таймер</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->timer == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Женский календарь</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->women_calendar == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Прогноз погоды</th>
+       <td class="prop-table__cell">
+         @if ($bracelet->weather_forecast == '1')
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         @else
+         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+          @endif
+     </tr>
+     
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Дополнительная информация</th>
+       <td class="prop-table__cell">{{ $bracelet->additional_info }}</td>
+     </tr>
+     <tr class="text-md text-bold">
+       <th class="text-center color-primary padding-y-sm" colspan="2">Аккумулятор</th>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Тип</th>
+       <td class="prop-table__cell">{{ $bracelet->type_battery }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Емкость</th>
+       <td class="prop-table__cell">{{ $bracelet->capacity_battery }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Время работы в режиме ожидания</th>
+       <td class="prop-table__cell">{{ $bracelet->standby_time }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Реальное время работы</th>
+       <td class="prop-table__cell">{{ $bracelet->real_time }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Время полной зарядки</th>
+       <td class="prop-table__cell">{{ $bracelet->full_charge_time }}</td>
+     </tr>
+     <tr class="prop-table__row">
+       <th class="prop-table__cell prop-table__cell--th">Зарядное устройство</th>
+       <td class="prop-table__cell">{{ $bracelet->charger }}</td>
+     </tr>
    </tbody>
  </table>
 

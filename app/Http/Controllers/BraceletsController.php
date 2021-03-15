@@ -13,18 +13,26 @@ use App\ResourceFiltering\ProductFilters\ProductPriceRangeFilter;
 class BraceletsController extends Controller
 {
     public function index(Request $request, ProuctFiltersPreset $preset) {
-        
-        
+
+
         $bracelets = Bracelet::filter($preset->getForMarketingMenu($request))->paginate(20);
 
         return view('bracelets.index', compact('bracelets'));
     }
-    
+
     public function show($slug) {
-        
-        $bracelet = Bracelet::where('slug', $slug)->first();       
+
+        $bracelet = Bracelet::where('slug', $slug)->first();
         $media = $bracelet->getMedia('bracelet');
         return view('bracelets.show', compact('bracelet', 'media'));
     }
     
+    public function selection(Request $request, ProuctFiltersPreset $preset) {
+
+
+        $bracelets = Bracelet::filter($preset->getForMarketingMenu($request))->paginate(20);
+
+        return view('bracelets.selection', compact('bracelets'));
+    }
+
 }

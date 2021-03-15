@@ -22,7 +22,13 @@ Route::get('/', function () {
 
 Route::get('katalog', 'App\Http\Controllers\BraceletsController@index')->name('pub.bracelets.index');
 
+Route::get('podbor', 'App\Http\Controllers\BraceletsController@selection')->name('pub.bracelets.selection');
+
 Route::get('katalog/{slug}', 'App\Http\Controllers\BraceletsController@show')->name('bracelets.show');
+
+Route::get('ratings', 'App\Http\Controllers\RatingsController@index')->name('pub.ratings.index');
+
+Route::get('/{slug}', 'App\Http\Controllers\RatingsController@show')->name('pub.ratings.show');
 
 Route::post('/katalog/{bracelet}/review', 'App\Http\Controllers\ReviewsController@store');
 

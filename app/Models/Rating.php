@@ -18,7 +18,7 @@ class Rating extends Model
     ];
 
     public function bracelets() {
-        return $this->belongsToMany(Bracelet::class)->withPivot('position', 'text_rating');
+        return $this->belongsToMany(Bracelet::class)->withPivot('position', 'text_rating')->orderBy('pivot_position');
     }
 
     public function comments() {
