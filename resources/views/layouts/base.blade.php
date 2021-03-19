@@ -18,6 +18,7 @@
     <noscript>
       <link rel="stylesheet" href="{{ asset('css/style-fallback.css') }}">
     </noscript>
+<livewire:styles />
     <title>Document</title>
     @endsection
     @yield('head')
@@ -444,9 +445,10 @@
     @show
 
 @section('footerScripts')
+<livewire:scripts />
     <script src="{{ asset("js/scripts.js") }}"></script>
     <script src="{{ asset("js/alpine.min.js") }}"></script>
-    <script src="{{ asset("js/axios.min.js") }}"></script>
+    {{-- <script src="{{ asset("js/axios.min.js") }}"></script> --}}
 @show
       </body>
       </html>

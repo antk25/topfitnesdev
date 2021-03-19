@@ -25,19 +25,22 @@
 {!! $rating->text !!}
 
 </div>
-
 @foreach ($rating->bracelets as $bracelet)
  {{ $bracelet->name }}<br> 
  {{ $bracelet->pivot->text_rating }}<br>
 @endforeach
- <h2>Комментарии</h2>
+ 
+@livewire('comments', ['rating' => $rating->id, 'user' => $user, 'post_id' => $rating->id, 'commentable_type' => get_class($rating)])
+
+{{-- <livewire:comments :comments="$rating->comments", :user="$user", :post_id='$rating->id'> --}}
+
 
 </div>
+
 @endsection
 
 @section('footerScripts')
 @parent
-
 @endsection
 
 

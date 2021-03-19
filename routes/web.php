@@ -34,6 +34,9 @@ Route::post('/katalog/{bracelet}/review', 'App\Http\Controllers\ReviewsControlle
 
 Route::get('/katalog/{bracelet}/reviews', 'App\Http\Controllers\ReviewsController@index');
 
+Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore')->name('reply.add');
+
+
 // Админка
 
 Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {

@@ -5,29 +5,34 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Rating;
 
 class CommentsController extends Controller
 {
-    public function store(Request $request)
-    {
-        $comment = new Comment;
-        $comment->comment = $request->comment;
-        $comment->user()->associate($request->user());
-        $post = Post::find($request->post_id);
-        $post->comments()->save($comment);
-        return back();
-    }
+    // public function store(Request $request)
+    // {
+        // $comment = new Comment;
+        // $comment->comment = $request->comment;
+        // $comment->user()->associate($request->user());
+        // $post = Post::find($request->post_id);
+        // $post->comments()->save($comment);
+        // return back();
+    // }
 
     public function replyStore(Request $request)
     {
-        $reply = new Comment();
-        $reply->comment = $request->get('comment');
-        $reply->user()->associate($request->user());
-        $reply->parent_id = $request->get('comment_id');
-        $post = Post::find($request->get('post_id'));
-        $post->comments()->save($reply);
+       $reply = new Comment([
+            'comment' => request('comment'),
+            'parent_id' => request('parent_id'),
+            'user_id' => request('user_id'),
+            'commentable_type' => request('commentable_type'),
+            'commentable_id' => request('commentable_id')
+            ]);
 
-        return back();
+       $reply->save();
+
+       return back();
+
     }
 }
 

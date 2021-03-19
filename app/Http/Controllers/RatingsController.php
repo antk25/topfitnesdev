@@ -10,7 +10,8 @@ class RatingsController extends Controller
     public function show($slug) {
 
         $rating = Rating::where('slug', $slug)->first();
+        $user = \Auth::user()->id;
         // $media = $rating->getMedia('rating');
-        return view('ratings.show', compact('rating'));
+        return view('ratings.show', compact('rating', 'user'));
     }
 }
