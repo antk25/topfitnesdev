@@ -121,8 +121,6 @@
 </div>
 </div>
 @endif
-  
-  
     <div class="items-center justify-between padding-top-sm">
       {{ $bracelets->links() }}
     </div>

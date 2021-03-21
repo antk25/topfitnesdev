@@ -11,7 +11,7 @@ use App\Models\User;
 class Comments extends Component
 {
     public $comment, $post_id, $commentable_type, $user, $rating;
-    public $commentIdReply = null;
+    public $commentIdReply = '';
 
     public function mount($user, $rating)
 
@@ -23,6 +23,7 @@ class Comments extends Component
     public function resetInputFields()
     {
         $this->comment = '';
+        $this->commentIdReply = '';
     }
 
     public function store()

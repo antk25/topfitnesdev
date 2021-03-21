@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Imports\BraceletsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Bracelet;
@@ -12,6 +13,10 @@ use App\Models\Seller;
 use Illuminate\Support\Str;
 use App\Http\Requests\Admin\BraceletRequest;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
 
 class BraceletsController extends Controller
 {
@@ -382,7 +387,7 @@ class BraceletsController extends Controller
     {
         Bracelet::destroy($id);
 
-        return redirect()->route('bracelets.index');
+        return back();
     }
     
     
@@ -410,4 +415,12 @@ class BraceletsController extends Controller
         return back();
     
     }
+
+    public function import() 
+    {
+        Excel::import(new BraceletsImport, 'all_bracelets_1.xlsx');
+        
+        return back()->with('success', 'Завершено!');
+    }
 }
+

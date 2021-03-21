@@ -26,8 +26,6 @@ class Bracelet extends Model implements HasMedia
         'colors' => 'array',
         'protect_stand' => 'array',
         'terms_of_use' => 'array',
-        'dimensions' => 'array',
-        'disp_resolution' => 'array',
         'other_interfaces' => 'array',
         'training_modes' => 'array',
     ];
@@ -105,10 +103,6 @@ class Bracelet extends Model implements HasMedia
     {
         $this->attributes['terms_of_use'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-    // public function getTermsOfUseAttribute($value)
-    // {
-    //     $this->attributes['terms_of_use'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
-    // }
     
     public function setSensorsAttribute($value)
     {
@@ -137,6 +131,12 @@ class Bracelet extends Model implements HasMedia
         
         $this->addMediaConversion('640')
             ->width(640);
+        
+        $this->addMediaConversion('960')
+            ->width(960);
+        
+        $this->addMediaConversion('1280')
+            ->width(1280);
 
     }
 

@@ -1,21 +1,5 @@
 @extends('admin.layouts.base')
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-@if (session()->has('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 @section('content')
 
 <div class="container">
@@ -24,7 +8,7 @@
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
       <div class="text-component margin-bottom-md text-center">
         <h2>Новый браслет</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        <p>Добавить новый браслет в каталог.</p>
       </div>
 
       <div class="margin-y-sm">
@@ -119,8 +103,7 @@
                         <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
                       </ul>
                     </div>
-
-                    <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
+                    <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> нет результатов.</p>
                   </div>
         </div>
 
@@ -222,7 +205,6 @@
     </div>
     </fieldset>
 
-
     <fieldset class="margin-y-md padding-bottom-md border-bottom">
         <div class="text-component margin-bottom-md text-center">
           <h2>Общие</h2>
@@ -235,54 +217,57 @@
         </div>
         <div class="col-4@md">
           <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
-                    <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать страну:</label>
+            <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать страну:</label>
 
-                    <!-- select -->
-                    <select name="country" id="country" class="js-select-auto__select">
-                       <option value="Россия">Россия</option>
-                       <option value="Китай">Китай</option>
-                       <option value="США">США</option>
-                    </select>
+            <!-- select -->
+            <select name="country" id="country" class="js-select-auto__select">
+                <option value="Россия">Россия</option>
+                <option value="Китай">Китай</option>
+                <option value="США">США</option>
+                <option value="Южная Корея">Южная Корея</option>
+                <option value="Канада">Канада</option>
+                <option value="Финляндия">Финляндия</option>
+                <option value="Япония">Япония</option>
+            </select>
 
-                    <!-- input -->
-                    <div class="select-auto__input-wrapper">
-                      <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать страну" autocomplete="off">
+            <!-- input -->
+            <div class="select-auto__input-wrapper">
+              <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать страну" autocomplete="off">
 
-                      <div class="select-auto__input-icon-wrapper">
-                        <!-- arrow icon -->
-                        <svg class="icon" viewBox="0 0 16 16">
-                          <title>Open selection</title>
-                          <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                        </svg>
+              <div class="select-auto__input-icon-wrapper">
+                <!-- arrow icon -->
+                <svg class="icon" viewBox="0 0 16 16">
+                  <title>Open selection</title>
+                  <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                </svg>
 
-                        <!-- close X icon -->
-                        <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
-                          <svg class="icon" viewBox="0 0 16 16">
-                            <title>Reset selection</title>
-                            <path d="M8,0a8,8,0,1,0,8,8A8,8,0,0,0,8,0Zm3.707,10.293a1,1,0,1,1-1.414,1.414L8,9.414,5.707,11.707a1,1,0,0,1-1.414-1.414L6.586,8,4.293,5.707A1,1,0,0,1,5.707,4.293L8,6.586l2.293-2.293a1,1,0,1,1,1.414,1.414L9.414,8Z" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
+                <!-- close X icon -->
+                <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
+                  <svg class="icon" viewBox="0 0 16 16">
+                    <title>Reset selection</title>
+                    <path d="M8,0a8,8,0,1,0,8,8A8,8,0,0,0,8,0Zm3.707,10.293a1,1,0,1,1-1.414,1.414L8,9.414,5.707,11.707a1,1,0,0,1-1.414-1.414L6.586,8,4.293,5.707A1,1,0,0,1,5.707,4.293L8,6.586l2.293-2.293a1,1,0,1,1,1.414,1.414L9.414,8Z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
 
-                    <!-- dropdown -->
-                    <div class="autocomplete__results select-auto__results js-autocomplete__results">
-                      <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
-                        <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
-                          <span class="text-truncate text-sm" data-autocomplete-label></span>
-                        </li>
+            <!-- dropdown -->
+            <div class="autocomplete__results select-auto__results js-autocomplete__results">
+              <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
+                <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
+                  <span class="text-truncate text-sm" data-autocomplete-label></span>
+                </li>
 
-                        <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
-                          <span class="is-hidden" data-autocomplete-value></span>
-                          <div class="text-truncate" data-autocomplete-label></div>
-                        </li>
+                <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
+                  <span class="is-hidden" data-autocomplete-value></span>
+                  <div class="text-truncate" data-autocomplete-label></div>
+                </li>
 
-                        <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
-                      </ul>
-                    </div>
-
-                    <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
-                  </div>
+                <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
+              </ul>
+            </div>
+            <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
+          </div>
         </div>
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxs" for="compatibility">Совместимость</label>
@@ -314,7 +299,9 @@
                 <option value="фторэластомер">фторэластомер</option>
                 <option value="текстиль">текстиль</option>
                 <option value="нейлон">нейлон</option>
+                <option value="термополиуретан">термополиуретан</option>
               </select>
+
 
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
             </div>
@@ -323,6 +310,7 @@
           <label class="form-label margin-bottom-xxs" for="colors">Возможные цвета</label>
             <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
               <select name="colors[]" id="colors[]" multiple>
+                <option value="черный">черный</option>
                 <option value="белый">белый</option>
                 <option value="голубой">голубой</option>
                 <option value="желтый">желтый</option>
@@ -334,7 +322,6 @@
                 <option value="серый">серый</option>
                 <option value="синий">синий</option>
                 <option value="фиолетовый">фиолетовый</option>
-                <option value="черный">черный</option>
               </select>
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
             </div>
@@ -346,8 +333,15 @@
           <label class="form-label margin-bottom-xxs" for="protect_stand">Стандарты защиты</label>
             <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
               <select name="protect_stand[]" id="protect_stand[]" multiple>
-                <option value="IP4">IP4</option>
-                <option value="WR0">WR0</option>
+                <option value="IP68">IP68</option>
+                <option value="IP57">IP57</option>
+                <option value="WR50">WR50</option>
+                <option value="IP67">IP67</option>
+                <option value="WR20">WR20</option>
+                <option value="WR30">WR30</option>
+                <option value="IPX5">IPX5</option>
+                <option value="IP65">IP65</option>
+                <option value="IP56">IP56</option>
               </select>
 
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
@@ -357,10 +351,12 @@
           <label class="form-label margin-bottom-xxs" for="terms_of_use">Допустимые условия использования</label>
             <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
               <select name="terms_of_use[]" id="terms_of_use[]" multiple>
-                <option value="душ">душ</option>
+                <option value="пыль">пыль</option>
+                <option value="брызги">брызги</option>
+                <option value="дождь">дождь</option>
                 <option value="мытье рук">мытье рук</option>
+                <option value="душ">душ</option>
                 <option value="плавание">плавание</option>
-                <option value="ныряние">ныряние</option>
               </select>
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
             </div>
@@ -376,20 +372,12 @@
 
       <div class="grid gap-xxs">
         <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="lenght">Длина</label>
-          <input class="form-control width-100%" type="number" name="dimensions[lenght]">
-        </div>
-        <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="width">Ширина</label>
-          <input class="form-control width-100%" type="number" name="dimensions[width]">
-        </div>
-        <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="height">Высота (толщина)</label>
-          <input class="form-control width-100%" type="number" name="dimensions[height]">
+          <label class="form-label margin-bottom-xxxs" for="dimensions">Размеры</label>
+          <input class="form-control width-100%" type="text" name="dimensions">
         </div>
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="weight">Вес</label>
-          <input class="form-control width-100%" type="number" name="dimensions[weight]">
+          <input class="form-control width-100%" type="number" name="weight" min="1" max="300" step="0.1" value="">
         </div>
       </div>
     </fieldset>
@@ -408,39 +396,35 @@
                 <option value="AMOLED">AMOLED</option>
                 <option value="IPS">IPS</option>
                 <option value="TFT">TFT</option>
-                <option value="LED">LED</option>
+                <option value="POLED">POLED</option>
                 <option value="OLED">OLED</option>
-                <option value="TN">TN</option>
+                <option value="LCD">LCD</option>
             </select>
             <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
           </div>
         </div>
         <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="lenght">Разрешение (width)</label>
-          <input class="form-control width-100%" type="number" name="disp_resolution[width]">
-        </div>
-        <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="lenght">Разрешение (height)</label>
-          <input class="form-control width-100%" type="number" name="disp_resolution[height]">
+          <label class="form-label margin-bottom-xxxs" for="disp_resolution">Разрешение дисплея</label>
+          <input class="form-control width-100%" type="text" name="disp_resolution">
         </div>
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="disp_ppi">Плотность пикселей (PPI)</label>
-          <input class="form-control width-100%" type="number" name="disp_ppi">
+          <input class="form-control width-100%" type="number" name="disp_ppi" min="100" max="1000" step="1" value="">
         </div>
       </div>
 
       <div class="grid gap-xxs margin-y-sm">
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="disp_brightness">Яркость (нит)</label>
-          <input class="form-control width-100%" type="number" name="disp_brightness">
+          <input class="form-control width-100%" type="number" name="disp_brightness" min="100" max="1000" step="1" value="">
         </div>
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="disp_col_depth">Глубина цвета (бит)</label>
-          <input class="form-control width-100%" type="number" name="disp_col_depth">
+          <input class="form-control width-100%" type="number" name="disp_col_depth" min="16" max="256" step="1" value="">
         </div>
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="disp_diag">Диагональ (дюймы)</label>
-          <input class="form-control width-100%" type="number" name="disp_diag">
+          <input class="form-control width-100%" type="number" name="disp_diag" min="0.1" max="3" step="0.1" value="">
         </div>
         <div class="col-3@md"></div>
       </div>
@@ -467,8 +451,12 @@
           <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
             <select name="sensors[]" id="sensors[]" multiple>
               <option value="акселерометр">акселерометр</option>
+              <option value="GPS">GPS</option>
               <option value="пульсометр">пульсометр</option>
               <option value="гироскоп">гироскоп</option>
+              <option value="датчик освещенности">датчик освещенности</option>
+              <option value="термометр">термометр</option>
+              <option value="высотомер">высотомер</option>
             </select>
             <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
           </div>
@@ -477,8 +465,12 @@
           <label class="form-label margin-bottom-xxs" for="other_interfaces">Другие интерфейсы</label>
           <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
             <select name="other_interfaces[]" id="other_interfaces[]" multiple>
-              <option value="интерфейс1">интерфейс1</option>
-              <option value="интерфейс2">интерфейс2</option>
+              <option value="Wi-Fi">Wi-Fi</option>
+              <option value="USB">USB</option>
+              <option value="BLE">BLE</option>
+              <option value="ANT+">ANT+</option>
+              <option value="BR">BR</option>
+              <option value="EDR">EDR</option>
             </select>
             <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
           </div>
@@ -489,7 +481,7 @@
         </div>
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="blue_ver">Весия Bluetooth</label>
-          <input class="form-control width-100%" type="number" name="blue_ver">
+          <input class="form-control width-100%" type="number" name="blue_ver" min="2" max="8" step="0.1" value="">
         </div>
       </div>
 
@@ -547,9 +539,42 @@
           <label class="form-label margin-bottom-xxs" for="training_modes">Тренировочные режимы</label>
           <div class="multi-select js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
             <select name="training_modes[]" id="training_modes[]" multiple>
-              <option value="режим1">режим1</option>
-              <option value="режим2">режим2</option>
-              <option value="режим3">режим3</option>
+                <option value="ходьба на улице">ходьба на улице</option>
+                <option value="ходьба">ходьба</option>
+                <option value="велотренажер">велотренажер</option>
+                <option value="бег на улице">бег на улице</option>
+                <option value="бег">бег</option>
+                <option value="беговая дорожка">беговая дорожка</option>
+                <option value="ходьба на дорожке">ходьба на дорожке</option>
+                <option value="свободная тренировка">свободная тренировка</option>
+                <option value="скакалка">скакалка</option>
+                <option value="велосипед">велосипед</option>
+                <option value="подъем на гору">подъем на гору</option>
+                <option value="плавание">плавание</option>
+                <option value="пресс">пресс</option>
+                <option value="альпинизм">альпинизм</option>
+                <option value="скалолазание">скалолазание</option>
+                <option value="баскетбол">баскетбол</option>
+                <option value="футбол">футбол</option>
+                <option value="поход">поход</option>
+                <option value="горный спорт">горный спорт</option>
+                <option value="настольный теннис">настольный теннис</option>
+                <option value="эллиптический тренажер">эллиптический тренажер</option>
+                <option value="игра с мячом">игра с мячом</option>
+                <option value="90 альтернативных активностей">90 альтернативных активностей</option>
+                <option value="плавание в бассейне">плавание в бассейне</option>
+                <option value="жиросжигательный бег">жиросжигательный бег</option>
+                <option value="гребной тренажер">гребной тренажер</option>
+                <option value="плавание в открытом водоеме">плавание в открытом водоеме</option>
+                <option value="степпер">степпер</option>
+                <option value="бадминтон">бадминтон</option>
+                <option value="прыжки на скакалке">прыжки на скакалке</option>
+                <option value="йога">йога</option>
+                <option value="скручивания">скручивания</option>
+                <option value="выпады">выпады</option>
+                <option value="приседания">приседания</option>
+                <option value="прыжки звезда">прыжки звезда</option>
+                <option value="пилатес">пилатес</option>
             </select>
             <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
           </div>
@@ -557,9 +582,6 @@
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="additional_info">Дополнительная информация</label>
           <textarea class="form-control width-100%" name="additional_info" id="additional_info"></textarea>
-        </div>
-        <div class="col-3@md">
-
         </div>
       </div>
 
@@ -617,22 +639,22 @@
         </div>
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxxs" for="capacity_battery">Емкость (мАч)</label>
-          <input class="form-control width-100%" type="number" name="capacity_battery">
+          <input class="form-control width-100%" type="number" name="capacity_battery" min="10" max="2000" step="1" value="">
         </div>
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxxs" for="standby_time">Время работы в режиме ожидания (часов)</label>
-          <input class="form-control width-100%" type="number" name="standby_time">
+          <input class="form-control width-100%" type="number" name="standby_time" min="3" max="2000" step="1" value="">
         </div>
       </div>
       
       <div class="grid gap-xxs margin-y-sm">
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxxs" for="real_time">Реальное время работы (дней)</label>
-          <input class="form-control width-100%" type="number" name="real_time">
+          <input class="form-control width-100%" type="number" name="real_time" min="1" max="1000" step="1" value="">
         </div>
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxxs" for="full_charge_time">Время полной зарядки</label>
-          <input class="form-control width-100%" type="number" name="full_charge_time">
+          <input class="form-control width-100%" type="number" name="full_charge_time" min="10" max="8" step="0.1" value="">
         </div>
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxxs" for="charger">Зарядное устройство</label>

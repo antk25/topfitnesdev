@@ -91,6 +91,6 @@ class GradesController extends Controller
     {
         Grade::destroy($id);
 
-        return redirect()->route('grades.index');
+        return back();
     }
 }

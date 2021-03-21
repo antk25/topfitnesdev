@@ -23,4 +23,14 @@ class Brand extends Model
         return $this->hasMany(Bracelet::class);
     }
 
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('320')
+            ->width(320);
+        
+        $this->addMediaConversion('640')
+            ->width(640);
+
+    }
+
 }

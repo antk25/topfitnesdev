@@ -37,17 +37,18 @@
   @if (session()->has('message'))
   <p>{{ session('message') }}</p>
   @endif
-  
+
+  @if($commentIdReply == '')
 <form wire:submit.prevent="store()">
     <fieldset>
       <legend class="form-legend">Написать комментарий</legend>
       <div class="margin-bottom-xs">
         <label class="sr-only" for="commentNewContent">Ваш комментарий</label>
-        <textarea class="form-control width-100%" wire:model="comment"></textarea>
+        <textarea class="form-control width-100%" wire:model.lazy="comment"></textarea>
       </div>
     </fieldset>
     <button class="btn btn--primary" type="submit">Написать</button>
   </form>
-  
+  @endif 
   </section>
 </div>

@@ -244,12 +244,8 @@
                             <option value="Россия" @if ($bracelet->country == 'Россия')selected @endif>Россия</option>
                             <option value="Южная Корея" @if ($bracelet->country == 'Южная Корея')selected @endif>Южная Корея</option>
                             <option value="Япония" @if ($bracelet->country == 'Япония')selected @endif>Япония</option>
-                            <option value="Тайвань" @if ($bracelet->country == 'Тайвань')selected @endif>Тайвань</option>
-                            <option value="Германия" @if ($bracelet->country == 'Германия')selected @endif>Германия</option>
                             <option value="Канада" @if ($bracelet->country == 'Канада')selected @endif>Канада</option>
-                            <option value="Нидерланды" @if ($bracelet->country == 'Нидерланды')selected @endif>Нидерланды</option>
                             <option value="Финляндия" @if ($bracelet->country == 'Финляндия')selected @endif>Финляндия</option>
-                            <option value="Швейцария" @if ($bracelet->country == 'Швейцария')selected @endif>Швейцария</option>
                           </select>
       
                           <!-- input -->
@@ -323,6 +319,7 @@
                       <option value="фторэластомер" @if(in_array('фторэластомер', $bracelet->material)) selected @endif>фторэластомер</option>
                       <option value="текстиль" @if(in_array('текстиль', $bracelet->material)) selected @endif>текстиль</option>
                       <option value="нейлон" @if(in_array('нейлон', $bracelet->material)) selected @endif>нейлон</option>
+                      <option value="термополиуретан" @if(in_array('термополиуретан', $bracelet->material)) selected @endif>термополиуретан</option>
                     </select>
       
                     <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
@@ -355,8 +352,15 @@
                 <label class="form-label margin-bottom-xxs" for="protect_stand">Стандарты защиты</label>
                   <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
                     <select name="protect_stand[]" id="protect_stand[]" multiple>
-                      <option value="IP4" @if(in_array('IP4', $bracelet->protect_stand)) selected @endif>IP4</option>
-                      <option value="WR0" @if(in_array('WR0', $bracelet->protect_stand)) selected @endif>WR0</option>
+                      <option value="IP68" @if(in_array('IP68', $bracelet->protect_stand)) selected @endif>IP68</option>
+                      <option value="IP57" @if(in_array('IP57', $bracelet->protect_stand)) selected @endif>IP57</option>
+                      <option value="WR50" @if(in_array('WR50', $bracelet->protect_stand)) selected @endif>WR50</option>
+                      <option value="IP67" @if(in_array('IP67', $bracelet->protect_stand)) selected @endif>IP67</option>
+                      <option value="WR20" @if(in_array('WR20', $bracelet->protect_stand)) selected @endif>WR20</option>
+                      <option value="WR30" @if(in_array('WR30', $bracelet->protect_stand)) selected @endif>WR30</option>
+                      <option value="IPX5" @if(in_array('IPX5', $bracelet->protect_stand)) selected @endif>IPX5</option>
+                      <option value="IP65" @if(in_array('IP65', $bracelet->protect_stand)) selected @endif>IP65</option>
+                      <option value="IP56" @if(in_array('IP56', $bracelet->protect_stand)) selected @endif>IP56</option>
                     </select>
       
                     <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
@@ -366,10 +370,12 @@
                 <label class="form-label margin-bottom-xxs" for="terms_of_use">Допустимые условия использования</label>
                   <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
                     <select name="terms_of_use[]" id="terms_of_use[]" multiple>
-                      <option value="душ" @if(in_array('душ', $bracelet->terms_of_use)) selected @endif>душ</option>
+                      <option value="пыль" @if(in_array('пыль', $bracelet->terms_of_use)) selected @endif>пыль</option>
+                      <option value="брызги" @if(in_array('брызги', $bracelet->terms_of_use)) selected @endif>брызги</option>
+                      <option value="дождь" @if(in_array('дождь', $bracelet->terms_of_use)) selected @endif>дождь</option>
                       <option value="мытье рук" @if(in_array('мытье рук', $bracelet->terms_of_use)) selected @endif>мытье рук</option>
+                      <option value="душ" @if(in_array('душ', $bracelet->terms_of_use)) selected @endif>душ</option>
                       <option value="плавание" @if(in_array('плавание', $bracelet->terms_of_use)) selected @endif>плавание</option>
-                      <option value="ныряние" @if(in_array('ныряние', $bracelet->terms_of_use)) selected @endif>ныряние</option>
                     </select>
                     <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                   </div>
@@ -389,20 +395,12 @@
       
             <div class="grid gap-xxs">
               <div class="col-3@md">
-                <label class="form-label margin-bottom-xxxs" for="lenght">Длина</label>
-                <input class="form-control width-100%" type="number" name="dimensions[lenght]" value="{{ $bracelet->dimensions['lenght'] }}">
-              </div>
-              <div class="col-3@md">
-                <label class="form-label margin-bottom-xxxs" for="width">Ширина</label>
-                <input class="form-control width-100%" type="number" name="dimensions[width]" value="{{ $bracelet->dimensions['width'] }}">
-              </div>
-              <div class="col-3@md">
-                <label class="form-label margin-bottom-xxxs" for="height">Высота (толщина)</label>
-                <input class="form-control width-100%" type="number" name="dimensions[height]" value="{{ $bracelet->dimensions['height'] }}">
+                <label class="form-label margin-bottom-xxxs" for="dimensions">Размеры</label>
+                <input class="form-control width-100%" type="text" name="dimensions" value="{{ $bracelet->dimensions }}">
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="weight">Вес</label>
-                <input class="form-control width-100%" type="number" name="dimensions[weight]" value="{{ $bracelet->dimensions['weight'] }}">
+                <input class="form-control width-100%" type="number" name="weight" min="1" max="300" step="0.1" value="{{ $bracelet->weight }}">
               </div>
             </div>
           </fieldset>
@@ -421,39 +419,37 @@
                       <option value="AMOLED" @if ($bracelet->disp_tech == 'AMOLED')selected @endif>AMOLED</option>
                       <option value="IPS" @if ($bracelet->disp_tech == 'IPS')selected @endif>IPS</option>
                       <option value="TFT" @if ($bracelet->disp_tech == 'TFT')selected @endif>TFT</option>
-                      <option value="LED" @if ($bracelet->disp_tech == 'LED')selected @endif>LED</option>
+                      <option value="POLED" @if ($bracelet->disp_tech == 'POLED')selected @endif>POLED</option>
                       <option value="OLED" @if ($bracelet->disp_tech == 'OLED')selected @endif>OLED</option>
-                      <option value="TN" @if ($bracelet->disp_tech == 'TN')selected @endif>TN</option>
+                      <option value="LCD" @if ($bracelet->disp_tech == 'LCD')selected @endif>LCD</option>
                   </select>
                   <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
                 </div>
               </div>
+
               <div class="col-3@md">
-                <label class="form-label margin-bottom-xxxs" for="disp_resolution">Разрешение (width)</label>
-                <input class="form-control width-100%" type="number" name="disp_resolution[width]" value="{{ $bracelet->disp_resolution['width'] }}">
+                <label class="form-label margin-bottom-xxxs" for="disp_resolution">Разрешение дисплея</label>
+                <input class="form-control width-100%" type="text" name="disp_resolution" value="{{ $bracelet->disp_resolution }}">
               </div>
-              <div class="col-3@md">
-                <label class="form-label margin-bottom-xxxs" for="lenght">Разрешение (height)</label>
-                <input class="form-control width-100%" type="number" name="disp_resolution[height]" value="{{ $bracelet->disp_resolution['height'] }}">
-              </div>
+
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_ppi">Плотность пикселей (PPI)</label>
-                <input class="form-control width-100%" type="number" name="disp_ppi" value="{{ $bracelet->disp_ppi }}">
+                <input class="form-control width-100%" type="number" name="disp_ppi" value="{{ $bracelet->disp_ppi }}" min="100" max="1000" step="1" value="">
               </div>
             </div>
       
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_brightness">Яркость (нит)</label>
-                <input class="form-control width-100%" type="number" name="disp_brightness" value="{{ $bracelet->disp_brightness }}">
+                <input class="form-control width-100%" type="number" name="disp_brightness" value="{{ $bracelet->disp_brightness }}" min="100" max="1000" step="1" value="">
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_col_depth">Глубина цвета (бит)</label>
-                <input class="form-control width-100%" type="number" name="disp_col_depth" value="{{ $bracelet->disp_col_depth }}">
+                <input class="form-control width-100%" type="number" name="disp_col_depth" value="{{ $bracelet->disp_col_depth }}" min="16" max="256" step="1" value="">
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_diag">Диагональ (дюймы)</label>
-                <input class="form-control width-100%" type="number" name="disp_diag" value="{{ $bracelet->disp_diag }}">
+                <input class="form-control width-100%" type="number" name="disp_diag" value="{{ $bracelet->disp_diag }}" min="0.1" max="3" step="0.1" value="">
               </div>
               <div class="col-3@md"></div>
             </div>
@@ -480,8 +476,12 @@
                 <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
                   <select name="sensors[]" id="sensors[]" multiple>
                     <option value="акселерометр" @if(in_array('акселерометр', $bracelet->sensors)) selected @endif>акселерометр</option>
+                    <option value="GPS" @if(in_array('GPS', $bracelet->sensors)) selected @endif>GPS</option>
                     <option value="пульсометр" @if(in_array('пульсометр', $bracelet->sensors)) selected @endif>пульсометр</option>
                     <option value="гироскоп" @if(in_array('гироскоп', $bracelet->sensors)) selected @endif>гироскоп</option>
+                    <option value="датчик освещенности" @if(in_array('датчик освещенности', $bracelet->sensors)) selected @endif>датчик освещенности</option>
+                    <option value="термометр" @if(in_array('термометр', $bracelet->sensors)) selected @endif>термометр</option>
+                    <option value="высотомер" @if(in_array('высотомер', $bracelet->sensors)) selected @endif>высотомер</option>
                   </select>
                   <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                 </div>
@@ -490,8 +490,12 @@
                 <label class="form-label margin-bottom-xxs" for="other_interfaces">Другие интерфейсы</label>
                 <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
                   <select name="other_interfaces[]" id="other_interfaces[]" multiple>
-                    <option value="интерфейс1" @if(in_array('интерфейс1', $bracelet->other_interfaces)) selected @endif>интерфейс1</option>
-                    <option value="интерфейс2" @if(in_array('интерфейс2', $bracelet->other_interfaces)) selected @endif>интерфейс2</option>
+                    <option value="Wi-Fi" @if(in_array('Wi-Fi', $bracelet->other_interfaces)) selected @endif>Wi-Fi</option>
+                    <option value="USB" @if(in_array('USB', $bracelet->other_interfaces)) selected @endif>USB</option>
+                    <option value="BLE" @if(in_array('BLE', $bracelet->other_interfaces)) selected @endif>BLE</option>
+                    <option value="ANT+" @if(in_array('ANT+', $bracelet->other_interfaces)) selected @endif>ANT+</option>
+                    <option value="BR" @if(in_array('BR', $bracelet->other_interfaces)) selected @endif>BR</option>
+                    <option value="EDR" @if(in_array('EDR', $bracelet->other_interfaces)) selected @endif>EDR</option>
                   </select>
                   <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                 </div>
@@ -502,7 +506,7 @@
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="blue_ver">Версия Bluetooth</label>
-                <input class="form-control width-100%" type="number" name="blue_ver" value="{{ $bracelet->blue_ver }}">
+                <input class="form-control width-100%" type="number" name="blue_ver" value="{{ $bracelet->blue_ver }}" min="2" max="8" step="0.1" value="">
               </div>
             </div>
       
@@ -560,9 +564,42 @@
                 <label class="form-label margin-bottom-xxs" for="training_modes">Тренировочные режимы</label>
                 <div class="multi-select js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
                   <select name="training_modes[]" id="training_modes[]" multiple>
-                    <option value="режим1" @if(in_array('режим1', $bracelet->training_modes)) selected @endif>режим1</option>
-                    <option value="режим2" @if(in_array('режим2', $bracelet->training_modes)) selected @endif>режим2</option>
-                    <option value="режим3" @if(in_array('режим3', $bracelet->training_modes)) selected @endif>режим3</option>
+                    <option value="ходьба на улице" @if(in_array('ходьба на улице', $bracelet->training_modes)) selected @endif>ходьба на улице</option>
+                    <option value="ходьба" @if(in_array('ходьба', $bracelet->training_modes)) selected @endif>ходьба</option>
+                    <option value="велотренажер" @if(in_array('велотренажер', $bracelet->training_modes)) selected @endif>велотренажер</option>
+                    <option value="бег на улице" @if(in_array('бег на улице', $bracelet->training_modes)) selected @endif>бег на улице</option>
+                    <option value="бег" @if(in_array('бег', $bracelet->training_modes)) selected @endif>бег</option>
+                    <option value="беговая дорожка" @if(in_array('беговая дорожка', $bracelet->training_modes)) selected @endif>беговая дорожка</option>
+                    <option value="ходьба на дорожке" @if(in_array('ходьба на дорожке', $bracelet->training_modes)) selected @endif>ходьба на дорожке</option>
+                    <option value="свободная тренировка" @if(in_array('свободная тренировка', $bracelet->training_modes)) selected @endif>свободная тренировка</option>
+                    <option value="скакалка" @if(in_array('скакалка', $bracelet->training_modes)) selected @endif>скакалка</option>
+                    <option value="велосипед" @if(in_array('велосипед', $bracelet->training_modes)) selected @endif>велосипед</option>
+                    <option value="подъем на гору" @if(in_array('подъем на гору', $bracelet->training_modes)) selected @endif>подъем на гору</option>
+                    <option value="плавание" @if(in_array('плавание', $bracelet->training_modes)) selected @endif>плавание</option>
+                    <option value="пресс" @if(in_array('пресс', $bracelet->training_modes)) selected @endif>пресс</option>
+                    <option value="альпинизм" @if(in_array('альпинизм', $bracelet->training_modes)) selected @endif>альпинизм</option>
+                    <option value="скалолазание" @if(in_array('скалолазание', $bracelet->training_modes)) selected @endif>скалолазание</option>
+                    <option value="баскетбол" @if(in_array('баскетбол', $bracelet->training_modes)) selected @endif>баскетбол</option>
+                    <option value="футбол" @if(in_array('футбол', $bracelet->training_modes)) selected @endif>футбол</option>
+                    <option value="поход" @if(in_array('поход', $bracelet->training_modes)) selected @endif>поход</option>
+                    <option value="горный спорт" @if(in_array('горный спорт', $bracelet->training_modes)) selected @endif>горный спорт</option>
+                    <option value="настольный теннис" @if(in_array('настольный теннис', $bracelet->training_modes)) selected @endif>настольный теннис</option>
+                    <option value="эллиптический тренажер" @if(in_array('эллиптический тренажер', $bracelet->training_modes)) selected @endif>эллиптический тренажер</option>
+                    <option value="игра с мячом" @if(in_array('игра с мячом', $bracelet->training_modes)) selected @endif>игра с мячом</option>
+                    <option value="90 альтернативных активностей" @if(in_array('90 альтернативных активностей', $bracelet->training_modes)) selected @endif>90 альтернативных активностей</option>
+                    <option value="плавание в бассейне" @if(in_array('плавание в бассейне', $bracelet->training_modes)) selected @endif>плавание в бассейне</option>
+                    <option value="жиросжигательный бег" @if(in_array('жиросжигательный бег', $bracelet->training_modes)) selected @endif>жиросжигательный бег</option>
+                    <option value="гребной тренажер" @if(in_array('гребной тренажер', $bracelet->training_modes)) selected @endif>гребной тренажер</option>
+                    <option value="плавание в открытом водоеме" @if(in_array('плавание в открытом водоеме', $bracelet->training_modes)) selected @endif>плавание в открытом водоеме</option>
+                    <option value="степпер" @if(in_array('степпер', $bracelet->training_modes)) selected @endif>степпер</option>
+                    <option value="бадминтон" @if(in_array('бадминтон', $bracelet->training_modes)) selected @endif>бадминтон</option>
+                    <option value="прыжки на скакалке" @if(in_array('прыжки на скакалке', $bracelet->training_modes)) selected @endif>прыжки на скакалке</option>
+                    <option value="йога" @if(in_array('йога', $bracelet->training_modes)) selected @endif>йога</option>
+                    <option value="скручивания" @if(in_array('скручивания', $bracelet->training_modes)) selected @endif>скручивания</option>
+                    <option value="выпады" @if(in_array('выпады', $bracelet->training_modes)) selected @endif>выпады</option>
+                    <option value="приседания" @if(in_array('приседания', $bracelet->training_modes)) selected @endif>приседания</option>
+                    <option value="прыжки звезда" @if(in_array('прыжки звезда', $bracelet->training_modes)) selected @endif>прыжки звезда</option>
+                    <option value="пилатес" @if(in_array('пилатес', $bracelet->training_modes)) selected @endif>пилатес</option>
                   </select>
                   <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                 </div>
@@ -630,22 +667,22 @@
               </div>
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="capacity_battery">Емкость (мАч)</label>
-                <input class="form-control width-100%" type="number" name="capacity_battery" value="{{ $bracelet->capacity_battery }}">
+                <input class="form-control width-100%" type="number" name="capacity_battery" value="{{ $bracelet->capacity_battery }}" min="10" max="2000" step="1" value="">
               </div>
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="standby_time">Время работы в режиме ожидания (часов)</label>
-                <input class="form-control width-100%" type="number" name="standby_time" value="{{ $bracelet->standby_time }}">
+                <input class="form-control width-100%" type="number" name="standby_time" value="{{ $bracelet->standby_time }}" min="3" max="2000" step="1" value="">
               </div>
             </div>
             
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="real_time">Реальное время работы (дней)</label>
-                <input class="form-control width-100%" type="number" name="real_time" value="{{ $bracelet->real_time }}">
+                <input class="form-control width-100%" type="number" name="real_time" value="{{ $bracelet->real_time }}" min="1" max="1000" step="1" value="">
               </div>
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="full_charge_time">Время полной зарядки</label>
-                <input class="form-control width-100%" type="number" name="full_charge_time" value="{{ $bracelet->full_charge_time }}">
+                <input class="form-control width-100%" type="number" name="full_charge_time" value="{{ $bracelet->full_charge_time }}" min="10" max="8" step="0.1" value="">
               </div>
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="charger">Зарядное устройство</label>

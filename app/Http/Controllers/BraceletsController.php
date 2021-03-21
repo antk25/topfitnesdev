@@ -14,8 +14,7 @@ class BraceletsController extends Controller
 {
     public function index(Request $request, ProuctFiltersPreset $preset) {
 
-
-        $bracelets = Bracelet::filter($preset->getForMarketingMenu($request))->paginate(20);
+        $bracelets = Bracelet::with('sellers', 'media')->filter($preset->getForMarketingMenu($request))->paginate(20);
 
         return view('bracelets.index', compact('bracelets'));
     }

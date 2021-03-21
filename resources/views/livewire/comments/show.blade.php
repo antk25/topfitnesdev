@@ -25,29 +25,14 @@
                 <fieldset>
                   <div class="margin-bottom-xs">
                     <label class="sr-only" for="commentNewContent">Ваш ответ на комментарий c id {{ $comment->id }}</label>
-                    <textarea class="form-control width-100%" wire:model="comment"></textarea>
+                    <textarea class="form-control width-100%" wire:model.lazy="comment"></textarea>
                   </div>
                 </fieldset>
                 <button class="btn btn--primary" type="submit">Написать</button>
+                <button class="btn btn--secondary" wire:click.prevent="resetInputFields">Отмена</button>
               </form>
               @endif
-              {{-- <div x-data="{ isOpen : ''}"> --}}
-              {{-- <button @click="isOpen = 'reply-{{ $comment->id }}'" type="button" class="reset comments__label-btn js-tab-focus">Ответить</button> --}}
-    
-				                {{-- <div x-show="isOpen === 'reply-{{ $comment->id }}'"> --}}
-                          
-                            {{-- <form wire:submit.prevent="replyStore({{ $comment->id }})"> --}}
-                                {{-- <fieldset> --}}
-                                  {{-- <div class="margin-bottom-xs"> --}}
-                                    {{-- <label class="sr-only" for="commentNewContent">Ваш ответ на комментарий c id {{ $comment->id }}</label> --}}
-                                    {{-- <textarea class="form-control width-100%" wire:model="comment"></textarea> --}}
-                                  {{-- </div> --}}
-                                {{-- </fieldset> --}}
-                                {{-- <button class="btn btn--primary" type="submit">Написать</button> --}}
-                              {{-- </form> --}}
-				 
-				                {{-- </div> --}}
-              {{-- </div> --}}
+              
               <span class="comments__inline-divider" aria-hidden="true"></span>
   
               <time class="comments__time" aria-label="1 hour ago">{{ $comment->created_at->diffForHumans() }}</time>

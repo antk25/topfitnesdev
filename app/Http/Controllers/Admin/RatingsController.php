@@ -150,11 +150,12 @@ class RatingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    
     public function destroy($id)
     {
-        // $brand = Brand::find($id);
-        // $brand->delete();
+        Rating::destroy($id);
 
-        return redirect()->route('ratings.index');
+        return back();
     }
+
 }

@@ -217,38 +217,7 @@
       <p class="text-sm">450 results</p>
   
       {{ $grades->links() }}
-      {{-- <nav class="pagination text-sm" aria-label="Pagination">
-        <ul class="pagination__list flex flex-wrap gap-xxxs">
-          <li>
-            <a href="#0" class="pagination__item">
-              <svg class="icon" viewBox="0 0 16 16">
-                <title>Go to previous page</title>
-                <g stroke-width="1.5" stroke="currentColor">
-                  <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="9.5,3.5 5,8 9.5,12.5 "></polyline>
-                </g>
-              </svg>
-            </a>
-          </li>
-  
-          <li>
-            <span class="pagination__jumper flex items-center">
-              <input aria-label="Page number" class="form-control" type="text" id="pageNumber" name="pageNumber" value="1">
-              <em>of 50</em>
-            </span>
-          </li>
-  
-          <li>
-            <a href="#0" class="pagination__item">
-              <svg class="icon" viewBox="0 0 16 16">
-                <title>Go to next page</title>
-                <g stroke-width="1.5" stroke="currentColor">
-                  <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline>
-                </g>
-              </svg>
-            </a>
-          </li>
-        </ul>
-      </nav> --}}
+      
     </div>
   </div>
 

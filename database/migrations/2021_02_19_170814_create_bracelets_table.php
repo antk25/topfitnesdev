@@ -38,11 +38,11 @@ class CreateBraceletsTable extends Migration
             $table->json('colors')->nullable();
             $table->json('protect_stand')->nullable();
             $table->json('terms_of_use')->nullable();
-            $table->json('dimensions')->nullable();
-            //$table->float('weight', 4, 1)->unsinged()->nullable();
+            $table->string('dimensions')->nullable();
+            $table->float('weight', 4, 1)->unsinged()->nullable();
             $table->float('disp_diag', 4, 1)->unsinged()->nullable();
             $table->string('disp_tech', 100)->nullable();
-            $table->json('disp_resolution')->nullable();
+            $table->string('disp_resolution')->nullable();
             $table->integer('disp_ppi')->unsinged()->nullable();
             $table->boolean('disp_sens')->default(0);
             $table->boolean('disp_color')->default(0);

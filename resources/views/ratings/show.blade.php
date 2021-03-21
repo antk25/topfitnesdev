@@ -9,11 +9,6 @@
         <svg class="icon margin-left-xxxs color-contrast-medium" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline></g></svg>
       </li>
   
-      <li class="breadcrumbs__item">
-        <a href="{{ route('pub.bracelets.index') }}" class="color-inherit">Каталог</a>
-        <svg class="icon margin-left-xxxs color-contrast-medium" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline></g></svg>
-      </li>
-  
       <li class="breadcrumbs__item" aria-current="page">{{ $rating->name }}</li>
     </ol>
   </nav>
