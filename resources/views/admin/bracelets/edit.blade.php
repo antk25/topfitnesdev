@@ -682,7 +682,7 @@
               </div>
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="full_charge_time">Время полной зарядки</label>
-                <input class="form-control width-100%" type="number" name="full_charge_time" value="{{ $bracelet->full_charge_time }}" min="10" max="8" step="0.1" value="">
+                <input class="form-control width-100%" type="number" name="full_charge_time" value="{{ $bracelet->full_charge_time }}" min="10" max="2000" step="1" value="">
               </div>
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="charger">Зарядное устройство</label>

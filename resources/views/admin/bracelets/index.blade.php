@@ -121,6 +121,9 @@
 </div>
 </div>
 @endif
+<div class="margin-y-md">
+  <a href="{{ route('bracelets.updategrades') }}">Обновить средний рейтинг браслетов</a>
+</div>
     <div class="items-center justify-between padding-top-sm">
       {{ $bracelets->links() }}
     </div>

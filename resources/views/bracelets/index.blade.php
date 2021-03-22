@@ -246,6 +246,9 @@
                                                         @endforeach
                                               </p>
                                               <p>
+                                                  Средняя оценка: {{ $bracelet->grade_bracelet }}
+                                              </p>
+                                              <p>
                                                   @foreach ($bracelet->terms_of_use as $item)
                                                   {{ $item }}<br>
                                                   @endforeach

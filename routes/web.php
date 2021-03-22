@@ -43,6 +43,7 @@ Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admi
     Route::get('/', 'MainController@index')->name('admin.index');
     Route::resource('/brands', 'BrandsController');
     Route::resource('/bracelets', 'BraceletsController');
+    Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
     Route::get('/import', 'BraceletsController@import');
     Route::post('importExcel', 'BraceletsController@importExcel');
     Route::resource('/ratings', 'RatingsController');

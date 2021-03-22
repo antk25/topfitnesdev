@@ -19,11 +19,12 @@ class CreateBraceletsTable extends Migration
             $table->string('slug')->unique();
             $table->string('title', 200);
             $table->string('subtitle', 200)->nullable();
-            $table->string('description')->nullable();
+            $table->string('description', 1000)->nullable();
             $table->text('about')->nullable();
             $table->integer('brand_id')->unsinged();
             $table->integer('position')->unsigned()->nullable();
             $table->float('rating_bracelet', 4, 2)->unsinged()->nullable();
+            $table->float('grade_bracelet', 4, 2)->unsinged()->nullable();
             $table->json('plus')->nullable();
             $table->json('minus')->nullable();
             $table->json('buyers_like')->nullable();
@@ -75,7 +76,7 @@ class CreateBraceletsTable extends Migration
             $table->boolean('women_calendar')->default(0);
             $table->boolean('weather_forecast')->default(0);
             $table->string('additional_info')->nullable();
-            $table->json('type_battery')->nullable();
+            $table->string('type_battery')->nullable();
             $table->integer('capacity_battery')->nullable()->unsinged();
             $table->integer('standby_time')->nullable()->unsinged();
             $table->string('real_time')->nullable();

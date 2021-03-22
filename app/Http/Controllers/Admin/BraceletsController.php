@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 use App\Http\Requests\Admin\BraceletRequest;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -132,7 +134,7 @@ class BraceletsController extends Controller
         $files = request('files');
 
         $nameimg = request('nameimg');
-        
+
         if ($files != '') {
             $lastbracelet = Bracelet::find($bracelet->id);
             $i = 0;
@@ -280,9 +282,12 @@ class BraceletsController extends Controller
 
             $bracelet->sellers()->sync($data3);
         }
-
+        // Вычисление средней цены по продавцам
         $avg_price = collect($request->price);
         $avg_price = $avg_price->avg();
+        // Вычисление среднего рейтинга по оценкам grades
+        $avg_grade = collect($request->value);
+        $avg_grade = $avg_grade->avg();
 
         $bracelet->update([
            'name' => request('name'),
@@ -350,12 +355,13 @@ class BraceletsController extends Controller
            'real_time' => request('real_time'),
            'full_charge_time' => request('full_charge_time'),
            'charger' => request('charger'),
-           'avg_price' => $avg_price
+           'avg_price' => $avg_price,
+           'grade_bracelet' => $avg_grade
         ]);
 
         $files = request('files');
         $nameimg = request('nameimg');
-        
+
         if ($files != '' && $nameimg[0] != '') {
             $lastbracelet = Bracelet::find($bracelet->id);
             $i = 0;
@@ -389,10 +395,10 @@ class BraceletsController extends Controller
 
         return back();
     }
-    
-    
+
+
     public function imgdelete(Request $request) {
-        
+
         $imgid = $request->imgid;
 
         $mediaItems = Media::find($imgid);
@@ -400,7 +406,7 @@ class BraceletsController extends Controller
         $mediaItems->delete();
 
         return back();
-    
+
     }
 
     public function imgupdate(Request $request) {
@@ -411,15 +417,29 @@ class BraceletsController extends Controller
             'name' => request('nameimg')
         ]);
 
-        
         return back();
-    
+
     }
 
-    public function import() 
+    public function gradeUpdate() {
+
+        $bracelets = Bracelet::with('grades')->select('id')->get();
+        foreach ($bracelets as $bracelet)
+        {
+           $brgrade = DB::table('bracelet_grade')->where('bracelet_id', $bracelet->id)->pluck('value');
+           $brgrade = $brgrade->avg();
+           $bracelet->update([
+               'grade_bracelet' => $brgrade
+           ]);
+        }
+        return back();
+
+    }
+
+    public function import()
     {
         Excel::import(new BraceletsImport, 'all_bracelets_1.xlsx');
-        
+
         return back()->with('success', 'Завершено!');
     }
 }

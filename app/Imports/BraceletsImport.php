@@ -86,7 +86,6 @@ class BraceletsImport implements ToModel, WithHeadingRow
             'popular' => $row['popular'],
         ]);
         
-        
         $files = $row['files'];
         // dd($files);
        if ($files != '') {
