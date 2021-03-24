@@ -9,31 +9,31 @@ use Illuminate\Support\Str;
 
 class ProductJsonFieldsFilter implements QueryFilterContract
 {
-    protected $terms_of_use;
+    protected $protect_stand;
 
 
-    public function __construct($terms_of_use)
+    public function __construct($protect_stand)
     {
-            $this->terms_of_use = $terms_of_use;
+            $this->protect_stand = $protect_stand;
     }
 
     public function apply($query)
     {
-        if (! $this->terms_of_use) {
+        if (! $this->protect_stand) {
             return;
         }
         
-        if (is_array($this->terms_of_use)) {
+        if (is_array($this->protect_stand)) {
 
-        $query->when($this->terms_of_use, function ($query) {
-           foreach ($this->terms_of_use as $item) {
-            $query->whereJsonContains('terms_of_use', $item);
+        $query->when($this->protect_stand, function ($query) {
+           foreach ($this->protect_stand as $item) {
+            $query->whereJsonContains('protect_stand', $item);
             }
         });
         }
         else {
 
-            $query->whereJsonContains('terms_of_use', $this->terms_of_use);
+            $query->whereJsonContains('protect_stand', $this->protect_stand);
 
         }
     }

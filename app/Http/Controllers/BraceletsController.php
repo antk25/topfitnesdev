@@ -12,11 +12,20 @@ use App\ResourceFiltering\ProductFilters\ProductPriceRangeFilter;
 
 class BraceletsController extends Controller
 {
-    public function index(Request $request, ProuctFiltersPreset $preset) {
+    // public function index(Request $request, ProuctFiltersPreset $preset) {
 
-        $bracelets = Bracelet::with('sellers', 'media')->filter($preset->getForMarketingMenu($request))->paginate(20);
+        // $bracelets = Bracelet::with('sellers', 'media')->filter($preset->getForMarketingMenu($request))->paginate(20);
 
-        return view('bracelets.index', compact('bracelets'));
+        // return view('bracelets.index', compact('bracelets'));
+    // }
+
+    public function index()
+    {
+        
+        // $bracelets = Bracelet::with('sellers', 'media')->get();
+
+        return view('bracelets.index');
+  
     }
 
     public function show($slug) {
@@ -26,12 +35,11 @@ class BraceletsController extends Controller
         return view('bracelets.show', compact('bracelet', 'media'));
     }
     
-    public function selection(Request $request, ProuctFiltersPreset $preset) {
+    // public function selection(Request $request, ProuctFiltersPreset $preset) {
 
+        // $bracelets = Bracelet::filter($preset->getForMarketingMenu($request))->paginate(20);
 
-        $bracelets = Bracelet::filter($preset->getForMarketingMenu($request))->paginate(20);
-
-        return view('bracelets.selection', compact('bracelets'));
-    }
+        // return view('bracelets.selection', compact('bracelets'));
+    // }
 
 }

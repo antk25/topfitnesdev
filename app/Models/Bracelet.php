@@ -9,6 +9,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Support\Str;
 use App\ResourceFiltering\QueryFilters;
+use Spatie\Image\Image;
+
 
 class Bracelet extends Model implements HasMedia
 {
@@ -138,6 +140,8 @@ class Bracelet extends Model implements HasMedia
         $this->addMediaConversion('1280')
             ->width(1280);
 
+        $this->addMediaConversion('thumb')
+        ->crop('crop-center', 300, 300);
     }
 
     public function setSlugAttribute($value)

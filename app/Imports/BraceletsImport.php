@@ -14,6 +14,7 @@ class BraceletsImport implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
+
     public function model(array $row)
     {
 
@@ -82,29 +83,28 @@ class BraceletsImport implements ToModel, WithHeadingRow
             'standby_time' => $row['standby_time'],
             'real_time' => $row['real_time'],
             'full_charge_time' => $row['full_charge_time'],
-            'charger' => $row['charger'],
-            'popular' => $row['popular'],
+            'charger' => $row['charger']
+            // 'popular' => $row['popular']
         ]);
         
         $files = $row['files'];
-        // dd($files);
-       if ($files != '') {
-        if (Str::contains($files, '|')) {
-            $files = explode("|", $files);
-            $lastbracelet = Bracelet::find($bracelet->id);
-            foreach ($files as $file) {
-                $lastbracelet->addMedia($file)
-                    ->preservingOriginal()
-                    ->toMediaCollection('bracelet');
-            }
+            if ($files != '') {
+                if (Str::contains($files, '|')) {
+                    $files = explode("|", $files);
+                    $lastbracelet = Bracelet::find($bracelet->id);
+                    foreach ($files as $file) {
+                        $lastbracelet->addMedia($file)
+                            ->preservingOriginal()
+                            ->toMediaCollection('bracelet');
+                    }
             
-        }
-        else  {
-            $lastbracelet = Bracelet::find($bracelet->id);
-                $lastbracelet->addMedia($files)
-                    ->preservingOriginal()
-                    ->toMediaCollection('bracelet');
+                }
+            else  {
+                $lastbracelet = Bracelet::find($bracelet->id);
+                    $lastbracelet->addMedia($files)
+                        ->preservingOriginal()
+                        ->toMediaCollection('bracelet');
+            }
         }
     }
-}
 }

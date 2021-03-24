@@ -17,6 +17,9 @@ class ProductPriceRangeFilter implements QueryFilterContract
 
 public function apply($query)
     {
+        if (! $this->minPrice) {
+            return;
+        }
         $query
             ->when($this->minPrice, function ($query) {
                 $query->where('avg_price', '>=', $this->minPrice);

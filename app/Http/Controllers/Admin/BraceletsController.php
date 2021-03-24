@@ -31,7 +31,7 @@ class BraceletsController extends Controller
     {
 
         $bracelets = Bracelet::with('brands')->paginate(20);
-        // dd($bracelets);
+
         return view('admin.bracelets.index', compact('bracelets'));
     }
 
@@ -187,7 +187,6 @@ class BraceletsController extends Controller
             }
         }
 
-
         return redirect()->route('bracelets.index');
     }
 
@@ -284,9 +283,12 @@ class BraceletsController extends Controller
         }
         // Вычисление средней цены по продавцам
         $avg_price = collect($request->price);
+
         $avg_price = $avg_price->avg();
+
         // Вычисление среднего рейтинга по оценкам grades
         $avg_grade = collect($request->value);
+
         $avg_grade = $avg_grade->avg();
 
         $bracelet->update([
@@ -410,7 +412,9 @@ class BraceletsController extends Controller
     }
 
     public function imgupdate(Request $request) {
+
         $id = $request->imgid;
+
         $image = Media::find($id);
 
         $image->update([
@@ -424,14 +428,18 @@ class BraceletsController extends Controller
     public function gradeUpdate() {
 
         $bracelets = Bracelet::with('grades')->select('id')->get();
+
         foreach ($bracelets as $bracelet)
         {
            $brgrade = DB::table('bracelet_grade')->where('bracelet_id', $bracelet->id)->pluck('value');
+
            $brgrade = $brgrade->avg();
+
            $bracelet->update([
                'grade_bracelet' => $brgrade
            ]);
         }
+        
         return back();
 
     }
