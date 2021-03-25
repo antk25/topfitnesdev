@@ -9,30 +9,21 @@
         <h2>Добавить продавца</h2>
             <p>Управление продавцами и партнерскими программами для браслетов.</p>
       </div>
-  
-      <div class="margin-bottom-xs">
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-4@md">
-            <label class="form-label" for="name">Название продавца</label>
-          </div>
-          
-          <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="name" id="name" required>
-          </div>
+      
+      <div class="grid gap-xxs margin-bottom-xs">
+        <div class="col-6@md">
+          <label class="form-label margin-bottom-xxs" for="name">Название продавца</label>
+          <input class="form-control width-100%" type="text" name="name" id="name">
+          <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
         </div>
-      </div>
-  
-      <div>
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-4@md">
-            <label class="form-label" for="about">Описание</label>
+
+          <div class="col-6@md">
+            <label class="form-label margin-bottom-xxs" for="about">Описание:</label>
             <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
-          </div>
-          
-          <div class="col-8@md">
+            
             <textarea class="form-control width-100%" name="about" id="code"></textarea>
+        
           </div>
-        </div>
       </div>
     </fieldset>
   

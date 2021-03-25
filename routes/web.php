@@ -20,6 +20,8 @@ Route::get('/', function () {
 
 // шаблоны страниц
 
+Route::get('/', 'App\Http\Controllers\IndexController@index')->name('index');
+
 Route::get('katalog', 'App\Http\Controllers\BraceletsController@index')->name('pub.bracelets.index');
 
 Route::get('podbor', 'App\Http\Controllers\BraceletsController@selection')->name('pub.bracelets.selection');

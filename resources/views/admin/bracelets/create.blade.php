@@ -14,8 +14,15 @@
       <div class="margin-y-sm">
         <input class="checkbox" type="checkbox" id="popular" name="popular">
         <label for="popular">Популярный</label>&nbsp;&nbsp;&nbsp;
+        
+        <input class="checkbox" type="checkbox" id="hit" name="hit">
+        <label for="hit">Лидер</label>&nbsp;&nbsp;&nbsp;
+        
         <input class="checkbox" type="checkbox" id="published" name="published" checked>
         <label for="published">Опубликован</label>&nbsp;&nbsp;&nbsp;
+        
+        <input class="checkbox" type="checkbox" id="selection" name="selection">
+        <label for="selection">Учавствует в подборе</label>&nbsp;&nbsp;&nbsp;
       </div>
 
       <div class="grid gap-xxs margin-bottom-xs">

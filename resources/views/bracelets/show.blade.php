@@ -26,7 +26,7 @@
 <ul class="exp-gallery grid gap-xs js-exp-gallery" data-controls="expLightbox" data-placeholder="assets/img/expandable-img-gallery-placeholder.svg">
    @foreach ($media as $image)
    <li class="col-4 col-3@sm js-exp-gallery__item">
-     <figure class="aspect-ratio-1:1">
+     <figure class="border border-contrast-middle border-opacity-30% shadow-xs">
        <img src="{{ $image->getFullUrl('320') }}" data-modal-src="{{ $image->getFullUrl('320') }}" alt="Image Description">
        <figcaption class="sr-only js-exp-gallery__caption">Image caption</figcaption>
      </figure>
@@ -37,55 +37,34 @@
     <div class="col-6@md">
 
 <div class="table-card bg radius-md padding-md shadow-xs">
-  <div class="margin-bottom-md">
-    <div class="flex items-baseline justify-between">
-      <p class="color-contrast-medium">Оценки</p>
-      <p>Общая оценка <span class="text-md color-primary font-bold">14.3</span></p>
-    </div>
-  </div>
 
-  <div class="tbl text-sm">
-    <table class="tbl__table" aria-label="Таблица оценок">
-      <thead class="tbl__header sr-only">
-        <tr class="tbl__row">
-          <th class="tbl__cell text-left" scope="col">
-            <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Оценка</span>
-          </th>
-
-          <th class="tbl__cell text-right" scope="col">
-            <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Значение</span>
-          </th>
-        </tr>
-      </thead>
-
-      <tbody class="tbl__body">
         @foreach ($bracelet->grades as $grade)
-        <tr class="tbl__row">
-          <td class="tbl__cell" role="cell"><span class="tooltip-trigger js-tooltip-trigger" title="{{ $grade->about }}">{{ $grade->name }}</span></td>
+        <div class="progress-bar progress-bar--color-update js-progress-bar flex flex-column items-center margin-y-xxs">              
+          <p class="sr-only" aria-live="polite" aria-atomic="true">Оценка составляет <span class="js-progress-bar__aria-value">{{ $grade->pivot->value * 10 }}%</span></p>
+        
+          <div class="margin-y-xxs width-100%">{{ $grade->name }} <span class="text-bold float-right">{{ number_format($grade->pivot->value, 1) }}</span></div>
+          
+          <div class="progress-bar__bg width-100%" aria-hidden="true">
+            <div class="progress-bar__fill" style="width: {{ $grade->pivot->value * 10 }}%;"></div>
+          </div>
+        </div>
 
-
-          <td class="tbl__cell" role="cell">
-            <div class="flex justify-end">
-
-              <div class="progress-bar inline-flex items-center js-progress-bar">
-                <p class="sr-only" aria-live="polite" aria-atomic="true">Progress value is <span class="js-progress-bar__aria-value">{{ $grade->pivot->value * 10 }}%</span></p>
-
-                <span class="progress-bar__value margin-left-xs order-2 font-bold" aria-hidden="true">
-                     {{ number_format($grade->pivot->value, 1) }}
-                </span>
-
-                <div class="progress-bar__bg order-1" aria-hidden="true">
-                  <div class="progress-bar__fill color-success" style="width: {{ $grade->pivot->value * 10 }}%;"></div>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
         @endforeach
-      </tbody>
-    </table>
-  </div>
+        <div class="text-center">
+        <span class="text-xxxl"><svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.765 9.397a.676.676 0 00-.538-.453l-6.64-1.015-2.976-6.34c-.222-.474-.999-.474-1.222 0L8.413 7.93l-6.64 1.015a.674.674 0 00-.381 1.139l4.824 4.945-1.14 6.99a.673.673 0 00.992.699L12 19.439l5.931 3.278a.672.672 0 00.993-.699l-1.14-6.99 4.824-4.945a.675.675 0 00.157-.686z" fill="#ffc107"/><path d="M5.574 15.362l-1.267 7.767a.751.751 0 001.103.777L12 20.264l6.59 3.643a.748.748 0 001.103-.778l-1.267-7.767 5.36-5.494a.75.75 0 00-.423-1.265l-7.378-1.127L12.678.432c-.247-.526-1.11-.526-1.357 0L8.015 7.476.637 8.603a.75.75 0 00-.424 1.265zm3.063-6.464a.75.75 0 00.565-.422L12 2.515l2.798 5.96a.747.747 0 00.565.422l6.331.967-4.605 4.72a.75.75 0 00-.204.645l1.08 6.617-5.602-3.096a.755.755 0 00-.726 0l-5.602 3.096 1.08-6.617a.75.75 0 00-.204-.645l-4.605-4.72z"/></svg> {{ $bracelet->grade_bracelet }}</span><br>
+        Средний рейтинг
+        </div>
 </div>
+<div class="text-divider"><span>Участвует в рейтингах</span></div>
+<ul class="list list--ol">
+  @foreach ($bracelet->ratings as $rating)
+    
+    <li class="list-item arrow-list4">
+      <a href="{{ $rating->slug }}">{{ $rating->name }}</a> <span class="text-sm">на {{ $rating->pivot->position }} месте</span>
+    </li>
+
+  @endforeach
+</ul>
     </div>
   </div>
   
@@ -128,10 +107,73 @@
      </div>
    </div>
  </div>
-<div class="margin-y-sm text-component">
+<div class="changelog__separator" role="presentation"></div>
+<section class="changelog margin-y-md">
+  <article>
+    <div class="grid gap-md items-start">
+      <!-- metadata -->
+      <div class="changelog__metadata col-4@md">
+        <h2 class="text-xl text-md@md">Плюсы</h2>
+      </div>
+      <!-- content -->
+      <div class="col-8@md">
+        <div class="grid gap-lg">
+          <!-- new features -->
+          <div>
+<ul class="grid gap-xs">
+    @foreach ($bracelet->plus as $plus)
+    <li>
+      <p class="changelog__update">
+        <svg class="changelog__icon icon color-success" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" opacity="0.2"/><path d="M17,11H13V7a1,1,0,0,0-2,0v4H7a1,1,0,0,0,0,2h4v4a1,1,0,0,0,2,0V13h4a1,1,0,0,0,0-2Z"/></svg>
+                  
+        <span>{{ $plus }}</span> 
+      </p>
+    </li>
+    @endforeach
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+</article>
+
+<div class="changelog__separator" role="presentation"></div>
+
+  <article>
+    <div class="grid gap-md items-start">
+      <!-- metadata -->
+      <div class="changelog__metadata col-4@md">
+        <h2 class="text-xl text-md@md">Минусы</h2>
+      </div>
+  
+      <!-- content -->
+      <div class="col-8@md">
+        <div class="grid gap-lg">
+          <!-- new features -->
+          <div>
+<ul class="grid gap-xs">
+    @foreach ($bracelet->minus as $minus)
+    <li>
+      <p class="changelog__update">
+        <svg class="changelog__icon icon color-error" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" opacity="0.2"/><path d="M12,15a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v8A1,1,0,0,1,12,15Z"/><circle cx="12" cy="18" r="1"/></svg>
+                  
+        <span>{{ $minus }}</span> 
+      </p>
+    </li>
+    @endforeach
+</ul>
+</div>
+</div>
+</div>
+</div>
+</article>
+</section>
+      <div class="margin-y-sm text-component">
  <h2>Характеристики</h2>
 </div>
- <table class="prop-table width-100%" aria-label="Характеристики {{ $bracelet->title }}">
+<div class="max-width-adaptive-sm">
+ <table class="prop-table width-100% text-sm" aria-label="Характеристики {{ $bracelet->title }}">
    <tbody class="prop-table__body">
 
      <tr class="text-md text-bold">
@@ -176,25 +218,25 @@
       <th class="prop-table__cell prop-table__cell--th">Сменный браслет/ремешок</th>
        <td class="prop-table__cell">
          @if ($bracelet->replaceable_strap == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Регулировка длины браслета</th>
        <td class="prop-table__cell">
          @if ($bracelet->lenght_adj == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Возможные цвета браслета</th>
       <td class="prop-table__cell">
         <fieldset class="color-swatches  js-color-swatches">
-          <legend class="color-swatches__legend text-sm color-contrast-medium margin-bottom-xs" aria-live="polite" aria-atomic="true">Цвет: <span class="color-swatches__color color-contrast-high js-color-swatches__color">Выбрать</span></legend>
+          <legend class="color-swatches__legend text-sm color-contrast-medium margin-bottom-xs" aria-live="polite" aria-atomic="true">Цвет: <span class="color-swatches__color color-contrast-high js-color-swatches__color"></span></legend>
           <select class="js-color-swatches__select" aria-label="Select a color">
             @foreach ($bracelet->colors as $color)
               @switch($color)
@@ -250,16 +292,16 @@
         @endforeach
       </td>
     </tr>
-     <tr class="prop-table__row">
-      <th class="prop-table__cell prop-table__cell--th">Габариты и вес</th>
+    <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Габариты</th>
       <td class="prop-table__cell">
-        @foreach ($bracelet->dimensions as $k => $v)
-         @if ($loop->last)
-             &nbsp;&nbsp;{{ $v }} г.
-         @else
-         {{ $v }} x 
-         @endif
-        @endforeach
+       {{ $bracelet->dimensions }} 
+      </td>
+    </tr>
+    <tr class="prop-table__row">
+      <th class="prop-table__cell prop-table__cell--th">Вес</th>
+      <td class="prop-table__cell">
+       {{ $bracelet->weight }} г. 
       </td>
     </tr>
      <tr class="text-md text-bold">
@@ -277,35 +319,29 @@
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Разрешение</th>
        <td class="prop-table__cell">
-         @foreach ($bracelet->disp_resolution as $k => $v)
-         @if ($loop->last)
-            {{ $v }} px 
-         @else
-         {{ $v }}x
-         @endif
-        @endforeach
+        {{ $bracelet->disp_resolution }} 
       </td>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">PPI (плотность пикселей)</th>
-       <td class="prop-table__cell">{{ $bracelet->disp_ppi }}</td>
+       <td class="prop-table__cell">{{ $bracelet->disp_ppi }} PPI</td>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Яркость</th>
-       <td class="prop-table__cell">{{ $bracelet->disp_brightness }}</td>
+       <td class="prop-table__cell">{{ $bracelet->disp_brightness }} нит.</td>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Глубина цвета</th>
-       <td class="prop-table__cell">{{ $bracelet->disp_col_depth }}</td>
+       <td class="prop-table__cell">{{ $bracelet->disp_col_depth }} бит.</td>
      </tr>
      
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Сенсорный</th>
        <td class="prop-table__cell">
          @if ($bracelet->disp_sens == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
 
@@ -313,9 +349,9 @@
       <th class="prop-table__cell prop-table__cell--th">Цветной</th>
        <td class="prop-table__cell">
          @if ($bracelet->disp_color == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      
@@ -323,9 +359,9 @@
       <th class="prop-table__cell prop-table__cell--th">Always on Display (AoD)</th>
        <td class="prop-table__cell">
          @if ($bracelet->disp_aod == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="text-md text-bold">
@@ -347,18 +383,18 @@
       <th class="prop-table__cell prop-table__cell--th">Встроенный GPS</th>
        <td class="prop-table__cell">
          @if ($bracelet->gps == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Вибромотор</th>
        <td class="prop-table__cell">
          @if ($bracelet->vibration == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
@@ -417,36 +453,36 @@
          пульса</th>
        <td class="prop-table__cell">
          @if ($bracelet->pulse_permanent == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Измерение кислорода в крови</th>
        <td class="prop-table__cell">
          @if ($bracelet->blood_oxy == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Измерение артериального давления</th>
        <td class="prop-table__cell">
          @if ($bracelet->blood_pressure == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Измерение стресса</th>
        <td class="prop-table__cell">
          @if ($bracelet->stress == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      
@@ -466,90 +502,90 @@
        <th class="prop-table__cell prop-table__cell--th">Автоматическое распознавание тренировки</th>
        <td class="prop-table__cell">
          @if ($bracelet->workout_recognition == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Напоминание об отсутствии активности</th>
        <td class="prop-table__cell">
          @if ($bracelet->inactivity_reminder == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Поиск смартфона/браслета</th>
        <td class="prop-table__cell">
          @if ($bracelet->search_smartphone == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Умный будильник</th>
        <td class="prop-table__cell">
          @if ($bracelet->smart_alarm == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Управление камерой смартфона</th>
        <td class="prop-table__cell">
          @if ($bracelet->camera_control == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Управление плеером смартфона</th>
        <td class="prop-table__cell">
          @if ($bracelet->player_control == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Секундомер</th>
        <td class="prop-table__cell">
          @if ($bracelet->stopwatch == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Таймер</th>
        <td class="prop-table__cell">
          @if ($bracelet->timer == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Женский календарь</th>
        <td class="prop-table__cell">
          @if ($bracelet->women_calendar == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Прогноз погоды</th>
        <td class="prop-table__cell">
          @if ($bracelet->weather_forecast == '1')
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#87c458"/><polyline points="12 24 20 32 36 16" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
          @else
-         <svg class="icon icon--md" viewBox="0 0 48 48"><title>Option not available</title><path d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47Z" fill="#f54250"/><line x1="33" y1="15" x2="15" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/><line x1="15" y1="15" x2="33" y2="33" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4"/></svg>
+         <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
      
@@ -586,7 +622,7 @@
      </tr>
    </tbody>
  </table>
-
+</div>
  <h2>Отзывы</h2>
 
  <section class="comments comments--no-profile-img">

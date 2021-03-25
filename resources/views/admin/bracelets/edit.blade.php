@@ -24,8 +24,15 @@
             <div class="margin-y-sm">
               <input class="checkbox" type="checkbox" id="popular" name="popular" @if ($bracelet->popular == 1)checked @endif>
               <label for="popular">Популярный</label>&nbsp;&nbsp;&nbsp;
+              
+              <input class="checkbox" type="checkbox" id="hit" name="hit" @if ($bracelet->hit == 1)checked @endif>
+              <label for="hit">Лидер</label>&nbsp;&nbsp;&nbsp;
+              
               <input class="checkbox" type="checkbox" id="published" name="published" @if ($bracelet->published == 1)checked @endif>
               <label for="published">Опубликован</label>&nbsp;&nbsp;&nbsp;
+        
+              <input class="checkbox" type="checkbox" id="selection" name="selection">
+              <label for="selection">Учавствует в подборе</label>&nbsp;&nbsp;&nbsp;
             </div>
       
             <div class="grid gap-xxs margin-bottom-xs">
@@ -299,6 +306,10 @@
                 <input class="form-control width-100%" type="text" name="assistant_app" id="assistant_app" value="{{ $bracelet->assistant_app }}">
               </div>
       
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="avg_price">Средняя цена</label>
+                <input class="form-control width-100%" type="text" name="avg_price" id="avg_price" value="{{ $bracelet->avg_price }}">
+              </div>
             </div>
           </fieldset>
 

@@ -447,7 +447,7 @@
 @section('footerScripts')
 <livewire:scripts />
     <script src="{{ asset("js/scripts.js") }}"></script>
-    {{-- <script src="{{ asset("js/alpine.min.js") }}"></script> --}}
+    <script src="{{ asset("js/alpine.min.js") }}"></script>
        {{-- window.livewire.on('loadData', () => { --}}
          {{-- document.getElementsByTagName("html")[0].className += " js"; --}}
            {{-- }); --}}

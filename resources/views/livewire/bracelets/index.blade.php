@@ -11,7 +11,7 @@
     <p class="text-sm"><a href="katalog/{{ $bracelet->slug }}" class="product-card-v2__title">{{ $bracelet->subtitle }}</a></p>
     <div class="text-sm text-left margin-top-sm">
         @if ($bracelet->avg_price != '')
-    <span class="color-contrast-medium">Средняя цена:</span> {{ $avg_price }}<br> 
+    <span class="color-contrast-medium">Средняя цена:</span> {{ $bracelet->avg_price }}<br> 
         @endif
         
         @if ($bracelet->nfc != '')

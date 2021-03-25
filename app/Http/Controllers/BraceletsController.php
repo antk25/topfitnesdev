@@ -35,11 +35,9 @@ class BraceletsController extends Controller
         return view('bracelets.show', compact('bracelet', 'media'));
     }
     
-    // public function selection(Request $request, ProuctFiltersPreset $preset) {
+    public function selection() {
 
-        // $bracelets = Bracelet::filter($preset->getForMarketingMenu($request))->paginate(20);
-
-        // return view('bracelets.selection', compact('bracelets'));
-    // }
+        return view('bracelets.selection');
+    }
 
 }

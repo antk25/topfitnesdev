@@ -8,32 +8,22 @@
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
       <div class="text-component margin-bottom-md text-center">
         <h2>Изменить продавца {{ $seller->name }}</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
       </div>
   
-      <div class="margin-bottom-xs">
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-2@md">
-            <label class="form-label" for="name">Название продавца</label>
-          </div>
-          
-          <div class="col-10@md">
-            <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $seller->name }}">
-          </div>
+      <div class="grid gap-xxs margin-bottom-xs">
+        <div class="col-6@md">
+          <label class="form-label margin-bottom-xxs" for="name">Название продавца</label>
+          <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $seller->name }}">
+          <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
         </div>
-      </div>
- 
-      <div>
-        <div class="grid gap-xxs items-center@md">
-          <div class="col-2@md">
-            <label class="form-label" for="about">Описание</label>
+
+          <div class="col-6@md">
+            <label class="form-label margin-bottom-xxs" for="about">Описание:</label>
             <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
-          </div>
-          
-          <div class="col-10@md">
+            
             <textarea class="form-control width-100%" name="about" id="code">{{ $seller->about }}</textarea>
+        
           </div>
-        </div>
       </div>
     </fieldset>
   

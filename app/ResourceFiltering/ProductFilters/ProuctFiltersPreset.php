@@ -22,6 +22,15 @@ class ProuctFiltersPreset
             new ProductPriceRangeFilter($min_price, $max_price),
         ]);
     }
+    
+    public function getForSelection($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $protect_stand, $min_price, $max_price)
+    {
+        return new QueryFilters([
+            new ProductCheckedFilter($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc),
+            new ProductJsonFieldsFilter($protect_stand),
+            new ProductPriceRangeFilter($minPrice, $maxPrice),
+        ]);
+    }
 
     // public function getForMarketingMenu($request)
     // {

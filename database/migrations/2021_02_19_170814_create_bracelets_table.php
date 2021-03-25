@@ -29,6 +29,8 @@ class CreateBraceletsTable extends Migration
             $table->json('minus')->nullable();
             $table->json('buyers_like')->nullable();
             $table->boolean('popular')->default(0);
+            $table->boolean('hit')->default(0);
+            $table->boolean('selection')->default(0);
             $table->integer('year')->unsinged()->nullable();
             $table->string('country')->nullable();
             $table->string('compatibility')->nullable();
