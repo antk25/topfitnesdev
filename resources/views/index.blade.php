@@ -120,5 +120,19 @@
     </div>
   </section>
 
+    <section class="margin-y-lg">
+      <div class="container max-width-adaptive-lg">
+        <div class="margin-bottom-lg">
+          <h1 class="text-center">Новые отзывы</h1>
+        </div>
+    
+        <div class="grid gap-sm">
+          @foreach ($reviews as $review)
+            @include('main.review')
+          @endforeach
+        </div>
+      </div>
+    </section>
+
 @endsection
 @section('footerScripts')

@@ -149,7 +149,7 @@ class BraceletsController extends Controller
 
         $ratings = $request->input('ratings', []);
 
-        $position = $request->input('position', []);
+        $position_rating = $request->input('position_rating', []);
 
         $text_rating = $request->input('text_rating', []);
 
@@ -173,7 +173,7 @@ class BraceletsController extends Controller
 
         for ($rating=0; $rating < count($ratings); $rating++) {
             if ($ratings[$rating] != '') {
-                $bracelet->ratings()->attach($ratings[$rating], ['position' => $position[$rating], 'text_rating' => $text_rating[$rating]]);
+                $bracelet->ratings()->attach($ratings[$rating], ['position' => $position_rating[$rating], 'text_rating' => $text_rating[$rating]]);
             }
         }
 
@@ -233,7 +233,7 @@ class BraceletsController extends Controller
 
         $ratings = $request->ratings;
 
-        $position = $request->position;
+        $position_rating = $request->position_rating;
 
         $text_rating = $request->text_rating;
 
@@ -257,7 +257,7 @@ class BraceletsController extends Controller
 
             $extra = array_map(function($p, $r){
                 return ['position' => $p, 'text_rating' => $r];
-            }, $position, $text_rating);
+            }, $position_rating, $text_rating);
 
             $data = array_combine($ratings, $extra);
 

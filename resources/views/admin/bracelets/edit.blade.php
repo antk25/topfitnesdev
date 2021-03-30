@@ -733,7 +733,7 @@
                         </div>
                       </td>
                       <td class="table__cell  text-left" role="cell">
-                        <input x-model="field.position" class="form-control" type="number" name="position[]" min="0" max="20" step="1">
+                        <input x-model="field.position" class="form-control" type="number" name="position_rating[]" min="0" max="20" step="1">
                       </td>
                       <td class="table__cell" role="cell">
                         <textarea x-model="field.text_rating" class="form-control width-100%" name="text_rating[]" id="code"></textarea>
@@ -810,9 +810,10 @@
               <thead class="table__header">
                 <tr class="table__row">
                   <th class="table__cell text-left" scope="col">#</th>
-                  <th class="table__cell text-left" scope="col">Оценка</th>
-                  <th class="table__cell text-right" scope="col">Значение</th>
-                  <th class="table__cell text-right" scope="col">Позиция</th>
+                  <th class="table__cell text-left" scope="col">Продавец</th>
+                  <th class="table__cell text-right" scope="col">Ссылка</th>
+                  <th class="table__cell text-right" scope="col">Цена</th>
+                  <th class="table__cell text-right" scope="col">Старая цена</th>
                   <th class="table__cell text-right" scope="col">Удалить</th>
                 </tr>
               </thead>

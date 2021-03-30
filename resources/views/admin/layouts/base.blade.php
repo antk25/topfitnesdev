@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin/codemirror.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/app.css') }}">
     
+<livewire:styles />
     <title>Управление сайтом Topfitnesbraslet</title>
 </head>
 <body>
@@ -252,6 +253,8 @@
         
       </div>
 @section('scripts')
+
+<livewire:scripts />
 
 <script src="{{ asset("js/admin/scripts.js") }}"></script>
 

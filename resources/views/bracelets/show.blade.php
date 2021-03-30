@@ -28,12 +28,26 @@
    <li class="col-4 col-3@sm js-exp-gallery__item">
      <figure class="border border-contrast-middle border-opacity-30% shadow-xs">
        <img src="{{ $image->getFullUrl('320') }}" data-modal-src="{{ $image->getFullUrl('320') }}" alt="Image Description">
-       <figcaption class="sr-only js-exp-gallery__caption">Image caption</figcaption>
+       <figcaption class="sr-only js-exp-gallery__caption"></figcaption>
      </figure>
    </li>
    @endforeach
   </ul>
+  @if ($bracelet->sellers->count())
+  <section class="margin-y-md">
+@foreach ($bracelet->sellers as $seller)
+  @if ($seller->pivot->old_price != '')
+    <p class="text-md">{{ $seller->name }} <del class="text-line-through color-contrast-medium margin-right-xxs">{{ $seller->pivot->old_price }}</del><ins class="text-decoration-none">{{ $seller->pivot->price }}</ins> <a href="{{ $seller->pivot->link }}">Купить</a></p>
+  @else
+    <p class="text-md">{{ $seller->name }} <ins class="text-decoration-none">{{ $seller->pivot->price }}</ins> <a href="{{ $seller->pivot->link }}">Купить</a></p>
+  @endif
+
+@endforeach
+  </section> 
+  @endif
+
     </div>
+
     <div class="col-6@md">
 
 <div class="table-card bg radius-md padding-md shadow-xs">
@@ -169,10 +183,11 @@
 </div>
 </article>
 </section>
-      <div class="margin-y-sm text-component">
+<div class="changelog__separator" role="presentation"></div>
+<section class="max-width-adaptive-sm container">
+<div class="text-component text-center">
  <h2>Характеристики</h2>
 </div>
-<div class="max-width-adaptive-sm">
  <table class="prop-table width-100% text-sm" aria-label="Характеристики {{ $bracelet->title }}">
    <tbody class="prop-table__body">
 
@@ -622,121 +637,16 @@
      </tr>
    </tbody>
  </table>
-</div>
- <h2>Отзывы</h2>
 
- <section class="comments comments--no-profile-img">
-  @section('comments')
-  <div class="margin-bottom-lg">
-    <div class="flex gap-sm flex-column flex-row@md justify-between items-center@md">
-      <div>
-        <h1 class="text-md">Comments</h1>
-      </div>
+</section>
+ <section class="container max-width-adaptive-sm">
 
-      <form aria-label="Choose sorting option">
-        <div class="flex flex-wrap gap-sm text-sm">
-          <div class="position-relative">
-            <input class="comments__sorting-label" type="radio" name="sortComments" id="sortCommentsPopular" checked>
-            <label for="sortCommentsPopular">Popular</label>
-          </div>
+@livewire('reviews', ['bracelet' => $bracelet])
+ </section>
 
-          <div class="position-relative">
-            <input class="comments__sorting-label" type="radio" name="sortComments" id="sortCommentsNewest">
-            <label for="sortCommentsNewest">Newest</label>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div x-data="allReviews()" x-init="submitReviews()" x-on:toggle.window="submitReviews()">
-      <div x-html="reviews"></div>
-  </div>
-
-  
-  @show
-  
-  @include('forms.review')
-
-  </section>
 </div>
 @endsection
 
 @section('footerScripts')
-@parent
-<script>
-
-  function reviewForm() {
-    return {
-      formData: {
-        name: '',
-        email: '',
-        rating_user: '',
-        period_use: '',
-        review_text: ''
-      },
-      
-      message: '',
-      errorsName: '',
-      errorsEmail: '',
-      errorsRating: '',
-      errorsReview: '',
-
-      submitData() {
-
-        axios
-        ({
-          url: '/katalog/{{ $bracelet->id }}/review',
-          method: 'post',
-          headers: { 'X-CSRFToken': '{{ csrf_token() }}' },
-          data: this.formData
-        }).catch(error => {
-                    if (error.response.status === 422) {
-                        this.errorsName = error.response.data.errors.name;
-                        this.errorsEmail = error.response.data.errors.email;
-                        this.errorsRating = error.response.data.errors.rating_user;
-                        this.errorsReview = error.response.data.errors.review_text;                        
-                        // document.getElementById('revi').remove();
-                        // console.log(error.response.data.errors);
-                        // this.errors.title = error.response.data.errors.title
-                        // this.errors.description = error.response.data.errors.description
-                    }
-                }).then(response => {
-                  if (response.status === 200) {
-                    this.formData = '';
-                    this.message = 'Form sucessfully submitted!';
-                    let event = new CustomEvent("toggle");
-                        window.dispatchEvent(event);
-                  }
-                  })
-              },
-
-            }
-          }
-
-        function allReviews() {
-          
-          // lastUpdate: Date.now();
-
-            return {
-              
-            reviews: '',
-            
-            submitReviews() {
-              
-                axios
-              ({
-                url: '/katalog/{{ $bracelet->id }}/reviews',
-                method: 'get',
-                responseType: 'text',
-              }).then(response => {
-                  this.reviews = response.data,
-                  console.log(response.data);
-                })
-
-              }
-            }
-          }
-        </script>
-@endsection
 
 

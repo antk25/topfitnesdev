@@ -124,9 +124,9 @@
                  <div class="margin-y-md">
                     
                     {!! $heart_rate != '' ? '<span wire:click.prevent="clearFilter(`heart_rate`)" class="badge badge--primary-light text-sm margin-right-xs">Постоянное измерение пульса
-                                                <svg class="icon icon--xxs margin-left-xxxs" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                                <a href="#0"><svg class="icon icon--xxs margin-left-xxxs" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
                         <line x1="1" y1="1" x2="11" y2="11" />
-                        <line x1="11" y1="1" x2="1" y2="11" /></svg>
+                        <line x1="11" y1="1" x2="1" y2="11" /></svg></a>
                         </span>' : '' !!}
                     {!! $blood_oxy != '' ? '<span wire:click.prevent="clearFilter(`blood_oxy`)" class="badge badge--primary-light text-sm margin-right-xs">Измерение кислорода в крови
                                                 <svg class="icon icon--xxs margin-left-xxxs" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">

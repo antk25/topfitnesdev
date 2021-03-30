@@ -57,18 +57,31 @@ class RatingsController extends Controller
                     'description' => request('description'),
                     'text' => request('text')
                 ]);
+// Старый код при использовании alpine для repeat fields
+        // $bracelets = $request->input('bracelets', []);
 
-        $bracelets = $request->input('bracelets', []);
+        // $position_rating = $request->input('position_rating', []);
 
-        $position = $request->input('position', []);
+        // $text_rating = $request->input('text_rating', []);
 
-        $text_rating = $request->input('text_rating', []);
+        // for ($bracelet=0; $bracelet < count($bracelets); $bracelet++) {
+            // if ($bracelets[$bracelet] != '') {
+                // $rating->bracelets()->attach($bracelets[$bracelet], ['position' => $position_rating[$bracelet], 'text_rating' => $text_rating[$bracelet]]);
+            // }
+        // }
+// Конец старого кода
 
-        for ($bracelet=0; $bracelet < count($bracelets); $bracelet++) {
-            if ($bracelets[$bracelet] != '') {
-                $rating->bracelets()->attach($bracelets[$bracelet], ['position' => $position[$bracelet], 'text_rating' => $text_rating[$bracelet]]);
+
+
+        // foreach ($request->braceletRating as $bracelet) {
+            // $rating->bracelets()->attach($bracelet['bracelet_id'], ['position' => $bracelet['position_rating'], 'text_rating' => $bracelet['text_rating']]);
+        // }
+
+        if ($request->ratingBracelets) 
+            foreach ($request->ratingBracelets as $bracelet) {
+                $rating->bracelets()->attach($bracelet['bracelet_id'],
+                    ['position' => $bracelet['position'], 'text_rating' => $bracelet['text_rating']]);
             }
-        }
 
         // if($request->files) {
 
@@ -114,17 +127,18 @@ class RatingsController extends Controller
     {
         $rating = Rating::find($id);
 
-        $bracelets = $request->bracelets;
 
-        $position = $request->position;
+        // $bracelets = $request->bracelets;
 
-        $text_rating = $request->text_rating;
+        // $position_rating = $request->position_rating;
 
-        $extra = array_map(function($p, $r){
-            return ['position' => $p, 'text_rating' => $r];
-        }, $position, $text_rating);
+        // $text_rating = $request->text_rating;
 
-        $data = array_combine($bracelets, $extra);
+        // $extra = array_map(function($p, $r){
+            // return ['position' => $p, 'text_rating' => $r];
+        // }, $position_rating, $text_rating);
+
+        // $data = array_combine($bracelets, $extra);
 
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
@@ -136,10 +150,20 @@ class RatingsController extends Controller
             'description' => request('description'),
             'text' => request('text')
         ]);
+        
+        if ($request->ratingBracelets)
+        $rating->bracelets()->sync($request->ratingBracelets);
+
+
+        // if ($request->ratingBracelets) 
+            // foreach ($request->ratingBracelets as $bracelet) {
+                // $rating->bracelets()->sync($bracelet['bracelet_id'],
+                    // ['position' => $bracelet['position'], 'text_rating' => $bracelet['text_rating']]);
+            // }
 
 
 
-        $rating->bracelets()->sync($data);
+        // $rating->bracelets()->sync($data);
 
         return redirect()->route('ratings.index');
     }

@@ -22,7 +22,7 @@
 </div>
 @foreach ($rating->bracelets as $bracelet)
  {{ $bracelet->name }}<br> 
- {{ $bracelet->pivot->text_rating }}<br>
+ {!! $bracelet->pivot->text_rating !!}<br>
 @endforeach
  
 @livewire('comments', ['rating' => $rating->id, 'user' => $user, 'post_id' => $rating->id, 'commentable_type' => get_class($rating)])

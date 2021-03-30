@@ -18,7 +18,7 @@ class Review extends Model
         'what_nolike'
     ];
 
-    public function bracelets() {
+    public function bracelet() {
         return $this->belongsTo(Bracelet::class);
     }
 }

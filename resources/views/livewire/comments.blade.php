@@ -32,7 +32,7 @@
     @endif
 </li>
 
-    @endforeach
+  @endforeach
   </ul>
   @if (session()->has('message'))
   <p>{{ session('message') }}</p>
