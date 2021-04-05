@@ -1,8 +1,54 @@
 @extends('layouts.base')
 
 @section('content')
+
 <div class="container max-width-adaptive-lg padding-top-md">
-  <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
+<div class="grid gap-md flex-row-reverse@md">
+
+<div class="col-3@md">
+  <div class="toc toc--static@md position-sticky@md text-sm@md js-toc">
+    <button class="reset toc__control no-js:is-hidden js-tab-focus js-toc__control" aria-controls="toc">
+      <span class="toc__control-text">
+        <i class="js-toc__control-label">Навигация по странице <span class="sr-only">- нажмите для выбора раздела.</span></i>
+        <i aria-hidden="true">Выбрать</i>
+      </span>
+  
+      <svg class="icon toc__icon-arrow margin-left-xxxs no-js:is-hidden" viewBox="0 0 16 16" aria-hidden="true">
+        <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10">
+          <path d="M2 2l12 12" />
+          <path d="M14 2L2 14" />
+        </g>
+      </svg>
+    </button>
+
+    <nav class="toc__nav">
+      <ul class="toc__list js-toc__list">
+        <li class="toc__label" tabindex="0">Навигация по странице</li>
+        <li><a class="toc__link js-smooth-scroll" href="#toc1">Рейтинг и цены</a></li>
+        @if($bracelet->plus)
+        <li><a class="toc__link js-smooth-scroll" href="#toc2">Плюсы и минусы</a></li>
+        @endif
+        <li><a class="toc__link js-smooth-scroll" href="#toc3">Характеристики</a>
+          <ul class="toc__list">
+            <li><a class="toc__link js-smooth-scroll" href="#toc3-1">Общие</a></li>
+            <li><a class="toc__link js-smooth-scroll" href="#toc3-2">Конструкция</a></li>
+            <li><a class="toc__link js-smooth-scroll" href="#toc3-3">Дисплей</a></li>
+            <li><a class="toc__link js-smooth-scroll" href="#toc3-4">Модули и датчики</a></li>
+            <li><a class="toc__link js-smooth-scroll" href="#toc3-5">Связь</a></li>
+            <li><a class="toc__link js-smooth-scroll" href="#toc3-6">Функционал</a></li>
+            <li><a class="toc__link js-smooth-scroll" href="#toc3-7">Аккумулятор</a></li>
+          </ul>
+        </li>
+
+        <li><a class="toc__link js-smooth-scroll" href="#toc4">Отзывы</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<div class="col-9@md">
+<div class="toc-content js-toc-content">
+<nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
     <ol class="flex flex-wrap gap-xxs">
       <li class="breadcrumbs__item">
         <a href="/" class="color-inherit"><svg class="icon margin-right-xxxs" viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke-width="1" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points=" 15.5,7.5 8,0.5 0.5,7.5 "></polyline><polyline points="2.5,8.5 2.5,15.5 6.5,15.5 6.5,11.5 9.5,11.5 9.5,15.5 13.5,15.5 13.5,8.5 "></polyline></g></svg></a>
@@ -18,10 +64,9 @@
     </ol>
   </nav>
 <div class="margin-y-sm text-component">
-  <h1>{{ $bracelet->name }}</h1>
+  <h1 id="toc1" class="toc-content__target">{{ $bracelet->name }}</h1>
 </div>
-
-  <div class="grid gap-xxs">
+<div class="grid gap-xxs">
     <div class="col-6@md">
 <ul class="exp-gallery grid gap-xs js-exp-gallery" data-controls="expLightbox" data-placeholder="assets/img/expandable-img-gallery-placeholder.svg">
    @foreach ($media as $image)
@@ -33,24 +78,86 @@
    </li>
    @endforeach
   </ul>
-  @if ($bracelet->sellers->count())
-  <section class="margin-y-md">
-@foreach ($bracelet->sellers as $seller)
-  @if ($seller->pivot->old_price != '')
-    <p class="text-md">{{ $seller->name }} <del class="text-line-through color-contrast-medium margin-right-xxs">{{ $seller->pivot->old_price }}</del><ins class="text-decoration-none">{{ $seller->pivot->price }}</ins> <a href="{{ $seller->pivot->link }}">Купить</a></p>
-  @else
-    <p class="text-md">{{ $seller->name }} <ins class="text-decoration-none">{{ $seller->pivot->price }}</ins> <a href="{{ $seller->pivot->link }}">Купить</a></p>
-  @endif
 
-@endforeach
-  </section> 
+  @if ($bracelet->sellers->count())
+
+    <section class="margin-y-md">
+      <div class="table-card bg radius-md padding-sm shadow-sm">
+        <div class="margin-bottom-md">
+          <div class="flex items-baseline justify-between">
+            <p class="color-contrast-medium">Где купить в Москве и регионах</p>
+          </div>
+        </div>
+
+        <div class="tbl text-sm">
+          <table class="tbl__table" aria-label="Table Example">
+            <thead class="tbl__header sr-only">
+              <tr class="tbl__row">
+                <th class="tbl__cell text-left" scope="col">
+                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Магазин</span>
+                </th>
+
+                <th class="tbl__cell text-left" scope="col">
+                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Цена</span>
+                </th>
+
+                <th class="tbl__cell text-right" scope="col">
+                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Купить</span>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="tbl__body">
+              @foreach ($bracelet->sellers as $seller)
+                <tr class="tbl__row">
+                  <td class="tbl__cell text-md text-bold" role="cell">{{ $seller->name }}</td>
+
+                  <td class="tbl__cell" role="cell">
+                  @if ($seller->pivot->old_price != '')
+                    <del class="text-line-through text-bold color-contrast-medium margin-right-xxs">{{ $seller->pivot->old_price }}</del>
+                    <a class="link-fx-1 color-contrast-higher text-bold color-success" href="{{ $seller->pivot->link }}">
+                      <span>{{ $seller->pivot->price }}</span>
+                      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="16" cy="16" r="15.5" />
+                          <line x1="10" y1="18" x2="16" y2="12" />
+                          <line x1="16" y1="12" x2="22" y2="18" />
+                        </g>
+                      </svg>
+                    </a>
+                  @else
+                    <a class="link-fx-1 color-contrast-higher text-bold" href="{{ $seller->pivot->link }}">
+                      <span>{{ $seller->pivot->price }}</span>
+                      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="16" cy="16" r="15.5" />
+                          <line x1="10" y1="18" x2="16" y2="12" />
+                          <line x1="16" y1="12" x2="22" y2="18" />
+                        </g>
+                      </svg>
+                    </a>
+                  @endif
+                  </td>
+
+                  <td class="tbl__cell" role="cell">
+                    <div class="flex justify-end">
+                      <a rel="nofollow" target="_blank" href="{{ $seller->pivot->link }}" class="btn btn--primary">Купить</a>
+                    </div>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody> 
+          </table>
+        </div>
+      </div>
+    </section>
   @endif
 
     </div>
 
     <div class="col-6@md">
 
-<div class="table-card bg radius-md padding-md shadow-xs">
+<div class="table-card bg radius-md padding-sm shadow-sm">
 
         @foreach ($bracelet->grades as $grade)
         <div class="progress-bar progress-bar--color-update js-progress-bar flex flex-column items-center margin-y-xxs">              
@@ -74,7 +181,7 @@
   @foreach ($bracelet->ratings as $rating)
     
     <li class="list-item arrow-list4">
-      <a href="{{ $rating->slug }}">{{ $rating->name }}</a> <span class="text-sm">на {{ $rating->pivot->position }} месте</span>
+      <a href="/{{ $rating->slug }}">{{ $rating->name }}</a> <span class="text-sm">на {{ $rating->pivot->position }} месте</span>
     </li>
 
   @endforeach
@@ -121,7 +228,8 @@
      </div>
    </div>
  </div>
-<div class="changelog__separator" role="presentation"></div>
+ @if($bracelet->plus)
+<div class="changelog__separator toc-content__target" role="presentation" id="toc2"></div>
 <section class="changelog margin-y-md">
   <article>
     <div class="grid gap-md items-start">
@@ -183,16 +291,17 @@
 </div>
 </article>
 </section>
+@endif
 <div class="changelog__separator" role="presentation"></div>
 <section class="max-width-adaptive-sm container">
 <div class="text-component text-center">
- <h2>Характеристики</h2>
+ <h2 id="toc3" class="toc-content__target">Характеристики</h2>
 </div>
  <table class="prop-table width-100% text-sm" aria-label="Характеристики {{ $bracelet->title }}">
    <tbody class="prop-table__body">
 
      <tr class="text-md text-bold">
-       <th class="text-center color-primary padding-y-sm" colspan="2">Общие</th>
+       <th class="text-center color-primary padding-y-sm toc-content__target" colspan="2" id="toc3-1">Общие</th>
      </tr>
 
      <tr class="prop-table__row">
@@ -214,7 +323,7 @@
 
 
      <tr class="text-md text-bold">
-       <th class="text-center color-primary padding-y-sm" colspan="2">Конструкция</th>
+       <th class="text-center color-primary padding-y-sm toc-content__target" colspan="2" id="toc3-2">Конструкция</th>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Материал ремешка</th>
@@ -320,7 +429,7 @@
       </td>
     </tr>
      <tr class="text-md text-bold">
-       <th class="text-center color-primary padding-y-sm" colspan="2">Дисплей</th>
+       <th class="text-center color-primary padding-y-sm toc-content__target" colspan="2" id="toc3-3">Дисплей</th>
      </tr>
 
      <tr class="prop-table__row">
@@ -380,7 +489,7 @@
           @endif
      </tr>
      <tr class="text-md text-bold">
-       <th class="text-center color-primary padding-y-sm" colspan="2">Модули и датчики</th>
+       <th class="text-center color-primary padding-y-sm toc-content__target" colspan="2" id="toc3-4">Модули и датчики</th>
      </tr>
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Датчики</th>
@@ -434,7 +543,7 @@
       </td>
     </tr>
      <tr class="text-md text-bold">
-       <th class="text-center color-primary padding-y-sm" colspan="2">Связь</th>
+       <th class="text-center color-primary padding-y-sm toc-content__target" colspan="2" id="toc3-5">Связь</th>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Телефонные звонки</th>
@@ -449,7 +558,7 @@
        <td class="prop-table__cell">{{ $bracelet->send_messages }}</td>
      </tr>
      <tr class="text-md text-bold">
-       <th class="text-center color-primary padding-y-sm" colspan="2">Функционал</th>
+       <th class="text-center color-primary padding-y-sm toc-content__target" colspan="2" id="toc3-6">Функционал</th>
      </tr>
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Мониторинг</th>
@@ -609,7 +718,7 @@
        <td class="prop-table__cell">{{ $bracelet->additional_info }}</td>
      </tr>
      <tr class="text-md text-bold">
-       <th class="text-center color-primary padding-y-sm" colspan="2">Аккумулятор</th>
+       <th class="text-center color-primary padding-y-sm toc-content__target" colspan="2" id="toc3-7">Аккумулятор</th>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Тип</th>
@@ -639,10 +748,16 @@
  </table>
 
 </section>
- <section class="container max-width-adaptive-sm">
+ <section class="container max-width-adaptive-sm toc-content__target" id="toc4">
 
 @livewire('reviews', ['bracelet' => $bracelet])
  </section>
+
+</div>
+  
+
+
+  
 
 </div>
 @endsection
