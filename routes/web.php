@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('private');
-})->middleware(['auth']);
 // авторизация-регистрация
 
 // шаблоны страниц
@@ -42,7 +39,7 @@ Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore'
 // Админка
 
 Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Route::get('/', 'MainController@index')->name('admin.index');
+    Route::get('/user', 'MainController@index')->name('admin.index');
     Route::resource('/brands', 'BrandsController');
     Route::resource('/bracelets', 'BraceletsController');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');

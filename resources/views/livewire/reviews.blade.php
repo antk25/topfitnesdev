@@ -1,17 +1,16 @@
 <div>
     @if ($reviews->count())
     <div class="margin-y-sm text-component">
-        <h2>{{ $reviews->count() }} {{ trans_choice('отзыв|отзыва|отзывов',$reviews->count()) }}</h2>
+        <h2>{{ $reviews->count() }} {{ trans_choice('отзыв|отзыва|отзывов', $reviews->count()) }}</h2>
     </div>
-    <p class="cd-demo-margin-bottom-md cd-demo-text-center">👇 <a href="#create-review">Написать отзыв</a></p>
-@foreach ($reviews as $review)
+    <p class="cd-demo-margin-bottom-md cd-demo-text-center">👇 <a href="#toc5">Написать отзыв</a></p>
+    @foreach ($reviews as $review)
     @include('livewire.reviews.show2')
-@endforeach
+    @endforeach
     @endif
-    <a name="create-review"></a>
 <form wire:submit.prevent="store()">
         <fieldset>
-          <legend class="form-legend">Добавить новый отзыв</legend>
+          <legend class="form-legend text-center toc-content__target" id="toc5">Добавить новый отзыв</legend>
            <div class="input-merger form-control width-100% grid">
              <input type="text" class="reset input-merger__input min-width-0 col" name="name" wire:model="name" id="name" placeholder="Ваше имя">
              <input type="email" class="reset input-merger__input min-width-0 col" name="email" wire:model="email" id="email" placeholder="Email">
@@ -147,10 +146,13 @@
     
           <div>
             <button type="submit" class="btn btn--primary">Опубликовать</button>
+            
           </div>
         </fieldset>
+        
       </form>
       
 
 
 </div>
+

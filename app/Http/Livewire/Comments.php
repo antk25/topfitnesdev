@@ -36,7 +36,6 @@ class Comments extends Component
        ]);
        session()->flash('message', 'комментарий добавлен');
        $this->resetInputFields();
-
     }
     public function commentId($commentId) 
     {

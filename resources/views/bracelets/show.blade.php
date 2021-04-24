@@ -39,8 +39,10 @@
             <li><a class="toc__link js-smooth-scroll" href="#toc3-7">Аккумулятор</a></li>
           </ul>
         </li>
-
+        @if ($bracelet->reviews->count())
         <li><a class="toc__link js-smooth-scroll" href="#toc4">Отзывы</a></li>
+        @endif
+        <li><a class="toc__link js-smooth-scroll" href="#toc5">Добавить отзыв</a></li>
       </ul>
     </nav>
   </div>
@@ -229,70 +231,44 @@
    </div>
  </div>
  @if($bracelet->plus)
-<div class="changelog__separator toc-content__target" role="presentation" id="toc2"></div>
-<section class="changelog margin-y-md">
-  <article>
-    <div class="grid gap-md items-start">
-      <!-- metadata -->
-      <div class="changelog__metadata col-4@md">
-        <h2 class="text-xl text-md@md">Плюсы</h2>
-      </div>
-      <!-- content -->
-      <div class="col-8@md">
-        <div class="grid gap-lg">
-          <!-- new features -->
-          <div>
-<ul class="grid gap-xs">
-    @foreach ($bracelet->plus as $plus)
-    <li>
-      <p class="changelog__update">
-        <svg class="changelog__icon icon color-success" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" opacity="0.2"/><path d="M17,11H13V7a1,1,0,0,0-2,0v4H7a1,1,0,0,0,0,2h4v4a1,1,0,0,0,2,0V13h4a1,1,0,0,0,0-2Z"/></svg>
-                  
-        <span>{{ $plus }}</span> 
-      </p>
-    </li>
-    @endforeach
-</ul>
-
-</div>
-</div>
-</div>
-</div>
-</article>
-
-<div class="changelog__separator" role="presentation"></div>
-
-  <article>
-    <div class="grid gap-md items-start">
-      <!-- metadata -->
-      <div class="changelog__metadata col-4@md">
-        <h2 class="text-xl text-md@md">Минусы</h2>
-      </div>
-  
-      <!-- content -->
-      <div class="col-8@md">
-        <div class="grid gap-lg">
-          <!-- new features -->
-          <div>
-<ul class="grid gap-xs">
-    @foreach ($bracelet->minus as $minus)
-    <li>
-      <p class="changelog__update">
-        <svg class="changelog__icon icon color-error" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" opacity="0.2"/><path d="M12,15a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v8A1,1,0,0,1,12,15Z"/><circle cx="12" cy="18" r="1"/></svg>
-                  
-        <span>{{ $minus }}</span> 
-      </p>
-    </li>
-    @endforeach
-</ul>
-</div>
-</div>
-</div>
-</div>
-</article>
+<div class="t-article-v4__divider margin-y-md" aria-hidden="true"><span></span></div>
+ <section class="toc-content__target" id="toc2">
+  <div class="container grid">
+    <div class="col-6@sm">
+      <h3 class="margin-y-sm text-center">Плюсы</h3>
+      
+      <ul class="list list--icons">
+        @foreach ($bracelet->plus as $plus)
+        <li>
+          <div class="flex items-start">
+            <svg class="list__icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
+            
+            <div>{{ $plus }}</div>
+          </div>
+        </li>
+        @endforeach
+      </ul>
+    </div>
+    <div class="col-6@sm">
+      <h3 class="margin-y-sm text-center">Минусы</h3>
+      <ul class="list list--icons">
+        @foreach ($bracelet->minus as $minus)
+        <li>
+          <div class="flex items-start">
+            <svg class="list__icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
+            
+            <div>{{ $minus }}</div>
+          </div>
+        </li>
+        @endforeach
+      </ul>
+    </div>
+  </div>
 </section>
 @endif
-<div class="changelog__separator" role="presentation"></div>
+
+<div class="t-article-v4__divider margin-y-lg" aria-hidden="true"><span></span></div>
+
 <section class="max-width-adaptive-sm container">
 <div class="text-component text-center">
  <h2 id="toc3" class="toc-content__target">Характеристики</h2>
@@ -748,7 +724,7 @@
  </table>
 
 </section>
- <section class="container max-width-adaptive-sm toc-content__target" id="toc4">
+ <section class="margin-y-md container max-width-adaptive-sm toc-content__target" id="toc4">
 
 @livewire('reviews', ['bracelet' => $bracelet])
  </section>
