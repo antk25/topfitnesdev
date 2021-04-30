@@ -1,5 +1,13 @@
 @extends('layouts.base')
 
+@section('title')
+{{ $rating->title }}
+@endsection
+
+@section('description')
+{{ $rating->description }}
+@endsection
+
 @section('content')
 <div class="position-relative z-index-1 bg-contrast-lower padding-y-lg">
   <div class="container max-width-adaptive-md">

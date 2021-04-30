@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    @section('head')
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -19,9 +19,9 @@
       <link rel="stylesheet" href="{{ asset('css/style-fallback.css') }}">
     </noscript>
 <livewire:styles />
-    <title>Document</title>
-    @endsection
-    @yield('head')
+    <title>@yield('title')</title>
+    <meta name="description" content="@yield('description')" />
+   
 </head>
 <body>
     @section('header')

@@ -1,22 +1,25 @@
 @foreach ($reply as $reply)
-   <li class="comments__comment">
-              <div class="flex items-start">
+   <li class="comments__comment hash-link hash-link--visible" id="c{{ $reply->id }}">
+              <div class="flex items-start border border-contrast-lower padding-sm radius-lg">
                 <div class="comments__content margin-top-xxxs">
                   <div class="text-component text-sm v-space-xs line-height-sm">
-                    <p><a href="#0" class="comments__author-name" rel="author">{{ $reply->user->name }}</a></p>
+
+                      <div class="flex items-center margin-bottom-sm">
+                      <span class="comments__author-img">
+                            <img class="user-cell__img" src="/storage/theme/comments-placeholder.svg">
+                      </span>
+
+                      <span class="color-contrast-high"><strong>@if($reply->user_id) {{ $reply->user->name }} @else Anonim @endif</strong></span>
+
+                      <span class="color-contrast-medium margin-left-xs"><time class="comments__time" aria-label="{{ $reply->created_at->diffForHumans() }}">{{ $reply->created_at->diffForHumans() }}</time></span>
+
+                      <span><a title="Постоянная ссылка на комментарий" class="hash-link__anchor text-bold text-decoration-none padding-x-xxs js-smooth-scroll" href="#c{{ $reply->id }}" aria-hidden="true">#</a></span>
+
+                      </div>
                     <p>{{ $reply->comment }}</p>
                   </div>
                   <div class="margin-top-xs text-sm">
                     <div class="flex gap-xxs items-center">
-                      <button class="reset comments__vote-btn js-comments__vote-btn js-tab-focus" data-label="Like this comment along with 5 other people" aria-pressed="false">
-                        <span class="comments__vote-icon-wrapper">
-                          <svg class="icon block" viewBox="0 0 12 12" aria-hidden="true"><path d="M11.045,2.011a3.345,3.345,0,0,0-4.792,0c-.075.075-.15.225-.225.3-.075-.074-.15-.224-.225-.3a3.345,3.345,0,0,0-4.792,0,3.345,3.345,0,0,0,0,4.792l5.017,4.718L11.045,6.8A3.484,3.484,0,0,0,11.045,2.011Z"></path></svg>
-                        </span>
-                        
-                        <span class="margin-left-xxxs js-comments__vote-label" aria-hidden="true">5</span>
-                      </button>
-            
-                      <span class="comments__inline-divider" aria-hidden="true"></span>
             
                         @if($commentIdReply !== $reply->id)
                         <button type="button" class="reset comments__label-btn js-tab-focus" wire:click.prevent="commentId({{ $reply->id }})">Ответить</button>
@@ -32,18 +35,17 @@
                           <button class="btn btn--secondary" wire:click.prevent="resetInputFields">Отмена</button>
                         </form>
                         @endif
-            
-                      <span class="comments__inline-divider" aria-hidden="true"></span>
           
-                      <time class="comments__time" aria-label="1 hour ago">{{ $reply->created_at->diffForHumans() }}</time>
                     </div>
                   </div>
                 </div>
               </div>
               @if($reply->replies->count() > 0)
-                <ul class="margin-left-sm">
+              <div class="border-left border-3 border-opacity-20%">
+                <ul class="margin-left-sm  margin-top-sm">
                   @include('livewire.comments.index', ['reply' => $reply->replies])
                 </ul>
+              </div>
               @endif
               
             </li>

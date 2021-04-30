@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 // авторизация-регистрация
 
+
+
 // шаблоны страниц
 
 Route::get('/', 'App\Http\Controllers\IndexController@index')->name('index');
