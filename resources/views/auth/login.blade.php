@@ -30,7 +30,7 @@
 
             <div class="margin-bottom-sm">
               <label class="form-label margin-bottom-xxxs" for="email">Email</label>
-              <input class="form-control width-100%" type="email" name="email" id="email" placeholder="email@myemail.com">
+              <input class="form-control width-100%" type="email" name="email" id="email" placeholder="email@myemail.com" @if (old('email')) value="{{ old('email') }}" @endif>
               @error('email')
               <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
               @enderror
@@ -63,7 +63,7 @@
             </div>
 
             <div class="text-center">
-              <p class="text-sm">У вас еще нет аккаунта? <a href="#0">Регистрация</a></p>
+              <p class="text-sm">У вас еще нет аккаунта? <a href="{{ route('register') }}">Регистрация</a></p>
             </div>
           </form>
     </div>

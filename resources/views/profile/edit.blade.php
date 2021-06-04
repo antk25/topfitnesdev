@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -20,41 +21,36 @@
 </head>
 <body>
     <div class="container max-width-xxs padding-y-lg">
-        <form class="login-form" method="POST" action="{{ route('user.login') }}">
+        <form class="login-form" method="POST" action="{{ route('user-profile-information.update') }}">
             @csrf
+            @method('PUT')
             <div class="text-component text-center margin-bottom-sm">
-              <h1>Вход</h1>
-              <p>Введите свой email и пароль</p>
+              <h1>Редактирование профиля</h1>
+              <p>Измените данные и нажмите обновить профиль.</p>
             </div>
 
             <div class="margin-bottom-sm">
-              <label class="form-label margin-bottom-xxxs" for="email">Email</label>
-              <input class="form-control width-100%" type="email" name="email" id="email" placeholder="email@myemail.com">
+                <label class="form-label margin-bottom-xxxs" for="name">{{ __('Name') }}</label>
+                <input class="form-control width-100%" type="name" name="name" id="name" value="{{ old('name') ?? auth()->user()->name }}">
+                @error('name')
+                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+                @enderror
+              </div>
+
+            <div class="margin-bottom-sm">
+              <label class="form-label margin-bottom-xxxs" for="email">{{ __('Email') }}</label>
+              <input class="form-control width-100%" type="email" name="email" id="email" value="{{ old('email') ?? auth()->user()->email }}">
               @error('email')
               <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
               @enderror
             </div>
-
             <div class="margin-bottom-sm">
-              <div class="flex justify-between margin-bottom-xxxs">
-                <label class="form-label" for="password">Пароль</label>
-                <span class="text-sm"><a href="#0">Забыли пароль?</a></span>
-              </div>
-
-              <input class="form-control width-100%" type="password" name="password" id="password">
-              @error('password')
-              <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-              @enderror
-            </div>
-
-            <div class="margin-bottom-sm">
-              <button class="btn btn--primary btn--md width-100%">Войти</button>
-            </div>
-
-            <div class="text-center">
-              <p class="text-sm">У вас еще нет аккаунта? <a href="#0">Регистрация</a></p>
+              <button class="btn btn--primary btn--md width-100%">Обновить профиль</button>
             </div>
           </form>
+          <div class="margin-bottom-sm">
+            <a href="{{ route('profile.password') }}" class="btn btn--accent btn--md width-100%">Изменить пароль</a>
+          </div>
     </div>
 
     <script src="{{ asset("js/scripts.js") }}"></script>

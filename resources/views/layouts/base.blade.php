@@ -376,6 +376,7 @@
 
               <ul class="mega-nav__items">
                 <!-- 👇 icon buttons --desktop -->
+                @if (auth()->check())
                 <li class="mega-nav__icon-btns mega-nav__icon-btns--desktop">
                   <div class="dropdown inline-block js-dropdown">
                     <div class="mega-nav__icon-btn dropdown__wrapper inline-block">
@@ -390,12 +391,9 @@
                       </a>
 
                       <ul class="dropdown__menu js-dropdown__menu" aria-label="submenu">
-                        <li><a href="#0" class="dropdown__item">Profile</a></li>
-                        <li><a href="#0" class="dropdown__item">Notifications</a></li>
-                        <li><a href="#0" class="dropdown__item">Messages</a></li>
+                        <li><a href="#0" class="dropdown__item">Профиль</a></li>
                         <li class="dropdown__separator" role="separator"></li>
-                        <li><a href="#0" class="dropdown__item">Account Settings</a></li>
-                        <li><a href="#0" class="dropdown__item">Log out</a></li>
+                        <li><a href="#0" class="dropdown__item">Выйти</a></li>
                       </ul>
                     </div>
                   </div>
@@ -410,6 +408,11 @@
                     </svg>
                   </button>
                 </li>
+                @else
+                <li class="mega-nav__item">
+                  <a href="#0" class="btn btn--primary mega-nav__btn">Войти</a>
+                </li>
+                @endif
 
                 <!-- 👇 button -->
                 <li class="mega-nav__item">

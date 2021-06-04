@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -31,7 +30,7 @@
                   
         <div class="margin-bottom-sm">
           <label class="form-label margin-bottom-xxxs" for="name">Имя</label>
-          <input class="form-control width-100%" type="text" id="name" name="name" value="{{ old('name') }}" autocomplete="name">
+          <input class="form-control width-100%" type="text" name="name" id="name">
           @error('name')
           <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
           @enderror
@@ -39,7 +38,7 @@
       
         <div class="margin-bottom-sm">
           <label class="form-label margin-bottom-xxxs" for="email">Email</label>
-          <input class="form-control width-100%" type="email" name="email" id="email" value="{{ old('email') }}" autocomplete="email">
+          <input class="form-control width-100%" type="email" name="email" id="email" placeholder="email@myemail.com">
           @error('email')
           <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
           @enderror
@@ -47,7 +46,7 @@
       
         <div class="margin-bottom-md">
           <label class="form-label margin-bottom-xxxs" for="password">Пароль</label> 
-          <input class="form-control width-100%" type="password" name="password" id="password" autocomplete="new-password">
+          <input class="form-control width-100%" type="password" name="password" id="password">
           @error('password')
           <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
           @enderror

@@ -20,27 +20,17 @@
 </head>
 <body>
     <div class="container max-width-xxs padding-y-lg">
-        <div class="user-cell ">
-            <div class="user-cell__body">
-              <figure aria-hidden="true">
-                <img class="user-cell__img" src="" alt="User profile image">
-              </figure>
-            
-              <div class="user-cell__content text-component line-height-sm v-space-xxs">
-                <p><a href="#0" class="color-contrast-high"><strong>{{ Auth::user()->name }}</strong></a></p>
-                <p class="color-contrast-medium">Lorem ipsum dolor sit</p>
-              </div>
+        <div class="grid">
+            <div class="col-8">
+                <p>Ваше имя: {{ auth()->user()->name }}</p>
+                <p>Email: {{ auth()->user()->email }}</p>
             </div>
-          
-            <div class="user-cell__cta">
-              <a href="{{ route('logout') }}" class='btn btn--subtle' onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выйти</a>
+            <div class="col-4">
+                
             </div>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-              @csrf
-          </form>
-          </div>
+        </div>
     </div>
-
+    
     <script src="{{ asset("js/scripts.js") }}"></script>
 </body>
 </html>

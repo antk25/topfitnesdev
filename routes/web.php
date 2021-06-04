@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// авторизация-регистрация
+// обновление и просмотр профиля пользователя
 
-
+Route::view('/profile/edit', 'profile.edit')->name('profile.edit')->middleware('auth');
+Route::view('/profile/password', 'profile.password')->name('profile.password')->middleware('auth');
+Route::view('/profile', 'profile.index')->name('profile.index')->middleware('auth');
 
 // шаблоны страниц
 
@@ -41,7 +43,6 @@ Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore'
 // Админка
 
 Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Route::get('/user', 'MainController@index')->name('admin.index');
     Route::resource('/brands', 'BrandsController');
     Route::resource('/bracelets', 'BraceletsController');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
