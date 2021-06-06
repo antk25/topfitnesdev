@@ -10,7 +10,7 @@ use App\Models\User;
 
 class Comments extends Component
 {
-    public $comment, $post_id, $commentable_type, $user, $rating;
+    public $comment, $post_id, $commentable_type, $user, $rating, $useremail, $username;
     public $commentIdReply = '';
 
     public function mount($user, $rating)
@@ -32,15 +32,19 @@ class Comments extends Component
            'comment' => $this->comment,
            'user_id' => $this->user,
            'commentable_id' => $this->post_id,
-           'commentable_type' => $this->commentable_type
+           'commentable_type' => $this->commentable_type,
+           'useremail' => $this->useremail,
+           'username' => $this->username,
        ]);
        session()->flash('message', 'комментарий добавлен');
        $this->resetInputFields();
     }
+
     public function commentId($commentId) 
     {
         $this->commentIdReply = $commentId;
     }
+
     public function replyStore($commentId)
     {
         Comment::create([
@@ -49,6 +53,8 @@ class Comments extends Component
            'user_id' => $this->user,
            'commentable_id' => $this->post_id,
            'commentable_type' => $this->commentable_type,
+           'useremail' => $this->useremail,
+           'username' => $this->username,
        ]);
        $this->commentIdReply = '';
        session()->flash('message', 'Ваш ответ на комментарий добавлен');

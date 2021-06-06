@@ -12,7 +12,9 @@ class Comment extends Model
         'comment',
         'commentable_id',
         'commentable_type',
-        'user_id'
+        'user_id',
+        'username',
+        'useremail'
     ];
 
     public function user()

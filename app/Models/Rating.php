@@ -24,4 +24,12 @@ class Rating extends Model
     public function comments() {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
+
+    public function getLink() {
+
+        $link = $this->slug;
+
+        return route('pub.ratings.show', ['slug' => $link]); 
+        
+     }
 }

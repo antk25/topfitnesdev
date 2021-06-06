@@ -18,7 +18,6 @@
           <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
             <div class="text-component margin-bottom-md text-center">
               <h2>Редактирование браслета {{ $bracelet->name }}</h2>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             </div>
   
             <div class="margin-y-sm">
@@ -131,12 +130,17 @@
               <input class="form-control width-100%" type="number" name="position" id="position" min="0" max="300" step="1" value="{{ $bracelet->position }}">
               </div>
             </div>
-  
+
+            
   
             <div class="margin-bottom-xs">
-              <label class="form-label margin-bottom-xxs" for="about">Описание</label>
-              <textarea class="form-control width-100%" name="about" id="code">{{ $bracelet->about }}</textarea>
+              <label class="form-label margin-bottom-xxs text-bold" for="about">Описание браслета:</label>
+              <div class="margin-y-sm">Код</div>
+              <div id="editor">{{ $bracelet->about }}</div>
+              <div class="margin-y-sm">Textarea</div>
+              <textarea class="form-control width-100% text-sm" spellcheck="false" name="about" id="about" rows="7"></textarea>
             </div>
+
           </fieldset>
           <fieldset>
             <div class="text-component margin-bottom-md text-center">
@@ -617,7 +621,7 @@
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="additional_info">Дополнительная информация</label>
-                <textarea class="form-control width-100%" name="additional_info" id="additional_info">{{ $bracelet->additional_info }}</textarea>
+                <textarea class="form-control width-100% text-sm" name="additional_info" spellcheck="false" id="additional_info">{{ $bracelet->additional_info }}</textarea>
               </div>
               <div class="col-3@md">
       
@@ -736,15 +740,15 @@
                         <input x-model="field.position" class="form-control" type="number" name="position_rating[]" min="0" max="20" step="1">
                       </td>
                       <td class="table__cell" role="cell">
-                        <textarea x-model="field.text_rating" class="form-control width-100%" name="text_rating[]" id="code"></textarea>
+                        <textarea x-model="field.text_rating" class="form-control width-100% text-sm" spellcheck="false" rows="5" name="text_rating[]" id="code"></textarea>
                       </td>
-                       <td class="table__cell" role="cell"><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
+                       <td class="table__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
                     </tr>
                    </template>
                   </tbody>
                   <tfoot>
                     <tr class="table__row">
-                       <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить браслет</button></td>
+                       <td colspan="4" class="text-right"><button type="button" class="btn btn--success text-sm margin-y-sm" @click="addNewField()">+ Добавить рейтинг</button></td>
                     </tr>
                   </tfoot>
                 </table>
@@ -788,13 +792,13 @@
                       <td class="table__cell  text-left" role="cell">
                         <input x-model="field.position_grade" class="form-control" type="number" name="position_grade[]" min="0" max="10" step="1">
                       </td>
-                       <td class="table__cell" role="cell"><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
+                       <td class="table__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
                     </tr>
                    </template>
                   </tbody>
                   <tfoot>
                     <tr class="table__row">
-                       <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить оценку</button></td>
+                       <td colspan="4" class="text-right"><button type="button" class="btn btn--success text-sm margin-y-sm" @click="addNewField()">+ Добавить оценку</button></td>
                     </tr>
                   </tfoot>
                 </table>
@@ -842,13 +846,13 @@
                   <td class="table__cell  text-left" role="cell">
                     <input x-model="field.old_price" class="form-control" type="text" name="old_price[]">
                   </td>
-                   <td class="table__cell" role="cell"><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
+                   <td class="table__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
                 </tr>
                </template>
               </tbody>
               <tfoot>
                 <tr class="table__row">
-                   <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить оценку</button></td>
+                   <td colspan="4" class="text-right"><button type="button" class="btn btn--success text-sm margin-y-sm" @click="addNewField()">+ Добавить оценку</button></td>
                 </tr>
               </tfoot>
             </table>
@@ -904,8 +908,8 @@
                   </div>
                 </section>
   
-          <div class="text-right">
-            <button type="submit" class="btn btn--primary">Отправить</button>
+          <div class="margin-y-sm">
+            <button type="submit" class="btn btn--success width-100%">Обновить/Сохранить</button>
           </div>
         </form>
       </section>
@@ -1226,18 +1230,27 @@
 @section('scripts')
 @parent
 <script src="{{ asset("js/admin/alpine.min.js") }}"></script>
-<script src="{{ asset("js/admin/codemirror.js") }}"></script>
-    <script src="{{ asset("js/admin/closetag.js") }}"></script>
-    <script src="{{ asset("js/admin/htmlmixed.js") }}"></script>
-    <script src="{{ asset("js/admin/css.js") }}"></script>
-    <script src="{{ asset("js/admin/javascript.js") }}"></script>
-    <script src="{{ asset("js/admin/xml.js") }}"></script>
-    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
+
+<script src="{{ asset("js/admin/ace.js") }}"></script>
+    <script
+			  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+			  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+			  crossorigin="anonymous"></script>
     <script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        mode: 'text/html',
-        autoCloseTags: true
-      });
+
+     var textarea = $('#about');
+
+   var editor = ace.edit("editor");
+   editor.setTheme("ace/theme/twilight");
+   editor.getSession().setMode("ace/mode/html");
+
+   editor.getSession().on('change', function () {
+       textarea.val(editor.getSession().getValue());
+   });
+
+   textarea.val(editor.getSession().getValue());
+
+
 
   function handler() {
     return {

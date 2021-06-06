@@ -61,9 +61,9 @@
         <td class="tbl__cell" role="cell">
             <div class="flex items-center">
                 <div class="line-height-xs">
-                <p class="margin-bottom-xxxxs">{{ $comment->user->name }}
-                <p class="color-contrast-medium">{{ $comment->user->email }}</p>
-                </p>
+                    {{ $comment->user->name }}
+                {{-- <p class="margin-bottom-xxxxs">{{ $comment->user->name }}</p>
+                <p class="color-contrast-medium">{{ $comment->user->email }}</p> --}}
                 </div>
             </div>
         </td>

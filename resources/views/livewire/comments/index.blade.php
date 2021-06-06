@@ -1,6 +1,6 @@
 @foreach ($reply as $reply)
    <li class="comments__comment hash-link hash-link--visible" id="c{{ $reply->id }}">
-              <div class="flex items-start border border-contrast-lower padding-sm radius-lg">
+              <div class="items-start border border-contrast-lower padding-sm radius-lg">
                 <div class="comments__content margin-top-xxxs">
                   <div class="text-component text-sm v-space-xs line-height-sm">
 
@@ -9,7 +9,7 @@
                             <img class="user-cell__img" src="/storage/theme/comments-placeholder.svg">
                       </span>
 
-                      <span class="color-contrast-high"><strong>@if($reply->user_id) {{ $reply->user->name }} @else Anonim @endif</strong></span>
+                      <span class="color-contrast-high"><strong>@if($reply->user_id) {{ $reply->user->name }} @else {{ $reply->username }} @endif</strong></span>
 
                       <span class="color-contrast-medium margin-left-xs"><time class="comments__time" aria-label="{{ $reply->created_at->diffForHumans() }}">{{ $reply->created_at->diffForHumans() }}</time></span>
 
@@ -19,12 +19,20 @@
                     <p>{{ $reply->comment }}</p>
                   </div>
                   <div class="margin-top-xs text-sm">
-                    <div class="flex gap-xxs items-center">
             
                         @if($commentIdReply !== $reply->id)
                         <button type="button" class="reset comments__label-btn js-tab-focus" wire:click.prevent="commentId({{ $reply->id }})">Ответить</button>
                         @else
                         <form wire:submit.prevent="replyStore({{ $reply->id }})">
+                          
+                          @if($user == '')
+                          <div class="input-merger form-control width-100% grid">
+                            <input type="text" class="reset input-merger__input min-width-0 col" name="username" wire:model="username" id="username" placeholder="Ваше имя">
+                            <input type="email" class="reset input-merger__input min-width-0 col" name="useremail" wire:model="useremail" id="useremail" placeholder="Email">
+                          </div> 
+                          <p class="text-xs color-contrast-medium margin-y-xxxxs">Укажите <span class="text-bold">имя</span> и <span class="text-bold">email</span>, либо <a href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p> 
+                          @endif
+
                           <fieldset>
                             <div class="margin-bottom-xs">
                               <label class="sr-only" for="commentNewContent">Ваш ответ на комментарий c id {{ $reply->id }}</label>
@@ -36,7 +44,6 @@
                         </form>
                         @endif
           
-                    </div>
                   </div>
                 </div>
               </div>

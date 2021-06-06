@@ -22,11 +22,30 @@
     <div class="container max-width-xxs padding-y-lg">
         <div class="grid">
             <div class="col-8">
-                <p>Ваше имя: {{ auth()->user()->name }}</p>
-                <p>Email: {{ auth()->user()->email }}</p>
+                <p>Ваше имя: {{ $user->name }}</p>
+                <p>Email: {{ $user->email }}</p>
+                
+                <h3>Ваши комментарии</h3>
+
+                @foreach ($user->comments as $comment)
+                <div class="margin-y-sm border-sm border-bottom">
+                  <div class="color-contrast-medium">Дата: {{ $comment->created_at->diffForHumans() }}</div>
+                  <div class="color-contrast-medium">Текст комментария:</div>
+                 <p>{{ $comment->comment }}</p>
+                 
+                 <a href="{{$comment->commentable->getLink()}}#c{{ $comment->id }}">Перейти к комментарию</a>
+
+                </div>
+                @endforeach
+
             </div>
             <div class="col-4">
-                
+              <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                {{ __('Logout') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
             </div>
         </div>
     </div>

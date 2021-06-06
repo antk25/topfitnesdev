@@ -52,6 +52,11 @@ class User extends Authenticatable
         return $this->hasMany(Rating::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
 
     // public function setPasswordAttribute($password){
     //     $this->attributes['password'] = Hash::make($password);

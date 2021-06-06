@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/profile/edit', 'profile.edit')->name('profile.edit')->middleware('auth');
 Route::view('/profile/password', 'profile.password')->name('profile.password')->middleware('auth');
-Route::view('/profile', 'profile.index')->name('profile.index')->middleware('auth');
+Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile.index')->middleware('auth');
 
 // шаблоны страниц
 
@@ -32,6 +32,8 @@ Route::get('katalog/{slug}', 'App\Http\Controllers\BraceletsController@show')->n
 Route::get('ratings', 'App\Http\Controllers\RatingsController@index')->name('pub.ratings.index');
 
 Route::get('/{slug}', 'App\Http\Controllers\RatingsController@show')->name('pub.ratings.show');
+
+Route::get('/blog/{slug}', 'App\Http\Controllers\PostsController@show')->name('pub.posts.show');
 
 Route::post('/katalog/{bracelet}/review', 'App\Http\Controllers\ReviewsController@store');
 

@@ -33,6 +33,14 @@ class Post extends Model implements HasMedia
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
+    public function getLink() {
+
+        $link = $this->slug;
+
+        return route('pub.posts.show', ['slug' => $link]); 
+        
+     }
+
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('320')

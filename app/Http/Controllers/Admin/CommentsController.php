@@ -9,8 +9,6 @@ use App\Models\User;
 use App\Models\Rating;
 use App\Models\Comment;
 
-use Spatie\QueryBuilder\QueryBuilder;
-
 class CommentsController extends Controller
 {
     /**
@@ -20,10 +18,7 @@ class CommentsController extends Controller
      */
     public function index()
     {
-        $comments = QueryBuilder::for(Comment::class)
-        ->allowedIncludes(['commentable'])
-        ->allowedFilters(['commentable.name','ratings.name'])
-        ->paginate(20);
+        $comments = Comment::with('user')->paginate(20);
 
         return view('admin.comments.index', compact('comments'));
     }

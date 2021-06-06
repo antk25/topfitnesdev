@@ -42,14 +42,15 @@
         </div>
       </div>
 
-      <div class="margin-bottom-xs">
-        <label class="form-label margin-bottom-xxs" for="text">Основной контент</label>
-            <textarea rows="20" class="form-control width-100%" name="text" wire:model="text"></textarea>
+      <div class="margin-bottom-sm">
+        <label class="form-label margin-bottom-xxs" for="text">Основной контент (в начале статьи)</label>
+            <textarea rows="20" class="form-control width-100% text-sm" spellcheck="false" name="text" wire:model="text"></textarea>
       </div>
 
         <div class="card">
             <div class="card-header">
-                Браслеты
+                Браслеты<br/>
+                <p class="text-sm">Выбрать браслет - выбрать позицию в рейтинге - вставить уникальное описание для текущего рейтинга (опционально)</p>
             </div>
 
             <div class="card-body">
@@ -85,7 +86,7 @@
   </div>
   
   <div class="col-7@md">
-  <textarea class="form-control width-100%" name="ratingBracelets[{{$index}}][text_rating]" wire:model="ratingBracelets.{{$index}}.text_rating" placeholder="Описание выбранного браслета для текущего рейтинга - вставлять с тегами"></textarea>
+  <textarea class="form-control width-100% text-sm" rows="5" name="ratingBracelets[{{$index}}][text_rating]" wire:model="ratingBracelets.{{$index}}.text_rating" placeholder="Описание выбранного браслета для текущего рейтинга - вставлять с тегами"></textarea>
   </div>
 
   <div class="col-2@md">
