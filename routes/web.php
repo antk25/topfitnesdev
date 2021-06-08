@@ -20,31 +20,21 @@ Route::view('/profile/password', 'profile.password')->name('profile.password')->
 Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile.index')->middleware('auth');
 
 // шаблоны страниц
-
 Route::get('/', 'App\Http\Controllers\IndexController@index')->name('index');
-
 Route::get('katalog', 'App\Http\Controllers\BraceletsController@index')->name('pub.bracelets.index');
-
 Route::get('podbor', 'App\Http\Controllers\BraceletsController@selection')->name('pub.bracelets.selection');
-
 Route::get('katalog/{slug}', 'App\Http\Controllers\BraceletsController@show')->name('bracelets.show');
-
 Route::get('ratings', 'App\Http\Controllers\RatingsController@index')->name('pub.ratings.index');
-
 Route::get('/{slug}', 'App\Http\Controllers\RatingsController@show')->name('pub.ratings.show');
-
 Route::get('/blog/{slug}', 'App\Http\Controllers\PostsController@show')->name('pub.posts.show');
-
 Route::post('/katalog/{bracelet}/review', 'App\Http\Controllers\ReviewsController@store');
-
 Route::get('/katalog/{bracelet}/reviews', 'App\Http\Controllers\ReviewsController@index');
-
 Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore')->name('reply.add');
-
 
 // Админка
 
-Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
+Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
+    Route::resource('/dashboard', 'MainController');
     Route::resource('/brands', 'BrandsController');
     Route::resource('/bracelets', 'BraceletsController');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
@@ -62,3 +52,4 @@ Route::middleware('auth')->prefix('admin')->namespace('App\Http\Controllers\Admi
     Route::resource('/comments', 'CommentsController');
     Route::post('/comments/reply', 'CommentsController@replyStore')->name('comments.reply');
 });
+

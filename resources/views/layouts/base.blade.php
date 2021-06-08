@@ -381,6 +381,11 @@
                   <div class="dropdown inline-block js-dropdown">
                     <div class="mega-nav__icon-btn dropdown__wrapper inline-block">
                       <a href="#0" class="color-inherit flex height-100% width-100% flex-center dropdown__trigger js-dropdown__trigger">
+                        @if (Auth::user()->getFirstMediaUrl('avatars', 'thumb'))
+                         
+                            <img class="radius-50%" src="{{ Auth::user()->getFirstMediaUrl('avatars', 'thumb') }}">
+                          
+                          @else
                         <svg class="icon" viewBox="0 0 24 24">
                           <title>Go to account settings</title>
                           <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
@@ -388,12 +393,19 @@
                             <path d="M12 13a8 8 0 00-8 8h16a8 8 0 00-8-8z" />
                           </g>
                         </svg>
+                        @endif
                       </a>
 
                       <ul class="dropdown__menu js-dropdown__menu" aria-label="submenu">
-                        <li><a href="#0" class="dropdown__item">Профиль</a></li>
+                        <li><a href="{{ route('profile.index') }}" class="dropdown__item">Профиль</a></li>
                         <li class="dropdown__separator" role="separator"></li>
-                        <li><a href="#0" class="dropdown__item">Выйти</a></li>
+                        <li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown__item">Выйти</a></li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                          @csrf
+                      </form>
+                        @can('view-admin-panel')
+                        <li><a href="/admin/dashboard" class="dropdown__item">Админка</a></li>
+                        @endcan
                       </ul>
                     </div>
                   </div>
@@ -410,7 +422,7 @@
                 </li>
                 @else
                 <li class="mega-nav__item">
-                  <a href="#0" class="btn btn--primary mega-nav__btn">Войти</a>
+                  <a href="{{ route('login') }}" class="btn btn--primary mega-nav__btn">Войти</a>
                 </li>
                 @endif
 

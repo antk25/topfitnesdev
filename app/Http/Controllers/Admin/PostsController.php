@@ -30,7 +30,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        $users = User::pluck('email', 'id')->all();
+        $users = User::pluck('name', 'id')->all();
         return view('admin.posts.create', compact('users'));
     }
 
@@ -83,7 +83,7 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
 
-        $users = User::pluck('email', 'id')->all();
+        $users = User::pluck('name', 'id')->all();
 
         $media = $post->getMedia('images');
         

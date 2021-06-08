@@ -21,7 +21,7 @@
 </head>
 <body>
     <div class="container max-width-xxs padding-y-lg">
-        <form class="login-form" method="POST" action="{{ route('user-profile-information.update') }}">
+        <form class="login-form" method="POST" action="{{ route('user-profile-information.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="text-component text-center margin-bottom-sm">
@@ -44,6 +44,51 @@
               <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
               @enderror
             </div>
+
+            <div class="margin-bottom-sm">
+              <label for="avatar" class="form-label margin-bottom-xxxs">Загрузить аватар</label>
+              <input id="avatar" type="file" class="form-control width-100%" name="avatar">
+              @error('avatar')
+              <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+              @enderror
+            </div>
+
+            <div class="margin-bottom-sm">
+                <label class="form-label margin-bottom-xxxs" for="about">О себе</label>
+                <textarea class="form-control width-100%" name="about" id="about">{{ old('about') ?? auth()->user()->about }}</textarea>
+                @error('about')
+                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+                @enderror
+              </div>
+              <div class="margin-bottom-sm">
+                <label class="form-label margin-bottom-xxxs" for="whatsapp">WhatsApp</label>
+                <input class="form-control width-100%" type="whatsapp" name="whatsapp" id="whatsapp" value="{{ old('whatsapp') ?? auth()->user()->whatsapp }}">
+                @error('whatsapp')
+                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+                @enderror
+              </div>
+              <div class="margin-bottom-sm">
+                <label class="form-label margin-bottom-xxxs" for="telegram">Telegram</label>
+                <input class="form-control width-100%" type="telegram" name="telegram" id="telegram" value="{{ old('telegram') ?? auth()->user()->telegram }}">
+                @error('telegram')
+                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+                @enderror
+              </div>
+              <div class="margin-bottom-sm">
+                <label class="form-label margin-bottom-xxxs" for="vk">Вконтакте</label>
+                <input class="form-control width-100%" type="vk" name="vk" id="vk" value="{{ old('vk') ?? auth()->user()->vk }}">
+                @error('vk')
+                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+                @enderror
+              </div>
+              <div class="margin-bottom-sm">
+                <label class="form-label margin-bottom-xxxs" for="facebook">Facebook</label>
+                <input class="form-control width-100%" type="facebook" name="facebook" id="facebook" value="{{ old('facebook') ?? auth()->user()->facebook }}">
+                @error('facebook')
+                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+                @enderror
+              </div>
+
             <div class="margin-bottom-sm">
               <button class="btn btn--primary btn--md width-100%">Обновить профиль</button>
             </div>

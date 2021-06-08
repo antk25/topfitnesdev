@@ -59,7 +59,7 @@
       <input type="text" class="reset input-merger__input min-width-0 col" name="username" wire:model="username" id="username" placeholder="Ваше имя">
       <input type="email" class="reset input-merger__input min-width-0 col" name="useremail" wire:model="useremail" id="useremail" placeholder="Email">
     </div> 
-    <p class="text-xs color-contrast-medium margin-y-xxs">Укажите <span class="text-bold">имя</span> и <span class="text-bold">email</span>, либо <a href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p> 
+    <p class="text-xs color-contrast-medium margin-y-xxs">Укажите <span class="text-bold">имя</span> и <span class="text-bold">email</span>, либо <a href="{{ route('login') }}" aria-controls="modal-form">войдите</a>, <a href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p> 
     @endif
       <div class="margin-y-xs">
         <label class="sr-only" for="commentNewContent">Ваш комментарий</label>

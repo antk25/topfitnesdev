@@ -37,8 +37,19 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->forceFill([
                 'name' => $input['name'],
                 'email' => $input['email'],
+                'about' => $input['about'],
+                'whatsapp' => $input['whatsapp'],
+                'telegram' => $input['telegram'],
+                'vk' => $input['vk'],
+                'facebook' => $input['facebook'],
             ])->save();
+
+            if (isset($input['avatar'])) {
+                $user->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+            }
+            redirectPath();
         }
+        
     }
 
     /**
@@ -53,9 +64,23 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         $user->forceFill([
             'name' => $input['name'],
             'email' => $input['email'],
+            'about' => $input['about'],
+            'whatsapp' => $input['whatsapp'],
+            'telegram' => $input['telegram'],
+            'vk' => $input['vk'],
+            'facebook' => $input['facebook'],
             'email_verified_at' => null,
         ])->save();
 
+        if (isset($input['avatar'])) {
+          $user->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+        }
+
         $user->sendEmailVerificationNotification();
+        redirectPath();
+    }
+    public function redirectPath()
+    {
+        return route('profile.index');
     }
 }

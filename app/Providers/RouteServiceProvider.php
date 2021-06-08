@@ -17,12 +17,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+
     public const HOME = '/';
 
-    // public function myredir()
-    // {
-        // return back();
-    // }
+    public const PROFILE = '/profile';
 
     /**
      * The controller namespace for the application.

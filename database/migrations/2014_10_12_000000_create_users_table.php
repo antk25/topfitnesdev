@@ -17,6 +17,11 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->text('about')->nullable();
+            $table->string('whatsapp')->nullable();
+            $table->string('telegram')->nullable();
+            $table->string('vk')->nullable();
+            $table->string('facebook')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->tinyInteger('is_admin')->default(0);

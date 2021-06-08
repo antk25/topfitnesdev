@@ -16,6 +16,10 @@ class ProfileController extends Controller
 
     $user = User::with('comments')->where('id', \Auth::user()->id)->first();
 
+    if(\Gate::check('view-admin-panel'))
+        {
+        return view('admin.account', compact('user'));
+        }
     return view('profile.index', compact('user'));
 
     }

@@ -24,10 +24,23 @@
       <div class="text-component line-height-lg v-space-md">
 
         {!! $post->content !!}
-        
-       
        
       </div>
+      
+
+<div class="author ">
+  <a href="#0" class="author__img-wrapper">
+    <img src="../../../app/assets/img/author-img-1.jpg" alt="Author picture">
+  </a>
+
+  <div class="author__content text-component v-space-xxs">
+    <h4><a href="#0" rel="author">{{ $post->user->name }}</a></h4>
+    <p class="color-contrast-medium">{{ $post->user->about }}</p>
+    <p class="text-sm"><a href="#0">@oliviagribben</a></p>
+  </div>
+</div>
+
+
     </article>
 
     <div class="bg padding-md padding-x-lg@md margin-y-sm@md">

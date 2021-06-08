@@ -10,6 +10,7 @@
         <h2>Изменить статью "{{ $post->name }}"</h2>
       </div>
       <div class="margin-bottom-xs">
+          <label class="form-label margin-y-xs" for="user_id">Автор</label>
         <div class="select">
           <select class="select__input form-control" name="user_id">
             @foreach ($users as $k => $v)
@@ -58,7 +59,10 @@
 
       <div class="margin-bottom-xs">
         <label class="form-label margin-bottom-xxs" for="content">Текст статьи</label>
-            <textarea class="form-control width-100%" name="content" id="code">{{ $post->content }}</textarea>
+        <div class="margin-y-sm">Код</div>
+        <div id="editor">{{ $post->content }}</div>
+        <div class="margin-y-sm">Textarea</div>
+        <textarea class="form-control width-100% text-sm" spellcheck="false" name="content" id="content"></textarea>
       </div>
     </fieldset>
 <section class="bg bg-white padding-sm">
@@ -174,20 +178,24 @@
 @section('scripts')
 @parent
 <script src="{{ asset("js/admin/alpine.min.js") }}"></script>
-<script src="{{ asset("js/admin/codemirror.js") }}"></script>
-    <script src="{{ asset("js/admin/closetag.js") }}"></script>
-    <script src="{{ asset("js/admin/htmlmixed.js") }}"></script>
-    <script src="{{ asset("js/admin/css.js") }}"></script>
-    <script src="{{ asset("js/admin/javascript.js") }}"></script>
-    <script src="{{ asset("js/admin/xml.js") }}"></script>
-    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
+<script src="{{ asset("js/admin/ace.js") }}"></script>
+    <script
+			  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+			  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+			  crossorigin="anonymous"></script>
     <script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        mode: 'text/html',
-        autoCloseTags: true,
-        lineWrapping: true
-      });
 
+     var textarea = $('#content');
+
+   var editor = ace.edit("editor");
+   editor.setTheme("ace/theme/twilight");
+   editor.getSession().setMode("ace/mode/html");
+
+   editor.getSession().on('change', function () {
+       textarea.val(editor.getSession().getValue());
+   });
+
+   textarea.val(editor.getSession().getValue());
 
 
   function handler() {
