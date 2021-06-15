@@ -38,15 +38,30 @@
 
           <!-- 👇 icon buttons --mobile -->
           <div class="mega-nav__icon-btns mega-nav__icon-btns--mobile">
-            <a href="#0" class="mega-nav__icon-btn">
+            @if (auth()->check())
+            
+            <a href="{{ route('profile.index') }}" class="mega-nav__icon-btn">
+             
               <svg class="icon" viewBox="0 0 24 24">
-                <title>Go to account settings</title>
+                <title>Перейти к настройкам профиля</title>
                 <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
                   <circle cx="12" cy="6" r="4" />
                   <path d="M12 13a8 8 0 00-8 8h16a8 8 0 00-8-8z" />
                 </g>
               </svg>
             </a>
+                @else
+                <a href="{{ route('login') }}" class="mega-nav__icon-btn">
+             
+                  <svg class="icon" viewBox="0 0 24 24">
+                    <title>Войти или зарегистрироваться</title>
+                    <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
+                      <circle cx="12" cy="6" r="4" />
+                      <path d="M12 13a8 8 0 00-8 8h16a8 8 0 00-8-8z" />
+                    </g>
+                  </svg>
+                </a>
+                @endif
 
             <button class="reset mega-nav__icon-btn mega-nav__icon-btn--search js-tab-focus" aria-label="Toggle search" aria-controls="mega-nav-search">
               <svg class="icon" viewBox="0 0 24 24">

@@ -47,7 +47,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             if (isset($input['avatar'])) {
                 $user->addMediaFromRequest('avatar')->toMediaCollection('avatars');
             }
-            redirectPath();
         }
         
     }
@@ -78,9 +77,5 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         $user->sendEmailVerificationNotification();
         redirectPath();
-    }
-    public function redirectPath()
-    {
-        return route('profile.index');
     }
 }
