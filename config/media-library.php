@@ -12,7 +12,7 @@ return [
      * The maximum file size of an item in bytes.
      * Adding a larger file will result in an exception.
      */
-    'max_file_size' => 3000 * 3000 * 30,
+    'max_file_size' => 3000 * 3000 * 100,
 
     /*
      * This queue will be used to generate derived and responsive images.

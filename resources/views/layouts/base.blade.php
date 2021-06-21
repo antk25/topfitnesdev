@@ -245,43 +245,8 @@
 
                   <div class="mega-nav__sub-nav-wrapper">
                     <div class="mega-nav__sub-nav mega-nav__sub-nav--layout-2">
-                      <ul class="mega-nav__sub-items">
-                        <li class="mega-nav__label">Clothing</li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">All Clothing</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Coats</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Dresses</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Jackets</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Jeans</a></li>
-                      </ul>
 
-                      <ul class="mega-nav__sub-items">
-                        <li class="mega-nav__label">Shoes</li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">All Shoes</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Trainers</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Heels</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Boots</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Ankle Boots</a></li>
-                      </ul>
-
-                      <ul class="mega-nav__sub-items">
-                        <li class="mega-nav__label">Sports</li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">All Sports</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Basketball</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Fitness</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Football</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Golf</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Running</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Swimming</a></li>
-                      </ul>
-
-                      <ul class="mega-nav__sub-items">
-                        <li class="mega-nav__label">Accessories</li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">All Accessories</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Bags</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Jewellery</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Watches</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Scarves</a></li>
-                      </ul>
+                      @include('layouts.parts.header-group')
 
                       <div class="mega-nav__card width-100% max-width-xs margin-x-auto">
                         <a href="#0" class="block radius-lg overflow-hidden">

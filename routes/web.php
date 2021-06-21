@@ -41,6 +41,8 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::get('/import', 'BraceletsController@import');
     Route::post('importExcel', 'BraceletsController@importExcel');
     Route::resource('/ratings', 'RatingsController');
+    Route::resource('/menuitems', 'MenuItemsController');
+    Route::resource('/groupmenus', 'GroupMenusController');
     Route::resource('/grades', 'GradesController');
     Route::resource('/sellers', 'SellersController');
     Route::resource('/reviews', 'ReviewsController');
