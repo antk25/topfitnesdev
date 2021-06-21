@@ -51,6 +51,13 @@ class Bracelet extends Model implements HasMedia
         return $this->belongsTo(Brand::class);
     }
 
+    // Связываем с обзором
+
+    public function overview()
+    {
+        return $this->hasOne(Overview::class);
+    }
+
     // Связываем с оценками
 
     public function grades() {

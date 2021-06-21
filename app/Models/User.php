@@ -46,15 +46,28 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
     ];
 
+    // Связываем с постами в блоге
+
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
+
+    // Связываем с обзорами
+
+    public function overviews()
+    {
+        return $this->hasMany(Overview::class);
+    }
     
+    // Связываем с рейтингами
+
     public function ratings()
     {
         return $this->hasMany(Rating::class);
     }
+
+    // Связываем с комментариями
 
     public function comments()
     {

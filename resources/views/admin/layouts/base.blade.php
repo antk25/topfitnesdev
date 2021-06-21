@@ -193,7 +193,43 @@
                   <span class="sidenav__text text-sm@md">Статьи блога</span>
                 </a>
               </li>        
+
+              <li class="sidenav__item">
+                <a href="{{ route('overviews.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'overviews') ? 'page' : '' }}">
+                  <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
+                    </g>
+                  </svg>
+                  <span class="sidenav__text text-sm@md">Обзоры</span>
+                </a>
+              </li>        
               
+              <li class="sidenav__item">
+                <a href="{{ route('menuitems.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'menuitems') ? 'page' : '' }}">
+                  <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
+                    </g>
+                  </svg>
+                  <span class="sidenav__text text-sm@md">Настройка меню</span>
+                </a>
+              </li>        
+
+              <li class="sidenav__item">
+                <a href="{{ route('groupmenus.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'groupmenus') ? 'page' : '' }}">
+                  <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <circle cx="6" cy="8" r="2"></circle>
+                      <path d="M10,2H6C2.7,2,0,4.7,0,8s2.7,6,6,6h4c3.3,0,6-2.7,6-6S13.3,2,10,2z M10,12H6c-2.2,0-4-1.8-4-4s1.8-4,4-4h4 c2.2,0,4,1.8,4,4S12.2,12,10,12z"></path>
+                    </g>
+                  </svg>
+                  <span class="sidenav__text text-sm@md">Группировка меню</span>
+                </a>
+              </li>        
+
               <li class="sidenav__item">
                 <a href="{{ route('comments.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'comments') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">

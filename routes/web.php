@@ -49,6 +49,9 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::resource('/posts', 'PostsController');
     Route::post('/posts/delimg', 'PostsController@imgdelete')->name('posts.delimg');
     Route::post('/posts/updimg', 'PostsController@imgupdate')->name('posts.updimg');
+    Route::resource('/overviews', 'OverviewsController');
+    Route::post('/overviews/delimg', 'OverviewsController@imgdelete')->name('overviews.delimg');
+    Route::post('/overviews/updimg', 'OverviewsController@imgupdate')->name('overviews.updimg');
     Route::post('/bracelets/delimg', 'BraceletsController@imgdelete')->name('bracelets.delimg');
     Route::post('/bracelets/updimg', 'BraceletsController@imgupdate')->name('bracelets.updimg');
     Route::resource('/comments', 'CommentsController');
