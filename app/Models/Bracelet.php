@@ -71,8 +71,15 @@ class Bracelet extends Model implements HasMedia
     }
 
     // Связь с статьями-сравнениями 
+
     public function comparison() {
         return $this->belongsToMany(Comparison::class);
+    }
+
+    // Связь с таблицей CompareItems 
+    
+    public function compareitem() {
+        return $this->belongsToMany(CompareItem::class);
     }
 
     // 3. Функция от админки для получения уже имеющихся атрибутов из БД и отметка соответствующих флажков https://twill.io/docs/#multiselect-with-static-values

@@ -31,4 +31,11 @@ class Comparison extends Model implements HasMedia
     {
         return $this->belongsTo(User::class);
     }
+
+    // Связываем с несколькими CompareItems
+
+    public function compareitems()
+    {
+        return $this->hasMany(CompareItems::class);
+    }
 }

@@ -263,6 +263,11 @@ class BraceletsController extends Controller
 
             $bracelet->ratings()->sync($data);
         }
+        // Для того, чтобы при удалении всех рейтингов - были удалены все связи, обязательно нужен след код:
+        else {
+            $ratings = $bracelet->ratings->pluck('id')->all();
+            $bracelet->ratings()->detach($ratings);
+        }
 
         if ($grades != '') {
             $extra2 = array_map(function($p, $r){
