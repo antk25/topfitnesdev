@@ -36,9 +36,7 @@ Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore'
 Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::resource('/dashboard', 'MainController');
     Route::resource('/brands', 'BrandsController');
-    Route::resource('/bracelets', 'BraceletsController', [
-    'only' => ['index', 'create', 'store']
-]);
+    Route::resource('/bracelets', 'BraceletsController');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
     Route::get('/import', 'BraceletsController@import');
     Route::post('importExcel', 'BraceletsController@importExcel');
