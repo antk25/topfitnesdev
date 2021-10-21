@@ -17,7 +17,7 @@
               <option value="{{ $k }}">{{ $v }}</option>
             @endforeach
           </select>
-          
+
           <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
         </div>
       </div>
@@ -59,10 +59,8 @@
 
       <div class="margin-bottom-xs">
         <label class="form-label margin-bottom-xxs" for="content">Текст статьи</label>
-        <div class="margin-y-sm">Код</div>
-        <div id="editor">{{ $post->content }}</div>
         <div class="margin-y-sm">Textarea</div>
-        <textarea class="form-control width-100% text-sm" spellcheck="false" name="content" id="content"></textarea>
+        <textarea class="form-control width-100% text-sm" spellcheck="false" name="content" id="content">{{ $post->content }}</textarea>
       </div>
     </fieldset>
 <section class="bg bg-white padding-sm">
@@ -183,19 +181,33 @@
 			  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
 			  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
 			  crossorigin="anonymous"></script>
+
+     <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
+    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
+    <script src="{{ asset("js/admin/closetag.js") }}"></script>
+    <script src="{{ asset("js/admin/matchtags.js") }}"></script>
+    <script src="{{ asset("js/admin/trailingspace.js") }}"></script>
+    <script src="{{ asset("js/admin/xml.js") }}"></script>
+    <script src="{{ asset("js/admin/fullscreen.js") }}"></script>
     <script>
-
-     var textarea = $('#content');
-
-   var editor = ace.edit("editor");
-   editor.setTheme("ace/theme/twilight");
-   editor.getSession().setMode("ace/mode/html");
-
-   editor.getSession().on('change', function () {
-       textarea.val(editor.getSession().getValue());
-   });
-
-   textarea.val(editor.getSession().getValue());
+      var myCodeMirror = CodeMirror.fromTextArea((content), {
+        lineNumbers: true,
+        tabSize: 2,
+        mode: "text/html",
+        autoCloseTags: true,
+        lineWrapping: true,
+        matchTags: {bothTags: true},
+        extraKeys: {"Ctrl-J": "toMatchingTag"},
+        showTrailingSpace: true,
+        extraKeys: {
+        "F11": function(cm) {
+          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function(cm) {
+          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        }
+      }
+      });
 
 
   function handler() {

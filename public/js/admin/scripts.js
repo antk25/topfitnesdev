@@ -5,24 +5,18 @@ function Util () {};
 	class manipulation functions
 */
 Util.hasClass = function(el, className) {
-	if (el.classList) return el.classList.contains(className);
-	else return !!el.getAttribute('class').match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+	return el.classList.contains(className);
 };
 
 Util.addClass = function(el, className) {
 	var classList = className.split(' ');
- 	if (el.classList) el.classList.add(classList[0]);
-  else if (!Util.hasClass(el, classList[0])) el.setAttribute('class', el.getAttribute('class') +  " " + classList[0]);
+ 	el.classList.add(classList[0]);
  	if (classList.length > 1) Util.addClass(el, classList.slice(1).join(' '));
 };
 
 Util.removeClass = function(el, className) {
 	var classList = className.split(' ');
-	if (el.classList) el.classList.remove(classList[0]);	
-	else if(Util.hasClass(el, classList[0])) {
-		var reg = new RegExp('(\\s|^)' + classList[0] + '(\\s|$)');
-    el.setAttribute('class', el.getAttribute('class').replace(reg, ' '));
-	}
+	el.classList.remove(classList[0]);	
 	if (classList.length > 1) Util.removeClass(el, classList.slice(1).join(' '));
 };
 
@@ -43,8 +37,8 @@ Util.setAttributes = function(el, attrs) {
 Util.getChildrenByClassName = function(el, className) {
   var children = el.children,
     childrenByClass = [];
-  for (var i = 0; i < el.children.length; i++) {
-    if (Util.hasClass(el.children[i], className)) childrenByClass.push(el.children[i]);
+  for (var i = 0; i < children.length; i++) {
+    if (Util.hasClass(children[i], className)) childrenByClass.push(children[i]);
   }
   return childrenByClass;
 };
@@ -321,1041 +315,931 @@ Math.easeOutElastic = function (t, b, c, d) {
 function resetFocusTabsStyle() {
   window.dispatchEvent(new CustomEvent('initFocusTabs'));
 };
+// File#: _1_3d-drawer
+// Usage: codyhouse.co/license
+(function() {
+	var TdDrawer = function(element) {
+    this.element = element;
+    this.mianContent = document.getElementsByClassName('js-td-drawer-main');
+		this.content = document.getElementsByClassName('js-td-drawer__body');
+		this.triggers = document.querySelectorAll('[aria-controls="'+this.element.getAttribute('id')+'"]');
+		this.firstFocusable = null;
+		this.lastFocusable = null;
+		this.selectedTrigger = null;
+    this.showClass = "td-drawer--is-visible";
+    this.showMainClass = "td-drawer-main--drawer-is-visible";
+		initDrawer(this);
+  };
+  
+  function initDrawer(drawer) {
+    // open drawer when clicking on trigger buttons
+		if ( drawer.triggers ) {
+			for(var i = 0; i < drawer.triggers.length; i++) {
+				drawer.triggers[i].addEventListener('click', function(event) {
+					event.preventDefault();
+					if(Util.hasClass(drawer.element, drawer.showClass)) {
+						closeDrawer(drawer);
+						return;
+					}
+					drawer.selectedTrigger = event.target;
+					showDrawer(drawer);
+					initDrawerEvents(drawer);
+				});
+			}
+		}
+		
+		// if drawer is already open -> we should initialize the drawer events
+		if(Util.hasClass(drawer.element, drawer.showClass)) initDrawerEvents(drawer);
+  };
+
+  function showDrawer(drawer) {
+    if(drawer.content.length  > 0 ) drawer.content[0].scrollTop = 0;
+    if(drawer.mianContent.length  > 0 ) Util.addClass(drawer.mianContent[0], drawer.showMainClass);
+		Util.addClass(drawer.element, drawer.showClass);
+	  getFocusableElements(drawer);
+		Util.moveFocus(drawer.element);
+		// wait for the end of transitions before moving focus
+		drawer.element.addEventListener("transitionend", function cb(event) {
+			Util.moveFocus(drawer.element);
+			drawer.element.removeEventListener("transitionend", cb);
+		});
+		emitDrawerEvents(drawer, 'drawerIsOpen');
+  };
+
+  function closeDrawer(drawer) {
+    if(drawer.mianContent.length  > 0 ) Util.removeClass(drawer.mianContent[0], drawer.showMainClass);
+    Util.removeClass(drawer.element, drawer.showClass);
+		drawer.firstFocusable = null;
+		drawer.lastFocusable = null;
+		if(drawer.selectedTrigger) drawer.selectedTrigger.focus();
+		//remove listeners
+		cancelDrawerEvents(drawer);
+		emitDrawerEvents(drawer, 'drawerIsClose');
+  };
+
+  function initDrawerEvents(drawer) {
+    //add event listeners
+    drawer.element.addEventListener('keydown', handleEvent.bind(drawer));
+    drawer.element.addEventListener('click', handleEvent.bind(drawer));
+  };
+
+  function cancelDrawerEvents(drawer) {
+		//remove event listeners
+		drawer.element.removeEventListener('keydown', handleEvent.bind(drawer));
+		drawer.element.removeEventListener('click', handleEvent.bind(drawer));
+  };
+
+  function handleEvent(event) {
+    switch(event.type) {
+      case 'click': {
+        initClick(this, event);
+      }
+      case 'keydown': {
+        initKeyDown(this, event);
+      }
+    }
+  };
+
+  function initKeyDown(drawer, event) {
+    if( event.keyCode && event.keyCode == 27 || event.key && event.key == 'Escape' ) {
+      //close drawer window on esc
+      closeDrawer(drawer);
+    } else if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+      //trap focus inside drawer
+      trapFocus(drawer, event);
+    }
+  };
+
+  function initClick(drawer, event) {
+    //close drawer when clicking on close button or drawer bg layer 
+		if( !event.target.closest('.js-td-drawer__close') && !Util.hasClass(event.target, 'js-td-drawer') ) return;
+		event.preventDefault();
+		closeDrawer(drawer);
+  };
+
+  function trapFocus(drawer, event) {
+    if( drawer.firstFocusable == document.activeElement && event.shiftKey) {
+			//on Shift+Tab -> focus last focusable element when focus moves out of drawer
+			event.preventDefault();
+			drawer.lastFocusable.focus();
+		}
+		if( drawer.lastFocusable == document.activeElement && !event.shiftKey) {
+			//on Tab -> focus first focusable element when focus moves out of drawer
+			event.preventDefault();
+			drawer.firstFocusable.focus();
+		}
+  };
+
+  function getFocusableElements(drawer) {
+    //get all focusable elements inside the drawer
+		var allFocusable = drawer.element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary');
+		getFirstVisible(drawer, allFocusable);
+		getLastVisible(drawer, allFocusable);
+  };
+
+  function getFirstVisible(drawer, elements) {
+    //get first visible focusable element inside the drawer
+		for(var i = 0; i < elements.length; i++) {
+			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
+				drawer.firstFocusable = elements[i];
+				return true;
+			}
+		}
+  };
+
+  function getLastVisible(drawer, elements) {
+    //get last visible focusable element inside the drawer
+		for(var i = elements.length - 1; i >= 0; i--) {
+			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
+				drawer.lastFocusable = elements[i];
+				return true;
+			}
+		}
+  };
+
+  function emitDrawerEvents(drawer, eventName) {
+    var event = new CustomEvent(eventName, {detail: drawer.selectedTrigger});
+		drawer.element.dispatchEvent(event);
+  };
+
+	//initialize the Drawer objects
+	var drawer = document.getElementsByClassName('js-td-drawer');
+	if( drawer.length > 0 ) {
+		for( var i = 0; i < drawer.length; i++) {
+			(function(i){new TdDrawer(drawer[i]);})(i);
+		}
+	}
+}());
+// File#: _1_accordion
+// Usage: codyhouse.co/license
+(function() {
+	var Accordion = function(element) {
+		this.element = element;
+		this.items = Util.getChildrenByClassName(this.element, 'js-accordion__item');
+		this.version = this.element.getAttribute('data-version') ? '-'+this.element.getAttribute('data-version') : '';
+		this.showClass = 'accordion'+this.version+'__item--is-open';
+		this.animateHeight = (this.element.getAttribute('data-animation') == 'on');
+		this.multiItems = !(this.element.getAttribute('data-multi-items') == 'off'); 
+		// deep linking options
+		this.deepLinkOn = this.element.getAttribute('data-deep-link') == 'on';
+		// init accordion
+		this.initAccordion();
+	};
+
+	Accordion.prototype.initAccordion = function() {
+		//set initial aria attributes
+		for( var i = 0; i < this.items.length; i++) {
+			var button = this.items[i].getElementsByTagName('button')[0],
+				content = this.items[i].getElementsByClassName('js-accordion__panel')[0],
+				isOpen = Util.hasClass(this.items[i], this.showClass) ? 'true' : 'false';
+			Util.setAttributes(button, {'aria-expanded': isOpen, 'aria-controls': 'accordion-content-'+i, 'id': 'accordion-header-'+i});
+			Util.addClass(button, 'js-accordion__trigger');
+			Util.setAttributes(content, {'aria-labelledby': 'accordion-header-'+i, 'id': 'accordion-content-'+i});
+		}
+
+		//listen for Accordion events
+		this.initAccordionEvents();
+
+		// check deep linking option
+		this.initDeepLink();
+	};
+
+	Accordion.prototype.initAccordionEvents = function() {
+		var self = this;
+
+		this.element.addEventListener('click', function(event) {
+			var trigger = event.target.closest('.js-accordion__trigger');
+			//check index to make sure the click didn't happen inside a children accordion
+			if( trigger && Util.getIndexInArray(self.items, trigger.parentElement) >= 0) self.triggerAccordion(trigger);
+		});
+	};
+
+	Accordion.prototype.triggerAccordion = function(trigger) {
+		var bool = (trigger.getAttribute('aria-expanded') === 'true');
+
+		this.animateAccordion(trigger, bool, false);
+
+		if(!bool && this.deepLinkOn) {
+			history.replaceState(null, '', '#'+trigger.getAttribute('aria-controls'));
+		}
+	};
+
+	Accordion.prototype.animateAccordion = function(trigger, bool, deepLink) {
+		var self = this;
+		var item = trigger.closest('.js-accordion__item'),
+			content = item.getElementsByClassName('js-accordion__panel')[0],
+			ariaValue = bool ? 'false' : 'true';
+
+		if(!bool) Util.addClass(item, this.showClass);
+		trigger.setAttribute('aria-expanded', ariaValue);
+		self.resetContentVisibility(item, content, bool);
+
+		if( !this.multiItems && !bool || deepLink) this.closeSiblings(item);
+	};
+
+	Accordion.prototype.resetContentVisibility = function(item, content, bool) {
+		Util.toggleClass(item, this.showClass, !bool);
+		content.removeAttribute("style");
+		if(bool && !this.multiItems) { // accordion item has been closed -> check if there's one open to move inside viewport 
+			this.moveContent();
+		}
+	};
+
+	Accordion.prototype.closeSiblings = function(item) {
+		//if only one accordion can be open -> search if there's another one open
+		var index = Util.getIndexInArray(this.items, item);
+		for( var i = 0; i < this.items.length; i++) {
+			if(Util.hasClass(this.items[i], this.showClass) && i != index) {
+				this.animateAccordion(this.items[i].getElementsByClassName('js-accordion__trigger')[0], true, false);
+				return false;
+			}
+		}
+	};
+
+	Accordion.prototype.moveContent = function() { // make sure title of the accordion just opened is inside the viewport
+		var openAccordion = this.element.getElementsByClassName(this.showClass);
+		if(openAccordion.length == 0) return;
+		var boundingRect = openAccordion[0].getBoundingClientRect();
+		if(boundingRect.top < 0 || boundingRect.top > window.innerHeight) {
+			var windowScrollTop = window.scrollY || document.documentElement.scrollTop;
+			window.scrollTo(0, boundingRect.top + windowScrollTop);
+		}
+	};
+
+	Accordion.prototype.initDeepLink = function() {
+		if(!this.deepLinkOn) return;
+		var hash = window.location.hash.substr(1);
+		if(!hash || hash == '') return;
+		var trigger = this.element.querySelector('.js-accordion__trigger[aria-controls="'+hash+'"]');
+		if(trigger && trigger.getAttribute('aria-expanded') !== 'true') {
+			this.animateAccordion(trigger, false, true);
+			setTimeout(function(){trigger.scrollIntoView(true);});
+		}
+	};
+
+	window.Accordion = Accordion;
+	
+	//initialize the Accordion objects
+	var accordions = document.getElementsByClassName('js-accordion');
+	if( accordions.length > 0 ) {
+		for( var i = 0; i < accordions.length; i++) {
+			(function(i){new Accordion(accordions[i]);})(i);
+		}
+	}
+}());
+// File#: _1_adv-multiple-custom-select
+// Usage: codyhouse.co/license
+(function() {
+  var AdvMultiSelect = function(element) {
+    this.element = element;
+    this.select = this.element.getElementsByTagName('select')[0];
+    this.optGroups = this.select.getElementsByTagName('optgroup');
+    this.options = this.select.getElementsByTagName('option');
+    this.optionData = getOptionsData(this); // create custom templates
+    this.selectId = this.select.getAttribute('id');
+    this.selectLabel = document.querySelector('[for='+this.selectId+']')
+    this.list = this.element.getElementsByClassName('js-advm-select__list')[0];
+    // used for keyboard/mouse multiple selection
+    this.startSelection = false; 
+    this.latestSelection = false;
+    // detect touch device
+    this.touchDevice = false;
+    // reset buttons
+    this.resetBtns = (this.selectId) ? document.querySelectorAll('[aria-controls="'+this.selectId +'"]') : [];
+
+    initAdvMultiSelect(this); // init markup
+    initAdvMultiSelectEvents(this); // init event listeners
+  };
+
+  function getOptionsData(select) {
+    var obj = [],
+      dataset = select.options[0].dataset;
+
+    function camelCaseToDash( myStr ) {
+      return myStr.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
+    }
+    for (var prop in dataset) {
+      if (Object.prototype.hasOwnProperty.call(dataset, prop)) {
+        obj.push(camelCaseToDash(prop));
+      }
+    }
+    return obj;
+  };
+
+  function initAdvMultiSelect(select) {
+    // create custom structure
+    createAdvStructure(select);
+    // store all custom options and labels
+    select.customOptions = select.list.getElementsByClassName('js-advm-select__option');
+    select.customLabels = select.list.getElementsByClassName('js-advm-select__label');
+    // make custom list focusable
+    select.list.setAttribute('tabindex', 0);
+    // hide native select and show custom structure
+    Util.addClass(select.select, 'is-hidden');
+    Util.removeClass(select.list, 'is-hidden');
+  };
+
+  function initAdvMultiSelectEvents(select) {
+    if(select.selectLabel) {
+      // move focus to custom select list when clicking on <select> label
+      select.selectLabel.addEventListener('click', function(){
+        select.list.focus();
+      });
+    }
+
+    // new option is selected in custom list
+    select.list.addEventListener('click', function(event){
+      var target = event.target,
+        option = target.closest('.js-advm-select__option');
+      if(!option) return;
+      mouseSelection(select, option, event);
+      select.touchDevice = false;
+    });
+
+    select.list.addEventListener('touchend', function(event){ // touch devices
+      select.touchDevice = true;
+    });
+
+    // keyboard navigation
+    select.list.addEventListener('keydown', function(event){
+      // use up/down arrows or space key to select new options
+      if(event.keyCode && event.keyCode == 38 || event.key && event.key.toLowerCase() == 'arrowup') {
+        event.preventDefault();
+        keyboardSelection(select, 'prev', event);
+      } else if(event.keyCode && event.keyCode == 40 || event.key && event.key.toLowerCase() == 'arrowdown') {
+        event.preventDefault();
+        keyboardSelection(select, 'next', event);
+      } else if(event.keyCode && event.keyCode == 32 || event.key && event.key.toLowerCase() == ' ') {
+        event.preventDefault();
+        var option = document.activeElement.closest('.js-advm-select__option');
+        if(!option) return;
+        selectOption([option], !(option.hasAttribute('aria-selected') && option.getAttribute('aria-selected') == 'true'));
+        select.startSelection = option;
+        select.latestSelection = select.startSelection;
+      }
+    });
+
+    // reset selection
+    if(select.resetBtns.length > 0) {
+      for(var i = 0; i < select.resetBtns.length; i++) {
+        select.resetBtns[i].addEventListener('click', function(event){
+          event.preventDefault();
+          resetSelect(select);
+        });
+      }
+    }
+  };
+
+  function createAdvStructure(select) {
+    // store optgroup and option structure
+    var optgroup = select.list.querySelector('[role="group"]'),
+      option = select.list.querySelector('.js-advm-select__option'),
+      optgroupClone = false,
+      optgroupLabel = false,
+      optionClone = false;
+    if(optgroup) {
+      optgroupClone = optgroup.cloneNode();
+      optgroupLabel = select.list.querySelector('.js-advm-select__label');
+    }
+    if(option) optionClone = option.cloneNode(true);
+
+    var listCode = '';
+
+    if(select.optGroups.length > 0) {
+      for(var i = 0; i < select.optGroups.length; i++) {
+        listCode = listCode + getOptGroupCode(select, select.optGroups[i], optgroupClone, optionClone, optgroupLabel, i);
+      }
+    } else {
+      for(var i = 0; i < select.options.length; i++) {
+        listCode = listCode + getOptionCode(select, select.options[i], optionClone);
+      }
+    }
+
+    select.list.innerHTML = listCode;
+  };
+
+  function getOptGroupCode(select, optGroup, optGroupClone, optionClone, optgroupLabel, index) {
+    if(!optGroupClone || !optionClone) return '';
+    var code = '';
+    var options = optGroup.getElementsByTagName('option');
+    for(var i = 0; i < options.length; i++) {
+      code = code + getOptionCode(select, options[i], optionClone);
+    }
+    if(optgroupLabel) {
+      var label = optgroupLabel.cloneNode(true);
+      var id = label.getAttribute('id') + '-'+index;
+      label.setAttribute('id', id);
+      optGroupClone.setAttribute('describedby', id);
+      code = label.outerHTML.replace('{optgroup-label}', optGroup.getAttribute('label')) + code;
+    } 
+    optGroupClone.innerHTML = code;
+    return optGroupClone.outerHTML;
+  };
+
+  function getOptionCode(select, option, optionClone) {
+    optionClone.setAttribute('data-value', option.value);
+    option.selected ? optionClone.setAttribute('aria-selected', 'true') : optionClone.removeAttribute('aria-selected');
+    var optionHtml = optionClone.outerHTML;
+    optionHtml = optionHtml.replace('{option-label}', option.text);
+    for(var i = 0; i < select.optionData.length; i++) {
+      optionHtml = optionHtml.replace('{'+select.optionData[i]+'}', option.getAttribute('data-'+select.optionData[i]));
+    }
+    return optionHtml;
+  };
+
+  function mouseSelection(select, option, event) {
+    var isSelected = (option.hasAttribute('aria-selected') && option.getAttribute('aria-selected') == 'true'); // option already selected
+    if((event.ctrlKey || event.metaKey) && !select.touchDevice) {
+      // add/remove clicked element from the selection 
+      selectOption([option], !isSelected);
+      if(!isSelected) {
+        select.startSelection = option;
+        select.latestSelection = select.startSelection;
+      }
+    } else if(event.shiftKey && !isSelected) {
+      // select all options between latest selected and clicked option 
+      selectInBetween(select, option);
+    } else {
+      if(!select.touchDevice) {
+        // deselect all others and select this one only
+        singleSelect(select, option);
+      } else {
+        // add this item to the selection or deselect it
+       selectOption([option], !isSelected);
+      }
+    }
+    select.startSelection = option;
+    select.latestSelection = select.startSelection;
+    // reset tabindex
+    resetTabindex(select);
+    // new option has been selected -> update native <select> element
+    updateNativeSelect(select);
+  };
+
+  function keyboardSelection(select, direction, event) {
+    var lastSelectedIndex = -1;
+    if(select.latestSelection) {
+      lastSelectedIndex = Util.getIndexInArray(select.customOptions, select.latestSelection);
+    }
+    if(event.ctrlKey || event.metaKey) {
+      // in this case we are only moving the focus, so take latest focused option
+      var focusedOption = document.activeElement.closest('.js-advm-select__option');
+      if(focusedOption) lastSelectedIndex = Util.getIndexInArray(select.customOptions, focusedOption);
+    }
+    var index = (direction == 'next') ? lastSelectedIndex + 1: lastSelectedIndex - 1;
+    if(index < 0 || index >= select.customOptions.length) return;
+    var option = select.customOptions[index];
+
+    if(event.ctrlKey || event.metaKey) {
+      // ctrl/command + up/down -> move focus
+      Util.moveFocus(option);
+    } else if(event.shiftKey) {
+      // shift + up/down -> select new item
+      //remove previously selected options
+      selectOption(select.list.querySelectorAll('[aria-selected="true"]'), false);
+      // select new options
+      selectInBetween(select, option);
+      select.latestSelection = option;
+    } else {
+      // only up/down -> deselect all others and select this one only
+      singleSelect(select, option);
+      select.startSelection = option;
+      select.latestSelection = select.startSelection;
+    }
+    // reset tabindex
+    if(!event.ctrlKey && !event.metaKey) resetTabindex(select);
+    // new option has been selected -> update native <select> element
+    updateNativeSelect(select);
+  };
+
+  function selectInBetween(select, option) {
+    // keyboard/mouse navigation + shift -> select optiong between to elements
+    var optionsBetween = getOptionsBetween(select, option);
+    selectOption(optionsBetween, true);
+  };
+
+  function singleSelect(select, option) {
+    // select a single option, deselecting all the others
+    var selectedOptions = select.list.querySelectorAll('[aria-selected="true"]');
+    selectOption(selectedOptions, false);
+    selectOption([option], true);
+  };
+
+  function selectOption(options, bool) {
+    for(var i = 0; i < options.length; i++) {
+      (bool) ? options[i].setAttribute('aria-selected', 'true') : options[i].removeAttribute('aria-selected');
+    }
+    if(bool) options[options.length - 1].scrollIntoView({block: 'nearest'});
+  };
+
+  function getOptionsBetween(select, option) {
+    var options = [];
+    var optIndex = Util.getIndexInArray(select.customOptions, option),
+      latestOptIndex = 0;
+    if(select.startSelection) {
+      latestOptIndex = Util.getIndexInArray(select.customOptions, select.startSelection);
+    }
+    var min = Math.min(optIndex, latestOptIndex),
+      max = Math.max(optIndex, latestOptIndex);
+    for(var i = min; i <= max; i++) {
+      options.push(select.customOptions[i]);
+    }
+    return options;
+  };
+
+  function updateNativeSelect(select) {
+    // update native select element
+    for(var i = 0; i < select.customOptions.length; i++) {
+      select.options[i].selected = (select.customOptions[i].hasAttribute('aria-selected') && select.customOptions[i].getAttribute('aria-selected') == 'true')
+    }
+    select.select.dispatchEvent(new CustomEvent('change', {bubbles: true})); // trigger change event
+  };
+
+  function resetTabindex(select) {
+    var focusableEl = select.list.querySelectorAll('[tabindex]');
+    for(var i = 0; i < focusableEl.length; i++) {
+      focusableEl[i].removeAttribute('tabindex');
+    }
+    // move focus on list
+    select.list.focus();
+  };
+
+  function resetSelect(select) {
+    selectOption(select.list.querySelectorAll('[aria-selected="true"]'), false);
+    updateNativeSelect(select);
+  };
+
+  //initialize the AdvMultiSelect objects
+  var advMultiSelect = document.getElementsByClassName('js-advm-select');
+  if( advMultiSelect.length > 0 ) {
+    for( var i = 0; i < advMultiSelect.length; i++) {
+      (function(i){new AdvMultiSelect(advMultiSelect[i]);})(i);
+    }
+  }
+}());
+// File#: _1_alert-card
+// Usage: codyhouse.co/license
+(function() {
+  function initAlertCard(card) {
+    card.addEventListener('click', function(event) {
+      if(event.target.closest('.js-alert-card__close-btn')) Util.addClass(card, 'is-hidden');
+    });
+  };
+
+  var alertCards = document.getElementsByClassName('js-alert-card');
+  if(alertCards.length > 0) {
+    for(var i = 0; i < alertCards.length; i++) {
+      (function(i){initAlertCard(alertCards[i])})(i);
+    }
+  }
+}());
 // File#: _1_alert
 // Usage: codyhouse.co/license
-(function () {
-    var alertClose = document.getElementsByClassName('js-alert__close-btn');
-    if (alertClose.length > 0) {
-        for (var i = 0; i < alertClose.length; i++) {
-            (function (i) { initAlertEvent(alertClose[i]); })(i);
-        }
-    };
+(function() {
+	var alertClose = document.getElementsByClassName('js-alert__close-btn');
+	if( alertClose.length > 0 ) {
+		for( var i = 0; i < alertClose.length; i++) {
+			(function(i){initAlertEvent(alertClose[i]);})(i);
+		}
+	};
 }());
 
 function initAlertEvent(element) {
-    element.addEventListener('click', function (event) {
-        event.preventDefault();
-        Util.removeClass(element.closest('.js-alert'), 'alert--is-visible');
-    });
+	element.addEventListener('click', function(event){
+		event.preventDefault();
+		Util.removeClass(element.closest('.js-alert'), 'alert--is-visible');
+	});
 };
+// File#: _1_anim-menu-btn
+// Usage: codyhouse.co/license
+(function() {
+	var menuBtns = document.getElementsByClassName('js-anim-menu-btn');
+	if( menuBtns.length > 0 ) {
+		for(var i = 0; i < menuBtns.length; i++) {(function(i){
+			initMenuBtn(menuBtns[i]);
+		})(i);}
+
+		function initMenuBtn(btn) {
+			btn.addEventListener('click', function(event){	
+				event.preventDefault();
+				var status = !Util.hasClass(btn, 'anim-menu-btn--state-b');
+				Util.toggleClass(btn, 'anim-menu-btn--state-b', status);
+				// emit custom event
+				var event = new CustomEvent('anim-menu-btn-clicked', {detail: status});
+				btn.dispatchEvent(event);
+			});
+		};
+	}
+}());
 // File#: _1_character-count
 // Usage: codyhouse.co/license
-(function () {
-    var CharacterCount = function (element) {
-        this.element = element;
-        this.input = this.element.getElementsByClassName('js-character-count__input')[0];
-        this.characterLimit = Number(this.input.getAttribute('maxlength')) || 200;
-        this.counter = this.element.getElementsByClassName('js-character-count__counter')[0];
-        this.initCount();
-    };
+(function() {
+	var CharacterCount = function(element) {
+		this.element = element;
+		this.input = this.element.getElementsByClassName('js-character-count__input')[0];
+		this.characterLimit = Number(this.input.getAttribute('maxlength')) || 200;
+		this.counter = this.element.getElementsByClassName('js-character-count__counter')[0];
+		this.initCount();
+	};
 
-    CharacterCount.prototype.initCount = function () {
-        var self = this;
-        this.counter.textContent = this.getCount();//set counter value 
-        this.input.addEventListener('input', function (event) { //listen for content changes
-            self.counter.textContent = self.getCount();
-        });
-    };
+	CharacterCount.prototype.initCount = function() {
+		var self = this;
+		this.counter.textContent = this.getCount();//set counter value 
+		this.input.addEventListener('input', function(event){ //listen for content changes
+		  self.counter.textContent = self.getCount();
+		});
+	};
 
-    CharacterCount.prototype.getCount = function () {
-        return this.characterLimit - this.input.value.length;
-    };
-
-    //initialize the CharacterCount objects
-    var characterCounts = document.getElementsByClassName('js-character-count');
-    if (characterCounts.length > 0) {
-        for (var i = 0; i < characterCounts.length; i++) {
-            (function (i) { new CharacterCount(characterCounts[i]); })(i);
-        }
-    };
+	CharacterCount.prototype.getCount = function() {
+		return this.characterLimit - this.input.value.length;
+	};
+	
+	//initialize the CharacterCount objects
+	var characterCounts = document.getElementsByClassName('js-character-count');
+	if( characterCounts.length > 0 ) {
+		for( var i = 0; i < characterCounts.length; i++) {
+			(function(i){new CharacterCount(characterCounts[i]);})(i);
+		}
+	};
 }());
 // File#: _1_choice-tags
 // Usage: codyhouse.co/license
 (function() {
-    var ChoiceTags = function(element) {
-      this.element = element;
-      this.labels = this.element.getElementsByClassName('js-choice-tag');
-      this.inputs = getChoiceInput(this);
-      this.isRadio = this.inputs[0].type.toString() == 'radio';
-      this.checkedClass = 'choice-tag--checked';
-      initChoiceTags(this);
-      initChoiceTagEvent(this);
-    }
-  
-    function getChoiceInput(element) {
-      var inputs = [];
-      for(var i = 0; i < element.labels.length; i++) {
-        inputs.push(element.labels[i].getElementsByTagName('input')[0]);
-      }
-      return inputs;
-    };
-  
-    function initChoiceTags(element) {
-      // if tag is selected by default - add checkedClass to the label element
-      for(var i = 0; i < element.inputs.length; i++) {
-        Util.toggleClass(element.labels[i], element.checkedClass, element.inputs[i].checked);
-      }
-    };
-  
-    function initChoiceTagEvent(element) {
-      element.element.addEventListener('change', function(event) {
-        var inputIndex = Util.getIndexInArray(element.inputs, event.target);
-        if(inputIndex < 0) return;
-        Util.toggleClass(element.labels[inputIndex], element.checkedClass, event.target.checked);
-        if(element.isRadio && event.target.checked) resetRadioTags(element, inputIndex);
-      });
-    };
-  
-    function resetRadioTags(element, index) {
-      // when a radio input is checked - reset all the others
-      for(var i = 0; i < element.labels.length; i++) {
-        if(i != index) Util.removeClass(element.labels[i], element.checkedClass);
-      }
-    };
-  
-    //initialize the ChoiceTags objects
-    var choiceTags = document.getElementsByClassName('js-choice-tags');
-    if( choiceTags.length > 0 ) {
-      for( var i = 0; i < choiceTags.length; i++) {
-        (function(i){new ChoiceTags(choiceTags[i]);})(i);
-      }
-    };
-  }());
-// File#: _1_circular-progress-bar
-// Usage: codyhouse.co/license
-(function() {	
-  var CProgressBar = function(element) {
+  var ChoiceTags = function(element) {
     this.element = element;
-    this.fill = this.element.getElementsByClassName('c-progress-bar__fill')[0];
-    this.fillLength = getProgressBarFillLength(this);
-    this.label = this.element.getElementsByClassName('js-c-progress-bar__value');
-    this.value = parseFloat(this.element.getAttribute('data-progress'));
-    // before checking if data-animation is set -> check for reduced motion
-    updatedProgressBarForReducedMotion(this);
-    this.animate = this.element.hasAttribute('data-animation') && this.element.getAttribute('data-animation') == 'on';
-    this.animationDuration = this.element.hasAttribute('data-duration') ? this.element.getAttribute('data-duration') : 1000;
-    // animation will run only on browsers supporting IntersectionObserver
-    this.canAnimate = ('IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype);
-    // this element is used to announce the percentage value to SR
-    this.ariaLabel = this.element.getElementsByClassName('js-c-progress-bar__aria-value');
-    // check if we need to update the bar color
-    this.changeColor =  Util.hasClass(this.element, 'c-progress-bar--color-update') && Util.cssSupports('color', 'var(--color-value)');
-    if(this.changeColor) {
-      this.colorThresholds = getProgressBarColorThresholds(this);
+    this.labels = this.element.getElementsByClassName('js-choice-tag');
+    this.inputs = getChoiceInput(this);
+    this.isRadio = this.inputs[0].type.toString() == 'radio';
+    this.checkedClass = 'choice-tag--checked';
+    initChoiceTags(this);
+    initChoiceTagEvent(this);
+  }
+
+  function getChoiceInput(element) {
+    var inputs = [];
+    for(var i = 0; i < element.labels.length; i++) {
+      inputs.push(element.labels[i].getElementsByTagName('input')[0]);
     }
-    initProgressBar(this);
-    // store id to reset animation
-    this.animationId = false;
+    return inputs;
   };
 
-  // public function
-  CProgressBar.prototype.setProgressBarValue = function(value) {
-    setProgressBarValue(this, value);
-  };
-
-  function getProgressBarFillLength(progressBar) {
-    return parseFloat(2*Math.PI*progressBar.fill.getAttribute('r')).toFixed(2);
-  };
-
-  function getProgressBarColorThresholds(progressBar) {
-    var thresholds = [];
-    var i = 1;
-    while (!isNaN(parseInt(getComputedStyle(progressBar.element).getPropertyValue('--c-progress-bar-color-'+i)))) {
-      thresholds.push(parseInt(getComputedStyle(progressBar.element).getPropertyValue('--c-progress-bar-color-'+i)));
-      i = i + 1;
+  function initChoiceTags(element) {
+    // if tag is selected by default - add checkedClass to the label element
+    for(var i = 0; i < element.inputs.length; i++) {
+      Util.toggleClass(element.labels[i], element.checkedClass, element.inputs[i].checked);
     }
-    return thresholds;
   };
 
-  function updatedProgressBarForReducedMotion(progressBar) {
-    // if reduced motion is supported and set to reduced -> remove animations
-    if(osHasReducedMotion) progressBar.element.removeAttribute('data-animation');
-  };
-
-  function initProgressBar(progressBar) {
-    // set shape initial dashOffset
-    setShapeOffset(progressBar);
-    // set initial bar color
-    if(progressBar.changeColor) updateProgressBarColor(progressBar, progressBar.value);
-    // if data-animation is on -> reset the progress bar and animate when entering the viewport
-    if(progressBar.animate && progressBar.canAnimate) animateProgressBar(progressBar);
-    else setProgressBarValue(progressBar, progressBar.value);
-    // reveal fill and label -> --animate and --color-update variations only
-    setTimeout(function(){Util.addClass(progressBar.element, 'c-progress-bar--init');}, 30);
-
-    // dynamically update value of progress bar
-    progressBar.element.addEventListener('updateProgress', function(event){
-      // cancel request animation frame if it was animating
-      if(progressBar.animationId) window.cancelAnimationFrame(progressBar.animationId);
-      
-      var final = event.detail.value,
-        duration = (event.detail.duration) ? event.detail.duration : progressBar.animationDuration;
-      var start = getProgressBarValue(progressBar);
-      // trigger update animation
-      updateProgressBar(progressBar, start, final, duration, function(){
-        emitProgressBarEvents(progressBar, 'progressCompleted', progressBar.value+'%');
-        // update value of label for SR
-        if(progressBar.ariaLabel.length > 0) progressBar.ariaLabel[0].textContent = final+'%';
-      });
+  function initChoiceTagEvent(element) {
+    element.element.addEventListener('change', function(event) {
+      var inputIndex = Util.getIndexInArray(element.inputs, event.target);
+      if(inputIndex < 0) return;
+      Util.toggleClass(element.labels[inputIndex], element.checkedClass, event.target.checked);
+      if(element.isRadio && event.target.checked) resetRadioTags(element, inputIndex);
     });
-  }; 
-
-  function setShapeOffset(progressBar) {
-    var center = progressBar.fill.getAttribute('cx');
-    progressBar.fill.setAttribute('transform', "rotate(-90 "+center+" "+center+")");
-    progressBar.fill.setAttribute('stroke-dashoffset', progressBar.fillLength);
-    progressBar.fill.setAttribute('stroke-dasharray', progressBar.fillLength);
   };
 
-  function animateProgressBar(progressBar) {
-    // reset inital values
-    setProgressBarValue(progressBar, 0);
-    
-    // listen for the element to enter the viewport -> start animation
-    var observer = new IntersectionObserver(progressBarObserve.bind(progressBar), { threshold: [0, 0.1] });
-    observer.observe(progressBar.element);
-  };
-
-  function progressBarObserve(entries, observer) { // observe progressBar position -> start animation when inside viewport
-    var self = this;
-    if(entries[0].intersectionRatio.toFixed(1) > 0 && !this.animationTriggered) {
-      updateProgressBar(this, 0, this.value, this.animationDuration, function(){
-        emitProgressBarEvents(self, 'progressCompleted', self.value+'%');
-      });
+  function resetRadioTags(element, index) {
+    // when a radio input is checked - reset all the others
+    for(var i = 0; i < element.labels.length; i++) {
+      if(i != index) Util.removeClass(element.labels[i], element.checkedClass);
     }
   };
 
-  function setProgressBarValue(progressBar, value) {
-    var offset = ((100 - value)*progressBar.fillLength/100).toFixed(2);
-    progressBar.fill.setAttribute('stroke-dashoffset', offset);
-    if(progressBar.label.length > 0 ) progressBar.label[0].textContent = value;
-    if(progressBar.changeColor) updateProgressBarColor(progressBar, value);
+  //initialize the ChoiceTags objects
+	var choiceTags = document.getElementsByClassName('js-choice-tags');
+	if( choiceTags.length > 0 ) {
+		for( var i = 0; i < choiceTags.length; i++) {
+			(function(i){new ChoiceTags(choiceTags[i]);})(i);
+		}
+	};
+}());
+// File#: _1_collapse
+// Usage: codyhouse.co/license
+(function() {
+  var Collapse = function(element) {
+    this.element = element;
+    this.triggers = document.querySelectorAll('[aria-controls="'+this.element.getAttribute('id')+'"]');
+    this.animate = this.element.getAttribute('data-collapse-animate') == 'on';
+    this.animating = false;
+    initCollapse(this);
   };
 
-  function updateProgressBar(progressBar, start, to, duration, cb) {
-    var change = to - start,
-      currentTime = null;
+  function initCollapse(element) {
+    if ( element.triggers ) {
+      // set initial 'aria-expanded' attribute for trigger elements
+      updateTriggers(element, !Util.hasClass(element.element, 'is-hidden'));
 
-    var animateFill = function(timestamp){  
-      if (!currentTime) currentTime = timestamp;         
-      var progress = timestamp - currentTime;
-      var val = parseInt((progress/duration)*change + start);
-      // make sure value is in correct range
-      if(change > 0 && val > to) val = to;
-      if(change < 0 && val < to) val = to;
-      if(progress >= duration) val = to;
+      // detect click on trigger elements
+			for(var i = 0; i < element.triggers.length; i++) {
+				element.triggers[i].addEventListener('click', function(event) {
+					event.preventDefault();
+					toggleVisibility(element);
+				});
+			}
+    }
+    
+    // custom event
+    element.element.addEventListener('collapseToggle', function(event){
+      toggleVisibility(element);
+    });
+  };
 
-      setProgressBarValue(progressBar, val);
-      if(progress < duration) {
-        progressBar.animationId = window.requestAnimationFrame(animateFill);
-      } else {
-        progressBar.animationId = false;
-        cb();
-      }
+  function toggleVisibility(element) {
+    var bool = Util.hasClass(element.element, 'is-hidden');
+    if(element.animating) return;
+    element.animating = true;
+    animateElement(element, bool);
+    updateTriggers(element, bool);
+  };
+
+  function animateElement(element, bool) {
+    // bool === true -> show content
+    if(!element.animate || !window.requestAnimationFrame) {
+      Util.toggleClass(element.element, 'is-hidden', !bool);
+      element.animating = false;
+      return;
+    }
+
+    // animate content height
+    Util.removeClass(element.element, 'is-hidden');
+    var initHeight = !bool ? element.element.offsetHeight: 0,
+      finalHeight = !bool ? 0 : element.element.offsetHeight;
+
+    Util.addClass(element.element, 'overflow-hidden');
+    
+    Util.setHeight(initHeight, finalHeight, element.element, 200, function(){
+      if(!bool) Util.addClass(element.element, 'is-hidden');
+      element.element.removeAttribute("style");
+      Util.removeClass(element.element, 'overflow-hidden');
+      element.animating = false;
+    }, 'easeInOutQuad');
+  };
+
+  function updateTriggers(element, bool) {
+    for(var i = 0; i < element.triggers.length; i++) {
+      bool ? element.triggers[i].setAttribute('aria-expanded', 'true') : element.triggers[i].removeAttribute('aria-expanded');
     };
-    if ( window.requestAnimationFrame && !osHasReducedMotion ) {
-      progressBar.animationId = window.requestAnimationFrame(animateFill);
-    } else {
-      setProgressBarValue(progressBar, to);
-      cb();
-    }
   };
 
-  function updateProgressBarColor(progressBar, value) {
-    var className = 'c-progress-bar--fill-color-'+ progressBar.colorThresholds.length;
-    for(var i = progressBar.colorThresholds.length; i > 0; i--) {
-      if( !isNaN(progressBar.colorThresholds[i - 1]) && value <= progressBar.colorThresholds[i - 1]) {
-        className = 'c-progress-bar--fill-color-' + i;
-      } 
-    }
-    
-    removeProgressBarColorClasses(progressBar);
-    Util.addClass(progressBar.element, className);
-  };
+  window.Collapse = Collapse;
 
-  function removeProgressBarColorClasses(progressBar) {
-    var classes = progressBar.element.className.split(" ").filter(function(c) {
-      return c.lastIndexOf('c-progress-bar--fill-color-', 0) !== 0;
-    });
-    progressBar.element.className = classes.join(" ").trim();
-  };
-
-  function getProgressBarValue(progressBar) {
-    return (100 - Math.round((parseFloat(progressBar.fill.getAttribute('stroke-dashoffset'))/progressBar.fillLength)*100));
-  };
-
-  function emitProgressBarEvents(progressBar, eventName, detail) {
-    progressBar.element.dispatchEvent(new CustomEvent(eventName, {detail: detail}));
-  };
-
-  window.CProgressBar = CProgressBar;
-
-  //initialize the CProgressBar objects
-  var circularProgressBars = document.getElementsByClassName('js-c-progress-bar');
-  var osHasReducedMotion = Util.osHasReducedMotion();
-  if( circularProgressBars.length > 0 ) {
-    for( var i = 0; i < circularProgressBars.length; i++) {
-      (function(i){new CProgressBar(circularProgressBars[i]);})(i);
+  //initialize the Collapse objects
+	var collapses = document.getElementsByClassName('js-collapse');
+	if( collapses.length > 0 ) {
+    for( var i = 0; i < collapses.length; i++) {
+      new Collapse(collapses[i]);
     }
   }
 }());
-// File#: _1_custom-select
-// Usage: codyhouse.co/license
-(function() {
-    // NOTE: you need the js code only when using the --custom-dropdown variation of the Custom Select component. Default version does nor require JS.
-    
-    var CustomSelect = function(element) {
-      this.element = element;
-      this.select = this.element.getElementsByTagName('select')[0];
-      this.optGroups = this.select.getElementsByTagName('optgroup');
-      this.options = this.select.getElementsByTagName('option');
-      this.selectedOption = getSelectedOptionText(this);
-      this.selectId = this.select.getAttribute('id');
-      this.trigger = false;
-      this.dropdown = false;
-      this.customOptions = false;
-      this.arrowIcon = this.element.getElementsByTagName('svg');
-      this.label = document.querySelector('[for="'+this.selectId+'"]');
-  
-      this.optionIndex = 0; // used while building the custom dropdown
-  
-      initCustomSelect(this); // init markup
-      initCustomSelectEvents(this); // init event listeners
-    };
-    
-    function initCustomSelect(select) {
-      // create the HTML for the custom dropdown element
-      select.element.insertAdjacentHTML('beforeend', initButtonSelect(select) + initListSelect(select));
-      
-      // save custom elements
-      select.dropdown = select.element.getElementsByClassName('js-select__dropdown')[0];
-      select.trigger = select.element.getElementsByClassName('js-select__button')[0];
-      select.customOptions = select.dropdown.getElementsByClassName('js-select__item');
-      
-      // hide default select
-      Util.addClass(select.select, 'is-hidden');
-      if(select.arrowIcon.length > 0 ) select.arrowIcon[0].style.display = 'none';
-  
-      // place dropdown
-      placeDropdown(select);
-    };
-  
-    function initCustomSelectEvents(select) {
-      // option selection in dropdown
-      initSelection(select);
-  
-      // click events
-      select.trigger.addEventListener('click', function(){
-        toggleCustomSelect(select, false);
-      });
-      if(select.label) {
-        // move focus to custom trigger when clicking on <select> label
-        select.label.addEventListener('click', function(){
-          Util.moveFocus(select.trigger);
-        });
-      }
-      // keyboard navigation
-      select.dropdown.addEventListener('keydown', function(event){
-        if(event.keyCode && event.keyCode == 38 || event.key && event.key.toLowerCase() == 'arrowup') {
-          keyboardCustomSelect(select, 'prev', event);
-        } else if(event.keyCode && event.keyCode == 40 || event.key && event.key.toLowerCase() == 'arrowdown') {
-          keyboardCustomSelect(select, 'next', event);
-        }
-      });
-      // native <select> element has been updated -> update custom select as well
-      select.element.addEventListener('select-updated', function(event){
-        resetCustomSelect(select);
-      });
-    };
-  
-    function toggleCustomSelect(select, bool) {
-      var ariaExpanded;
-      if(bool) {
-        ariaExpanded = bool;
-      } else {
-        ariaExpanded = select.trigger.getAttribute('aria-expanded') == 'true' ? 'false' : 'true';
-      }
-      select.trigger.setAttribute('aria-expanded', ariaExpanded);
-      if(ariaExpanded == 'true') {
-        var selectedOption = getSelectedOption(select);
-        Util.moveFocus(selectedOption); // fallback if transition is not supported
-        select.dropdown.addEventListener('transitionend', function cb(){
-          Util.moveFocus(selectedOption);
-          select.dropdown.removeEventListener('transitionend', cb);
-        });
-        placeDropdown(select); // place dropdown based on available space
-      }
-    };
-  
-    function placeDropdown(select) {
-      // remove placement classes to reset position
-      Util.removeClass(select.dropdown, 'select__dropdown--right select__dropdown--up');
-      var triggerBoundingRect = select.trigger.getBoundingClientRect();
-      Util.toggleClass(select.dropdown, 'select__dropdown--right', (document.documentElement.clientWidth - 5 < triggerBoundingRect.left + select.dropdown.offsetWidth));
-      // check if there's enough space up or down
-      var moveUp = (window.innerHeight - triggerBoundingRect.bottom - 5) < triggerBoundingRect.top;
-      Util.toggleClass(select.dropdown, 'select__dropdown--up', moveUp);
-      // check if we need to set a max width
-      var maxHeight = moveUp ? triggerBoundingRect.top - 20 : window.innerHeight - triggerBoundingRect.bottom - 20;
-      // set max-height based on available space
-      select.dropdown.setAttribute('style', 'max-height: '+maxHeight+'px; width: '+triggerBoundingRect.width+'px;');
-    };
-  
-    function keyboardCustomSelect(select, direction, event) { // navigate custom dropdown with keyboard
-      event.preventDefault();
-      var index = Util.getIndexInArray(select.customOptions, document.activeElement);
-      index = (direction == 'next') ? index + 1 : index - 1;
-      if(index < 0) index = select.customOptions.length - 1;
-      if(index >= select.customOptions.length) index = 0;
-      Util.moveFocus(select.customOptions[index]);
-    };
-  
-    function initSelection(select) { // option selection
-      select.dropdown.addEventListener('click', function(event){
-        var option = event.target.closest('.js-select__item');
-        if(!option) return;
-        selectOption(select, option);
-      });
-    };
-    
-    function selectOption(select, option) {
-      if(option.hasAttribute('aria-selected') && option.getAttribute('aria-selected') == 'true') {
-        // selecting the same option
-        select.trigger.setAttribute('aria-expanded', 'false'); // hide dropdown
-      } else { 
-        var selectedOption = select.dropdown.querySelector('[aria-selected="true"]');
-        if(selectedOption) selectedOption.setAttribute('aria-selected', 'false');
-        option.setAttribute('aria-selected', 'true');
-        select.trigger.getElementsByClassName('js-select__label')[0].textContent = option.textContent;
-        select.trigger.setAttribute('aria-expanded', 'false');
-        // new option has been selected -> update native <select> element _ arai-label of trigger <button>
-        updateNativeSelect(select, option.getAttribute('data-index'));
-        updateTriggerAria(select); 
-      }
-      // move focus back to trigger
-      select.trigger.focus();
-    };
-  
-    function updateNativeSelect(select, index) {
-      select.select.selectedIndex = index;
-      select.select.dispatchEvent(new CustomEvent('change', {bubbles: true})); // trigger change event
-    };
-  
-    function updateTriggerAria(select) {
-      select.trigger.setAttribute('aria-label', select.options[select.select.selectedIndex].innerHTML+', '+select.label.textContent);
-    };
-  
-    function getSelectedOptionText(select) {// used to initialize the label of the custom select button
-      var label = '';
-      if('selectedIndex' in select.select) {
-        label = select.options[select.select.selectedIndex].text;
-      } else {
-        label = select.select.querySelector('option[selected]').text;
-      }
-      return label;
-  
-    };
-    
-    function initButtonSelect(select) { // create the button element -> custom select trigger
-      // check if we need to add custom classes to the button trigger
-      var customClasses = select.element.getAttribute('data-trigger-class') ? ' '+select.element.getAttribute('data-trigger-class') : '';
-  
-      var label = select.options[select.select.selectedIndex].innerHTML+', '+select.label.textContent;
-    
-      var button = '<button type="button" class="js-select__button select__button'+customClasses+'" aria-label="'+label+'" aria-expanded="false" aria-controls="'+select.selectId+'-dropdown"><span aria-hidden="true" class="js-select__label select__label">'+select.selectedOption+'</span>';
-      if(select.arrowIcon.length > 0 && select.arrowIcon[0].outerHTML) {
-        var clone = select.arrowIcon[0].cloneNode(true);
-        Util.removeClass(clone, 'select__icon');
-        button = button +clone.outerHTML;
-      }
-      
-      return button+'</button>';
-  
-    };
-  
-    function initListSelect(select) { // create custom select dropdown
-      var list = '<div class="js-select__dropdown select__dropdown" aria-describedby="'+select.selectId+'-description" id="'+select.selectId+'-dropdown">';
-      list = list + getSelectLabelSR(select);
-      if(select.optGroups.length > 0) {
-        for(var i = 0; i < select.optGroups.length; i++) {
-          var optGroupList = select.optGroups[i].getElementsByTagName('option'),
-            optGroupLabel = '<li><span class="select__item select__item--optgroup">'+select.optGroups[i].getAttribute('label')+'</span></li>';
-          list = list + '<ul class="select__list" role="listbox">'+optGroupLabel+getOptionsList(select, optGroupList) + '</ul>';
-        }
-      } else {
-        list = list + '<ul class="select__list" role="listbox">'+getOptionsList(select, select.options) + '</ul>';
-      }
-      return list;
-    };
-  
-    function getSelectLabelSR(select) {
-      if(select.label) {
-        return '<p class="sr-only" id="'+select.selectId+'-description">'+select.label.textContent+'</p>'
-      } else {
-        return '';
-      }
-    };
-    
-    function resetCustomSelect(select) {
-      // <select> element has been updated (using an external control) - update custom select
-      var selectedOption = select.dropdown.querySelector('[aria-selected="true"]');
-      if(selectedOption) selectedOption.setAttribute('aria-selected', 'false');
-      var option = select.dropdown.querySelector('.js-select__item[data-index="'+select.select.selectedIndex+'"]');
-      option.setAttribute('aria-selected', 'true');
-      select.trigger.getElementsByClassName('js-select__label')[0].textContent = option.textContent;
-      select.trigger.setAttribute('aria-expanded', 'false');
-      updateTriggerAria(select); 
-    };
-  
-    function getOptionsList(select, options) {
-      var list = '';
-      for(var i = 0; i < options.length; i++) {
-        var selected = options[i].hasAttribute('selected') ? ' aria-selected="true"' : ' aria-selected="false"';
-        list = list + '<li><button type="button" class="reset js-select__item select__item select__item--option" role="option" data-value="'+options[i].value+'" '+selected+' data-index="'+select.optionIndex+'">'+options[i].text+'</button></li>';
-        select.optionIndex = select.optionIndex + 1;
-      };
-      return list;
-    };
-  
-    function getSelectedOption(select) {
-      var option = select.dropdown.querySelector('[aria-selected="true"]');
-      if(option) return option;
-      else return select.dropdown.getElementsByClassName('js-select__item')[0];
-    };
-  
-    function moveFocusToSelectTrigger(select) {
-      if(!document.activeElement.closest('.js-select')) return
-      select.trigger.focus();
-    };
-    
-    function checkCustomSelectClick(select, target) { // close select when clicking outside it
-      if( !select.element.contains(target) ) toggleCustomSelect(select, 'false');
-    };
-    
-    //initialize the CustomSelect objects
-    var customSelect = document.getElementsByClassName('js-select');
-    if( customSelect.length > 0 ) {
-      var selectArray = [];
-      for( var i = 0; i < customSelect.length; i++) {
-        (function(i){selectArray.push(new CustomSelect(customSelect[i]));})(i);
-      }
-  
-      // listen for key events
-      window.addEventListener('keyup', function(event){
-        if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
-          // close custom select on 'Esc'
-          selectArray.forEach(function(element){
-            moveFocusToSelectTrigger(element); // if focus is within dropdown, move it to dropdown trigger
-            toggleCustomSelect(element, 'false'); // close dropdown
-          });
-        } 
-      });
-      // close custom select when clicking outside it
-      window.addEventListener('click', function(event){
-        selectArray.forEach(function(element){
-          checkCustomSelectClick(element, event.target);
-        });
-      });
-    }
-  }());
-// File#: _1_details
-// Usage: codyhouse.co/license
-(function() {
-	var Details = function(element, index) {
-		this.element = element;
-		this.summary = this.element.getElementsByClassName('js-details__summary')[0];
-		this.details = this.element.getElementsByClassName('js-details__content')[0];
-		this.htmlElSupported = 'open' in this.element;
-		this.initDetails(index);
-		this.initDetailsEvents();
-	};
-
-	Details.prototype.initDetails = function(index) {
-		// init aria attributes 
-		Util.setAttributes(this.summary, {'aria-expanded': 'false', 'aria-controls': 'details--'+index, 'role': 'button'});
-		Util.setAttributes(this.details, {'aria-hidden': 'true', 'id': 'details--'+index});
-	};
-
-	Details.prototype.initDetailsEvents = function() {
-		var self = this;
-		if( this.htmlElSupported ) { // browser supports the <details> element 
-			this.element.addEventListener('toggle', function(event){
-				var ariaValues = self.element.open ? ['true', 'false'] : ['false', 'true'];
-				// update aria attributes when details element status change (open/close)
-				self.updateAriaValues(ariaValues);
-			});
-		} else { //browser does not support <details>
-			this.summary.addEventListener('click', function(event){
-				event.preventDefault();
-				var isOpen = self.element.getAttribute('open'),
-					ariaValues = [];
-
-				isOpen ? self.element.removeAttribute('open') : self.element.setAttribute('open', 'true');
-				ariaValues = isOpen ? ['false', 'true'] : ['true', 'false'];
-				self.updateAriaValues(ariaValues);
-			});
-		}
-	};
-
-	Details.prototype.updateAriaValues = function(values) {
-		this.summary.setAttribute('aria-expanded', values[0]);
-		this.details.setAttribute('aria-hidden', values[1]);
-	};
-
-	//initialize the Details objects
-	var detailsEl = document.getElementsByClassName('js-details');
-	if( detailsEl.length > 0 ) {
-		for( var i = 0; i < detailsEl.length; i++) {
-			(function(i){new Details(detailsEl[i], i);})(i);
-		}
-	}
-}());
-// File#: _1_diagonal-movement 
-// Usage: codyhouse.co/license
-/*
-  Modified version of the jQuery-menu-aim plugin
-  https://github.com/kamens/jQuery-menu-aim
-  - Replaced jQuery with Vanilla JS
-  - Minor changes
-*/
-(function() {
-    var menuAim = function(opts) {
-      init(opts);
-    };
-  
-    window.menuAim = menuAim;
-  
-    function init(opts) {
-      var activeRow = null,
-        mouseLocs = [],
-        lastDelayLoc = null,
-        timeoutId = null,
-        options = Util.extend({
-          menu: '',
-          rows: false, //if false, get direct children - otherwise pass nodes list 
-          submenuSelector: "*",
-          submenuDirection: "right",
-          tolerance: 75,  // bigger = more forgivey when entering submenu
-          enter: function(){},
-          exit: function(){},
-          activate: function(){},
-          deactivate: function(){},
-          exitMenu: function(){}
-        }, opts),
-        menu = options.menu;
-  
-      var MOUSE_LOCS_TRACKED = 3,  // number of past mouse locations to track
-        DELAY = 300;  // ms delay when user appears to be entering submenu
-  
-      /**
-       * Keep track of the last few locations of the mouse.
-       */
-      var mouseMoveFallback = function(event) {
-        (!window.requestAnimationFrame) ? mousemoveDocument(event) : window.requestAnimationFrame(function(){mousemoveDocument(event);});
-      };
-  
-      var mousemoveDocument = function(e) {
-        mouseLocs.push({x: e.pageX, y: e.pageY});
-  
-        if (mouseLocs.length > MOUSE_LOCS_TRACKED) {
-          mouseLocs.shift();
-        }
-      };
-  
-      /**
-       * Cancel possible row activations when leaving the menu entirely
-       */
-      var mouseleaveMenu = function() {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-        }
-  
-        // If exitMenu is supplied and returns true, deactivate the
-        // currently active row on menu exit.
-        if (options.exitMenu(this)) {
-          if (activeRow) {
-            options.deactivate(activeRow);
-          }
-  
-          activeRow = null;
-        }
-      };
-  
-      /**
-       * Trigger a possible row activation whenever entering a new row.
-       */
-      var mouseenterRow = function() {
-        if (timeoutId) {
-          // Cancel any previous activation delays
-          clearTimeout(timeoutId);
-        }
-  
-        options.enter(this);
-        possiblyActivate(this);
-      },
-      mouseleaveRow = function() {
-        options.exit(this);
-      };
-  
-      /*
-       * Immediately activate a row if the user clicks on it.
-       */
-      var clickRow = function() {
-        activate(this);
-      };  
-  
-      /**
-       * Activate a menu row.
-       */
-      var activate = function(row) {
-        if (row == activeRow) {
-          return;
-        }
-  
-        if (activeRow) {
-          options.deactivate(activeRow);
-        }
-  
-        options.activate(row);
-        activeRow = row;
-      };
-  
-      /**
-       * Possibly activate a menu row. If mouse movement indicates that we
-       * shouldn't activate yet because user may be trying to enter
-       * a submenu's content, then delay and check again later.
-       */
-      var possiblyActivate = function(row) {
-        var delay = activationDelay();
-  
-        if (delay) {
-          timeoutId = setTimeout(function() {
-            possiblyActivate(row);
-          }, delay);
-        } else {
-          activate(row);
-        }
-      };
-  
-      /**
-       * Return the amount of time that should be used as a delay before the
-       * currently hovered row is activated.
-       *
-       * Returns 0 if the activation should happen immediately. Otherwise,
-       * returns the number of milliseconds that should be delayed before
-       * checking again to see if the row should be activated.
-       */
-      var activationDelay = function() {
-        if (!activeRow || !Util.is(activeRow, options.submenuSelector)) {
-          // If there is no other submenu row already active, then
-          // go ahead and activate immediately.
-          return 0;
-        }
-  
-        function getOffset(element) {
-          var rect = element.getBoundingClientRect();
-          return { top: rect.top + window.pageYOffset, left: rect.left + window.pageXOffset };
-        };
-  
-        var offset = getOffset(menu),
-            upperLeft = {
-                x: offset.left,
-                y: offset.top - options.tolerance
-            },
-            upperRight = {
-                x: offset.left + menu.offsetWidth,
-                y: upperLeft.y
-            },
-            lowerLeft = {
-                x: offset.left,
-                y: offset.top + menu.offsetHeight + options.tolerance
-            },
-            lowerRight = {
-                x: offset.left + menu.offsetWidth,
-                y: lowerLeft.y
-            },
-            loc = mouseLocs[mouseLocs.length - 1],
-            prevLoc = mouseLocs[0];
-  
-        if (!loc) {
-          return 0;
-        }
-  
-        if (!prevLoc) {
-          prevLoc = loc;
-        }
-  
-        if (prevLoc.x < offset.left || prevLoc.x > lowerRight.x || prevLoc.y < offset.top || prevLoc.y > lowerRight.y) {
-          // If the previous mouse location was outside of the entire
-          // menu's bounds, immediately activate.
-          return 0;
-        }
-  
-        if (lastDelayLoc && loc.x == lastDelayLoc.x && loc.y == lastDelayLoc.y) {
-          // If the mouse hasn't moved since the last time we checked
-          // for activation status, immediately activate.
-          return 0;
-        }
-  
-        // Detect if the user is moving towards the currently activated
-        // submenu.
-        //
-        // If the mouse is heading relatively clearly towards
-        // the submenu's content, we should wait and give the user more
-        // time before activating a new row. If the mouse is heading
-        // elsewhere, we can immediately activate a new row.
-        //
-        // We detect this by calculating the slope formed between the
-        // current mouse location and the upper/lower right points of
-        // the menu. We do the same for the previous mouse location.
-        // If the current mouse location's slopes are
-        // increasing/decreasing appropriately compared to the
-        // previous's, we know the user is moving toward the submenu.
-        //
-        // Note that since the y-axis increases as the cursor moves
-        // down the screen, we are looking for the slope between the
-        // cursor and the upper right corner to decrease over time, not
-        // increase (somewhat counterintuitively).
-        function slope(a, b) {
-          return (b.y - a.y) / (b.x - a.x);
-        };
-  
-        var decreasingCorner = upperRight,
-          increasingCorner = lowerRight;
-  
-        // Our expectations for decreasing or increasing slope values
-        // depends on which direction the submenu opens relative to the
-        // main menu. By default, if the menu opens on the right, we
-        // expect the slope between the cursor and the upper right
-        // corner to decrease over time, as explained above. If the
-        // submenu opens in a different direction, we change our slope
-        // expectations.
-        if (options.submenuDirection == "left") {
-          decreasingCorner = lowerLeft;
-          increasingCorner = upperLeft;
-        } else if (options.submenuDirection == "below") {
-          decreasingCorner = lowerRight;
-          increasingCorner = lowerLeft;
-        } else if (options.submenuDirection == "above") {
-          decreasingCorner = upperLeft;
-          increasingCorner = upperRight;
-        }
-  
-        var decreasingSlope = slope(loc, decreasingCorner),
-          increasingSlope = slope(loc, increasingCorner),
-          prevDecreasingSlope = slope(prevLoc, decreasingCorner),
-          prevIncreasingSlope = slope(prevLoc, increasingCorner);
-  
-        if (decreasingSlope < prevDecreasingSlope && increasingSlope > prevIncreasingSlope) {
-          // Mouse is moving from previous location towards the
-          // currently activated submenu. Delay before activating a
-          // new menu row, because user may be moving into submenu.
-          lastDelayLoc = loc;
-          return DELAY;
-        }
-  
-        lastDelayLoc = null;
-        return 0;
-      };
-  
-      var reset = function(triggerDeactivate) {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-        }
-  
-        if (activeRow && triggerDeactivate) {
-          options.deactivate(activeRow);
-        }
-  
-        activeRow = null;
-      };
-  
-      var destroyInstance = function() {
-        menu.removeEventListener('mouseleave', mouseleaveMenu);  
-        document.removeEventListener('mousemove', mouseMoveFallback);
-        if(rows.length > 0) {
-          for(var i = 0; i < rows.length; i++) {
-            rows[i].removeEventListener('mouseenter', mouseenterRow);  
-            rows[i].removeEventListener('mouseleave', mouseleaveRow);
-            rows[i].removeEventListener('click', clickRow);  
-          }
-        }
-        
-      };
-  
-      /**
-       * Hook up initial menu events
-       */
-      menu.addEventListener('mouseleave', mouseleaveMenu);  
-      var rows = (options.rows) ? options.rows : menu.children;
-      if(rows.length > 0) {
-        for(var i = 0; i < rows.length; i++) {(function(i){
-          rows[i].addEventListener('mouseenter', mouseenterRow);  
-          rows[i].addEventListener('mouseleave', mouseleaveRow);
-          rows[i].addEventListener('click', clickRow);  
-        })(i);}
-      }
-  
-      document.addEventListener('mousemove', mouseMoveFallback);
-  
-      /* Reset/destroy menu */
-      menu.addEventListener('reset', function(event){
-        reset(event.detail);
-      });
-      menu.addEventListener('destroy', destroyInstance);
-    };
-  }());
-  
-  
-
 // File#: _1_dialog
 // Usage: codyhouse.co/license
-(function () {
-    var Dialog = function (element) {
-        this.element = element;
-        this.triggers = document.querySelectorAll('[aria-controls="' + this.element.getAttribute('id') + '"]');
-        this.firstFocusable = null;
-        this.lastFocusable = null;
-        this.selectedTrigger = null;
-        this.showClass = "dialog--is-visible";
-        initDialog(this);
-    };
+(function() {
+  var Dialog = function(element) {
+    this.element = element;
+    this.triggers = document.querySelectorAll('[aria-controls="'+this.element.getAttribute('id')+'"]');
+    this.firstFocusable = null;
+		this.lastFocusable = null;
+		this.selectedTrigger = null;
+		this.showClass = "dialog--is-visible";
+    initDialog(this);
+  };
 
-    function initDialog(dialog) {
-        if (dialog.triggers) {
-            for (var i = 0; i < dialog.triggers.length; i++) {
-                dialog.triggers[i].addEventListener('click', function (event) {
-                    event.preventDefault();
-                    dialog.selectedTrigger = event.target;
-                    showDialog(dialog);
-                    initDialogEvents(dialog);
-                });
-            }
-        }
-
-        // listen to the openDialog event -> open dialog without a trigger button
-        dialog.element.addEventListener('openDialog', function (event) {
-            if (event.detail) self.selectedTrigger = event.detail;
-            showDialog(dialog);
-            initDialogEvents(dialog);
-        });
-    };
-
-    function showDialog(dialog) {
-        Util.addClass(dialog.element, dialog.showClass);
-        getFocusableElements(dialog);
-        dialog.firstFocusable.focus();
-        // wait for the end of transitions before moving focus
-        dialog.element.addEventListener("transitionend", function cb(event) {
-            dialog.firstFocusable.focus();
-            dialog.element.removeEventListener("transitionend", cb);
-        });
-        emitDialogEvents(dialog, 'dialogIsOpen');
-    };
-
-    function closeDialog(dialog) {
-        Util.removeClass(dialog.element, dialog.showClass);
-        dialog.firstFocusable = null;
-        dialog.lastFocusable = null;
-        if (dialog.selectedTrigger) dialog.selectedTrigger.focus();
-        //remove listeners
-        cancelDialogEvents(dialog);
-        emitDialogEvents(dialog, 'dialogIsClose');
-    };
-
-    function initDialogEvents(dialog) {
-        //add event listeners
-        dialog.element.addEventListener('keydown', handleEvent.bind(dialog));
-        dialog.element.addEventListener('click', handleEvent.bind(dialog));
-    };
-
-    function cancelDialogEvents(dialog) {
-        //remove event listeners
-        dialog.element.removeEventListener('keydown', handleEvent.bind(dialog));
-        dialog.element.removeEventListener('click', handleEvent.bind(dialog));
-    };
-
-    function handleEvent(event) {
-        // handle events
-        switch (event.type) {
-            case 'click': {
-                initClick(this, event);
-            }
-            case 'keydown': {
-                initKeyDown(this, event);
-            }
-        }
-    };
-
-    function initKeyDown(dialog, event) {
-        if (event.keyCode && event.keyCode == 27 || event.key && event.key == 'Escape') {
-            //close dialog on esc
-            closeDialog(dialog);
-        } else if (event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab') {
-            //trap focus inside dialog
-            trapFocus(dialog, event);
-        }
-    };
-
-    function initClick(dialog, event) {
-        //close dialog when clicking on close button
-        if (!event.target.closest('.js-dialog__close')) return;
-        event.preventDefault();
-        closeDialog(dialog);
-    };
-
-    function trapFocus(dialog, event) {
-        if (dialog.firstFocusable == document.activeElement && event.shiftKey) {
-            //on Shift+Tab -> focus last focusable element when focus moves out of dialog
-            event.preventDefault();
-            dialog.lastFocusable.focus();
-        }
-        if (dialog.lastFocusable == document.activeElement && !event.shiftKey) {
-            //on Tab -> focus first focusable element when focus moves out of dialog
-            event.preventDefault();
-            dialog.firstFocusable.focus();
-        }
-    };
-
-    function getFocusableElements(dialog) {
-        //get all focusable elements inside the dialog
-        var allFocusable = dialog.element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary');
-        getFirstVisible(dialog, allFocusable);
-        getLastVisible(dialog, allFocusable);
-    };
-
-    function getFirstVisible(dialog, elements) {
-        //get first visible focusable element inside the dialog
-        for (var i = 0; i < elements.length; i++) {
-            if (elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length) {
-                dialog.firstFocusable = elements[i];
-                return true;
-            }
-        }
-    };
-
-    function getLastVisible(dialog, elements) {
-        //get last visible focusable element inside the dialog
-        for (var i = elements.length - 1; i >= 0; i--) {
-            if (elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length) {
-                dialog.lastFocusable = elements[i];
-                return true;
-            }
-        }
-    };
-
-    function emitDialogEvents(dialog, eventName) {
-        var event = new CustomEvent(eventName, { detail: dialog.selectedTrigger });
-        dialog.element.dispatchEvent(event);
-    };
-
-    //initialize the Dialog objects
-    var dialogs = document.getElementsByClassName('js-dialog');
-    if (dialogs.length > 0) {
-        for (var i = 0; i < dialogs.length; i++) {
-            (function (i) { new Dialog(dialogs[i]); })(i);
-        }
+  function initDialog(dialog) {
+    if ( dialog.triggers ) {
+			for(var i = 0; i < dialog.triggers.length; i++) {
+				dialog.triggers[i].addEventListener('click', function(event) {
+					event.preventDefault();
+					dialog.selectedTrigger = event.target;
+					showDialog(dialog);
+					initDialogEvents(dialog);
+				});
+			}
     }
+    
+    // listen to the openDialog event -> open dialog without a trigger button
+		dialog.element.addEventListener('openDialog', function(event){
+			if(event.detail) self.selectedTrigger = event.detail;
+			showDialog(dialog);
+			initDialogEvents(dialog);
+		});
+  };
+
+  function showDialog(dialog) {
+		Util.addClass(dialog.element, dialog.showClass);
+    getFocusableElements(dialog);
+		dialog.firstFocusable.focus();
+		// wait for the end of transitions before moving focus
+		dialog.element.addEventListener("transitionend", function cb(event) {
+			dialog.firstFocusable.focus();
+			dialog.element.removeEventListener("transitionend", cb);
+		});
+		emitDialogEvents(dialog, 'dialogIsOpen');
+  };
+
+  function closeDialog(dialog) {
+    Util.removeClass(dialog.element, dialog.showClass);
+		dialog.firstFocusable = null;
+		dialog.lastFocusable = null;
+		if(dialog.selectedTrigger) dialog.selectedTrigger.focus();
+		//remove listeners
+		cancelDialogEvents(dialog);
+		emitDialogEvents(dialog, 'dialogIsClose');
+  };
+  
+  function initDialogEvents(dialog) {
+    //add event listeners
+		dialog.element.addEventListener('keydown', handleEvent.bind(dialog));
+		dialog.element.addEventListener('click', handleEvent.bind(dialog));
+  };
+
+  function cancelDialogEvents(dialog) {
+		//remove event listeners
+		dialog.element.removeEventListener('keydown', handleEvent.bind(dialog));
+		dialog.element.removeEventListener('click', handleEvent.bind(dialog));
+  };
+  
+  function handleEvent(event) {
+		// handle events
+		switch(event.type) {
+      case 'click': {
+        initClick(this, event);
+      }
+      case 'keydown': {
+        initKeyDown(this, event);
+      }
+		}
+  };
+  
+  function initKeyDown(dialog, event) {
+		if( event.keyCode && event.keyCode == 27 || event.key && event.key == 'Escape' ) {
+			//close dialog on esc
+			closeDialog(dialog);
+		} else if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+			//trap focus inside dialog
+			trapFocus(dialog, event);
+		}
+	};
+
+	function initClick(dialog, event) {
+		//close dialog when clicking on close button
+		if( !event.target.closest('.js-dialog__close') ) return;
+		event.preventDefault();
+		closeDialog(dialog);
+	};
+
+	function trapFocus(dialog, event) {
+		if( dialog.firstFocusable == document.activeElement && event.shiftKey) {
+			//on Shift+Tab -> focus last focusable element when focus moves out of dialog
+			event.preventDefault();
+			dialog.lastFocusable.focus();
+		}
+		if( dialog.lastFocusable == document.activeElement && !event.shiftKey) {
+			//on Tab -> focus first focusable element when focus moves out of dialog
+			event.preventDefault();
+			dialog.firstFocusable.focus();
+		}
+	};
+
+  function getFocusableElements(dialog) {
+    //get all focusable elements inside the dialog
+		var allFocusable = dialog.element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary');
+		getFirstVisible(dialog, allFocusable);
+		getLastVisible(dialog, allFocusable);
+  };
+
+  function getFirstVisible(dialog, elements) {
+    //get first visible focusable element inside the dialog
+		for(var i = 0; i < elements.length; i++) {
+			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
+				dialog.firstFocusable = elements[i];
+				return true;
+			}
+		}
+  };
+
+  function getLastVisible(dialog, elements) {
+    //get last visible focusable element inside the dialog
+		for(var i = elements.length - 1; i >= 0; i--) {
+			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
+				dialog.lastFocusable = elements[i];
+				return true;
+			}
+		}
+  };
+
+  function emitDialogEvents(dialog, eventName) {
+    var event = new CustomEvent(eventName, {detail: dialog.selectedTrigger});
+		dialog.element.dispatchEvent(event);
+  };
+
+  //initialize the Dialog objects
+	var dialogs = document.getElementsByClassName('js-dialog');
+	if( dialogs.length > 0 ) {
+		for( var i = 0; i < dialogs.length; i++) {
+			(function(i){new Dialog(dialogs[i]);})(i);
+		}
+	}
 }());
 // File#: _1_drawer
 // Usage: codyhouse.co/license
@@ -1503,6 +1387,8 @@ function initAlertEvent(element) {
 		this.element.dispatchEvent(event);
 	};
 
+	window.Drawer = Drawer;
+
 	//initialize the Drawer objects
 	var drawer = document.getElementsByClassName('js-drawer');
 	if( drawer.length > 0 ) {
@@ -1511,269 +1397,177 @@ function initAlertEvent(element) {
 		}
 	}
 }());
-// File#: _1_expandable-search
+// File#: _1_expandable-side-navigation
 // Usage: codyhouse.co/license
 (function() {
-	var expandableSearch = document.getElementsByClassName('js-expandable-search');
-	if(expandableSearch.length > 0) {
-		for( var i = 0; i < expandableSearch.length; i++) {
-			(function(i){ // if user types in search input, keep the input expanded when focus is lost
-				expandableSearch[i].getElementsByClassName('js-expandable-search__input')[0].addEventListener('input', function(event){
-					Util.toggleClass(event.target, 'expandable-search__input--has-content', event.target.value.length > 0);
-				});
-			})(i);
-		}
-	}
-}());
-// File#: _1_flash-message
-// Usage: codyhouse.co/license
-(function () {
-    var FlashMessage = function (element) {
-        this.element = element;
-        this.showClass = "flash-message--is-visible";
-        this.messageDuration = parseInt(this.element.getAttribute('data-duration')) || 3000;
-        this.triggers = document.querySelectorAll('[aria-controls="' + this.element.getAttribute('id') + '"]');
-        this.temeoutId = null;
-        this.isVisible = false;
-        this.initFlashMessage();
-    };
-
-    FlashMessage.prototype.initFlashMessage = function () {
-        var self = this;
-        //open modal when clicking on trigger buttons
-        if (self.triggers) {
-            for (var i = 0; i < self.triggers.length; i++) {
-                self.triggers[i].addEventListener('click', function (event) {
-                    event.preventDefault();
-                    self.showFlashMessage();
-                });
-            }
-        }
-        //listen to the event that triggers the opening of a flash message
-        self.element.addEventListener('showFlashMessage', function () {
-            self.showFlashMessage();
-        });
-    };
-
-    FlashMessage.prototype.showFlashMessage = function () {
-        var self = this;
-        Util.addClass(self.element, self.showClass);
-        self.isVisible = true;
-        //hide other flash messages
-        self.hideOtherFlashMessages();
-        if (self.messageDuration > 0) {
-            //hide the message after an interveal (this.messageDuration)
-            self.temeoutId = setTimeout(function () {
-                self.hideFlashMessage();
-            }, self.messageDuration);
-        }
-    };
-
-    FlashMessage.prototype.hideFlashMessage = function () {
-        Util.removeClass(this.element, this.showClass);
-        this.isVisible = false;
-        //reset timeout
-        clearTimeout(this.temeoutId);
-        this.temeoutId = null;
-    };
-
-    FlashMessage.prototype.hideOtherFlashMessages = function () {
-        var event = new CustomEvent('flashMessageShown', { detail: this.element });
-        window.dispatchEvent(event);
-    };
-
-    FlashMessage.prototype.checkFlashMessage = function (message) {
-        if (!this.isVisible) return;
-        if (this.element == message) return;
-        this.hideFlashMessage();
-    };
-
-    //initialize the FlashMessage objects
-    var flashMessages = document.getElementsByClassName('js-flash-message');
-    if (flashMessages.length > 0) {
-        var flashMessagesArray = [];
-        for (var i = 0; i < flashMessages.length; i++) {
-            (function (i) { flashMessagesArray.push(new FlashMessage(flashMessages[i])); })(i);
-        }
-
-        //listen for a flash message to be shown -> close the others
-        window.addEventListener('flashMessageShown', function (event) {
-            flashMessagesArray.forEach(function (element) {
-                element.checkFlashMessage(event.detail);
-            });
-        });
-    }
-}());
-// File#: _1_menu
-// Usage: codyhouse.co/license
-(function() {
-	var Menu = function(element) {
+  var Exsidenav = function(element) {
 		this.element = element;
-		this.elementId = this.element.getAttribute('id');
-		this.menuItems = this.element.getElementsByClassName('js-menu__content');
-		this.trigger = document.querySelectorAll('[aria-controls="'+this.elementId+'"]');
-		this.selectedTrigger = false;
-		this.menuIsOpen = false;
-		this.initMenu();
-		this.initMenuEvents();
-	};	
-
-	Menu.prototype.initMenu = function() {
-		// init aria-labels
-		for(var i = 0; i < this.trigger.length; i++) {
-			Util.setAttributes(this.trigger[i], {'aria-expanded': 'false', 'aria-haspopup': 'true'});
-		}
-		// init tabindex
-		for(var i = 0; i < this.menuItems.length; i++) {
-			this.menuItems[i].setAttribute('tabindex', '0');
-		}
+    this.controls = this.element.getElementsByClassName('js-exsidenav__control');
+    this.index = 0;
+		initExsidenav(this);
 	};
 
-	Menu.prototype.initMenuEvents = function() {
-		var self = this;
-		for(var i = 0; i < this.trigger.length; i++) {(function(i){
-			self.trigger[i].addEventListener('click', function(event){
-				event.preventDefault();
-				// if the menu had been previously opened by another trigger element -> close it first and reopen in the right position
-				if(Util.hasClass(self.element, 'menu--is-visible') && self.selectedTrigger !=  self.trigger[i]) {
-					self.toggleMenu(false, false); // close menu
-				}
-				// toggle menu
-				self.selectedTrigger = self.trigger[i];
-				self.toggleMenu(!Util.hasClass(self.element, 'menu--is-visible'), true);
-			});
-		})(i);}
-		
-		// keyboard events
-		this.element.addEventListener('keydown', function(event) {
-			// use up/down arrow to navigate list of menu items
-			if( !Util.hasClass(event.target, 'js-menu__content') ) return;
-			if( (event.keyCode && event.keyCode == 40) || (event.key && event.key.toLowerCase() == 'arrowdown') ) {
-				self.navigateItems(event, 'next');
-			} else if( (event.keyCode && event.keyCode == 38) || (event.key && event.key.toLowerCase() == 'arrowup') ) {
-				self.navigateItems(event, 'prev');
-			}
-		});
-	};
+  function initExsidenav(element) {
+    // set aria attributes
+    initAria(element);
+    // detect click on control buttons
+    element.element.addEventListener('click', function(event){
+      var control = event.target.closest('.js-exsidenav__control');
+      if(control) toggleNav(control);
+    });
+  };
 
-	Menu.prototype.toggleMenu = function(bool, moveFocus) {
-		var self = this;
-		// toggle menu visibility
-		Util.toggleClass(this.element, 'menu--is-visible', bool);
-		this.menuIsOpen = bool;
-		if(bool) {
-			this.selectedTrigger.setAttribute('aria-expanded', 'true');
-			Util.moveFocus(this.menuItems[0]);
-			this.element.addEventListener("transitionend", function(event) {Util.moveFocus(self.menuItems[0]);}, {once: true});
-			// position the menu element
-			this.positionMenu();
-			// add class to menu trigger
-			Util.addClass(this.selectedTrigger, 'menu-control--active');
-		} else if(this.selectedTrigger) {
-			this.selectedTrigger.setAttribute('aria-expanded', 'false');
-			if(moveFocus) Util.moveFocus(this.selectedTrigger);
-			// remove class from menu trigger
-			Util.removeClass(this.selectedTrigger, 'menu-control--active');
-			this.selectedTrigger = false;
-		}
-	};
+  function initAria(element) {
+    // set aria attributes -> aria-controls and aria-expanded
+    var randomNum = getRandomInt(0, 1000);
+    for(var i = 0; i < element.controls.length; i++) {
+      var newId = 'exsidenav-'+randomNum+'-'+element.index,
+        id = element.controls[i].nextElementSibling.getAttribute('id');
+      if(!id) {
+        id = newId;
+        element.controls[i].nextElementSibling.setAttribute('id', newId);
+      }
+      element.index = element.index + 1;
+      element.controls[i].setAttribute('aria-controls', id);
+      if(!element.controls[i].getAttribute('aria-expanded')) element.controls[i].setAttribute('aria-expanded', 'false');
+    }
+  };
 
-	Menu.prototype.positionMenu = function(event, direction) {
-		var selectedTriggerPosition = this.selectedTrigger.getBoundingClientRect(),
-			menuOnTop = (window.innerHeight - selectedTriggerPosition.bottom) < selectedTriggerPosition.top;
-			// menuOnTop = window.innerHeight < selectedTriggerPosition.bottom + this.element.offsetHeight;
-			
-		var left = selectedTriggerPosition.left,
-			right = (window.innerWidth - selectedTriggerPosition.right),
-			isRight = (window.innerWidth < selectedTriggerPosition.left + this.element.offsetWidth);
+  function toggleNav(control) {
+    // open/close sub list
+    var bool = (control.getAttribute('aria-expanded') === 'true'),
+      ariaValue = bool ? 'false' : 'true';
+    control.setAttribute('aria-expanded', ariaValue);
+  };
 
-		var horizontal = isRight ? 'right: '+right+'px;' : 'left: '+left+'px;',
-			vertical = menuOnTop
-				? 'bottom: '+(window.innerHeight - selectedTriggerPosition.top)+'px;'
-				: 'top: '+selectedTriggerPosition.bottom+'px;';
-		// check right position is correct -> otherwise set left to 0
-		if( isRight && (right + this.element.offsetWidth) > window.innerWidth) horizontal = 'left: '+ parseInt((window.innerWidth - this.element.offsetWidth)/2)+'px;';
-		var maxHeight = menuOnTop ? selectedTriggerPosition.top - 20 : window.innerHeight - selectedTriggerPosition.bottom - 20;
-		this.element.setAttribute('style', horizontal + vertical +'max-height:'+Math.floor(maxHeight)+'px;');
-	};
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); 
+  };
 
-	Menu.prototype.navigateItems = function(event, direction) {
-		event.preventDefault();
-		var index = Util.getIndexInArray(this.menuItems, event.target),
-			nextIndex = direction == 'next' ? index + 1 : index - 1;
-		if(nextIndex < 0) nextIndex = this.menuItems.length - 1;
-		if(nextIndex > this.menuItems.length - 1) nextIndex = 0;
-		Util.moveFocus(this.menuItems[nextIndex]);
-	};
-
-	Menu.prototype.checkMenuFocus = function() {
-		var menuParent = document.activeElement.closest('.js-menu');
-		if (!menuParent || !this.element.contains(menuParent)) this.toggleMenu(false, false);
-	};
-
-	Menu.prototype.checkMenuClick = function(target) {
-		if( !this.element.contains(target) && !target.closest('[aria-controls="'+this.elementId+'"]')) this.toggleMenu(false);
-	};
-
-	window.Menu = Menu;
-
-	//initialize the Menu objects
-	var menus = document.getElementsByClassName('js-menu');
-	if( menus.length > 0 ) {
-		var menusArray = [];
-		var scrollingContainers = [];
-		for( var i = 0; i < menus.length; i++) {
-			(function(i){
-				menusArray.push(new Menu(menus[i]));
-				var scrollableElement = menus[i].getAttribute('data-scrollable-element');
-				if(scrollableElement && !scrollingContainers.includes(scrollableElement)) scrollingContainers.push(scrollableElement);
-			})(i);
-		}
-
-		// listen for key events
-		window.addEventListener('keyup', function(event){
-			if( event.keyCode && event.keyCode == 9 || event.key && event.key.toLowerCase() == 'tab' ) {
-				//close menu if focus is outside menu element
-				menusArray.forEach(function(element){
-					element.checkMenuFocus();
-				});
-			} else if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
-				// close menu on 'Esc'
-				menusArray.forEach(function(element){
-					element.toggleMenu(false, false);
-				});
-			} 
-		});
-		// close menu when clicking outside it
-		window.addEventListener('click', function(event){
-			menusArray.forEach(function(element){
-				element.checkMenuClick(event.target);
-			});
-		});
-		// on resize -> close all menu elements
-		window.addEventListener('resize', function(event){
-			menusArray.forEach(function(element){
-				element.toggleMenu(false, false);
-			});
-		});
-		// on scroll -> close all menu elements
-		window.addEventListener('scroll', function(event){
-			menusArray.forEach(function(element){
-				if(element.menuIsOpen) element.toggleMenu(false, false);
-			});
-		});
-		// take into account additinal scrollable containers
-		for(var j = 0; j < scrollingContainers.length; j++) {
-			var scrollingContainer = document.querySelector(scrollingContainers[j]);
-			if(scrollingContainer) {
-				scrollingContainer.addEventListener('scroll', function(event){
-					menusArray.forEach(function(element){
-						if(element.menuIsOpen) element.toggleMenu(false, false);
-					});
-				});
-			}
+  window.Exsidenav = Exsidenav;
+	
+	//initialize the Exsidenav objects
+	var exsidenav = document.getElementsByClassName('js-exsidenav');
+	if( exsidenav.length > 0 ) {
+		for( var i = 0; i < exsidenav.length; i++) {
+			(function(i){new Exsidenav(exsidenav[i]);})(i);
 		}
 	}
+}());
+// File#: _1_form-validator
+// Usage: codyhouse.co/license
+(function() {
+  var FormValidator = function(opts) {
+    this.options = Util.extend(FormValidator.defaults , opts);
+		this.element = this.options.element;
+    this.input = [];
+    this.textarea = [];
+    this.select = [];
+    this.errorFields = [];
+    this.errorFieldListeners = [];
+		initFormValidator(this);
+	};
+
+  //public functions
+  FormValidator.prototype.validate = function(cb) {
+    validateForm(this);
+    if(cb) cb(this.errorFields);
+  };
+
+  // private methods
+  function initFormValidator(formValidator) {
+    formValidator.input = formValidator.element.querySelectorAll('input');
+    formValidator.textarea = formValidator.element.querySelectorAll('textarea');
+    formValidator.select = formValidator.element.querySelectorAll('select');
+  };
+
+  function validateForm(formValidator) {
+    // reset input with errors
+    formValidator.errorFields = []; 
+    // remove change/input events from fields with error
+    resetEventListeners(formValidator);
+    
+    // loop through fields and push to errorFields if there are errors
+    for(var i = 0; i < formValidator.input.length; i++) {
+      validateField(formValidator, formValidator.input[i]);
+    }
+
+    for(var i = 0; i < formValidator.textarea.length; i++) {
+      validateField(formValidator, formValidator.textarea[i]);
+    }
+
+    for(var i = 0; i < formValidator.select.length; i++) {
+      validateField(formValidator, formValidator.select[i]);
+    }
+
+    // show errors if any was found
+    for(var i = 0; i < formValidator.errorFields.length; i++) {
+      showError(formValidator, formValidator.errorFields[i]);
+    }
+
+    // move focus to first field with error
+    if(formValidator.errorFields.length > 0) formValidator.errorFields[0].focus();
+  };
+
+  function validateField(formValidator, field) {
+    if(!field.checkValidity()) {
+      formValidator.errorFields.push(field);
+      return;
+    }
+    // check for custom functions
+    var customValidate = field.getAttribute('data-validate');
+    if(customValidate && formValidator.options.customValidate[customValidate]) {
+      formValidator.options.customValidate[customValidate](field, function(result) {
+        if(!result) formValidator.errorFields.push(field);
+      });
+    }
+  };
+
+  function showError(formValidator, field) {
+    // add error classes
+    toggleErrorClasses(formValidator, field, true);
+
+    // add event listener
+    var index = formValidator.errorFieldListeners.length;
+    formValidator.errorFieldListeners[index] = function() {
+      toggleErrorClasses(formValidator, field, false);
+      field.removeEventListener('change', formValidator.errorFieldListeners[index]);
+      field.removeEventListener('input', formValidator.errorFieldListeners[index]);
+    };
+    field.addEventListener('change', formValidator.errorFieldListeners[index]);
+    field.addEventListener('input', formValidator.errorFieldListeners[index]);
+  };
+
+  function toggleErrorClasses(formValidator, field, bool) {
+    bool ? Util.addClass(field, formValidator.options.inputErrorClass) : Util.removeClass(field, formValidator.options.inputErrorClass);
+    if(formValidator.options.inputWrapperErrorClass) {
+      var wrapper = field.closest('.js-form-validate__input-wrapper');
+      if(wrapper) {
+        bool ? Util.addClass(wrapper, formValidator.options.inputWrapperErrorClass) : Util.removeClass(wrapper, formValidator.options.inputWrapperErrorClass);
+      }
+    }
+  };
+
+  function resetEventListeners(formValidator) {
+    for(var i = 0; i < formValidator.errorFields.length; i++) {
+      toggleErrorClasses(formValidator, formValidator.errorFields[i], false);
+      formValidator.errorFields[i].removeEventListener('change', formValidator.errorFieldListeners[i]);
+      formValidator.errorFields[i].removeEventListener('input', formValidator.errorFieldListeners[i]);
+    }
+
+    formValidator.errorFields = [];
+    formValidator.errorFieldListeners = [];
+  };
+  
+  FormValidator.defaults = {
+    element : '',
+    inputErrorClass : 'form-control--error',
+    inputWrapperErrorClass: 'form-validate__input-wrapper--error',
+    customValidate: {}
+  };
+  window.FormValidator = FormValidator;
 }());
 // File#: _1_modal-window
 // Usage: codyhouse.co/license
@@ -1852,6 +1646,7 @@ function initAlertEvent(element) {
 
 	Modal.prototype.closeModal = function() {
 		if(!Util.hasClass(this.element, this.showClass)) return;
+		console.log('close')
 		Util.removeClass(this.element, this.showClass);
 		this.firstFocusable = null;
 		this.lastFocusable = null;
@@ -1975,6 +1770,8 @@ function initAlertEvent(element) {
 		return element.offsetWidth || element.offsetHeight || element.getClientRects().length;
 	};
 
+	window.Modal = Modal;
+
 	//initialize the Modal objects
 	var modals = document.getElementsByClassName('js-modal');
 	// generic focusable elements string selector
@@ -1996,3450 +1793,1690 @@ function initAlertEvent(element) {
 }());
 // File#: _1_number-input
 // Usage: codyhouse.co/license
-(function () {
-    var InputNumber = function (element) {
-        this.element = element;
-        this.input = this.element.getElementsByClassName('js-number-input__value')[0];
-        this.min = parseFloat(this.input.getAttribute('min'));
-        this.max = parseFloat(this.input.getAttribute('max'));
-        this.step = parseFloat(this.input.getAttribute('step'));
-        if (isNaN(this.step)) this.step = 1;
-        this.precision = getStepPrecision(this.step);
-        initInputNumberEvents(this);
-    };
-
-    function initInputNumberEvents(input) {
-        // listen to the click event on the custom increment buttons
-        input.element.addEventListener('click', function (event) {
-            var increment = event.target.closest('.js-number-input__btn');
-            if (increment) {
-                event.preventDefault();
-                updateInputNumber(input, increment);
-            }
-        });
-
-        // when input changes, make sure the new value is acceptable
-        input.input.addEventListener('focusout', function (event) {
-            var value = parseFloat(input.input.value);
-            if (value < input.min) value = input.min;
-            if (value > input.max) value = input.max;
-            // check value is multiple of step
-            value = checkIsMultipleStep(input, value);
-            if (value != parseFloat(input.input.value)) input.input.value = value;
-
-        });
-    };
-
-    function getStepPrecision(step) {
-        // if step is a floating number, return its precision
-        return (step.toString().length - Math.floor(step).toString().length - 1);
-    };
-
-    function updateInputNumber(input, btn) {
-        var value = (Util.hasClass(btn, 'number-input__btn--plus')) ? parseFloat(input.input.value) + input.step : parseFloat(input.input.value) - input.step;
-        if (input.precision > 0) value = value.toFixed(input.precision);
-        if (value < input.min) value = input.min;
-        if (value > input.max) value = input.max;
-        input.input.value = value;
-        input.input.dispatchEvent(new CustomEvent('change', { bubbles: true })); // trigger change event
-    };
-
-    function checkIsMultipleStep(input, value) {
-        // check if the number inserted is a multiple of the step value
-        var remain = (value * 10 * input.precision) % (input.step * 10 * input.precision);
-        if (remain != 0) value = value - remain;
-        if (input.precision > 0) value = value.toFixed(input.precision);
-        return value;
-    };
-
-    //initialize the InputNumber objects
-    var inputNumbers = document.getElementsByClassName('js-number-input');
-    if (inputNumbers.length > 0) {
-        for (var i = 0; i < inputNumbers.length; i++) {
-            (function (i) { new InputNumber(inputNumbers[i]); })(i);
-        }
-    }
-}());
-// File#: _1_rating
-// Usage: codyhouse.co/license
-(function () {
-	var Rating = function (element) {
+(function() {
+	var InputNumber = function(element) {
 		this.element = element;
-		this.icons = this.element.getElementsByClassName('js-rating__control')[0];
-		this.iconCode = this.icons.children[0].parentNode.innerHTML;
-		this.initialRating = [];
-		this.initialRatingElement = this.element.getElementsByClassName('js-rating__value')[0];
-		this.ratingItems;
-		this.selectedRatingItem;
-		this.readOnly = Util.hasClass(this.element, 'js-rating--read-only');
-		this.ratingMaxValue = 5;
-		this.getInitialRating();
-		this.initRatingHtml();
+		this.input = this.element.getElementsByClassName('js-number-input__value')[0];
+		this.min = parseFloat(this.input.getAttribute('min'));
+		this.max = parseFloat(this.input.getAttribute('max'));
+		this.step = parseFloat(this.input.getAttribute('step'));
+		if(isNaN(this.step)) this.step = 1;
+		this.precision = getStepPrecision(this.step);
+		initInputNumberEvents(this);
 	};
 
-	Rating.prototype.getInitialRating = function () {
-		// get the rating of the product
-		if (!this.initialRatingElement || !this.readOnly) {
-			this.initialRating = [0, false];
-			return;
-		}
-
-		var initialValue = Number(this.initialRatingElement.textContent);
-		if (isNaN(initialValue)) {
-			this.initialRating = [0, false];
-			return;
-		}
-
-		var floorNumber = Math.floor(initialValue);
-		this.initialRating[0] = (floorNumber < initialValue) ? floorNumber + 1 : floorNumber;
-		this.initialRating[1] = (floorNumber < initialValue) ? Math.round((initialValue - floorNumber) * 100) : false;
-	};
-
-	Rating.prototype.initRatingHtml = function () {
-		//create the star elements
-		var iconsList = this.readOnly ? '<ul>' : '<ul role="radiogroup">';
-
-		//if initial rating value is zero -> add a 'zero' item 
-		if (this.initialRating[0] == 0 && !this.initialRating[1]) {
-			iconsList = iconsList + '<li class="rating__item--zero rating__item--checked"></li>';
-		}
-
-		// create the stars list 
-		for (var i = 0; i < this.ratingMaxValue; i++) {
-			iconsList = iconsList + this.getStarHtml(i);
-		}
-		iconsList = iconsList + '</ul>';
-
-		// --default variation only - improve SR accessibility including a legend element 
-		if (!this.readOnly) {
-			var labelElement = this.element.getElementsByTagName('label');
-			if (labelElement.length > 0) {
-				var legendElement = '<legend class="' + labelElement[0].getAttribute('class') + '">' + labelElement[0].textContent + '</legend>';
-				iconsList = '<fieldset>' + legendElement + iconsList + '</fieldset>';
-				Util.addClass(labelElement[0], 'is-hidden');
+	function initInputNumberEvents(input) {
+		// listen to the click event on the custom increment buttons
+		input.element.addEventListener('click', function(event){ 
+			var increment = event.target.closest('.js-number-input__btn');
+			if(increment) {
+				event.preventDefault();
+				updateInputNumber(input, increment);
 			}
-		}
-
-		this.icons.innerHTML = iconsList;
-
-		//init object properties
-		this.ratingItems = this.icons.getElementsByClassName('js-rating__item');
-		this.selectedRatingItem = this.icons.getElementsByClassName('rating__item--checked')[0];
-
-		//show the stars
-		Util.removeClass(this.icons, 'rating__control--is-hidden');
-
-		//event listener
-		!this.readOnly && this.initRatingEvents();// rating vote enabled
-	};
-
-	Rating.prototype.getStarHtml = function (index) {
-		var listItem = '';
-		var checked = (index + 1 == this.initialRating[0]) ? true : false,
-			itemClass = checked ? ' rating__item--checked' : '',
-			tabIndex = (checked || (this.initialRating[0] == 0 && !this.initialRating[1] && index == 0)) ? 0 : -1,
-			showHalf = checked && this.initialRating[1] ? true : false,
-			iconWidth = showHalf ? ' rating__item--half' : '';
-		if (!this.readOnly) {
-			listItem = '<li class="js-rating__item' + itemClass + iconWidth + '" role="radio" aria-label="' + (index + 1) + '" aria-checked="' + checked + '" tabindex="' + tabIndex + '"><div class="rating__icon">' + this.iconCode + '</div></li>';
-		} else {
-			var starInner = showHalf ? '<div class="rating__icon">' + this.iconCode + '</div><div class="rating__icon rating__icon--inactive">' + this.iconCode + '</div>' : '<div class="rating__icon">' + this.iconCode + '</div>';
-			listItem = '<li class="js-rating__item' + itemClass + iconWidth + '">' + starInner + '</li>';
-		}
-		return listItem;
-	};
-
-	Rating.prototype.initRatingEvents = function () {
-		var self = this;
-
-		//click on a star
-		this.icons.addEventListener('click', function (event) {
-			var trigger = event.target.closest('.js-rating__item');
-			self.resetSelectedIcon(trigger);
 		});
 
-		//keyboard navigation -> select new star
-		this.icons.addEventListener('keydown', function (event) {
-			if (event.keyCode && (event.keyCode == 39 || event.keyCode == 40) || event.key && (event.key.toLowerCase() == 'arrowright' || event.key.toLowerCase() == 'arrowdown')) {
-				self.selectNewIcon('next'); //select next star on arrow right/down
-			} else if (event.keyCode && (event.keyCode == 37 || event.keyCode == 38) || event.key && (event.key.toLowerCase() == 'arrowleft' || event.key.toLowerCase() == 'arrowup')) {
-				self.selectNewIcon('prev'); //select prev star on arrow left/up
-			} else if (event.keyCode && event.keyCode == 32 || event.key && event.key == ' ') {
-				self.selectFocusIcon(); // select focused star on Space
-			}
+		// when input changes, make sure the new value is acceptable
+		input.input.addEventListener('focusout', function(event){
+			var value = parseFloat(input.input.value);
+			if( value < input.min ) value = input.min;
+			if( value > input.max ) value = input.max;
+			// check value is multiple of step
+			value = checkIsMultipleStep(input, value);
+			if( value != parseFloat(input.input.value)) input.input.value = value;
+
 		});
 	};
 
-	Rating.prototype.selectNewIcon = function (direction) {
-		var index = Util.getIndexInArray(this.ratingItems, this.selectedRatingItem);
-		index = (direction == 'next') ? index + 1 : index - 1;
-		if (index < 0) index = this.ratingItems.length - 1;
-		if (index >= this.ratingItems.length) index = 0;
-		this.resetSelectedIcon(this.ratingItems[index]);
-		this.ratingItems[index].focus();
+	function getStepPrecision(step) {
+		// if step is a floating number, return its precision
+		return (step.toString().length - Math.floor(step).toString().length - 1);
 	};
 
-	Rating.prototype.selectFocusIcon = function (direction) {
-		this.resetSelectedIcon(document.activeElement);
+	function updateInputNumber(input, btn) {
+		var value = ( Util.hasClass(btn, 'number-input__btn--plus') ) ? parseFloat(input.input.value) + input.step : parseFloat(input.input.value) - input.step;
+		if( input.precision > 0 ) value = value.toFixed(input.precision);
+		if( value < input.min ) value = input.min;
+		if( value > input.max ) value = input.max;
+		input.input.value = value;
+		input.input.dispatchEvent(new CustomEvent('change', {bubbles: true})); // trigger change event
 	};
 
-	Rating.prototype.resetSelectedIcon = function (trigger) {
-		if (!trigger) return;
-		Util.removeClass(this.selectedRatingItem, 'rating__item--checked');
-		Util.setAttributes(this.selectedRatingItem, { 'aria-checked': false, 'tabindex': -1 });
-		Util.addClass(trigger, 'rating__item--checked');
-		Util.setAttributes(trigger, { 'aria-checked': true, 'tabindex': 0 });
-		this.selectedRatingItem = trigger;
-		// update select input value
-		var select = this.element.getElementsByTagName('select');
-		if (select.length > 0) {
-			select[0].value = trigger.getAttribute('aria-label');
+	function checkIsMultipleStep(input, value) {
+		// check if the number inserted is a multiple of the step value
+		var remain = (value*10*input.precision)%(input.step*10*input.precision);
+		if( remain != 0) value = value - remain;
+		if( input.precision > 0 ) value = value.toFixed(input.precision);
+		return value;
+	};
+
+	//initialize the InputNumber objects
+	var inputNumbers = document.getElementsByClassName('js-number-input');
+	if( inputNumbers.length > 0 ) {
+		for( var i = 0; i < inputNumbers.length; i++) {
+			(function(i){new InputNumber(inputNumbers[i]);})(i);
 		}
-	};
-
-	//initialize the Rating objects
-	var ratings = document.getElementsByClassName('js-rating');
-	if (ratings.length > 0) {
-		for (var i = 0; i < ratings.length; i++) {
-			(function (i) { new Rating(ratings[i]); })(i);
-		}
-	};
+	}
 }());
-// File#: _1_read-more
+// File#: _1_popover
 // Usage: codyhouse.co/license
 (function() {
-  var ReadMore = function(element) {
+  var Popover = function(element) {
     this.element = element;
-    this.moreContent = this.element.getElementsByClassName('js-read-more__content');
-    this.count = this.element.getAttribute('data-characters') || 200;
-    this.counting = 0;
-    this.btnClasses = this.element.getAttribute('data-btn-class');
-    this.ellipsis = this.element.getAttribute('data-ellipsis') && this.element.getAttribute('data-ellipsis') == 'off' ? false : true;
-    this.btnShowLabel = 'Read more';
-    this.btnHideLabel = 'Read less';
-    this.toggleOff = this.element.getAttribute('data-toggle') && this.element.getAttribute('data-toggle') == 'off' ? false : true;
-    if( this.moreContent.length == 0 ) splitReadMore(this);
-    setBtnLabels(this);
-    initReadMore(this);
+		this.elementId = this.element.getAttribute('id');
+		this.trigger = document.querySelectorAll('[aria-controls="'+this.elementId+'"]');
+		this.selectedTrigger = false;
+    this.popoverVisibleClass = 'popover--is-visible';
+    this.selectedTriggerClass = 'popover-control--active';
+    this.popoverIsOpen = false;
+    // focusable elements
+    this.firstFocusable = false;
+		this.lastFocusable = false;
+		// position target - position tooltip relative to a specified element
+		this.positionTarget = getPositionTarget(this);
+		// gap between element and viewport - if there's max-height 
+		this.viewportGap = parseInt(getComputedStyle(this.element).getPropertyValue('--popover-viewport-gap')) || 20;
+		initPopover(this);
+		initPopoverEvents(this);
   };
 
-  function splitReadMore(readMore) { 
-    splitChildren(readMore.element, readMore); // iterate through children and hide content
+  // public methods
+  Popover.prototype.togglePopover = function(bool, moveFocus) {
+    togglePopover(this, bool, moveFocus);
   };
 
-  function splitChildren(parent, readMore) {
-    if(readMore.counting >= readMore.count) {
-      Util.addClass(parent, 'js-read-more__content');
-      return parent.outerHTML;
-    }
-    var children = parent.childNodes;
-    var content = '';
-    for(var i = 0; i < children.length; i++) {
-      if (children[i].nodeType == Node.TEXT_NODE) {
-        content = content + wrapText(children[i], readMore);
-      } else {
-        content = content + splitChildren(children[i], readMore);
-      }
-    }
-    parent.innerHTML = content;
-    return parent.outerHTML;
+  Popover.prototype.checkPopoverClick = function(target) {
+    checkPopoverClick(this, target);
   };
 
-  function wrapText(element, readMore) {
-    var content = element.textContent;
-    if(content.replace(/\s/g,'').length == 0) return '';// check if content is empty
-    if(readMore.counting >= readMore.count) {
-      return '<span class="js-read-more__content">' + content + '</span>';
-    }
-    if(readMore.counting + content.length < readMore.count) {
-      readMore.counting = readMore.counting + content.length;
-      return content;
-    }
-    var firstContent = content.substr(0, readMore.count - readMore.counting);
-    firstContent = firstContent.substr(0, Math.min(firstContent.length, firstContent.lastIndexOf(" ")));
-    var secondContent = content.substr(firstContent.length, content.length);
-    readMore.counting = readMore.count;
-    return firstContent + '<span class="js-read-more__content">' + secondContent + '</span>';
+  Popover.prototype.checkPopoverFocus = function() {
+    checkPopoverFocus(this);
   };
 
-  function setBtnLabels(readMore) { // set custom labels for read More/Less btns
-    var btnLabels = readMore.element.getAttribute('data-btn-labels');
-    if(btnLabels) {
-      var labelsArray = btnLabels.split(',');
-      readMore.btnShowLabel = labelsArray[0].trim();
-      readMore.btnHideLabel = labelsArray[1].trim();
-    }
-  };
+	// private methods
+	function getPositionTarget(popover) {
+		// position tooltip relative to a specified element - if provided
+		var positionTargetSelector = popover.element.getAttribute('data-position-target');
+		if(!positionTargetSelector) return false;
+		var positionTarget = document.querySelector(positionTargetSelector);
+		return positionTarget;
+	};
 
-  function initReadMore(readMore) { // add read more/read less buttons to the markup
-    readMore.moreContent = readMore.element.getElementsByClassName('js-read-more__content');
-    if( readMore.moreContent.length == 0 ) {
-      Util.addClass(readMore.element, 'read-more--loaded');
-      return;
-    }
-    var btnShow = ' <button class="js-read-more__btn '+readMore.btnClasses+'">'+readMore.btnShowLabel+'</button>';
-    var btnHide = ' <button class="js-read-more__btn is-hidden '+readMore.btnClasses+'">'+readMore.btnHideLabel+'</button>';
-    if(readMore.ellipsis) {
-      btnShow = '<span class="js-read-more__ellipsis" aria-hidden="true">...</span>'+ btnShow;
-    }
-
-    readMore.moreContent[readMore.moreContent.length - 1].insertAdjacentHTML('afterend', btnHide);
-    readMore.moreContent[0].insertAdjacentHTML('afterend', btnShow);
-    resetAppearance(readMore);
-    initEvents(readMore);
-  };
-
-  function resetAppearance(readMore) { // hide part of the content
-    for(var i = 0; i < readMore.moreContent.length; i++) Util.addClass(readMore.moreContent[i], 'is-hidden');
-    Util.addClass(readMore.element, 'read-more--loaded'); // show entire component
-  };
-
-  function initEvents(readMore) { // listen to the click on the read more/less btn
-    readMore.btnToggle = readMore.element.getElementsByClassName('js-read-more__btn');
-    readMore.ellipsis = readMore.element.getElementsByClassName('js-read-more__ellipsis');
-
-    readMore.btnToggle[0].addEventListener('click', function(event){
-      event.preventDefault();
-      updateVisibility(readMore, true);
-    });
-    readMore.btnToggle[1].addEventListener('click', function(event){
-      event.preventDefault();
-      updateVisibility(readMore, false);
-    });
-  };
-
-  function updateVisibility(readMore, visibile) {
-    for(var i = 0; i < readMore.moreContent.length; i++) Util.toggleClass(readMore.moreContent[i], 'is-hidden', !visibile);
-    // reset btns appearance
-    Util.toggleClass(readMore.btnToggle[0], 'is-hidden', visibile);
-    Util.toggleClass(readMore.btnToggle[1], 'is-hidden', !visibile);
-    if(readMore.ellipsis.length > 0 ) Util.toggleClass(readMore.ellipsis[0], 'is-hidden', visibile);
-    if(!readMore.toggleOff) Util.addClass(readMore.btn, 'is-hidden');
-    // move focus
-    if(visibile) {
-      var targetTabIndex = readMore.moreContent[0].getAttribute('tabindex');
-      Util.moveFocus(readMore.moreContent[0]);
-      resetFocusTarget(readMore.moreContent[0], targetTabIndex);
-    } else {
-      Util.moveFocus(readMore.btnToggle[0]);
-    }
-  };
-
-  function resetFocusTarget(target, tabindex) {
-    if( parseInt(target.getAttribute('tabindex')) < 0) {
-			target.style.outline = 'none';
-			!tabindex && target.removeAttribute('tabindex');
+  function initPopover(popover) {
+		// init aria-labels
+		for(var i = 0; i < popover.trigger.length; i++) {
+			Util.setAttributes(popover.trigger[i], {'aria-expanded': 'false', 'aria-haspopup': 'true'});
 		}
   };
-
-  //initialize the ReadMore objects
-	var readMore = document.getElementsByClassName('js-read-more');
-	if( readMore.length > 0 ) {
-		for( var i = 0; i < readMore.length; i++) {
-			(function(i){new ReadMore(readMore[i]);})(i);
+  
+  function initPopoverEvents(popover) {
+		for(var i = 0; i < popover.trigger.length; i++) {(function(i){
+			popover.trigger[i].addEventListener('click', function(event){
+				event.preventDefault();
+				// if the popover had been previously opened by another trigger element -> close it first and reopen in the right position
+				if(Util.hasClass(popover.element, popover.popoverVisibleClass) && popover.selectedTrigger !=  popover.trigger[i]) {
+					togglePopover(popover, false, false); // close menu
+				}
+				// toggle popover
+				popover.selectedTrigger = popover.trigger[i];
+				togglePopover(popover, !Util.hasClass(popover.element, popover.popoverVisibleClass), true);
+			});
+    })(i);}
+    
+    // trap focus
+    popover.element.addEventListener('keydown', function(event){
+      if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+        //trap focus inside popover
+        trapFocus(popover, event);
+      }
+    });
+  };
+  
+  function togglePopover(popover, bool, moveFocus) {
+		// toggle popover visibility
+		Util.toggleClass(popover.element, popover.popoverVisibleClass, bool);
+		popover.popoverIsOpen = bool;
+		if(bool) {
+      popover.selectedTrigger.setAttribute('aria-expanded', 'true');
+      getFocusableElements(popover);
+      // move focus
+      focusPopover(popover);
+			popover.element.addEventListener("transitionend", function(event) {focusPopover(popover);}, {once: true});
+			// position the popover element
+			positionPopover(popover);
+			// add class to popover trigger
+			Util.addClass(popover.selectedTrigger, popover.selectedTriggerClass);
+		} else if(popover.selectedTrigger) {
+			popover.selectedTrigger.setAttribute('aria-expanded', 'false');
+			if(moveFocus) Util.moveFocus(popover.selectedTrigger);
+			// remove class from menu trigger
+			Util.removeClass(popover.selectedTrigger, popover.selectedTriggerClass);
+			popover.selectedTrigger = false;
 		}
 	};
+	
+	function focusPopover(popover) {
+		if(popover.firstFocusable) {
+			popover.firstFocusable.focus();
+		} else {
+			Util.moveFocus(popover.element);
+		}
+	};
+
+  function positionPopover(popover) {
+		// reset popover position
+		resetPopoverStyle(popover);
+		var selectedTriggerPosition = (popover.positionTarget) ? popover.positionTarget.getBoundingClientRect() : popover.selectedTrigger.getBoundingClientRect();
+		
+		var menuOnTop = (window.innerHeight - selectedTriggerPosition.bottom) < selectedTriggerPosition.top;
+			
+		var left = selectedTriggerPosition.left,
+			right = (window.innerWidth - selectedTriggerPosition.right),
+			isRight = (window.innerWidth < selectedTriggerPosition.left + popover.element.offsetWidth);
+
+		var horizontal = isRight ? 'right: '+right+'px;' : 'left: '+left+'px;',
+			vertical = menuOnTop
+				? 'bottom: '+(window.innerHeight - selectedTriggerPosition.top)+'px;'
+				: 'top: '+selectedTriggerPosition.bottom+'px;';
+		// check right position is correct -> otherwise set left to 0
+		if( isRight && (right + popover.element.offsetWidth) > window.innerWidth) horizontal = 'left: '+ parseInt((window.innerWidth - popover.element.offsetWidth)/2)+'px;';
+		// check if popover needs a max-height (user will scroll inside the popover)
+		var maxHeight = menuOnTop ? selectedTriggerPosition.top - popover.viewportGap : window.innerHeight - selectedTriggerPosition.bottom - popover.viewportGap;
+
+		var initialStyle = popover.element.getAttribute('style');
+		if(!initialStyle) initialStyle = '';
+		popover.element.setAttribute('style', initialStyle + horizontal + vertical +'max-height:'+Math.floor(maxHeight)+'px;');
+	};
+	
+	function resetPopoverStyle(popover) {
+		// remove popover inline style before appling new style
+		popover.element.style.maxHeight = '';
+		popover.element.style.top = '';
+		popover.element.style.bottom = '';
+		popover.element.style.left = '';
+		popover.element.style.right = '';
+	};
+
+  function checkPopoverClick(popover, target) {
+    // close popover when clicking outside it
+    if(!popover.popoverIsOpen) return;
+    if(!popover.element.contains(target) && !target.closest('[aria-controls="'+popover.elementId+'"]')) togglePopover(popover, false);
+  };
+
+  function checkPopoverFocus(popover) {
+    // on Esc key -> close popover if open and move focus (if focus was inside popover)
+    if(!popover.popoverIsOpen) return;
+    var popoverParent = document.activeElement.closest('.js-popover');
+    togglePopover(popover, false, popoverParent);
+  };
+  
+  function getFocusableElements(popover) {
+    //get all focusable elements inside the popover
+		var allFocusable = popover.element.querySelectorAll(focusableElString);
+		getFirstVisible(popover, allFocusable);
+		getLastVisible(popover, allFocusable);
+  };
+
+  function getFirstVisible(popover, elements) {
+		//get first visible focusable element inside the popover
+		for(var i = 0; i < elements.length; i++) {
+			if( isVisible(elements[i]) ) {
+				popover.firstFocusable = elements[i];
+				break;
+			}
+		}
+	};
+
+  function getLastVisible(popover, elements) {
+		//get last visible focusable element inside the popover
+		for(var i = elements.length - 1; i >= 0; i--) {
+			if( isVisible(elements[i]) ) {
+				popover.lastFocusable = elements[i];
+				break;
+			}
+		}
+  };
+
+  function trapFocus(popover, event) {
+    if( popover.firstFocusable == document.activeElement && event.shiftKey) {
+			//on Shift+Tab -> focus last focusable element when focus moves out of popover
+			event.preventDefault();
+			popover.lastFocusable.focus();
+		}
+		if( popover.lastFocusable == document.activeElement && !event.shiftKey) {
+			//on Tab -> focus first focusable element when focus moves out of popover
+			event.preventDefault();
+			popover.firstFocusable.focus();
+		}
+  };
+  
+  function isVisible(element) {
+		// check if element is visible
+		return element.offsetWidth || element.offsetHeight || element.getClientRects().length;
+	};
+
+  window.Popover = Popover;
+
+  //initialize the Popover objects
+  var popovers = document.getElementsByClassName('js-popover');
+  // generic focusable elements string selector
+	var focusableElString = '[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary';
+	
+	if( popovers.length > 0 ) {
+		var popoversArray = [];
+		var scrollingContainers = [];
+		for( var i = 0; i < popovers.length; i++) {
+			(function(i){
+				popoversArray.push(new Popover(popovers[i]));
+				var scrollableElement = popovers[i].getAttribute('data-scrollable-element');
+				if(scrollableElement && !scrollingContainers.includes(scrollableElement)) scrollingContainers.push(scrollableElement);
+			})(i);
+		}
+
+		// listen for key events
+		window.addEventListener('keyup', function(event){
+			if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
+        // close popover on 'Esc'
+				popoversArray.forEach(function(element){
+					element.checkPopoverFocus();
+				});
+			} 
+		});
+		// close popover when clicking outside it
+		window.addEventListener('click', function(event){
+			popoversArray.forEach(function(element){
+				element.checkPopoverClick(event.target);
+			});
+		});
+		// on resize -> close all popover elements
+		window.addEventListener('resize', function(event){
+			popoversArray.forEach(function(element){
+				element.togglePopover(false, false);
+			});
+		});
+		// on scroll -> close all popover elements
+		window.addEventListener('scroll', function(event){
+			popoversArray.forEach(function(element){
+				if(element.popoverIsOpen) element.togglePopover(false, false);
+			});
+		});
+		// take into account additinal scrollable containers
+		for(var j = 0; j < scrollingContainers.length; j++) {
+			var scrollingContainer = document.querySelector(scrollingContainers[j]);
+			if(scrollingContainer) {
+				scrollingContainer.addEventListener('scroll', function(event){
+					popoversArray.forEach(function(element){
+						if(element.popoverIsOpen) element.togglePopover(false, false);
+					});
+				});
+			}
+		}
+	}
 }());
 // File#: _1_repeater
 // Usage: codyhouse.co/license
-(function () {
-    var Repeater = function (element) {
-        this.element = element;
-        this.blockWrapper = this.element.getElementsByClassName('js-repeater__list');
-        if (this.blockWrapper.length < 1) return;
-        this.blocks = false;
-        getBlocksList(this);
-        this.firstBlock = false;
-        this.addNew = this.element.getElementsByClassName('js-repeater__add');
-        this.cloneClass = this.element.getAttribute('data-repeater-class');
-        this.inputName = this.element.getAttribute('data-repeater-input-name');
-        initRepeater(this);
-    };
+(function() {
+  var Repeater = function(element) {
+    this.element = element;
+    this.blockWrapper = this.element.getElementsByClassName('js-repeater__list');
+    if(this.blockWrapper.length < 1) return;
+    this.blocks = false;
+    getBlocksList(this);
+    this.firstBlock = false;
+    this.addNew = this.element.getElementsByClassName('js-repeater__add');
+    this.cloneClass = this.element.getAttribute('data-repeater-class');
+    this.inputName = this.element.getAttribute('data-repeater-input-name');
+    initRepeater(this);
+  };
 
-    function initRepeater(element) {
-        if (element.addNew.length < 1 || element.blocks.length < 1 || element.blockWrapper.length < 1) return;
-        element.firstBlock = element.blocks[0].cloneNode(true);
+  function initRepeater(element) {
+    if(element.addNew.length < 1 || element.blocks.length < 1 || element.blockWrapper.length < 1 ) return;
+    element.firstBlock = element.blocks[0].cloneNode(true);
+    
+    // detect click on a Remove button
+    element.element.addEventListener('click', function(event) {
+      var deleteBtn = event.target.closest('.js-repeater__remove');
+      if(deleteBtn) {
+        event.preventDefault();
+        removeBlock(element, deleteBtn);
+      }
+    });
 
-        // detect click on a Remove button
-        element.element.addEventListener('click', function (event) {
-            var deleteBtn = event.target.closest('.js-repeater__remove');
-            if (deleteBtn) {
-                event.preventDefault();
-                removeBlock(element, deleteBtn);
-            }
-        });
+    // detect click on Add button
+    element.addNew[0].addEventListener('click', function(event) {
+      event.preventDefault();
+      addBlock(element);
+    });
+  };
 
-        // detect click on Add button
-        element.addNew[0].addEventListener('click', function (event) {
-            event.preventDefault();
-            addBlock(element);
-        });
-    };
+  function addBlock(element) {
+    if(element.blocks.length > 0) {
+      var clone = element.blocks[element.blocks.length - 1].cloneNode(true),
+        nameToReplace = element.inputName.replace('[n]', '['+(element.blocks.length - 1)+']'),
+        newName = element.inputName.replace('[n]', '['+element.blocks.length+']');
+    } else {
+      var clone =  element.firstBlock.cloneNode(true),
+      nameToReplace = element.inputName.replace('[n]', '[0]'),
+      newName = element.inputName.replace('[n]', '[0]');
+    }
+    
+    if(element.cloneClass) Util.addClass(clone, element.cloneClass);
+    // modify name/for/id attributes
+    updateBlockAttrs(clone, nameToReplace, newName, true);
 
-    function addBlock(element) {
-        if (element.blocks.length > 0) {
-            var clone = element.blocks[element.blocks.length - 1].cloneNode(true),
-                nameToReplace = element.inputName.replace('[n]', '[' + (element.blocks.length - 1) + ']'),
-                newName = element.inputName.replace('[n]', '[' + element.blocks.length + ']');
-        } else {
-            var clone = element.firstBlock.cloneNode(true),
-                nameToReplace = element.inputName.replace('[n]', '[0]'),
-                newName = element.inputName.replace('[n]', '[0]');
-        }
+    element.blockWrapper[0].appendChild(clone);
+    // update blocks list
+    getBlocksList(element)
+  };
 
-        if (element.cloneClass) Util.addClass(clone, element.cloneClass);
-        // modify name/for/id attributes
-        updateBlockAttrs(clone, nameToReplace, newName, true);
+  function removeBlock(element, trigger) {
+    var block = trigger.closest('.js-repeater__item');
+    if(block) {
+      var index = Util.getIndexInArray(element.blocks, block);
+      block.remove();
+      // update blocks list
+      getBlocksList(element);
+      // need to reset all blocks after that -> name/for/id values
+      for(var i = index; i < element.blocks.length; i++) {
+        updateBlockAttrs(element.blocks[i], element.inputName.replace('[n]', '['+(i+1)+']'), element.inputName.replace('[n]', '['+i+']'));
+      }
+    }
+  };
 
-        element.blockWrapper[0].appendChild(clone);
-        // update blocks list
-        getBlocksList(element)
-    };
+  function updateBlockAttrs(block, nameToReplace, newName, reset) {
+    var nameElements = block.querySelectorAll('[name^="'+nameToReplace+'"]'),
+      forElements = block.querySelectorAll('[for^="'+nameToReplace+'"]'),
+      idElements = block.querySelectorAll('[id^="'+nameToReplace+'"]');
 
-    function removeBlock(element, trigger) {
-        var block = trigger.closest('.js-repeater__item');
-        if (block) {
-            var index = Util.getIndexInArray(element.blocks, block);
-            block.remove();
-            // update blocks list
-            getBlocksList(element);
-            // need to reset all blocks after that -> name/for/id values
-            for (var i = index; i < element.blocks.length; i++) {
-                updateBlockAttrs(element.blocks[i], element.inputName.replace('[n]', '[' + (i + 1) + ']'), element.inputName.replace('[n]', '[' + i + ']'));
-            }
-        }
-    };
+    for(var i = 0; i < nameElements.length; i++) {
+      var nameAttr = nameElements[i].getAttribute('name');
+      nameElements[i].setAttribute('name', nameAttr.replace(nameToReplace, newName));
+      if(reset && nameElements[i].value) nameElements[i].value = '';
+    }
 
-    function updateBlockAttrs(block, nameToReplace, newName, reset) {
-        var nameElements = block.querySelectorAll('[name^="' + nameToReplace + '"]'),
-            forElements = block.querySelectorAll('[for^="' + nameToReplace + '"]'),
-            idElements = block.querySelectorAll('[id^="' + nameToReplace + '"]');
+    for(var i = 0; i < forElements.length; i++) {
+      var forAttr = forElements[i].getAttribute('for');
+      forElements[i].setAttribute('for', forAttr.replace(nameToReplace, newName));
+    }
 
-        for (var i = 0; i < nameElements.length; i++) {
-            var nameAttr = nameElements[i].getAttribute('name');
-            nameElements[i].setAttribute('name', nameAttr.replace(nameToReplace, newName));
-            if (reset && nameElements[i].value) nameElements[i].value = '';
-        }
+    for(var i = 0; i < idElements.length; i++) {
+      var idAttr = idElements[i].getAttribute('id');
+      idElements[i].setAttribute('id', idAttr.replace(nameToReplace, newName));
+    }
+  };
 
-        for (var i = 0; i < forElements.length; i++) {
-            var forAttr = forElements[i].getAttribute('for');
-            forElements[i].setAttribute('for', forAttr.replace(nameToReplace, newName));
-        }
+  function getBlocksList(element) {
+    element.blocks = Util.getChildrenByClassName(element.blockWrapper[0], 'js-repeater__item');
+  };
 
-        for (var i = 0; i < idElements.length; i++) {
-            var idAttr = idElements[i].getAttribute('id');
-            idElements[i].setAttribute('id', idAttr.replace(nameToReplace, newName));
-        }
-    };
-
-    function getBlocksList(element) {
-        element.blocks = Util.getChildrenByClassName(element.blockWrapper[0], 'js-repeater__item');
-    };
-
-    //initialize the Repeater objects
-    var repeater = document.getElementsByClassName('js-repeater');
-    if (repeater.length > 0) {
-        for (var i = 0; i < repeater.length; i++) {
-            (function (i) { new Repeater(repeater[i]); })(i);
-        }
-    };
+  //initialize the Repeater objects
+	var repeater = document.getElementsByClassName('js-repeater');
+	if( repeater.length > 0 ) {
+		for( var i = 0; i < repeater.length; i++) {
+			(function(i){new Repeater(repeater[i]);})(i);
+		}
+	};
 }());
 // File#: _1_responsive-sidebar
 // Usage: codyhouse.co/license
 (function() {
-    var Sidebar = function(element) {
-      this.element = element;
-      this.triggers = document.querySelectorAll('[aria-controls="'+this.element.getAttribute('id')+'"]');
-      this.firstFocusable = null;
-      this.lastFocusable = null;
-      this.selectedTrigger = null;
-      this.showClass = "sidebar--is-visible";
-      this.staticClass = "sidebar--static";
-      this.customStaticClass = "";
-      this.readyClass = "sidebar--loaded";
-      this.layout = false; // this will be static or mobile
-      getCustomStaticClass(this); // custom classes for static version
-      initSidebar(this);
-    };
-  
-    function getCustomStaticClass(element) {
-      var customClasses = element.element.getAttribute('data-static-class');
-      if(customClasses) element.customStaticClass = ' '+customClasses;
-    };
-    
-    function initSidebar(sidebar) {
-      initSidebarResize(sidebar); // handle changes in layout -> mobile to static and viceversa
-      
-      if ( sidebar.triggers ) { // open sidebar when clicking on trigger buttons - mobile layout only
-        for(var i = 0; i < sidebar.triggers.length; i++) {
-          sidebar.triggers[i].addEventListener('click', function(event) {
-            event.preventDefault();
-            if(Util.hasClass(sidebar.element, sidebar.showClass)) {
-              sidebar.selectedTrigger = event.target;
-              closeSidebar(sidebar);
-              return;
-            }
-            sidebar.selectedTrigger = event.target;
-            showSidebar(sidebar);
-            initSidebarEvents(sidebar);
-          });
-        }
-      }
-    };
-  
-    function showSidebar(sidebar) { // mobile layout only
-      Util.addClass(sidebar.element, sidebar.showClass);
-      getFocusableElements(sidebar);
-      Util.moveFocus(sidebar.element);
-    };
-  
-    function closeSidebar(sidebar) { // mobile layout only
-      Util.removeClass(sidebar.element, sidebar.showClass);
-      sidebar.firstFocusable = null;
-      sidebar.lastFocusable = null;
-      if(sidebar.selectedTrigger) sidebar.selectedTrigger.focus();
-      sidebar.element.removeAttribute('tabindex');
-      //remove listeners
-      cancelSidebarEvents(sidebar);
-    };
-  
-    function initSidebarEvents(sidebar) { // mobile layout only
-      //add event listeners
-      sidebar.element.addEventListener('keydown', handleEvent.bind(sidebar));
-      sidebar.element.addEventListener('click', handleEvent.bind(sidebar));
-    };
-  
-    function cancelSidebarEvents(sidebar) { // mobile layout only
-      //remove event listeners
-      sidebar.element.removeEventListener('keydown', handleEvent.bind(sidebar));
-      sidebar.element.removeEventListener('click', handleEvent.bind(sidebar));
-    };
-  
-    function handleEvent(event) { // mobile layout only
-      switch(event.type) {
-        case 'click': {
-          initClick(this, event);
-        }
-        case 'keydown': {
-          initKeyDown(this, event);
-        }
-      }
-    };
-  
-    function initKeyDown(sidebar, event) { // mobile layout only
-      if( event.keyCode && event.keyCode == 27 || event.key && event.key == 'Escape' ) {
-        //close sidebar window on esc
-        closeSidebar(sidebar);
-      } else if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
-        //trap focus inside sidebar
-        trapFocus(sidebar, event);
-      }
-    };
-  
-    function initClick(sidebar, event) { // mobile layout only
-      //close sidebar when clicking on close button or sidebar bg layer 
-      if( !event.target.closest('.js-sidebar__close-btn') && !Util.hasClass(event.target, 'js-sidebar') ) return;
-      event.preventDefault();
-      closeSidebar(sidebar);
-    };
-  
-    function trapFocus(sidebar, event) { // mobile layout only
-      if( sidebar.firstFocusable == document.activeElement && event.shiftKey) {
-        //on Shift+Tab -> focus last focusable element when focus moves out of sidebar
-        event.preventDefault();
-        sidebar.lastFocusable.focus();
-      }
-      if( sidebar.lastFocusable == document.activeElement && !event.shiftKey) {
-        //on Tab -> focus first focusable element when focus moves out of sidebar
-        event.preventDefault();
-        sidebar.firstFocusable.focus();
-      }
-    };
-  
-    function initSidebarResize(sidebar) {
-      // custom event emitted when window is resized - detect only if the sidebar--static@{breakpoint} class was added
-      var beforeContent = getComputedStyle(sidebar.element, ':before').getPropertyValue('content');
-      if(beforeContent && beforeContent !='' && beforeContent !='none') {
-        checkSidebarLayout(sidebar);
-  
-        sidebar.element.addEventListener('update-sidebar', function(event){
-          checkSidebarLayout(sidebar);
-        });
-      } 
-      Util.addClass(sidebar.element, sidebar.readyClass);
-    };
-  
-    function checkSidebarLayout(sidebar) {
-      var layout = getComputedStyle(sidebar.element, ':before').getPropertyValue('content').replace(/\'|"/g, '');
-      if(layout == sidebar.layout) return;
-      sidebar.layout = layout;
-      if(layout != 'static') Util.addClass(sidebar.element, 'is-hidden');
-      Util.toggleClass(sidebar.element, sidebar.staticClass + sidebar.customStaticClass, layout == 'static');
-      if(layout != 'static') setTimeout(function(){Util.removeClass(sidebar.element, 'is-hidden')});
-      // reset element role 
-      (layout == 'static') ? sidebar.element.removeAttribute('role', 'alertdialog') :  sidebar.element.setAttribute('role', 'alertdialog');
-      // reset mobile behaviour
-      if(layout == 'static' && Util.hasClass(sidebar.element, sidebar.showClass)) closeSidebar(sidebar);
-    };
-  
-    function getFocusableElements(sidebar) {
-      //get all focusable elements inside the drawer
-      var allFocusable = sidebar.element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary');
-      getFirstVisible(sidebar, allFocusable);
-      getLastVisible(sidebar, allFocusable);
-    };
-  
-    function getFirstVisible(sidebar, elements) {
-      //get first visible focusable element inside the sidebar
-      for(var i = 0; i < elements.length; i++) {
-        if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
-          sidebar.firstFocusable = elements[i];
-          return true;
-        }
-      }
-    };
-  
-    function getLastVisible(sidebar, elements) {
-      //get last visible focusable element inside the sidebar
-      for(var i = elements.length - 1; i >= 0; i--) {
-        if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
-          sidebar.lastFocusable = elements[i];
-          return true;
-        }
-      }
-    };
-  
-    //initialize the Sidebar objects
-    var sidebar = document.getElementsByClassName('js-sidebar');
-    if( sidebar.length > 0 ) {
-      for( var i = 0; i < sidebar.length; i++) {
-        (function(i){new Sidebar(sidebar[i]);})(i);
-      }
-      // switch from mobile to static layout
-      var customEvent = new CustomEvent('update-sidebar');
-      window.addEventListener('resize', function(event){
-        (!window.requestAnimationFrame) ? setTimeout(function(){resetLayout();}, 250) : window.requestAnimationFrame(resetLayout);
-      });
-  
-      (window.requestAnimationFrame) // init sidebar layout
-        ? window.requestAnimationFrame(resetLayout)
-        : resetLayout();
-  
-      function resetLayout() {
-        for( var i = 0; i < sidebar.length; i++) {
-          (function(i){sidebar[i].dispatchEvent(customEvent)})(i);
-        };
-      };
-    }
-  }());
-// File#: _1_side-navigation
-// Usage: codyhouse.co/license
-(function() {
-  function initSideNav(nav) {
-    nav.addEventListener('click', function(event){
-      var btn = event.target.closest('.js-sidenav__sublist-control');
-      if(!btn) return;
-      var listItem = btn.parentElement,
-        bool = Util.hasClass(listItem, 'sidenav__item--expanded');
-      btn.setAttribute('aria-expanded', !bool);
-      Util.toggleClass(listItem, 'sidenav__item--expanded', !bool);
-    });
+  var Sidebar = function(element) {
+		this.element = element;
+		this.triggers = document.querySelectorAll('[aria-controls="'+this.element.getAttribute('id')+'"]');
+		this.firstFocusable = null;
+		this.lastFocusable = null;
+		this.selectedTrigger = null;
+    this.showClass = "sidebar--is-visible";
+    this.staticClass = "sidebar--static";
+    this.customStaticClass = "";
+    this.readyClass = "sidebar--loaded";
+    this.layout = false; // this will be static or mobile
+    getCustomStaticClass(this); // custom classes for static version
+    initSidebar(this);
   };
 
-	var sideNavs = document.getElementsByClassName('js-sidenav');
-	if( sideNavs.length > 0 ) {
-		for( var i = 0; i < sideNavs.length; i++) {
-      (function(i){initSideNav(sideNavs[i]);})(i);
-		}
-	}
-}());
-// File#: _1_slider
-// Usage: codyhouse.co/license
-(function() {
-	var Slider = function(element) {
-		this.element = element;
-		this.rangeWrapper = this.element.getElementsByClassName('slider__range');
-		this.rangeInput = this.element.getElementsByClassName('slider__input');
-		this.value = this.element.getElementsByClassName('js-slider__value'); 
-		this.floatingValue = this.element.getElementsByClassName('js-slider__value--floating'); 
-		this.rangeMin = this.rangeInput[0].getAttribute('min');
-		this.rangeMax = this.rangeInput[0].getAttribute('max');
-		this.sliderWidth = window.getComputedStyle(this.element.getElementsByClassName('slider__range')[0]).getPropertyValue('width');
-		this.thumbWidth = getComputedStyle(this.element).getPropertyValue('--slide-thumb-size');
-		this.isInputVar = (this.value[0].tagName.toLowerCase() == 'input');
-		this.isFloatingVar = this.floatingValue.length > 0;
-		if(this.isFloatingVar) {
-			this.floatingValueLeft = window.getComputedStyle(this.floatingValue[0]).getPropertyValue('left');
-		}
-		initSlider(this);
-	};
-
-	function initSlider(slider) {
-		updateLabelValues(slider);// update label/input value so that it is the same as the input range
-		updateLabelPosition(slider, false); // update label position if floating variation
-		updateRangeColor(slider, false); // update range bg color
-		checkRangeSupported(slider); // hide label/input value if input range is not supported
-		
-		// listen to change in the input range
-		for(var i = 0; i < slider.rangeInput.length; i++) {
-			(function(i){
-				slider.rangeInput[i].addEventListener('input', function(event){
-					updateSlider(slider, i);
+  function getCustomStaticClass(element) {
+    var customClasses = element.element.getAttribute('data-static-class');
+    if(customClasses) element.customStaticClass = ' '+customClasses;
+  };
+  
+  function initSidebar(sidebar) {
+    initSidebarResize(sidebar); // handle changes in layout -> mobile to static and viceversa
+    
+		if ( sidebar.triggers ) { // open sidebar when clicking on trigger buttons - mobile layout only
+			for(var i = 0; i < sidebar.triggers.length; i++) {
+				sidebar.triggers[i].addEventListener('click', function(event) {
+					event.preventDefault();
+					if(Util.hasClass(sidebar.element, sidebar.showClass)) {
+            sidebar.selectedTrigger = event.target;
+            closeSidebar(sidebar);
+            return;
+          }
+					sidebar.selectedTrigger = event.target;
+					showSidebar(sidebar);
+					initSidebarEvents(sidebar);
 				});
-				slider.rangeInput[i].addEventListener('change', function(event){ // fix issue on IE where input event is not emitted
-					updateSlider(slider, i);
-				});
-			})(i);
-		}
-
-		// if there's an input text, listen for changes in value, validate it and then update slider
-		if(slider.isInputVar) {
-			for(var i = 0; i < slider.value.length; i++) {
-				(function(i){
-					slider.value[i].addEventListener('change', function(event){
-						updateRange(slider, i);
-					});
-				})(i);
 			}
 		}
+  };
 
-		// native <input> element has been updated (e.g., form reset) -> update custom appearance
-		slider.element.addEventListener('slider-updated', function(event){
-			for(var i = 0; i < slider.value.length; i++) {updateSlider(slider, i);}
-		});
+  function showSidebar(sidebar) { // mobile layout only
+		Util.addClass(sidebar.element, sidebar.showClass);
+		getFocusableElements(sidebar);
+		Util.moveFocus(sidebar.element);
+  };
 
-		// custom events - emitted if slider has allows for multi-values
-		slider.element.addEventListener('inputRangeLimit', function(event){
-			updateLabelValues(slider);
-			updateLabelPosition(slider, event.detail);
-		});
+  function closeSidebar(sidebar) { // mobile layout only
+		Util.removeClass(sidebar.element, sidebar.showClass);
+		sidebar.firstFocusable = null;
+		sidebar.lastFocusable = null;
+    if(sidebar.selectedTrigger) sidebar.selectedTrigger.focus();
+    sidebar.element.removeAttribute('tabindex');
+		//remove listeners
+		cancelSidebarEvents(sidebar);
 	};
 
-	function updateSlider(slider, index) {
-		updateLabelValues(slider);
-		updateLabelPosition(slider, index);
-		updateRangeColor(slider, index);
-	};
+  function initSidebarEvents(sidebar) { // mobile layout only
+    //add event listeners
+		sidebar.element.addEventListener('keydown', handleEvent.bind(sidebar));
+		sidebar.element.addEventListener('click', handleEvent.bind(sidebar));
+  };
 
-	function updateLabelValues(slider) {
-		for(var i = 0; i < slider.rangeInput.length; i++) {
-			slider.isInputVar ? slider.value[i].value = slider.rangeInput[i].value : slider.value[i].textContent = slider.rangeInput[i].value;
-		}
-	};
+  function cancelSidebarEvents(sidebar) { // mobile layout only
+    //remove event listeners
+		sidebar.element.removeEventListener('keydown', handleEvent.bind(sidebar));
+		sidebar.element.removeEventListener('click', handleEvent.bind(sidebar));
+  };
 
-	function updateLabelPosition(slider, index) {
-		if(!slider.isFloatingVar) return;
-		var i = index ? index : 0,
-			j = index ? index + 1: slider.rangeInput.length;
-		for(var k = i; k < j; k++) {
-			var percentage = (slider.rangeInput[k].value - slider.rangeMin)/(slider.rangeMax - slider.rangeMin);
-			slider.floatingValue[k].style.left = 'calc(0.5 * '+slider.floatingValueLeft+' + '+percentage+' * ( '+slider.sliderWidth+' - '+slider.floatingValueLeft+' ))';
-		}
-	};
-
-	function updateRangeColor(slider, index) {
-		if(slider.rangeInput.length > 1) {slider.element.dispatchEvent(new CustomEvent('updateRange', {detail: index}));return;}
-		var percentage = parseInt((slider.rangeInput[0].value - slider.rangeMin)/(slider.rangeMax - slider.rangeMin)*100),
-			fill = 'calc('+percentage+'*('+slider.sliderWidth+' - 0.5*'+slider.thumbWidth+')/100)',
-			empty = 'calc('+slider.sliderWidth+' - '+percentage+'*('+slider.sliderWidth+' - 0.5*'+slider.thumbWidth+')/100)';
-
-		slider.rangeWrapper[0].style.setProperty('--slider-fill-value', fill);
-		slider.rangeWrapper[0].style.setProperty('--slider-empty-value', empty);
-	};
-
-	function updateRange(slider, index) {
-		var newValue = parseFloat(slider.value[index].value);
-		if(isNaN(newValue)) {
-			slider.value[index].value = slider.rangeInput[index].value;
-			return;
-		} else {
-			if(newValue < slider.rangeMin) newValue = slider.rangeMin;
-			if(newValue > slider.rangeMax) newValue = slider.rangeMax;
-			slider.rangeInput[index].value = newValue;
-			var inputEvent = new Event('change');
-			slider.rangeInput[index].dispatchEvent(inputEvent);
-		}
-	};
-
-	function checkRangeSupported(slider) {
-		var input = document.createElement("input");
-		input.setAttribute("type", "range");
-		Util.toggleClass(slider.element, 'slider--range-not-supported', input.type !== "range");
-	};
-
-	//initialize the Slider objects
-	var sliders = document.getElementsByClassName('js-slider');
-	if( sliders.length > 0 ) {
-		for( var i = 0; i < sliders.length; i++) {
-			(function(i){new Slider(sliders[i]);})(i);
-		}
-	}
-}());
-// File#: _1_swipe-content
-(function() {
-	var SwipeContent = function(element) {
-		this.element = element;
-		this.delta = [false, false];
-		this.dragging = false;
-		this.intervalId = false;
-		initSwipeContent(this);
-	};
-
-	function initSwipeContent(content) {
-		content.element.addEventListener('mousedown', handleEvent.bind(content));
-		content.element.addEventListener('touchstart', handleEvent.bind(content));
-	};
-
-	function initDragging(content) {
-		//add event listeners
-		content.element.addEventListener('mousemove', handleEvent.bind(content));
-		content.element.addEventListener('touchmove', handleEvent.bind(content));
-		content.element.addEventListener('mouseup', handleEvent.bind(content));
-		content.element.addEventListener('mouseleave', handleEvent.bind(content));
-		content.element.addEventListener('touchend', handleEvent.bind(content));
-	};
-
-	function cancelDragging(content) {
-		//remove event listeners
-		if(content.intervalId) {
-			(!window.requestAnimationFrame) ? clearInterval(content.intervalId) : window.cancelAnimationFrame(content.intervalId);
-			content.intervalId = false;
-		}
-		content.element.removeEventListener('mousemove', handleEvent.bind(content));
-		content.element.removeEventListener('touchmove', handleEvent.bind(content));
-		content.element.removeEventListener('mouseup', handleEvent.bind(content));
-		content.element.removeEventListener('mouseleave', handleEvent.bind(content));
-		content.element.removeEventListener('touchend', handleEvent.bind(content));
-	};
-
-	function handleEvent(event) {
-		switch(event.type) {
-			case 'mousedown':
-			case 'touchstart':
-				startDrag(this, event);
-				break;
-			case 'mousemove':
-			case 'touchmove':
-				drag(this, event);
-				break;
-			case 'mouseup':
-			case 'mouseleave':
-			case 'touchend':
-				endDrag(this, event);
-				break;
-		}
-	};
-
-	function startDrag(content, event) {
-		content.dragging = true;
-		// listen to drag movements
-		initDragging(content);
-		content.delta = [parseInt(unify(event).clientX), parseInt(unify(event).clientY)];
-		// emit drag start event
-		emitSwipeEvents(content, 'dragStart', content.delta, event.target);
-	};
-
-	function endDrag(content, event) {
-		cancelDragging(content);
-		// credits: https://css-tricks.com/simple-swipe-with-vanilla-javascript/
-		var dx = parseInt(unify(event).clientX), 
-	    dy = parseInt(unify(event).clientY);
-	  
-	  // check if there was a left/right swipe
-		if(content.delta && (content.delta[0] || content.delta[0] === 0)) {
-	    var s = getSign(dx - content.delta[0]);
-			
-			if(Math.abs(dx - content.delta[0]) > 30) {
-				(s < 0) ? emitSwipeEvents(content, 'swipeLeft', [dx, dy]) : emitSwipeEvents(content, 'swipeRight', [dx, dy]);	
-			}
-	    
-	    content.delta[0] = false;
-	  }
-		// check if there was a top/bottom swipe
-	  if(content.delta && (content.delta[1] || content.delta[1] === 0)) {
-	  	var y = getSign(dy - content.delta[1]);
-
-	  	if(Math.abs(dy - content.delta[1]) > 30) {
-	    	(y < 0) ? emitSwipeEvents(content, 'swipeUp', [dx, dy]) : emitSwipeEvents(content, 'swipeDown', [dx, dy]);
-	    }
-
-	    content.delta[1] = false;
-	  }
-		// emit drag end event
-	  emitSwipeEvents(content, 'dragEnd', [dx, dy]);
-	  content.dragging = false;
-	};
-
-	function drag(content, event) {
-		if(!content.dragging) return;
-		// emit dragging event with coordinates
-		(!window.requestAnimationFrame) 
-			? content.intervalId = setTimeout(function(){emitDrag.bind(content, event);}, 250) 
-			: content.intervalId = window.requestAnimationFrame(emitDrag.bind(content, event));
-	};
-
-	function emitDrag(event) {
-		emitSwipeEvents(this, 'dragging', [parseInt(unify(event).clientX), parseInt(unify(event).clientY)]);
-	};
-
-	function unify(event) { 
-		// unify mouse and touch events
-		return event.changedTouches ? event.changedTouches[0] : event; 
-	};
-
-	function emitSwipeEvents(content, eventName, detail, el) {
-		var trigger = false;
-		if(el) trigger = el;
-		// emit event with coordinates
-		var event = new CustomEvent(eventName, {detail: {x: detail[0], y: detail[1], origin: trigger}});
-		content.element.dispatchEvent(event);
-	};
-
-	function getSign(x) {
-		if(!Math.sign) {
-			return ((x > 0) - (x < 0)) || +x;
-		} else {
-			return Math.sign(x);
-		}
-	};
-
-	window.SwipeContent = SwipeContent;
-	
-	//initialize the SwipeContent objects
-	var swipe = document.getElementsByClassName('js-swipe-content');
-	if( swipe.length > 0 ) {
-		for( var i = 0; i < swipe.length; i++) {
-			(function(i){new SwipeContent(swipe[i]);})(i);
-		}
-	}
-}());
-// File#: _1_table
-// Usage: codyhouse.co/license
-(function () {
-    function initTable(table) {
-        checkTableLayour(table); // switch from a collapsed to an expanded layout
-        Util.addClass(table, 'table--loaded'); // show table
-
-        // custom event emitted when window is resized
-        table.addEventListener('update-table', function (event) {
-            checkTableLayour(table);
-        });
-    };
-
-    function checkTableLayour(table) {
-        var layout = getComputedStyle(table, ':before').getPropertyValue('content').replace(/\'|"/g, '');
-        Util.toggleClass(table, tableExpandedLayoutClass, layout != 'collapsed');
-    };
-
-    var tables = document.getElementsByClassName('js-table'),
-        tableExpandedLayoutClass = 'table--expanded';
-    if (tables.length > 0) {
-        var j = 0;
-        for (var i = 0; i < tables.length; i++) {
-            var beforeContent = getComputedStyle(tables[i], ':before').getPropertyValue('content');
-            if (beforeContent && beforeContent != '' && beforeContent != 'none') {
-                (function (i) { initTable(tables[i]); })(i);
-                j = j + 1;
-            } else {
-                Util.addClass(tables[i], 'table--loaded');
-            }
-        }
-
-        if (j > 0) {
-            var resizingId = false,
-                customEvent = new CustomEvent('update-table');
-            window.addEventListener('resize', function (event) {
-                clearTimeout(resizingId);
-                resizingId = setTimeout(doneResizing, 300);
-            });
-
-            function doneResizing() {
-                for (var i = 0; i < tables.length; i++) {
-                    (function (i) { tables[i].dispatchEvent(customEvent) })(i);
-                };
-            };
-
-            (window.requestAnimationFrame) // init table layout
-                ? window.requestAnimationFrame(doneResizing)
-                : doneResizing();
-        }
+  function handleEvent(event) { // mobile layout only
+    switch(event.type) {
+      case 'click': {
+        initClick(this, event);
+      }
+      case 'keydown': {
+        initKeyDown(this, event);
+      }
     }
+  };
+
+  function initKeyDown(sidebar, event) { // mobile layout only
+    if( event.keyCode && event.keyCode == 27 || event.key && event.key == 'Escape' ) {
+      //close sidebar window on esc
+      closeSidebar(sidebar);
+    } else if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+      //trap focus inside sidebar
+      trapFocus(sidebar, event);
+    }
+  };
+
+  function initClick(sidebar, event) { // mobile layout only
+    //close sidebar when clicking on close button or sidebar bg layer 
+		if( !event.target.closest('.js-sidebar__close-btn') && !Util.hasClass(event.target, 'js-sidebar') ) return;
+		event.preventDefault();
+		closeSidebar(sidebar);
+  };
+
+  function trapFocus(sidebar, event) { // mobile layout only
+    if( sidebar.firstFocusable == document.activeElement && event.shiftKey) {
+			//on Shift+Tab -> focus last focusable element when focus moves out of sidebar
+			event.preventDefault();
+			sidebar.lastFocusable.focus();
+		}
+		if( sidebar.lastFocusable == document.activeElement && !event.shiftKey) {
+			//on Tab -> focus first focusable element when focus moves out of sidebar
+			event.preventDefault();
+			sidebar.firstFocusable.focus();
+		}
+  };
+
+  function initSidebarResize(sidebar) {
+    // custom event emitted when window is resized - detect only if the sidebar--static@{breakpoint} class was added
+    var beforeContent = getComputedStyle(sidebar.element, ':before').getPropertyValue('content');
+    if(beforeContent && beforeContent !='' && beforeContent !='none') {
+      checkSidebarLayout(sidebar);
+
+      sidebar.element.addEventListener('update-sidebar', function(event){
+        checkSidebarLayout(sidebar);
+      });
+    } 
+    Util.addClass(sidebar.element, sidebar.readyClass);
+  };
+
+  function checkSidebarLayout(sidebar) {
+    var layout = getComputedStyle(sidebar.element, ':before').getPropertyValue('content').replace(/\'|"/g, '');
+    if(layout == sidebar.layout) return;
+    sidebar.layout = layout;
+    if(layout != 'static') Util.addClass(sidebar.element, 'is-hidden');
+    Util.toggleClass(sidebar.element, sidebar.staticClass + sidebar.customStaticClass, layout == 'static');
+    if(layout != 'static') setTimeout(function(){Util.removeClass(sidebar.element, 'is-hidden')});
+    // reset element role 
+    (layout == 'static') ? sidebar.element.removeAttribute('role', 'alertdialog') :  sidebar.element.setAttribute('role', 'alertdialog');
+    // reset mobile behaviour
+    if(layout == 'static' && Util.hasClass(sidebar.element, sidebar.showClass)) closeSidebar(sidebar);
+  };
+
+  function getFocusableElements(sidebar) {
+    //get all focusable elements inside the drawer
+		var allFocusable = sidebar.element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary');
+		getFirstVisible(sidebar, allFocusable);
+		getLastVisible(sidebar, allFocusable);
+  };
+
+  function getFirstVisible(sidebar, elements) {
+		//get first visible focusable element inside the sidebar
+		for(var i = 0; i < elements.length; i++) {
+			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
+				sidebar.firstFocusable = elements[i];
+				return true;
+			}
+		}
+	};
+
+	function getLastVisible(sidebar, elements) {
+		//get last visible focusable element inside the sidebar
+		for(var i = elements.length - 1; i >= 0; i--) {
+			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
+				sidebar.lastFocusable = elements[i];
+				return true;
+			}
+		}
+  };
+
+  //initialize the Sidebar objects
+	var sidebar = document.getElementsByClassName('js-sidebar');
+	if( sidebar.length > 0 ) {
+		for( var i = 0; i < sidebar.length; i++) {
+			(function(i){new Sidebar(sidebar[i]);})(i);
+    }
+    // switch from mobile to static layout
+    var customEvent = new CustomEvent('update-sidebar');
+    window.addEventListener('resize', function(event){
+      (!window.requestAnimationFrame) ? setTimeout(function(){resetLayout();}, 250) : window.requestAnimationFrame(resetLayout);
+    });
+
+    (window.requestAnimationFrame) // init sidebar layout
+      ? window.requestAnimationFrame(resetLayout)
+      : resetLayout();
+
+    function resetLayout() {
+      for( var i = 0; i < sidebar.length; i++) {
+        (function(i){sidebar[i].dispatchEvent(customEvent)})(i);
+      };
+    };
+	}
 }());
 // File#: _1_tabs
 // Usage: codyhouse.co/license
 (function() {
-    var Tab = function(element) {
-      this.element = element;
-      this.tabList = this.element.getElementsByClassName('js-tabs__controls')[0];
-      this.listItems = this.tabList.getElementsByTagName('li');
-      this.triggers = this.tabList.getElementsByTagName('a');
-      this.panelsList = this.element.getElementsByClassName('js-tabs__panels')[0];
-      this.panels = Util.getChildrenByClassName(this.panelsList, 'js-tabs__panel');
-      this.hideClass = 'is-hidden';
-      this.customShowClass = this.element.getAttribute('data-show-panel-class') ? this.element.getAttribute('data-show-panel-class') : false;
-      this.layout = this.element.getAttribute('data-tabs-layout') ? this.element.getAttribute('data-tabs-layout') : 'horizontal';
-      // deep linking options
-      this.deepLinkOn = this.element.getAttribute('data-deep-link') == 'on';
-      // init tabs
-      this.initTab();
-    };
-  
-    Tab.prototype.initTab = function() {
-      //set initial aria attributes
-      this.tabList.setAttribute('role', 'tablist');
-      for( var i = 0; i < this.triggers.length; i++) {
-        var bool = (i == 0),
-          panelId = this.panels[i].getAttribute('id');
-        this.listItems[i].setAttribute('role', 'presentation');
-        Util.setAttributes(this.triggers[i], {'role': 'tab', 'aria-selected': bool, 'aria-controls': panelId, 'id': 'tab-'+panelId});
-        Util.addClass(this.triggers[i], 'js-tabs__trigger'); 
-        Util.setAttributes(this.panels[i], {'role': 'tabpanel', 'aria-labelledby': 'tab-'+panelId});
-        Util.toggleClass(this.panels[i], this.hideClass, !bool);
-  
-        if(!bool) this.triggers[i].setAttribute('tabindex', '-1'); 
-      }
-  
-      //listen for Tab events
-      this.initTabEvents();
-  
-      // check deep linking option
-      this.initDeepLink();
-    };
-  
-    Tab.prototype.initTabEvents = function() {
-      var self = this;
-      //click on a new tab -> select content
-      this.tabList.addEventListener('click', function(event) {
-        if( event.target.closest('.js-tabs__trigger') ) self.triggerTab(event.target.closest('.js-tabs__trigger'), event);
-      });
-      //arrow keys to navigate through tabs 
-      this.tabList.addEventListener('keydown', function(event) {
-        ;
-        if( !event.target.closest('.js-tabs__trigger') ) return;
-        if( tabNavigateNext(event, self.layout) ) {
-          event.preventDefault();
-          self.selectNewTab('next');
-        } else if( tabNavigatePrev(event, self.layout) ) {
-          event.preventDefault();
-          self.selectNewTab('prev');
-        }
-      });
-    };
-  
-    Tab.prototype.selectNewTab = function(direction) {
-      var selectedTab = this.tabList.querySelector('[aria-selected="true"]'),
-        index = Util.getIndexInArray(this.triggers, selectedTab);
-      index = (direction == 'next') ? index + 1 : index - 1;
-      //make sure index is in the correct interval 
-      //-> from last element go to first using the right arrow, from first element go to last using the left arrow
-      if(index < 0) index = this.listItems.length - 1;
-      if(index >= this.listItems.length) index = 0;	
-      this.triggerTab(this.triggers[index]);
-      this.triggers[index].focus();
-    };
-  
-    Tab.prototype.triggerTab = function(tabTrigger, event) {
-      var self = this;
-      event && event.preventDefault();	
-      var index = Util.getIndexInArray(this.triggers, tabTrigger);
-      //no need to do anything if tab was already selected
-      if(this.triggers[index].getAttribute('aria-selected') == 'true') return;
-      
-      for( var i = 0; i < this.triggers.length; i++) {
-        var bool = (i == index);
-        Util.toggleClass(this.panels[i], this.hideClass, !bool);
-        if(this.customShowClass) Util.toggleClass(this.panels[i], this.customShowClass, bool);
-        this.triggers[i].setAttribute('aria-selected', bool);
-        bool ? this.triggers[i].setAttribute('tabindex', '0') : this.triggers[i].setAttribute('tabindex', '-1');
-      }
-  
-      // update url if deepLink is on
-      if(this.deepLinkOn) {
-        history.replaceState(null, '', '#'+tabTrigger.getAttribute('aria-controls'));
-      }
-    };
-  
-    Tab.prototype.initDeepLink = function() {
-      if(!this.deepLinkOn) return;
-      var hash = window.location.hash.substr(1);
-      var self = this;
-      if(!hash || hash == '') return;
-      for(var i = 0; i < this.panels.length; i++) {
-        if(this.panels[i].getAttribute('id') == hash) {
-          this.triggerTab(this.triggers[i], false);
-          setTimeout(function(){self.panels[i].scrollIntoView(true);});
-          break;
-        }
-      };
-    };
-  
-    function tabNavigateNext(event, layout) {
-      if(layout == 'horizontal' && (event.keyCode && event.keyCode == 39 || event.key && event.key == 'ArrowRight')) {return true;}
-      else if(layout == 'vertical' && (event.keyCode && event.keyCode == 40 || event.key && event.key == 'ArrowDown')) {return true;}
-      else {return false;}
-    };
-  
-    function tabNavigatePrev(event, layout) {
-      if(layout == 'horizontal' && (event.keyCode && event.keyCode == 37 || event.key && event.key == 'ArrowLeft')) {return true;}
-      else if(layout == 'vertical' && (event.keyCode && event.keyCode == 38 || event.key && event.key == 'ArrowUp')) {return true;}
-      else {return false;}
-    };
-    
-    //initialize the Tab objects
-    var tabs = document.getElementsByClassName('js-tabs');
-    if( tabs.length > 0 ) {
-      for( var i = 0; i < tabs.length; i++) {
-        (function(i){new Tab(tabs[i]);})(i);
-      }
-    }
-  }());
-// File#: _2_autocomplete
-// Usage: codyhouse.co/license
-(function() {
-    var Autocomplete = function(opts) {
-      if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) return;
-      this.options = Util.extend(Autocomplete.defaults, opts);
-      this.element = this.options.element;
-      this.input = this.element.getElementsByClassName('js-autocomplete__input')[0];
-      this.results = this.element.getElementsByClassName('js-autocomplete__results')[0];
-      this.resultsList = this.results.getElementsByClassName('js-autocomplete__list')[0];
-      this.ariaResult = this.element.getElementsByClassName('js-autocomplete__aria-results');
-      this.resultClassName = this.element.getElementsByClassName('js-autocomplete__item').length > 0 ? 'js-autocomplete__item' : 'js-autocomplete__result';
-      // store search info
-      this.inputVal = '';
-      this.typeId = false;
-      this.searching = false;
-      this.searchingClass = this.element.getAttribute('data-autocomplete-searching-class') || 'autocomplete--searching';
-      // dropdown reveal class
-      this.dropdownActiveClass =  this.element.getAttribute('data-autocomplete-dropdown-visible-class') || this.element.getAttribute('data-dropdown-active-class');
-      // truncate dropdown
-      this.truncateDropdown = this.element.getAttribute('data-autocomplete-dropdown-truncate') && this.element.getAttribute('data-autocomplete-dropdown-truncate') == 'on' ? true : false;
-      initAutocomplete(this);
-      this.autocompleteClosed = false; // fix issue when selecting an option from the list
-    };
-  
-    function initAutocomplete(element) {
-      initAutocompleteAria(element); // set aria attributes for SR and keyboard users
-      initAutocompleteTemplates(element);
-      initAutocompleteEvents(element);
-    };
-  
-    function initAutocompleteAria(element) {
-      // set aria attributes for input element
-      Util.setAttributes(element.input, {'role': 'combobox', 'aria-autocomplete': 'list'});
-      var listId = element.resultsList.getAttribute('id');
-      if(listId) element.input.setAttribute('aria-owns', listId);
-      // set aria attributes for autocomplete list
-      element.resultsList.setAttribute('role', 'list');
-    };
-  
-    function initAutocompleteTemplates(element) {
-      element.templateItems = element.resultsList.querySelectorAll('.'+element.resultClassName+'[data-autocomplete-template]');
-      if(element.templateItems.length < 1) element.templateItems = element.resultsList.querySelectorAll('.'+element.resultClassName);
-      element.templates = [];
-      for(var i = 0; i < element.templateItems.length; i++) {
-        element.templates[i] = element.templateItems[i].getAttribute('data-autocomplete-template');
-      }
-    };
-  
-    function initAutocompleteEvents(element) {
-      // input - keyboard navigation 
-      element.input.addEventListener('keyup', function(event){
-        handleInputTyped(element, event);
-      });
-  
-      // if input type="search" -> detect when clicking on 'x' to clear input
-      element.input.addEventListener('search', function(event){
-        updateSearch(element);
-      });
-  
-      // make sure dropdown is open on click
-      element.input.addEventListener('click', function(event){
-        updateSearch(element, true);
-      });
-  
-      element.input.addEventListener('focus', function(event){
-        if(element.autocompleteClosed) {
-          element.autocompleteClosed = false;
-          return;
-        }
-        updateSearch(element, true);
-      });
-  
-      // input loses focus -> close menu
-      element.input.addEventListener('blur', function(event){
-        checkFocusLost(element, event);
-      });
-  
-      // results list - keyboard navigation 
-      element.resultsList.addEventListener('keydown', function(event){
-        navigateList(element, event);
-      });
-  
-      // results list loses focus -> close menu
-      element.resultsList.addEventListener('focusout', function(event){
-        checkFocusLost(element, event);
-      });
-  
-      // close on esc
-      window.addEventListener('keyup', function(event){
-        if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
-          toggleOptionsList(element, false);
-        } else if(event.keyCode && event.keyCode == 13 || event.key && event.key.toLowerCase() == 'enter') { // on Enter - select result if focus is within results list
-          selectResult(element, document.activeElement.closest('.'+element.resultClassName), event);
-        }
-      });
-  
-      // select element from list
-      element.resultsList.addEventListener('click', function(event){
-        selectResult(element, event.target.closest('.'+element.resultClassName), event);
-      });
-    };
-  
-    function checkFocusLost(element, event) {
-      if(element.element.contains(event.relatedTarget)) return;
-      toggleOptionsList(element, false);
-    };
-  
-    function handleInputTyped(element, event) {
-      if(event.key.toLowerCase() == 'arrowdown' || event.keyCode == '40') {
-        moveFocusToList(element);
-      } else {
-        updateSearch(element);
-      }
-    };
-  
-    function moveFocusToList(element) {
-      if(!Util.hasClass(element.element, element.dropdownActiveClass)) return;
-      resetSearch(element); // clearTimeout
-      // make sure first element is focusable
-      var index = 0;
-      if(!elementListIsFocusable(element.resultsItems[index])) {
-        index = getElementFocusbleIndex(element, index, true);
-      }
-      getListFocusableEl(element.resultsItems[index]).focus();
-    };
-  
-    function updateSearch(element, bool) {
-      var inputValue = element.input.value;
-      if(inputValue == element.inputVal && !bool) return; // input value did not change
-      element.inputVal = inputValue;
-      if(element.typeId) clearInterval(element.typeId); // clearTimeout
-      if(element.inputVal.length < element.options.characters) { // not enough characters to start searching
-        toggleOptionsList(element, false);
-        return;
-      }
-      if(bool) { // on focus -> update result list without waiting for the debounce
-        updateResultsList(element, 'focus');
-        return;
-      }
-      element.typeId = setTimeout(function(){
-        updateResultsList(element, 'type');
-      }, element.options.debounce);
-    };
-  
-    function toggleOptionsList(element, bool) {
-      // toggle visibility of options list
-      if(bool) {
-        if(Util.hasClass(element.element, element.dropdownActiveClass)) return;
-        Util.addClass(element.element, element.dropdownActiveClass);
-        element.input.setAttribute('aria-expanded', true);
-        truncateAutocompleteList(element);
-      } else {
-        if(!Util.hasClass(element.element, element.dropdownActiveClass)) return;
-        if(element.resultsList.contains(document.activeElement)) {
-          element.autocompleteClosed = true;
-          element.input.focus();
-        }
-        Util.removeClass(element.element, element.dropdownActiveClass);
-        element.input.removeAttribute('aria-expanded');
-        resetSearch(element); // clearTimeout
-      }
-    };
-  
-    function truncateAutocompleteList(element) {
-      if(!element.truncateDropdown) return;
-      // reset max height
-      element.resultsList.style.maxHeight = '';
-      // check available space 
-      var spaceBelow = (window.innerHeight - element.input.getBoundingClientRect().bottom - 10),
-        maxHeight = parseInt(getComputedStyle(element.resultsList).maxHeight);
-  
-      (maxHeight > spaceBelow) 
-        ? element.resultsList.style.maxHeight = spaceBelow+'px' 
-        : element.resultsList.style.maxHeight = '';
-    };
-  
-    function updateResultsList(element, eventType) {
-      if(element.searching) return;
-      element.searching = true;
-      Util.addClass(element.element, element.searchingClass); // show loader
-      element.options.searchData(element.inputVal, function(data){
-        // data = custom results
-        populateResults(element, data);
-        Util.removeClass(element.element, element.searchingClass);
-        toggleOptionsList(element, true);
-        updateAriaRegion(element);
-        element.searching = false;
-      }, eventType);
-    };
-  
-    function updateAriaRegion(element) {
-      element.resultsItems = element.resultsList.querySelectorAll('.'+element.resultClassName+'[tabindex="-1"]');
-      if(element.ariaResult.length == 0) return;
-      element.ariaResult[0].textContent = element.resultsItems.length;
-    };
-  
-    function resetSearch(element) {
-      if(element.typeId) clearInterval(element.typeId);
-      element.typeId = false;
-    };
-  
-    function navigateList(element, event) {
-      var downArrow = (event.key.toLowerCase() == 'arrowdown' || event.keyCode == '40'),
-        upArrow = (event.key.toLowerCase() == 'arrowup' || event.keyCode == '38');
-      if(!downArrow && !upArrow) return;
-      event.preventDefault();
-      var selectedElement = document.activeElement.closest('.'+element.resultClassName) || document.activeElement;
-      var index = Util.getIndexInArray(element.resultsItems, selectedElement);
-      var newIndex = getElementFocusbleIndex(element, index, downArrow);
-      getListFocusableEl(element.resultsItems[newIndex]).focus();
-    };
-  
-    function getElementFocusbleIndex(element, index, nextItem) {
-      var newIndex = nextItem ? index + 1 : index - 1;
-      if(newIndex < 0) newIndex = element.resultsItems.length - 1;
-      if(newIndex >= element.resultsItems.length) newIndex = 0;
-      // check if element can be focused
-      if(!elementListIsFocusable(element.resultsItems[newIndex])) {
-        // skip this element
-        return getElementFocusbleIndex(element, newIndex, nextItem);
-      }
-      return newIndex;
-    };
-  
-    function elementListIsFocusable(item) {
-      var role = item.getAttribute('role');
-      if(role && role == 'presentation') {
-        // skip this element
-        return false;
-      }
-      return true;
-    };
-  
-    function getListFocusableEl(item) {
-      var newFocus = item,
-        focusable = newFocus.querySelectorAll('button:not([disabled]), [href]');
-      if(focusable.length > 0 ) newFocus = focusable[0];
-      return newFocus;
-    };
-  
-    function selectResult(element, result, event) {
-      if(!result) return;
-      if(element.options.onClick) {
-        element.options.onClick(result, element, event, function(){
-          toggleOptionsList(element, false);
-        });
-      } else {
-        element.input.value = getResultContent(result);
-        toggleOptionsList(element, false);
-      }
-      element.inputVal = element.input.value;
-    };
-  
-    function getResultContent(result) { // get text content of selected item
-      var labelElement = result.querySelector('[data-autocomplete-label]');
-      return labelElement ? labelElement.textContent : result.textContent;
-    };
-  
-    function populateResults(element, data) {
-      var innerHtml = '';
-  
-      for(var i = 0; i < data.length; i++) {
-        innerHtml = innerHtml + getItemHtml(element, data[i]);
-      }
-      element.resultsList.innerHTML = innerHtml;
-    };
-  
-    function getItemHtml(element, data) {
-      var clone = getClone(element, data);
-      Util.removeClass(clone, 'is-hidden');
-      clone.setAttribute('tabindex', '-1');
-      for(var key in data) {
-        if (data.hasOwnProperty(key)) {
-          if(key == 'label') setLabel(clone, data[key]);
-          else if(key == 'class') setClass(clone, data[key]);
-          else if(key == 'url') setUrl(clone, data[key]);
-          else if(key == 'src') setSrc(clone, data[key]);
-          else setKey(clone, key, data[key]);
-        }
-      }
-      return clone.outerHTML;
-    };
-  
-    function getClone(element, data) {
-      var item = false;
-      if(element.templateItems.length == 1 || !data['template']) item = element.templateItems[0];
-      else {
-        for(var i = 0; i < element.templateItems.length; i++) {
-          if(data['template'] == element.templates[i]) {
-            item = element.templateItems[i];
-          }
-        }
-        if(!item) item = element.templateItems[0];
-      }
-      return item.cloneNode(true);
-    };
-  
-    function setLabel(clone, label) {
-      var labelElement = clone.querySelector('[data-autocomplete-label]');
-      labelElement 
-        ? labelElement.textContent = label
-        : clone.textContent = label;
-    };
-  
-    function setClass(clone, classList) {
-      Util.addClass(clone, classList);
-    };
-  
-    function setUrl(clone, url) {
-      var linkElement = clone.querySelector('[data-autocomplete-url]');
-      if(linkElement) linkElement.setAttribute('href', url);
-    };
-  
-    function setSrc(clone, src) {
-      var imgElement = clone.querySelector('[data-autocomplete-src]');
-      if(imgElement) imgElement.setAttribute('src', src);
-    };
-  
-    function setKey(clone, key, value) {
-      var subElement = clone.querySelector('[data-autocomplete-'+key+']');
-      if(subElement) {
-        if(subElement.hasAttribute('data-autocomplete-html')) subElement.innerHTML = value;
-        else subElement.textContent = value;
-      }
-    };
-  
-    Autocomplete.defaults = {
-      element : '',
-      debounce: 200,
-      characters: 2,
-      searchData: false, // function used to return results
-      onClick: false // function executed when selecting an item in the list; arguments (result, obj) -> selected <li> item + Autocompletr obj reference
-    };
-  
-    window.Autocomplete = Autocomplete;
-  }());
-// File#: _2_comments
-// Usage: codyhouse.co/license
-(function() {
-  function initVote(element) {
-    var voteCounter = element.getElementsByClassName('js-comments__vote-label');
-    element.addEventListener('click', function(){
-      var pressed = element.getAttribute('aria-pressed') == 'true';
-      element.setAttribute('aria-pressed', !pressed);
-      Util.toggleClass(element, 'comments__vote-btn--pressed', !pressed);
-      resetCounter(voteCounter, pressed);
-      emitKeypressEvents(element, voteCounter, pressed);
-    });
-  };
+	var Tab = function(element) {
+		this.element = element;
+		this.tabList = this.element.getElementsByClassName('js-tabs__controls')[0];
+		this.listItems = this.tabList.getElementsByTagName('li');
+		this.triggers = this.tabList.getElementsByTagName('a');
+		this.panelsList = this.element.getElementsByClassName('js-tabs__panels')[0];
+		this.panels = Util.getChildrenByClassName(this.panelsList, 'js-tabs__panel');
+		this.hideClass = 'is-hidden';
+		this.customShowClass = this.element.getAttribute('data-show-panel-class') ? this.element.getAttribute('data-show-panel-class') : false;
+		this.layout = this.element.getAttribute('data-tabs-layout') ? this.element.getAttribute('data-tabs-layout') : 'horizontal';
+		// deep linking options
+		this.deepLinkOn = this.element.getAttribute('data-deep-link') == 'on';
+		// init tabs
+		this.initTab();
+	};
 
-  function resetCounter(voteCounter, pressed) { // update counter value (if present)
-    if(voteCounter.length == 0) return;
-    var count = parseInt(voteCounter[0].textContent);
-    voteCounter[0].textContent = pressed ? count - 1 : count + 1;
-  };
+	Tab.prototype.initTab = function() {
+		//set initial aria attributes
+		this.tabList.setAttribute('role', 'tablist');
+		for( var i = 0; i < this.triggers.length; i++) {
+			var bool = (i == 0),
+				panelId = this.panels[i].getAttribute('id');
+			this.listItems[i].setAttribute('role', 'presentation');
+			Util.setAttributes(this.triggers[i], {'role': 'tab', 'aria-selected': bool, 'aria-controls': panelId, 'id': 'tab-'+panelId});
+			Util.addClass(this.triggers[i], 'js-tabs__trigger'); 
+			Util.setAttributes(this.panels[i], {'role': 'tabpanel', 'aria-labelledby': 'tab-'+panelId});
+			Util.toggleClass(this.panels[i], this.hideClass, !bool);
 
-  function emitKeypressEvents(element, label, pressed) { // emit custom event when vote is updated
-    var count = (label.length == 0) ? false : parseInt(label[0].textContent);
-    var event = new CustomEvent('newVote', {detail: {count: count, upVote: !pressed}});
-		element.dispatchEvent(event);
-  };
+			if(!bool) this.triggers[i].setAttribute('tabindex', '-1'); 
+		}
 
-  var voteCounting = document.getElementsByClassName('js-comments__vote-btn');
-  if( voteCounting.length > 0 ) {
-		for( var i = 0; i < voteCounting.length; i++) {
-			(function(i){initVote(voteCounting[i]);})(i);
+		//listen for Tab events
+		this.initTabEvents();
+
+		// check deep linking option
+		this.initDeepLink();
+	};
+
+	Tab.prototype.initTabEvents = function() {
+		var self = this;
+		//click on a new tab -> select content
+		this.tabList.addEventListener('click', function(event) {
+			if( event.target.closest('.js-tabs__trigger') ) self.triggerTab(event.target.closest('.js-tabs__trigger'), event);
+		});
+		//arrow keys to navigate through tabs 
+		this.tabList.addEventListener('keydown', function(event) {
+			;
+			if( !event.target.closest('.js-tabs__trigger') ) return;
+			if( tabNavigateNext(event, self.layout) ) {
+				event.preventDefault();
+				self.selectNewTab('next');
+			} else if( tabNavigatePrev(event, self.layout) ) {
+				event.preventDefault();
+				self.selectNewTab('prev');
+			}
+		});
+	};
+
+	Tab.prototype.selectNewTab = function(direction) {
+		var selectedTab = this.tabList.querySelector('[aria-selected="true"]'),
+			index = Util.getIndexInArray(this.triggers, selectedTab);
+		index = (direction == 'next') ? index + 1 : index - 1;
+		//make sure index is in the correct interval 
+		//-> from last element go to first using the right arrow, from first element go to last using the left arrow
+		if(index < 0) index = this.listItems.length - 1;
+		if(index >= this.listItems.length) index = 0;	
+		this.triggerTab(this.triggers[index]);
+		this.triggers[index].focus();
+	};
+
+	Tab.prototype.triggerTab = function(tabTrigger, event) {
+		var self = this;
+		event && event.preventDefault();	
+		var index = Util.getIndexInArray(this.triggers, tabTrigger);
+		//no need to do anything if tab was already selected
+		if(this.triggers[index].getAttribute('aria-selected') == 'true') return;
+		
+		for( var i = 0; i < this.triggers.length; i++) {
+			var bool = (i == index);
+			Util.toggleClass(this.panels[i], this.hideClass, !bool);
+			if(this.customShowClass) Util.toggleClass(this.panels[i], this.customShowClass, bool);
+			this.triggers[i].setAttribute('aria-selected', bool);
+			bool ? this.triggers[i].setAttribute('tabindex', '0') : this.triggers[i].setAttribute('tabindex', '-1');
+		}
+
+		// update url if deepLink is on
+		if(this.deepLinkOn) {
+			history.replaceState(null, '', '#'+tabTrigger.getAttribute('aria-controls'));
+		}
+	};
+
+	Tab.prototype.initDeepLink = function() {
+		if(!this.deepLinkOn) return;
+		var hash = window.location.hash.substr(1);
+		var self = this;
+		if(!hash || hash == '') return;
+		for(var i = 0; i < this.panels.length; i++) {
+			if(this.panels[i].getAttribute('id') == hash) {
+				this.triggerTab(this.triggers[i], false);
+				setTimeout(function(){self.panels[i].scrollIntoView(true);});
+				break;
+			}
+		};
+	};
+
+	function tabNavigateNext(event, layout) {
+		if(layout == 'horizontal' && (event.keyCode && event.keyCode == 39 || event.key && event.key == 'ArrowRight')) {return true;}
+		else if(layout == 'vertical' && (event.keyCode && event.keyCode == 40 || event.key && event.key == 'ArrowDown')) {return true;}
+		else {return false;}
+	};
+
+	function tabNavigatePrev(event, layout) {
+		if(layout == 'horizontal' && (event.keyCode && event.keyCode == 37 || event.key && event.key == 'ArrowLeft')) {return true;}
+		else if(layout == 'vertical' && (event.keyCode && event.keyCode == 38 || event.key && event.key == 'ArrowUp')) {return true;}
+		else {return false;}
+	};
+	
+	//initialize the Tab objects
+	var tabs = document.getElementsByClassName('js-tabs');
+	if( tabs.length > 0 ) {
+		for( var i = 0; i < tabs.length; i++) {
+			(function(i){new Tab(tabs[i]);})(i);
 		}
 	}
 }());
-// File#: _2_drag-drop-file
-// Usage: codyhouse.co/license
-(function () {
-  var Ddf = function (opts) {
-    this.options = Util.extend(Ddf.defaults, opts);
-    this.element = this.options.element;
-    this.area = this.element.getElementsByClassName('js-ddf__area');
-    this.input = this.element.getElementsByClassName('js-ddf__input');
-    this.label = this.element.getElementsByClassName('js-ddf__label');
-    this.labelEnd = this.element.getElementsByClassName('js-ddf__files-counter');
-    this.labelEndMessage = this.labelEnd.length > 0 ? this.labelEnd[0].innerHTML.split('%') : false;
-    this.droppedFiles = [];
-    this.lastDroppedFiles = [];
-    this.options.acceptFile = [];
-    this.progress = false;
-    this.progressObj = [];
-    this.progressCompleteClass = 'ddf__progress--complete';
-    initDndMessageResponse(this);
-    initProgress(this, 0, 1, false);
-    initDdf(this);
-  };
-
-  function initDndMessageResponse(element) {
-    // use this function to initilise the response of the Ddf when files are dropped (e.g., show list of files, update label message, show loader)
-    if (element.options.showFiles) {
-      element.filesList = element.element.getElementsByClassName('js-ddf__list');
-      if (element.filesList.length == 0) return;
-      element.fileItems = element.filesList[0].getElementsByClassName('js-ddf__item');
-      if (element.fileItems.length > 0) Util.addClass(element.fileItems[0], 'is-hidden'); +
-        // listen for click on remove file action
-        initRemoveFile(element);
-    } else { // do not show list of files
-      if (element.label.length == 0) return;
-      if (element.options.upload) element.progress = element.element.getElementsByClassName('js-ddf__progress');
-    }
-  };
-
-  function initDdf(element) {
-    if (element.input.length > 0) { // store accepted file format
-      var accept = element.input[0].getAttribute('accept');
-      if (accept) element.options.acceptFile = accept.split(',').map(function (element) { return element.trim(); })
-    }
-
-    initDndInput(element);
-    initDndArea(element);
-  };
-
-  function initDndInput(element) { // listen to changes in the input file element
-    if (element.input.length == 0) return;
-    element.input[0].addEventListener('change', function (event) {
-      if (element.input[0].value == '') return;
-      storeDroppedFiles(element, element.input[0].files);
-      element.input[0].value = '';
-      updateDndArea(element);
-    });
-  };
-
-  function initDndArea(element) { //drag event listeners
-    element.element.addEventListener('dragenter', handleEvent.bind(element));
-    element.element.addEventListener('dragover', handleEvent.bind(element));
-    element.element.addEventListener('dragleave', handleEvent.bind(element));
-    element.element.addEventListener('drop', handleEvent.bind(element));
-  };
-
-  function handleEvent(event) {
-    switch (event.type) {
-      case 'dragenter':
-      case 'dragover':
-        preventDefaults(event);
-        Util.addClass(this.area[0], 'ddf__area--file-hover');
-        break;
-      case 'dragleave':
-        preventDefaults(event);
-        Util.removeClass(this.area[0], 'ddf__area--file-hover');
-        break;
-      case 'drop':
-        preventDefaults(event);
-        storeDroppedFiles(this, event.dataTransfer.files);
-        updateDndArea(this);
-        break;
-    }
-  };
-
-  function storeDroppedFiles(element, fileData) { // check files size/format/number
-    element.lastDroppedFiles = [];
-    if (element.options.replaceFiles) element.droppedFiles = [];
-    Array.prototype.push.apply(element.lastDroppedFiles, fileData);
-    filterUploadedFiles(element); // remove files that do not respect format/size
-    element.droppedFiles = element.droppedFiles.concat(element.lastDroppedFiles);
-    if (element.options.maxFiles) filterMaxFiles(element); // check max number of files
-  };
-
-  function updateDndArea(element) { // update UI + emit events
-    if (element.options.showFiles) updateDndList(element);
-    else {
-      updateDndAreaMessage(element);
-      Util.addClass(element.area[0], 'ddf__area--file-dropped');
-    }
-    Util.removeClass(element.area[0], 'ddf__area--file-hover');
-    emitCustomEvents(element, 'filesUploaded', false);
-  };
-
-  function preventDefaults(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  function filterUploadedFiles(element) {
-    // check max weight
-    if (element.options.maxSize) filterMaxWeight(element);
-    // check file format
-    if (element.options.acceptFile.length > 0) filterAcceptFile(element);
-  };
-
-  function filterMaxWeight(element) { // filter files by size
-    var rejected = [];
-    for (var i = element.lastDroppedFiles.length - 1; i >= 0; i--) {
-      if (element.lastDroppedFiles[i].size > element.options.maxSize * 1000) {
-        var rejectedFile = element.lastDroppedFiles.splice(i, 1);
-        rejected.push(rejectedFile[0].name);
-      }
-    }
-    if (rejected.length > 0) {
-      emitCustomEvents(element, 'rejectedWeight', rejected);
-    }
-  };
-
-  function filterAcceptFile(element) { // filter files by format
-    var rejected = [];
-    for (var i = element.lastDroppedFiles.length - 1; i >= 0; i--) {
-      if (!formatInList(element, i)) {
-        var rejectedFile = element.lastDroppedFiles.splice(i, 1);
-        rejected.push(rejectedFile[0].name);
-      }
-    }
-
-    if (rejected.length > 0) {
-      emitCustomEvents(element, 'rejectedFormat', rejected);
-    }
-  };
-
-  function formatInList(element, index) {
-    var formatArray = element.lastDroppedFiles[index].type.split('/'),
-      type = formatArray[0] + '/*',
-      extension = formatArray.length > 1 ? formatArray[1] : false;
-
-    var accepted = false;
-    for (var i = 0; i < element.options.acceptFile.length; i++) {
-      if (element.lastDroppedFiles[index].type == element.options.acceptFile[i] || type == element.options.acceptFile[i] || (extension && extension == element.options.acceptFile[i])) {
-        accepted = true;
-        break;
-      }
-
-      if (extension && extensionInList(extension, element.options.acceptFile[i])) { // extension could be list of format; e.g. for the svg it is svg+xml
-        accepted = true;
-        break;
-      }
-    }
-    return accepted;
-  };
-
-  function extensionInList(extensionList, extension) {
-    // extension could be .svg, .pdf, ..
-    // extensionList could be png, svg+xml, ...
-    if ('.' + extensionList == extension) return true;
-    var accepted = false;
-    var extensionListArray = extensionList.split('+');
-    for (var i = 0; i < extensionListArray.length; i++) {
-      if ('.' + extensionListArray[i] == extension) {
-        accepted = true;
-        break;
-      }
-    }
-    return accepted;
-  }
-
-  function filterMaxFiles(element) { // check number of uploaded files
-    if (element.options.maxFiles >= element.droppedFiles.length) return;
-    var rejected = [];
-    while (element.droppedFiles.length > element.options.maxFiles) {
-      var rejectedFile = element.droppedFiles.pop();
-      element.lastDroppedFiles.pop();
-      rejected.push(rejectedFile.name);
-    }
-
-    if (rejected.length > 0) {
-      emitCustomEvents(element, 'rejectedNumber', rejected);
-    }
-  };
-
-  function updateDndAreaMessage(element) {
-    if (element.progress && element.progress[0]) { // reset progress bar 
-      element.progressObj[0].setProgressBarValue(0);
-      Util.toggleClass(element.progress[0], 'is-hidden', element.droppedFiles.length == 0);
-      Util.removeClass(element.progress[0], element.progressCompleteClass);
-    }
-
-    if (element.droppedFiles.length > 0 && element.labelEndMessage) {
-      var finalMessage = element.labelEnd.innerHTML;
-      if (element.labelEndMessage.length > 3) {
-        finalMessage = element.droppedFiles.length > 1
-          ? element.labelEndMessage[0] + element.labelEndMessage[2] + element.labelEndMessage[3]
-          : element.labelEndMessage[0] + element.labelEndMessage[1] + element.labelEndMessage[3];
-      }
-      element.labelEnd[0].innerHTML = finalMessage.replace('{n}', element.droppedFiles.length);
-    }
-  };
-
-  function updateDndList(element) {
-    // create new list of files to be appended
-    if (!element.fileItems || element.fileItems.length == 0) return
-    var clone = element.fileItems[0].cloneNode(true),
-      string = '';
-    Util.removeClass(clone, 'is-hidden');
-    for (var i = 0; i < element.lastDroppedFiles.length; i++) {
-      clone.getElementsByClassName('js-ddf__file-name')[0].textContent = element.lastDroppedFiles[i].name;
-      string = clone.outerHTML + string;
-    }
-
-    if (element.options.replaceFiles) { // replace all files in list with new files
-      string = element.fileItems[0].outerHTML + string;
-      element.filesList[0].innerHTML = string;
-    } else {
-      element.fileItems[0].insertAdjacentHTML('afterend', string);
-    }
-
-    if (element.options.upload) storeMultipleProgress(element);
-
-    Util.toggleClass(element.filesList[0], 'is-hidden', element.droppedFiles.length == 0);
-  };
-
-  function initRemoveFile(element) { // if list of files is visible - option to remove file from list
-    element.filesList[0].addEventListener('click', function (event) {
-      if (!event.target.closest('.js-ddf__remove-btn')) return;
-      event.preventDefault();
-      var item = event.target.closest('.js-ddf__item'),
-        index = Util.getIndexInArray(element.filesList[0].getElementsByClassName('js-ddf__item'), item);
-
-      var removedFile = element.droppedFiles.splice(element.droppedFiles.length - index, 1);
-      if (element.progress && element.progress.length > element.droppedFiles.length - index) {
-        element.progress.splice();
-      }
-      // check if we need to remove items form the lastDroppedFiles array
-      var lastDroppedIndex = element.lastDroppedFiles.length - index;
-      if (lastDroppedIndex >= 0 && lastDroppedIndex < element.lastDroppedFiles.length - 1) {
-        element.lastDroppedFiles.splice(element.lastDroppedFiles.length - index, 1);
-      }
-      item.remove();
-      emitCustomEvents(element, 'fileRemoved', removedFile);
-    });
-
-  };
-
-  function storeMultipleProgress(element) { // handle progress bar elements
-    element.progress = [];
-    var delta = element.droppedFiles.length - element.lastDroppedFiles.length;
-    for (var i = 0; i < element.lastDroppedFiles.length; i++) {
-      element.progress[i] = element.fileItems[element.droppedFiles.length - delta - i].getElementsByClassName('js-ddf__progress')[0];
-    }
-    initProgress(element, 0, element.lastDroppedFiles.length, true);
-  };
-
-  function initProgress(element, start, end, bool) {
-    element.progressObj = [];
-    if (!element.progress || element.progress.length == 0) return;
-    for (var i = start; i < end; i++) {
-      (function (i) {
-        element.progressObj.push(new CProgressBar(element.progress[i]));
-        if (bool) Util.removeClass(element.progress[i], 'is-hidden');
-        // listen for 100% progress
-        element.progress[i].addEventListener('updateProgress', function (event) {
-          if (event.detail.value == 100) Util.addClass(element.progress[i], element.progressCompleteClass);
-        });
-      })(i);
-    }
-  };
-
-  function emitCustomEvents(element, eventName, detail) {
-    var event = new CustomEvent(eventName, { detail: detail });
-    element.element.dispatchEvent(event);
-  };
-
-  Ddf.defaults = {
-    element: '',
-    maxFiles: false, // max number of files
-    maxSize: false, // max weight - set in kb
-    showFiles: false, // show list of selected files
-    replaceFiles: true, // when new files are loaded -> they replace the old ones
-    upload: false // show progress bar for the upload process
-  };
-
-  window.Ddf = Ddf;
-}());
-// File#: _2_dropdown 
+// File#: _2_adv-custom-select
 // Usage: codyhouse.co/license
 (function() {
-    var Dropdown = function(element) {
-      this.element = element;
-      this.trigger = this.element.getElementsByClassName('js-dropdown__trigger')[0];
-      this.dropdown = this.element.getElementsByClassName('js-dropdown__menu')[0];
-      this.triggerFocus = false;
-      this.dropdownFocus = false;
-      this.hideInterval = false;
-      // sublevels
-      this.dropdownSubElements = this.element.getElementsByClassName('js-dropdown__sub-wrapper');
-      this.prevFocus = false; // store element that was in focus before focus changed
-      this.addDropdownEvents();
-    };
-    
-    Dropdown.prototype.addDropdownEvents = function(){
-      //place dropdown
-      var self = this;
-      this.placeElement();
-      this.element.addEventListener('placeDropdown', function(event){
-        self.placeElement();
-      });
-      // init dropdown
-      this.initElementEvents(this.trigger, this.triggerFocus); // this is used to trigger the primary dropdown
-      this.initElementEvents(this.dropdown, this.dropdownFocus); // this is used to trigger the primary dropdown
-      // init sublevels
-      this.initSublevels(); // if there are additional sublevels -> bind hover/focus events
-    };
-  
-    Dropdown.prototype.placeElement = function() {
-      // remove inline style first
-      this.dropdown.removeAttribute('style');
-      // check dropdown position
-      var triggerPosition = this.trigger.getBoundingClientRect(),
-        isRight = (window.innerWidth < triggerPosition.left + parseInt(getComputedStyle(this.dropdown).getPropertyValue('width')));
-  
-      var xPosition = isRight ? 'right: 0px; left: auto;' : 'left: 0px; right: auto;';
-      this.dropdown.setAttribute('style', xPosition);
-    };
-  
-    Dropdown.prototype.initElementEvents = function(element, bool) {
-      var self = this;
-      element.addEventListener('mouseenter', function(){
-        bool = true;
-        self.showDropdown();
-      });
-      element.addEventListener('focus', function(){
-        self.showDropdown();
-      });
-      element.addEventListener('mouseleave', function(){
-        bool = false;
-        self.hideDropdown();
-      });
-      element.addEventListener('focusout', function(){
-        self.hideDropdown();
-      });
-    };
-  
-    Dropdown.prototype.showDropdown = function(){
-      if(this.hideInterval) clearInterval(this.hideInterval);
-      // remove style attribute
-      this.dropdown.removeAttribute('style');
-      this.placeElement();
-      this.showLevel(this.dropdown, true);
-    };
-  
-    Dropdown.prototype.hideDropdown = function(){
-      var self = this;
-      if(this.hideInterval) clearInterval(this.hideInterval);
-      this.hideInterval = setTimeout(function(){
-        var dropDownFocus = document.activeElement.closest('.js-dropdown'),
-          inFocus = dropDownFocus && (dropDownFocus == self.element);
-        // if not in focus and not hover -> hide
-        if(!self.triggerFocus && !self.dropdownFocus && !inFocus) {
-          self.hideLevel(self.dropdown, true);
-          // make sure to hide sub/dropdown
-          self.hideSubLevels();
-          self.prevFocus = false;
-        }
-      }, 300);
-    };
-  
-    Dropdown.prototype.initSublevels = function(){
-      var self = this;
-      var dropdownMenu = this.element.getElementsByClassName('js-dropdown__menu');
-      for(var i = 0; i < dropdownMenu.length; i++) {
-        var listItems = dropdownMenu[i].children;
-        // bind hover
-        new menuAim({
-          menu: dropdownMenu[i],
-          activate: function(row) {
-              var subList = row.getElementsByClassName('js-dropdown__menu')[0];
-              if(!subList) return;
-              Util.addClass(row.querySelector('a'), 'dropdown__item--hover');
-              self.showLevel(subList);
-          },
-          deactivate: function(row) {
-              var subList = row.getElementsByClassName('dropdown__menu')[0];
-              if(!subList) return;
-              Util.removeClass(row.querySelector('a'), 'dropdown__item--hover');
-              self.hideLevel(subList);
-          },
-          submenuSelector: '.js-dropdown__sub-wrapper',
-        });
-      }
-      // store focus element before change in focus
-      this.element.addEventListener('keydown', function(event) { 
-        if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
-          self.prevFocus = document.activeElement;
-        }
-      });
-      // make sure that sublevel are visible when their items are in focus
-      this.element.addEventListener('keyup', function(event) {
-        if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
-          // focus has been moved -> make sure the proper classes are added to subnavigation
-          var focusElement = document.activeElement,
-            focusElementParent = focusElement.closest('.js-dropdown__menu'),
-            focusElementSibling = focusElement.nextElementSibling;
-  
-          // if item in focus is inside submenu -> make sure it is visible
-          if(focusElementParent && !Util.hasClass(focusElementParent, 'dropdown__menu--is-visible')) {
-            self.showLevel(focusElementParent);
-          }
-          // if item in focus triggers a submenu -> make sure it is visible
-          if(focusElementSibling && !Util.hasClass(focusElementSibling, 'dropdown__menu--is-visible')) {
-            self.showLevel(focusElementSibling);
-          }
-  
-          // check previous element in focus -> hide sublevel if required 
-          if( !self.prevFocus) return;
-          var prevFocusElementParent = self.prevFocus.closest('.js-dropdown__menu'),
-            prevFocusElementSibling = self.prevFocus.nextElementSibling;
-          
-          if( !prevFocusElementParent ) return;
-          
-          // element in focus and element prev in focus are siblings
-          if( focusElementParent && focusElementParent == prevFocusElementParent) {
-            if(prevFocusElementSibling) self.hideLevel(prevFocusElementSibling);
-            return;
-          }
-  
-          // element in focus is inside submenu triggered by element prev in focus
-          if( prevFocusElementSibling && focusElementParent && focusElementParent == prevFocusElementSibling) return;
-          
-          // shift tab -> element in focus triggers the submenu of the element prev in focus
-          if( focusElementSibling && prevFocusElementParent && focusElementSibling == prevFocusElementParent) return;
-          
-          var focusElementParentParent = focusElementParent.parentNode.closest('.js-dropdown__menu');
-          
-          // shift tab -> element in focus is inside the dropdown triggered by a siblings of the element prev in focus
-          if(focusElementParentParent && focusElementParentParent == prevFocusElementParent) {
-            if(prevFocusElementSibling) self.hideLevel(prevFocusElementSibling);
-            return;
-          }
-          
-          if(prevFocusElementParent && Util.hasClass(prevFocusElementParent, 'dropdown__menu--is-visible')) {
-            self.hideLevel(prevFocusElementParent);
-          }
-        }
-      });
-    };
-  
-    Dropdown.prototype.hideSubLevels = function(){
-      var visibleSubLevels = this.dropdown.getElementsByClassName('dropdown__menu--is-visible');
-      if(visibleSubLevels.length == 0) return;
-      while (visibleSubLevels[0]) {
-        this.hideLevel(visibleSubLevels[0]);
-         }
-         var hoveredItems = this.dropdown.getElementsByClassName('dropdown__item--hover');
-         while (hoveredItems[0]) {
-        Util.removeClass(hoveredItems[0], 'dropdown__item--hover');
-         }
-    };
-  
-    Dropdown.prototype.showLevel = function(level, bool){
-      if(bool == undefined) {
-        //check if the sublevel needs to be open to the left
-        Util.removeClass(level, 'dropdown__menu--left');
-        var boundingRect = level.getBoundingClientRect();
-        if(window.innerWidth - boundingRect.right < 5 && boundingRect.left + window.scrollX > 2*boundingRect.width) Util.addClass(level, 'dropdown__menu--left');
-      }
-      Util.addClass(level, 'dropdown__menu--is-visible');
-      Util.removeClass(level, 'dropdown__menu--is-hidden');
-    };
-  
-    Dropdown.prototype.hideLevel = function(level, bool){
-      if(!Util.hasClass(level, 'dropdown__menu--is-visible')) return;
-      Util.removeClass(level, 'dropdown__menu--is-visible');
-      Util.addClass(level, 'dropdown__menu--is-hidden');
-      
-      level.addEventListener('transitionend', function cb(event){
-        if(event.propertyName != 'opacity') return;
-        level.removeEventListener('transitionend', cb);
-        Util.removeClass(level, 'dropdown__menu--is-hidden dropdown__menu--left');
-        if(bool && !Util.hasClass(level, 'dropdown__menu--is-visible')) level.setAttribute('style', 'width: 0px');
-      });
-    };
-  
-    window.Dropdown = Dropdown;
-  
-    var dropdown = document.getElementsByClassName('js-dropdown');
-    if( dropdown.length > 0 ) { // init Dropdown objects
-      for( var i = 0; i < dropdown.length; i++) {
-        (function(i){new Dropdown(dropdown[i]);})(i);
-      }
-    }
-  }());
-// File#: _2_grid-switch
-// Usage: codyhouse.co/license
-(function() {
-    var GridSwitch = function(element) {
-      this.element = element;
-      this.controller = this.element.getElementsByClassName('js-grid-switch__controller')[0];
-      this.items = this.element.getElementsByClassName('js-grid-switch__item');
-      this.contentElements = this.element.getElementsByClassName('js-grid-switch__content');
-      // store custom classes
-      this.classList = [[this.element.getAttribute('data-gs-item-class-1'), this.element.getAttribute('data-gs-content-class-1')], [this.element.getAttribute('data-gs-item-class-2'), this.element.getAttribute('data-gs-content-class-2')]];
-      initGridSwitch(this);
-    };
-  
-    function initGridSwitch(element) {
-      // get selected state and apply style
-      var selectedInput = element.controller.querySelector('input:checked');
-      if(selectedInput) {
-        setGridAppearance(element, selectedInput.value);
-      }
-      // reveal grid
-      Util.addClass(element.element, 'grid-switch--is-visible');
-      // a new layout has been selected 
-      element.controller.addEventListener('change', function(event) {
-        setGridAppearance(element, event.target.value);
-      });
-    };
-  
-    function setGridAppearance(element, value) {
-      var newStatus = parseInt(value) - 1,
-        oldStatus = newStatus == 1 ? 0 : 1;
-        
-      for(var i = 0; i < element.items.length; i++) {
-        Util.removeClass(element.items[i], element.classList[oldStatus][0]);
-        Util.removeClass(element.contentElements[i], element.classList[oldStatus][1]);
-        Util.addClass(element.items[i], element.classList[newStatus][0]);
-        Util.addClass(element.contentElements[i], element.classList[newStatus][1]);
-      }
-    };
-  
-    //initialize the GridSwitch objects
-    var gridSwitch = document.getElementsByClassName('js-grid-switch');
-    if( gridSwitch.length > 0 ) {
-      for( var i = 0; i < gridSwitch.length; i++) {
-        (function(i){new GridSwitch(gridSwitch[i]);})(i);
-      }
-    }
-  }());
-// File#: _2_menu-bar
-// Usage: codyhouse.co/license
-(function() {
-  var MenuBar = function(element) {
+  var AdvSelect = function(element) {
     this.element = element;
-    this.items = Util.getChildrenByClassName(this.element, 'menu-bar__item');
-    this.mobHideItems = this.element.getElementsByClassName('menu-bar__item--hide');
-    this.moreItemsTrigger = this.element.getElementsByClassName('js-menu-bar__trigger');
-    initMenuBar(this);
+    this.select = this.element.getElementsByTagName('select')[0];
+    this.optGroups = this.select.getElementsByTagName('optgroup');
+    this.options = this.select.getElementsByTagName('option');
+    this.optionData = getOptionsData(this);
+    this.selectId = this.select.getAttribute('id');
+    this.selectLabel = document.querySelector('[for='+this.selectId+']')
+    this.trigger = this.element.getElementsByClassName('js-adv-select__control')[0];
+    this.triggerLabel = this.trigger.getElementsByClassName('js-adv-select__value')[0];
+    this.dropdown = document.getElementById(this.trigger.getAttribute('aria-controls'));
+
+    initAdvSelect(this); // init markup
+    initAdvSelectEvents(this); // init event listeners
   };
 
-  function initMenuBar(menu) {
-    setMenuTabIndex(menu); // set correct tabindexes for menu item
-    initMenuBarMarkup(menu); // create additional markup
-    checkMenuLayout(menu); // set menu layout
-    Util.addClass(menu.element, 'menu-bar--loaded'); // reveal menu
+  function getOptionsData(select) {
+    var obj = [],
+      dataset = select.options[0].dataset;
 
-    // custom event emitted when window is resized
-    menu.element.addEventListener('update-menu-bar', function(event){
-      checkMenuLayout(menu);
-      if(menu.menuInstance) menu.menuInstance.toggleMenu(false, false); // close dropdown
-    });
+    function camelCaseToDash( myStr ) {
+      return myStr.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
+    }
+    for (var prop in dataset) {
+      if (Object.prototype.hasOwnProperty.call(dataset, prop)) {
+        // obj[prop] = select.dataset[prop];
+        obj.push(camelCaseToDash(prop));
+      }
+    }
+    return obj;
+  };
 
-    // keyboard events 
-    // open dropdown when pressing Enter on trigger element
-    if(menu.moreItemsTrigger.length > 0) {
-      menu.moreItemsTrigger[0].addEventListener('keydown', function(event) {
-        if( (event.keyCode && event.keyCode == 13) || (event.key && event.key.toLowerCase() == 'enter') ) {
-          if(!menu.menuInstance) return;
-          menu.menuInstance.selectedTrigger = menu.moreItemsTrigger[0];
-          menu.menuInstance.toggleMenu(!Util.hasClass(menu.subMenu, 'menu--is-visible'), true);
-        }
-      });
+  function initAdvSelect(select) {
+    // create custom structure
+    createAdvStructure(select);
+    // update trigger label
+    updateTriggerLabel(select);
+    // hide native select and show custom structure
+    Util.addClass(select.select, 'is-hidden');
+    Util.removeClass(select.trigger, 'is-hidden');
+    Util.removeClass(select.dropdown, 'is-hidden');
+  };
 
-      // close dropdown on esc
-      menu.subMenu.addEventListener('keydown', function(event) {
-        if((event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape')) { // close submenu on esc
-          if(menu.menuInstance) menu.menuInstance.toggleMenu(false, true);
-        }
+  function initAdvSelectEvents(select) {
+    if(select.selectLabel) {
+      // move focus to custom trigger when clicking on <select> label
+      select.selectLabel.addEventListener('click', function(){
+        select.trigger.focus();
       });
     }
-    
-    // navigate menu items using left/right arrows
-    menu.element.addEventListener('keydown', function(event) {
-      if( (event.keyCode && event.keyCode == 39) || (event.key && event.key.toLowerCase() == 'arrowright') ) {
-        navigateItems(menu.items, event, 'next');
-      } else if( (event.keyCode && event.keyCode == 37) || (event.key && event.key.toLowerCase() == 'arrowleft') ) {
-        navigateItems(menu.items, event, 'prev');
+
+    // option is selected in dropdown
+    select.dropdown.addEventListener('click', function(event){
+      triggerSelection(select, event.target);
+    });
+
+    // keyboard navigation
+    select.dropdown.addEventListener('keydown', function(event){
+      if(event.keyCode && event.keyCode == 38 || event.key && event.key.toLowerCase() == 'arrowup') {
+        keyboardCustomSelect(select, 'prev', event);
+      } else if(event.keyCode && event.keyCode == 40 || event.key && event.key.toLowerCase() == 'arrowdown') {
+        keyboardCustomSelect(select, 'next', event);
+      } else if(event.keyCode && event.keyCode == 13 || event.key && event.key.toLowerCase() == 'enter') {
+        triggerSelection(select, document.activeElement);
       }
     });
   };
 
-  function setMenuTabIndex(menu) { // set tabindexes for the menu items to allow keyboard navigation
-    var nextItem = false;
-    for(var i = 0; i < menu.items.length; i++ ) {
-      if(i == 0 || nextItem) menu.items[i].setAttribute('tabindex', '0');
-      else menu.items[i].setAttribute('tabindex', '-1');
-      if(i == 0 && menu.moreItemsTrigger.length > 0) nextItem = true;
-      else nextItem = false;
+  function createAdvStructure(select) {
+    // store optgroup and option structure
+    var optgroup = select.dropdown.querySelector('[role="group"]'),
+      option = select.dropdown.querySelector('[role="option"]'),
+      optgroupClone = false,
+      optgroupLabel = false,
+      optionClone = false;
+    if(optgroup) {
+      optgroupClone = optgroup.cloneNode();
+      optgroupLabel = document.getElementById(optgroupClone.getAttribute('describedby'));
+    }
+    if(option) optionClone = option.cloneNode(true);
+
+    var dropdownCode = '';
+
+    if(select.optGroups.length > 0) {
+      for(var i = 0; i < select.optGroups.length; i++) {
+        dropdownCode = dropdownCode + getOptGroupCode(select, select.optGroups[i], optgroupClone, optionClone, optgroupLabel, i);
+      }
+    } else {
+      for(var i = 0; i < select.options.length; i++) {
+        dropdownCode = dropdownCode + getOptionCode(select, select.options[i], optionClone);
+      }
+    }
+
+    select.dropdown.innerHTML = dropdownCode;
+  };
+
+  function getOptGroupCode(select, optGroup, optGroupClone, optionClone, optgroupLabel, index) {
+    if(!optGroupClone || !optionClone) return '';
+    var code = '';
+    var options = optGroup.getElementsByTagName('option');
+    for(var i = 0; i < options.length; i++) {
+      code = code + getOptionCode(select, options[i], optionClone);
+    }
+    if(optgroupLabel) {
+      var label = optgroupLabel.cloneNode(true);
+      var id = label.getAttribute('id') + '-'+index;
+      label.setAttribute('id', id);
+      optGroupClone.setAttribute('describedby', id);
+      code = label.outerHTML.replace('{optgroup-label}', optGroup.getAttribute('label')) + code;
+    } 
+    optGroupClone.innerHTML = code;
+    return optGroupClone.outerHTML;
+  };
+
+  function getOptionCode(select, option, optionClone) {
+    optionClone.setAttribute('data-value', option.value);
+    if(option.selected) {
+      optionClone.setAttribute('aria-selected', 'true');
+      optionClone.setAttribute('tabindex', '0');
+    } else {
+      optionClone.removeAttribute('aria-selected');
+      optionClone.removeAttribute('tabindex');
+    }
+    var optionHtml = optionClone.outerHTML;
+    optionHtml = optionHtml.replace('{option-label}', option.text);
+    for(var i = 0; i < select.optionData.length; i++) {
+      optionHtml = optionHtml.replace('{'+select.optionData[i]+'}', option.getAttribute('data-'+select.optionData[i]));
+    }
+    return optionHtml;
+  };
+
+  function updateTriggerLabel(select) {
+    // select.triggerLabel.textContent = select.options[select.select.selectedIndex].text;
+    select.triggerLabel.innerHTML = select.dropdown.querySelector('[aria-selected="true"]').innerHTML;
+  };
+
+  function triggerSelection(select, target) {
+    var option = target.closest('[role="option"]');
+    if(!option) return;
+    selectOption(select, option);
+  };
+
+  function selectOption(select, option) {
+    if(option.hasAttribute('aria-selected') && option.getAttribute('aria-selected') == 'true') {
+      // selecting the same option
+    } else { 
+      var selectedOption = select.dropdown.querySelector('[aria-selected="true"]');
+      if(selectedOption) {
+        selectedOption.removeAttribute('aria-selected');
+        selectedOption.removeAttribute('tabindex');
+      }
+      option.setAttribute('aria-selected', 'true');
+      option.setAttribute('tabindex', '0');
+      // new option has been selected -> update native <select> element and trigger label
+      updateNativeSelect(select, option.getAttribute('data-value'));
+      updateTriggerLabel(select);
+    }
+    // move focus back to trigger
+    setTimeout(function(){
+      select.trigger.click();
+    });
+  };
+
+  function updateNativeSelect(select, selectedValue) {
+    var selectedOption = select.select.querySelector('[value="'+selectedValue+'"');
+    select.select.selectedIndex = Util.getIndexInArray(select.options, selectedOption);
+    select.select.dispatchEvent(new CustomEvent('change', {bubbles: true})); // trigger change event
+  };
+
+  function keyboardCustomSelect(select, direction) {
+    var selectedOption = select.select.querySelector('[value="'+document.activeElement.getAttribute('data-value')+'"]');
+    if(!selectedOption) return;
+    var index = Util.getIndexInArray(select.options, selectedOption);
+    
+    index = direction == 'next' ? index + 1 : index - 1;
+    if(index < 0) return;
+    if(index >= select.options.length) return;
+    
+    var dropdownOption = select.dropdown.querySelector('[data-value="'+select.options[index].getAttribute('value')+'"]');
+    if(dropdownOption) Util.moveFocus(dropdownOption);
+  };
+
+  //initialize the AdvSelect objects
+  var advSelect = document.getElementsByClassName('js-adv-select');
+  if( advSelect.length > 0 ) {
+    for( var i = 0; i < advSelect.length; i++) {
+      (function(i){new AdvSelect(advSelect[i]);})(i);
+    }
+  }
+}());
+// File#: _2_autocomplete
+// Usage: codyhouse.co/license
+(function() {
+  var Autocomplete = function(opts) {
+    if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) return;
+    this.options = Util.extend(Autocomplete.defaults, opts);
+    this.element = this.options.element;
+    this.input = this.element.getElementsByClassName('js-autocomplete__input')[0];
+    this.results = this.element.getElementsByClassName('js-autocomplete__results')[0];
+    this.resultsList = this.results.getElementsByClassName('js-autocomplete__list')[0];
+    this.ariaResult = this.element.getElementsByClassName('js-autocomplete__aria-results');
+    this.resultClassName = this.element.getElementsByClassName('js-autocomplete__item').length > 0 ? 'js-autocomplete__item' : 'js-autocomplete__result';
+    // store search info
+    this.inputVal = '';
+    this.typeId = false;
+    this.searching = false;
+    this.searchingClass = this.element.getAttribute('data-autocomplete-searching-class') || 'autocomplete--searching';
+    // dropdown reveal class
+    this.dropdownActiveClass =  this.element.getAttribute('data-autocomplete-dropdown-visible-class') || this.element.getAttribute('data-dropdown-active-class');
+    // truncate dropdown
+    this.truncateDropdown = this.element.getAttribute('data-autocomplete-dropdown-truncate') && this.element.getAttribute('data-autocomplete-dropdown-truncate') == 'on' ? true : false;
+    initAutocomplete(this);
+    this.autocompleteClosed = false; // fix issue when selecting an option from the list
+  };
+
+  function initAutocomplete(element) {
+    initAutocompleteAria(element); // set aria attributes for SR and keyboard users
+    initAutocompleteTemplates(element);
+    initAutocompleteEvents(element);
+  };
+
+  function initAutocompleteAria(element) {
+    // set aria attributes for input element
+    Util.setAttributes(element.input, {'role': 'combobox', 'aria-autocomplete': 'list'});
+    var listId = element.resultsList.getAttribute('id');
+    if(listId) element.input.setAttribute('aria-owns', listId);
+    // set aria attributes for autocomplete list
+    element.resultsList.setAttribute('role', 'list');
+  };
+
+  function initAutocompleteTemplates(element) {
+    element.templateItems = element.resultsList.querySelectorAll('.'+element.resultClassName+'[data-autocomplete-template]');
+    if(element.templateItems.length < 1) element.templateItems = element.resultsList.querySelectorAll('.'+element.resultClassName);
+    element.templates = [];
+    for(var i = 0; i < element.templateItems.length; i++) {
+      element.templates[i] = element.templateItems[i].getAttribute('data-autocomplete-template');
     }
   };
 
-  function initMenuBarMarkup(menu) {
-    if(menu.mobHideItems.length == 0 ) { // no items to hide on mobile - remove trigger
-      if(menu.moreItemsTrigger.length > 0) menu.element.removeChild(menu.moreItemsTrigger[0]);
+  function initAutocompleteEvents(element) {
+    // input - keyboard navigation 
+    element.input.addEventListener('keyup', function(event){
+      handleInputTyped(element, event);
+    });
+
+    // if input type="search" -> detect when clicking on 'x' to clear input
+    element.input.addEventListener('search', function(event){
+      updateSearch(element);
+    });
+
+    // make sure dropdown is open on click
+    element.input.addEventListener('click', function(event){
+      updateSearch(element, true);
+    });
+
+    element.input.addEventListener('focus', function(event){
+      if(element.autocompleteClosed) {
+        element.autocompleteClosed = false;
+        return;
+      }
+      updateSearch(element, true);
+    });
+
+    // input loses focus -> close menu
+    element.input.addEventListener('blur', function(event){
+      checkFocusLost(element, event);
+    });
+
+    // results list - keyboard navigation 
+    element.resultsList.addEventListener('keydown', function(event){
+      navigateList(element, event);
+    });
+
+    // results list loses focus -> close menu
+    element.resultsList.addEventListener('focusout', function(event){
+      checkFocusLost(element, event);
+    });
+
+    // close on esc
+    window.addEventListener('keyup', function(event){
+      if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
+        toggleOptionsList(element, false);
+      } else if(event.keyCode && event.keyCode == 13 || event.key && event.key.toLowerCase() == 'enter') { // on Enter - select result if focus is within results list
+        selectResult(element, document.activeElement.closest('.'+element.resultClassName), event);
+      }
+    });
+
+    // select element from list
+    element.resultsList.addEventListener('click', function(event){
+      selectResult(element, event.target.closest('.'+element.resultClassName), event);
+    });
+  };
+
+  function checkFocusLost(element, event) {
+    if(element.element.contains(event.relatedTarget)) return;
+    toggleOptionsList(element, false);
+  };
+
+  function handleInputTyped(element, event) {
+    if(event.key.toLowerCase() == 'arrowdown' || event.keyCode == '40') {
+      moveFocusToList(element);
+    } else {
+      updateSearch(element);
+    }
+  };
+
+  function moveFocusToList(element) {
+    if(!Util.hasClass(element.element, element.dropdownActiveClass)) return;
+    resetSearch(element); // clearTimeout
+    // make sure first element is focusable
+    var index = 0;
+    if(!elementListIsFocusable(element.resultsItems[index])) {
+      index = getElementFocusbleIndex(element, index, true);
+    }
+    getListFocusableEl(element.resultsItems[index]).focus();
+  };
+
+  function updateSearch(element, bool) {
+    var inputValue = element.input.value;
+    if(inputValue == element.inputVal && !bool) return; // input value did not change
+    element.inputVal = inputValue;
+    if(element.typeId) clearInterval(element.typeId); // clearTimeout
+    if(element.inputVal.length < element.options.characters) { // not enough characters to start searching
+      toggleOptionsList(element, false);
       return;
     }
-
-    if(menu.moreItemsTrigger.length == 0) return;
-
-    // create the markup for the Menu element
-    var content = '';
-    menu.menuControlId = 'submenu-bar-'+Date.now();
-    for(var i = 0; i < menu.mobHideItems.length; i++) {
-      var item = menu.mobHideItems[i].cloneNode(true),
-        svg = item.getElementsByTagName('svg')[0],
-        label = item.getElementsByClassName('menu-bar__label')[0];
-
-      svg.setAttribute('class', 'icon menu__icon');
-      content = content + '<li role="menuitem"><span class="menu__content js-menu__content">'+svg.outerHTML+'<span>'+label.innerHTML+'</span></span></li>';
+    if(bool) { // on focus -> update result list without waiting for the debounce
+      updateResultsList(element, 'focus');
+      return;
     }
-
-    Util.setAttributes(menu.moreItemsTrigger[0], {'role': 'button', 'aria-expanded': 'false', 'aria-controls': menu.menuControlId, 'aria-haspopup': 'true'});
-
-    var subMenu = document.createElement('menu'),
-      customClass = menu.element.getAttribute('data-menu-class');
-    Util.setAttributes(subMenu, {'id': menu.menuControlId, 'class': 'menu js-menu '+customClass});
-    subMenu.innerHTML = content;
-    document.body.appendChild(subMenu);
-
-    menu.subMenu = subMenu;
-    menu.subItems = subMenu.getElementsByTagName('li');
-
-    menu.menuInstance = new Menu(menu.subMenu); // this will handle the dropdown behaviour
+    element.typeId = setTimeout(function(){
+      updateResultsList(element, 'type');
+    }, element.options.debounce);
   };
 
-  function checkMenuLayout(menu) { // switch from compressed to expanded layout and viceversa
-    var layout = getComputedStyle(menu.element, ':before').getPropertyValue('content').replace(/\'|"/g, '');
-    Util.toggleClass(menu.element, 'menu-bar--collapsed', layout == 'collapsed');
+  function toggleOptionsList(element, bool) {
+    // toggle visibility of options list
+    if(bool) {
+      if(Util.hasClass(element.element, element.dropdownActiveClass)) return;
+      Util.addClass(element.element, element.dropdownActiveClass);
+      element.input.setAttribute('aria-expanded', true);
+      truncateAutocompleteList(element);
+    } else {
+      if(!Util.hasClass(element.element, element.dropdownActiveClass)) return;
+      if(element.resultsList.contains(document.activeElement)) {
+        element.autocompleteClosed = true;
+        element.input.focus();
+      }
+      Util.removeClass(element.element, element.dropdownActiveClass);
+      element.input.removeAttribute('aria-expanded');
+      resetSearch(element); // clearTimeout
+    }
   };
 
-  function navigateItems(list, event, direction, prevIndex) { // keyboard navigation among menu items
+  function truncateAutocompleteList(element) {
+    if(!element.truncateDropdown) return;
+    // reset max height
+    element.resultsList.style.maxHeight = '';
+    // check available space 
+    var spaceBelow = (window.innerHeight - element.input.getBoundingClientRect().bottom - 10),
+      maxHeight = parseInt(getComputedStyle(element.resultsList).maxHeight);
+
+    (maxHeight > spaceBelow) 
+      ? element.resultsList.style.maxHeight = spaceBelow+'px' 
+      : element.resultsList.style.maxHeight = '';
+  };
+
+  function updateResultsList(element, eventType) {
+    if(element.searching) return;
+    element.searching = true;
+    Util.addClass(element.element, element.searchingClass); // show loader
+    element.options.searchData(element.inputVal, function(data){
+      // data = custom results
+      populateResults(element, data);
+      Util.removeClass(element.element, element.searchingClass);
+      toggleOptionsList(element, true);
+      updateAriaRegion(element);
+      element.searching = false;
+    }, eventType);
+  };
+
+  function updateAriaRegion(element) {
+    element.resultsItems = element.resultsList.querySelectorAll('.'+element.resultClassName+'[tabindex="-1"]');
+    if(element.ariaResult.length == 0) return;
+    element.ariaResult[0].textContent = element.resultsItems.length;
+  };
+
+  function resetSearch(element) {
+    if(element.typeId) clearInterval(element.typeId);
+    element.typeId = false;
+  };
+
+  function navigateList(element, event) {
+    var downArrow = (event.key.toLowerCase() == 'arrowdown' || event.keyCode == '40'),
+      upArrow = (event.key.toLowerCase() == 'arrowup' || event.keyCode == '38');
+    if(!downArrow && !upArrow) return;
     event.preventDefault();
-    var index = (typeof prevIndex !== 'undefined') ? prevIndex : Util.getIndexInArray(list, event.target),
-      nextIndex = direction == 'next' ? index + 1 : index - 1;
-    if(nextIndex < 0) nextIndex = list.length - 1;
-    if(nextIndex > list.length - 1) nextIndex = 0;
-    // check if element is visible before moving focus
-    (list[nextIndex].offsetParent === null) ? navigateItems(list, event, direction, nextIndex) : Util.moveFocus(list[nextIndex]);
+    var selectedElement = document.activeElement.closest('.'+element.resultClassName) || document.activeElement;
+    var index = Util.getIndexInArray(element.resultsItems, selectedElement);
+    var newIndex = getElementFocusbleIndex(element, index, downArrow);
+    getListFocusableEl(element.resultsItems[newIndex]).focus();
   };
 
-  function checkMenuClick(menu, target) { // close dropdown when clicking outside the menu element
-    if(menu.menuInstance && !menu.moreItemsTrigger[0].contains(target) && !menu.subMenu.contains(target)) menu.menuInstance.toggleMenu(false, false);
+  function getElementFocusbleIndex(element, index, nextItem) {
+    var newIndex = nextItem ? index + 1 : index - 1;
+    if(newIndex < 0) newIndex = element.resultsItems.length - 1;
+    if(newIndex >= element.resultsItems.length) newIndex = 0;
+    // check if element can be focused
+    if(!elementListIsFocusable(element.resultsItems[newIndex])) {
+      // skip this element
+      return getElementFocusbleIndex(element, newIndex, nextItem);
+    }
+    return newIndex;
   };
 
-  // init MenuBars objects
-  var menuBars = document.getElementsByClassName('js-menu-bar');
-  if( menuBars.length > 0 ) {
-    var j = 0,
-      menuBarArray = [];
-    for( var i = 0; i < menuBars.length; i++) {
-      var beforeContent = getComputedStyle(menuBars[i], ':before').getPropertyValue('content');
-      if(beforeContent && beforeContent !='' && beforeContent !='none') {
-        (function(i){menuBarArray.push(new MenuBar(menuBars[i]));})(i);
-        j = j + 1;
+  function elementListIsFocusable(item) {
+    var role = item.getAttribute('role');
+    if(role && role == 'presentation') {
+      // skip this element
+      return false;
+    }
+    return true;
+  };
+
+  function getListFocusableEl(item) {
+    var newFocus = item,
+      focusable = newFocus.querySelectorAll('button:not([disabled]), [href]');
+    if(focusable.length > 0 ) newFocus = focusable[0];
+    return newFocus;
+  };
+
+  function selectResult(element, result, event) {
+    if(!result) return;
+    if(element.options.onClick) {
+      element.options.onClick(result, element, event, function(){
+        toggleOptionsList(element, false);
+      });
+    } else {
+      element.input.value = getResultContent(result);
+      toggleOptionsList(element, false);
+    }
+    element.inputVal = element.input.value;
+  };
+
+  function getResultContent(result) { // get text content of selected item
+    var labelElement = result.querySelector('[data-autocomplete-label]');
+    return labelElement ? labelElement.textContent : result.textContent;
+  };
+
+  function populateResults(element, data) {
+    var innerHtml = '';
+
+    for(var i = 0; i < data.length; i++) {
+      innerHtml = innerHtml + getItemHtml(element, data[i]);
+    }
+    element.resultsList.innerHTML = innerHtml;
+  };
+
+  function getItemHtml(element, data) {
+    var clone = getClone(element, data);
+    Util.removeClass(clone, 'is-hidden');
+    clone.setAttribute('tabindex', '-1');
+    for(var key in data) {
+      if (data.hasOwnProperty(key)) {
+        if(key == 'label') setLabel(clone, data[key]);
+        else if(key == 'class') setClass(clone, data[key]);
+        else if(key == 'url') setUrl(clone, data[key]);
+        else if(key == 'src') setSrc(clone, data[key]);
+        else setKey(clone, key, data[key]);
       }
     }
-    
-    if(j > 0) {
-      var resizingId = false,
-        customEvent = new CustomEvent('update-menu-bar');
-      // update Menu Bar layout on resize  
-      window.addEventListener('resize', function(event){
-        clearTimeout(resizingId);
-        resizingId = setTimeout(doneResizing, 150);
-      });
+    return clone.outerHTML;
+  };
 
-      // close menu when clicking outside it
-      window.addEventListener('click', function(event){
-        menuBarArray.forEach(function(element){
-          checkMenuClick(element, event.target);
-        });
-      });
-
-      function doneResizing() {
-        for( var i = 0; i < menuBars.length; i++) {
-          (function(i){menuBars[i].dispatchEvent(customEvent)})(i);
-        };
-      };
+  function getClone(element, data) {
+    var item = false;
+    if(element.templateItems.length == 1 || !data['template']) item = element.templateItems[0];
+    else {
+      for(var i = 0; i < element.templateItems.length; i++) {
+        if(data['template'] == element.templates[i]) {
+          item = element.templateItems[i];
+        }
+      }
+      if(!item) item = element.templateItems[0];
     }
-  }
+    return item.cloneNode(true);
+  };
+
+  function setLabel(clone, label) {
+    var labelElement = clone.querySelector('[data-autocomplete-label]');
+    labelElement 
+      ? labelElement.textContent = label
+      : clone.textContent = label;
+  };
+
+  function setClass(clone, classList) {
+    Util.addClass(clone, classList);
+  };
+
+  function setUrl(clone, url) {
+    var linkElement = clone.querySelector('[data-autocomplete-url]');
+    if(linkElement) linkElement.setAttribute('href', url);
+  };
+
+  function setSrc(clone, src) {
+    var imgElement = clone.querySelector('[data-autocomplete-src]');
+    if(imgElement) imgElement.setAttribute('src', src);
+  };
+
+  function setKey(clone, key, value) {
+    var subElement = clone.querySelector('[data-autocomplete-'+key+']');
+    if(subElement) {
+      if(subElement.hasAttribute('data-autocomplete-html')) subElement.innerHTML = value;
+      else subElement.textContent = value;
+    }
+  };
+
+  Autocomplete.defaults = {
+    element : '',
+    debounce: 200,
+    characters: 2,
+    searchData: false, // function used to return results
+    onClick: false // function executed when selecting an item in the list; arguments (result, obj) -> selected <li> item + Autocompletr obj reference
+  };
+
+  window.Autocomplete = Autocomplete;
+}());
+// File#: _2_drawer-navigation
+// Usage: codyhouse.co/license
+(function() {
+  function initDrNavControl(element) {
+    var circle = element.getElementsByTagName('circle');
+    if(circle.length > 0) {
+      // set svg attributes to create fill-in animation on click
+      initCircleAttributes(element, circle[0]);
+    }
+
+    var drawerId = element.getAttribute('aria-controls'),
+      drawer = document.getElementById(drawerId);
+    if(drawer) {
+      // when the drawer is closed without click (e.g., user presses 'Esc') -> reset trigger status
+      drawer.addEventListener('drawerIsClose', function(event){ 
+        if(!event.detail || (event.detail && !event.detail.closest('.js-dr-nav-control[aria-controls="'+drawerId+'"]')) ) resetTrigger(element);
+      });
+    }
+  };
+
+  function initCircleAttributes(element, circle) {
+    // set circle stroke-dashoffset/stroke-dasharray values
+    var circumference = (2*Math.PI*circle.getAttribute('r')).toFixed(2);
+    circle.setAttribute('stroke-dashoffset', circumference);
+    circle.setAttribute('stroke-dasharray', circumference);
+    Util.addClass(element, 'dr-nav-control--ready-to-animate');
+  };
+
+  function resetTrigger(element) {
+    Util.removeClass(element, 'anim-menu-btn--state-b'); 
+  };
+
+  var drNavControl = document.getElementsByClassName('js-dr-nav-control');
+  if(drNavControl.length > 0) initDrNavControl(drNavControl[0]);
 }());
 // File#: _2_multiple-custom-select
 // Usage: codyhouse.co/license
-(function () {
-	var MultiCustomSelect = function (element) {
+(function() {
+  var MultiCustomSelect = function(element) {
 		this.element = element;
-		this.select = this.element.getElementsByTagName('select')[0];
-		this.optGroups = this.select.getElementsByTagName('optgroup');
+    this.select = this.element.getElementsByTagName('select')[0];
+    this.optGroups = this.select.getElementsByTagName('optgroup');
 		this.options = this.select.getElementsByTagName('option');
 		this.selectId = this.select.getAttribute('id');
 		this.trigger = false;
 		this.dropdown = false;
 		this.customOptions = false;
 		this.arrowIcon = this.element.getElementsByTagName('svg');
-		this.label = document.querySelector('[for="' + this.selectId + '"]');
+		this.label = document.querySelector('[for="'+this.selectId+'"]');
 		this.selectedOptCounter = 0;
 
 		this.optionIndex = 0; // used while building the custom dropdown
 
 		// label options
 		this.noSelectText = this.element.getAttribute('data-no-select-text') || 'Select';
-		this.multiSelectText = this.element.getAttribute('data-multi-select-text') || '{n} items selected';
-		this.nMultiSelect = this.element.getAttribute('data-n-multi-select') || 2;
+		this.multiSelectText = this.element.getAttribute('data-multi-select-text') || '{n} items selected'; 
+		this.nMultiSelect = this.element.getAttribute('data-n-multi-select') || 1;
 		this.noUpdateLabel = this.element.getAttribute('data-update-text') && this.element.getAttribute('data-update-text') == 'off';
 		this.insetLabel = this.element.getAttribute('data-inset-label') && this.element.getAttribute('data-inset-label') == 'on';
 
 		// init
 		initCustomSelect(this); // init markup
 		initCustomSelectEvents(this); // init event listeners
-	};
-
-	function initCustomSelect(select) {
+  };
+  
+  function initCustomSelect(select) {
 		// create the HTML for the custom dropdown element
 		select.element.insertAdjacentHTML('beforeend', initButtonSelect(select) + initListSelect(select));
-
+		
 		// save custom elements
 		select.dropdown = select.element.getElementsByClassName('js-multi-select__dropdown')[0];
 		select.trigger = select.element.getElementsByClassName('js-multi-select__button')[0];
 		select.customOptions = select.dropdown.getElementsByClassName('js-multi-select__option');
+    
+    // hide default select
+    Util.addClass(select.select, 'is-hidden');
+    if(select.arrowIcon.length > 0 ) select.arrowIcon[0].style.display = 'none';
+  };
 
-		// hide default select
-		Util.addClass(select.select, 'is-hidden');
-		if (select.arrowIcon.length > 0) select.arrowIcon[0].style.display = 'none';
-	};
-
-	function initCustomSelectEvents(select) {
+  function initCustomSelectEvents(select) {
 		// option selection in dropdown
 		initSelection(select);
 
 		// click events
-		select.trigger.addEventListener('click', function (event) {
+		select.trigger.addEventListener('click', function(event){
 			event.preventDefault();
 			toggleCustomSelect(select, false);
 		});
-		if (select.label) {
+		if(select.label) {
 			// move focus to custom trigger when clicking on <select> label
-			select.label.addEventListener('click', function () {
+			select.label.addEventListener('click', function(){
 				Util.moveFocus(select.trigger);
 			});
 		}
 		// keyboard navigation
-		select.dropdown.addEventListener('keydown', function (event) {
-			if (event.keyCode && event.keyCode == 38 || event.key && event.key.toLowerCase() == 'arrowup') {
+		select.dropdown.addEventListener('keydown', function(event){
+			if(event.keyCode && event.keyCode == 38 || event.key && event.key.toLowerCase() == 'arrowup') {
 				keyboardCustomSelect(select, 'prev', event);
-			} else if (event.keyCode && event.keyCode == 40 || event.key && event.key.toLowerCase() == 'arrowdown') {
+			} else if(event.keyCode && event.keyCode == 40 || event.key && event.key.toLowerCase() == 'arrowdown') {
 				keyboardCustomSelect(select, 'next', event);
 			}
 		});
-	};
+  };
 
-	function toggleCustomSelect(select, bool) {
-		var ariaExpanded;
-		if (bool) {
+  function toggleCustomSelect(select, bool) {
+    var ariaExpanded;
+		if(bool) {
 			ariaExpanded = bool;
 		} else {
 			ariaExpanded = select.trigger.getAttribute('aria-expanded') == 'true' ? 'false' : 'true';
 		}
 		select.trigger.setAttribute('aria-expanded', ariaExpanded);
-		if (ariaExpanded == 'true') {
+		if(ariaExpanded == 'true') {
 			var selectedOption = getSelectedOption(select);
-			Util.moveFocus(selectedOption); // fallback if transition is not supported
-			select.dropdown.addEventListener('transitionend', function cb() {
+      Util.moveFocus(selectedOption); // fallback if transition is not supported
+			select.dropdown.addEventListener('transitionend', function cb(){
 				Util.moveFocus(selectedOption);
 				select.dropdown.removeEventListener('transitionend', cb);
 			});
 			placeDropdown(select); // place dropdown based on available space
 		}
-	};
+  };
 
-	function placeDropdown(select) {
+  function placeDropdown(select) {
 		var triggerBoundingRect = select.trigger.getBoundingClientRect();
-		Util.toggleClass(select.dropdown, 'multi-select__dropdown--right', (window.innerWidth < triggerBoundingRect.left + select.dropdown.offsetWidth));
-		// check if there's enough space up or down
-		var moveUp = (window.innerHeight - triggerBoundingRect.bottom) < triggerBoundingRect.top;
-		Util.toggleClass(select.dropdown, 'multi-select__dropdown--up', moveUp);
-		// check if we need to set a max height
+    Util.toggleClass(select.dropdown, 'multi-select__dropdown--right', (window.innerWidth < triggerBoundingRect.left + select.dropdown.offsetWidth));
+    // check if there's enough space up or down
+    var moveUp = (window.innerHeight - triggerBoundingRect.bottom) < triggerBoundingRect.top;
+    Util.toggleClass(select.dropdown, 'multi-select__dropdown--up', moveUp);
+    // check if we need to set a max height
 		var maxHeight = moveUp ? triggerBoundingRect.top - 20 : window.innerHeight - triggerBoundingRect.bottom - 20;
 		// set max-height (based on available space) and width
-		select.dropdown.setAttribute('style', 'max-height: ' + maxHeight + 'px; width: ' + triggerBoundingRect.width + 'px;');
+    select.dropdown.setAttribute('style', 'max-height: '+maxHeight+'px; width: '+triggerBoundingRect.width+'px;');
 	};
 
-	function keyboardCustomSelect(select, direction, event) { // navigate custom dropdown with keyboard
+  function keyboardCustomSelect(select, direction, event) { // navigate custom dropdown with keyboard
 		event.preventDefault();
 		var index = Util.getIndexInArray(select.customOptions, document.activeElement.closest('.js-multi-select__option'));
 		index = (direction == 'next') ? index + 1 : index - 1;
-		if (index < 0) index = select.customOptions.length - 1;
-		if (index >= select.customOptions.length) index = 0;
+		if(index < 0) index = select.customOptions.length - 1;
+		if(index >= select.customOptions.length) index = 0;
 		Util.moveFocus(select.customOptions[index].getElementsByClassName('js-multi-select__checkbox')[0]);
-	};
+  };
 
-	function initSelection(select) { // option selection
-		select.dropdown.addEventListener('change', function (event) {
+  function initSelection(select) { // option selection
+    select.dropdown.addEventListener('change', function(event){
 			var option = event.target.closest('.js-multi-select__option');
-			if (!option) return;
+			if(!option) return;
 			selectOption(select, option);
 		});
-		select.dropdown.addEventListener('click', function (event) {
+		select.dropdown.addEventListener('click', function(event){
 			var option = event.target.closest('.js-multi-select__option');
-			if (!option || !Util.hasClass(event.target, 'js-multi-select__option')) return;
+			if(!option || !Util.hasClass(event.target, 'js-multi-select__option')) return;
 			selectOption(select, option);
 		});
 	};
-
+	
 	function selectOption(select, option) {
-		if (option.hasAttribute('aria-selected') && option.getAttribute('aria-selected') == 'true') {
-			// deselecting that option
-			option.setAttribute('aria-selected', 'false');
-			// update native select element
-			updateNativeSelect(select, option.getAttribute('data-index'), false);
-		} else {
+		if(option.hasAttribute('aria-selected') && option.getAttribute('aria-selected') == 'true') {
+      // deselecting that option
+      option.setAttribute('aria-selected', 'false');
+      // update native select element
+      updateNativeSelect(select, option.getAttribute('data-index'), false);
+		} else { 
 			option.setAttribute('aria-selected', 'true');
 			// update native select element
 			updateNativeSelect(select, option.getAttribute('data-index'), true);
-
+			
 		}
 		var triggerLabel = getSelectedOptionText(select);
 		select.trigger.getElementsByClassName('js-multi-select__label')[0].innerHTML = triggerLabel[0]; // update trigger label
 		Util.toggleClass(select.trigger, 'multi-select__button--active', select.selectedOptCounter > 0);
-		updateTriggerAria(select, triggerLabel[1]); // update trigger arai-label
+    updateTriggerAria(select, triggerLabel[1]); // update trigger arai-label
 	};
 
 	function updateNativeSelect(select, index, bool) {
 		select.options[index].selected = bool;
-		select.select.dispatchEvent(new CustomEvent('change', { bubbles: true })); // trigger change event
+		select.select.dispatchEvent(new CustomEvent('change', {bubbles: true})); // trigger change event
 	};
 
 	function updateTriggerAria(select, ariaLabel) { // new label for custom triegger
-		select.trigger.setAttribute('aria-label', ariaLabel);
+    select.trigger.setAttribute('aria-label', ariaLabel);
 	};
 
 	function getSelectedOptionText(select) {// used to initialize the label of the custom select button
-		var noSelectionText = '<span class="multi-select__term">' + select.noSelectText + '</span>';
-		if (select.noUpdateLabel) return [noSelectionText, select.noSelectText];
+		var noSelectionText = '<span class="multi-select__term">'+select.noSelectText+'</span>';
+		if(select.noUpdateLabel) return [noSelectionText, select.noSelectText];
 		var label = '';
 		var ariaLabel = '';
 		select.selectedOptCounter = 0;
 
 		for (var i = 0; i < select.options.length; i++) {
-			if (select.options[i].selected) {
-				if (select.selectedOptCounter != 0) label = label + ', '
+			if(select.options[i].selected) {
+				if(select.selectedOptCounter != 0 ) label = label + ', '
 				label = label + '' + select.options[i].text;
 				select.selectedOptCounter = select.selectedOptCounter + 1;
-			}
+			} 
 		}
 
-		if (select.selectedOptCounter > select.nMultiSelect) {
-			label = '<span class="multi-select__details">' + select.multiSelectText.replace('{n}', select.selectedOptCounter) + '</span>';
-			ariaLabel = select.multiSelectText.replace('{n}', select.selectedOptCounter) + ', ' + select.noSelectText;
-		} else if (select.selectedOptCounter > 0) {
-			ariaLabel = label + ', ' + select.noSelectText;
-			label = '<span class="multi-select__details">' + label + '</span>';
+		if(select.selectedOptCounter > select.nMultiSelect) {
+			label = '<span class="multi-select__details">'+select.multiSelectText.replace('{n}', select.selectedOptCounter)+'</span>';
+			ariaLabel = select.multiSelectText.replace('{n}', select.selectedOptCounter)+', '+select.noSelectText;
+		} else if( select.selectedOptCounter > 0) {
+			ariaLabel = label + ', ' +select.noSelectText;
+			label = '<span class="multi-select__details">'+label+'</span>';
 		} else {
 			label = noSelectionText;
 			ariaLabel = select.noSelectText;
 		}
 
-		if (select.insetLabel && select.selectedOptCounter > 0) label = noSelectionText + label;
+		if(select.insetLabel && select.selectedOptCounter > 0) label = noSelectionText+label;
 		return [label, ariaLabel];
-	};
-
-	function initButtonSelect(select) { // create the button element -> custom select trigger
+  };
+  
+  function initButtonSelect(select) { // create the button element -> custom select trigger
 		// check if we need to add custom classes to the button trigger
-		var customClasses = select.element.getAttribute('data-trigger-class') ? ' ' + select.element.getAttribute('data-trigger-class') : '';
+		var customClasses = select.element.getAttribute('data-trigger-class') ? ' '+select.element.getAttribute('data-trigger-class') : '';
 
-		var triggerLabel = getSelectedOptionText(select);
+		var triggerLabel = getSelectedOptionText(select);	
 		var activeSelectionClass = select.selectedOptCounter > 0 ? ' multi-select__button--active' : '';
+		
+		var button = '<button class="js-multi-select__button multi-select__button'+customClasses+activeSelectionClass+'" aria-label="'+triggerLabel[1]+'" aria-expanded="false" aria-controls="'+select.selectId+'-dropdown"><span aria-hidden="true" class="js-multi-select__label multi-select__label">'+triggerLabel[0]+'</span>';
+    if(select.arrowIcon.length > 0 && select.arrowIcon[0].outerHTML) {
+      button = button +select.arrowIcon[0].outerHTML;
+    }
+		
+		return button+'</button>';
 
-		var button = '<button class="js-multi-select__button multi-select__button' + customClasses + activeSelectionClass + '" aria-label="' + triggerLabel[1] + '" aria-expanded="false" aria-controls="' + select.selectId + '-dropdown"><span aria-hidden="true" class="js-multi-select__label multi-select__label">' + triggerLabel[0] + '</span>';
-		if (select.arrowIcon.length > 0 && select.arrowIcon[0].outerHTML) {
-			button = button + select.arrowIcon[0].outerHTML;
-		}
+  };
 
-		return button + '</button>';
+  function initListSelect(select) { // create custom select dropdown
+    var list = '<div class="js-multi-select__dropdown multi-select__dropdown" aria-describedby="'+select.selectId+'-description" id="'+select.selectId+'-dropdown">';
+    list = list + getSelectLabelSR(select);
+    if(select.optGroups.length > 0) {
+      for(var i = 0; i < select.optGroups.length; i++) {
+        var optGroupList = select.optGroups[i].getElementsByTagName('option'),
+          optGroupLabel = '<li><span class="multi-select__item multi-select__item--optgroup">'+select.optGroups[i].getAttribute('label')+'</span></li>';
+        list = list + '<ul class="multi-select__list" role="listbox" aria-multiselectable="true">'+optGroupLabel+getOptionsList(select, optGroupList) + '</ul>';
+      }
+    } else {
+      list = list + '<ul class="multi-select__list" role="listbox" aria-multiselectable="true">'+getOptionsList(select, select.options) + '</ul>';
+    }
+    return list;
+  };
 
-	};
+  function getSelectLabelSR(select) {
+    if(select.label) {
+      return '<p class="sr-only" id="'+select.selectId+'-description">'+select.label.textContent+'</p>'
+    } else {
+      return '';
+    }
+  };
 
-	function initListSelect(select) { // create custom select dropdown
-		var list = '<div class="js-multi-select__dropdown multi-select__dropdown" aria-describedby="' + select.selectId + '-description" id="' + select.selectId + '-dropdown">';
-		list = list + getSelectLabelSR(select);
-		if (select.optGroups.length > 0) {
-			for (var i = 0; i < select.optGroups.length; i++) {
-				var optGroupList = select.optGroups[i].getElementsByTagName('option'),
-					optGroupLabel = '<li><span class="multi-select__item multi-select__item--optgroup">' + select.optGroups[i].getAttribute('label') + '</span></li>';
-				list = list + '<ul class="multi-select__list" role="listbox" aria-multiselectable="true">' + optGroupLabel + getOptionsList(select, optGroupList) + '</ul>';
-			}
-		} else {
-			list = list + '<ul class="multi-select__list" role="listbox" aria-multiselectable="true">' + getOptionsList(select, select.options) + '</ul>';
-		}
-		return list;
-	};
-
-	function getSelectLabelSR(select) {
-		if (select.label) {
-			return '<p class="sr-only" id="' + select.selectId + '-description">' + select.label.textContent + '</p>'
-		} else {
-			return '';
-		}
-	};
-
-	function getOptionsList(select, options) {
-		var list = '';
-		for (var i = 0; i < options.length; i++) {
-			var selected = options[i].hasAttribute('selected') ? ' aria-selected="true"' : ' aria-selected="false"',
-				checked = options[i].hasAttribute('selected') ? 'checked' : '';
-			list = list + '<li class="js-multi-select__option" role="option" data-value="' + options[i].value + '" ' + selected + ' data-label="' + options[i].text + '" data-index="' + select.optionIndex + '"><input aria-hidden="true" class="checkbox js-multi-select__checkbox" type="checkbox" id="' + select.selectId + '-' + options[i].value + '-' + select.optionIndex + '" ' + checked + '><label class="multi-select__item multi-select__item--option" aria-hidden="true" for="' + select.selectId + '-' + options[i].value + '-' + select.optionIndex + '"><span>' + options[i].text + '</span></label></li>';
+  function getOptionsList(select, options) {
+    var list = '';
+    for(var i = 0; i < options.length; i++) {
+      var selected = options[i].hasAttribute('selected') ? ' aria-selected="true"' : ' aria-selected="false"',
+        checked = options[i].hasAttribute('selected') ? 'checked' : '';
+			list = list + '<li class="js-multi-select__option" role="option" data-value="'+options[i].value+'" '+selected+' data-label="'+options[i].text+'" data-index="'+select.optionIndex+'"><input aria-hidden="true" class="checkbox js-multi-select__checkbox" type="checkbox" id="'+select.selectId+'-'+options[i].value+'-'+select.optionIndex+'" '+checked+'><label class="multi-select__item multi-select__item--option" aria-hidden="true" for="'+select.selectId+'-'+options[i].value+'-'+select.optionIndex+'"><span>'+options[i].text+'</span></label></li>';
 			select.optionIndex = select.optionIndex + 1;
-		};
-		return list;
-	};
+    };
+    return list;
+  };
 
-	function getSelectedOption(select) { // return first selected option
+  function getSelectedOption(select) { // return first selected option
 		var option = select.dropdown.querySelector('[aria-selected="true"]');
-		if (option) return option.getElementsByClassName('js-multi-select__checkbox')[0];
-		else return select.dropdown.getElementsByClassName('js-multi-select__option')[0].getElementsByClassName('js-multi-select__checkbox')[0];
-	};
+    if(option) return option.getElementsByClassName('js-multi-select__checkbox')[0];
+    else return select.dropdown.getElementsByClassName('js-multi-select__option')[0].getElementsByClassName('js-multi-select__checkbox')[0];
+  };
 
-	function moveFocusToSelectTrigger(select) {
-		if (!document.activeElement.closest('.js-multi-select')) return
-		select.trigger.focus();
+  function moveFocusToSelectTrigger(select) {
+    if(!document.activeElement.closest('.js-multi-select')) return
+    select.trigger.focus();
 	};
-
+	
 	function checkCustomSelectClick(select, target) { // close select when clicking outside it
-		if (!select.element.contains(target)) toggleCustomSelect(select, 'false');
-	};
-
-	//initialize the CustomSelect objects
+		if( !select.element.contains(target) ) toggleCustomSelect(select, 'false');
+  };
+  
+  //initialize the CustomSelect objects
 	var customSelect = document.getElementsByClassName('js-multi-select');
-	if (customSelect.length > 0) {
+	if( customSelect.length > 0 ) {
 		var selectArray = [];
-		for (var i = 0; i < customSelect.length; i++) {
-			(function (i) { selectArray.push(new MultiCustomSelect(customSelect[i])); })(i);
+		for( var i = 0; i < customSelect.length; i++) {
+			(function(i){selectArray.push(new MultiCustomSelect(customSelect[i]));})(i);
 		}
 
 		// listen for key events
-		window.addEventListener('keyup', function (event) {
-			if (event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape') {
+		window.addEventListener('keyup', function(event){
+			if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
 				// close custom select on 'Esc'
-				selectArray.forEach(function (element) {
+				selectArray.forEach(function(element){
 					moveFocusToSelectTrigger(element); // if focus is within dropdown, move it to dropdown trigger
 					toggleCustomSelect(element, 'false'); // close dropdown
 				});
-			}
+			} 
 		});
 		// close custom select when clicking outside it
-		window.addEventListener('click', function (event) {
-			selectArray.forEach(function (element) {
+		window.addEventListener('click', function(event){
+			selectArray.forEach(function(element){
 				checkCustomSelectClick(element, event.target);
 			});
 		});
 	}
 }());
-// File#: _2_slider-multi-value
-// Usage: codyhouse.co/license
-(function() {
-	var SliderMulti = function(element) {
-		this.element = element;
-		this.rangeWrapper = this.element.getElementsByClassName('slider__range');
-		this.rangeInput = this.element.getElementsByClassName('slider__input');
-		this.rangeMin = this.rangeInput[0].getAttribute('min');
-		this.rangeMax = this.rangeInput[0].getAttribute('max');
-		this.sliderWidth = window.getComputedStyle(this.element.getElementsByClassName('slider__range')[0]).getPropertyValue('width');
-		this.thumbWidth = getComputedStyle(this.element).getPropertyValue('--slide-thumb-size');
-		initSliderMulti(this);
-	};
-
-	function initSliderMulti(slider) {
-		// toggle custom class based on browser support
-		toggleMsClass(slider);
-
-		// init bg color of the slider
-		updateRangeColor(slider);
-
-		slider.element.addEventListener('updateRange', function(event){
-			checkRangeValues(slider, event.detail);
-			updateRangeColor(slider);
-		});
-
-		// custom event emitted after window resize
-		slider.element.addEventListener('update-slider-multi-value', function(event){
-			slider.sliderWidth = window.getComputedStyle(slider.element.getElementsByClassName('slider__range')[0]).getPropertyValue('width');
-			updateRangeColor(slider);
-		});
-	};
-
-	function checkRangeValues(slider, index) {
-		// if min value was changed -> make sure min value is smaller than max value 
-		// if max value was changed -> make sure max value is bigger than min value 
-		var i = (index == 0) ? 1 : 0,
-			limit = parseFloat(slider.rangeInput[i].value);
-		if( (index == 0 && slider.rangeInput[0].value >= limit) || (index == 1 && slider.rangeInput[1].value <= limit) ) {
-			slider.rangeInput[index].value = limit;
-			slider.element.dispatchEvent(new CustomEvent('inputRangeLimit', {detail: index}))
-		}
-	};
-
-	function updateRangeColor(slider) { // update background fill color of the slider
-		var percentageStart = parseInt((slider.rangeInput[0].value - slider.rangeMin)/(slider.rangeMax - slider.rangeMin)*100),
-			percentageEnd = parseInt((slider.rangeInput[1].value - slider.rangeMin)/(slider.rangeMax - slider.rangeMin)*100), 
-			start = 'calc('+percentageStart+'*('+slider.sliderWidth+' - 0.5*'+slider.thumbWidth+')/100)',
-			end = 'calc('+percentageEnd+'*('+slider.sliderWidth+' - 0.5*'+slider.thumbWidth+')/100)';
-
-		slider.rangeWrapper[0].style.setProperty('--slider-fill-value-start', start);
-		slider.rangeWrapper[0].style.setProperty('--slider-fill-value-end', end);
-	};
-
-	function toggleMsClass(slider) {
-		var cssVariablesSupport = Util.cssSupports('--color-value', 'red'),
-			imeAlignSuport = Util.cssSupports('-ms-ime-align', 'auto');
-		if(imeAlignSuport || !cssVariablesSupport) Util.addClass(slider.element, 'slider--ms-fallback'); // IE and Edge (<=18) Fallback
-	};
-
-	//initialize the SliderMulti objects
-	var slidersMulti = document.getElementsByClassName('js-slider');
-	if( slidersMulti.length > 0 ) {
-		var slidersMultiArray = [];
-		for( var i = 0; i < slidersMulti.length; i++) {(function(i){
-			if(slidersMulti[i].getElementsByClassName('slider__input').length > 1) slidersMultiArray.push(new SliderMulti(slidersMulti[i]));
-		})(i);}
-		if(slidersMultiArray.length > 0) {
-			var resizingId = false,
-        customEvent = new CustomEvent('update-slider-multi-value');
-      
-      window.addEventListener('resize', function() {
-        clearTimeout(resizingId);
-        resizingId = setTimeout(doneResizing, 500);
-      });
-
-      function doneResizing() {
-        for( var i = 0; i < slidersMultiArray.length; i++) {
-          (function(i){slidersMultiArray[i].element.dispatchEvent(customEvent)})(i);
-        };
-      };
-		}
-	}
-}());
-// File#: _2_slideshow
-// Usage: codyhouse.co/license
-(function() {
-	var Slideshow = function(opts) {
-		this.options = slideshowAssignOptions(Slideshow.defaults , opts);
-		this.element = this.options.element;
-		this.items = this.element.getElementsByClassName('js-slideshow__item');
-		this.controls = this.element.getElementsByClassName('js-slideshow__control'); 
-		this.selectedSlide = 0;
-		this.autoplayId = false;
-		this.autoplayPaused = false;
-		this.navigation = false;
-		this.navCurrentLabel = false;
-		this.ariaLive = false;
-		this.moveFocus = false;
-		this.animating = false;
-		this.supportAnimation = Util.cssSupports('transition');
-		this.animationOff = (!Util.hasClass(this.element, 'slideshow--transition-fade') && !Util.hasClass(this.element, 'slideshow--transition-slide') && !Util.hasClass(this.element, 'slideshow--transition-prx'));
-		this.animationType = Util.hasClass(this.element, 'slideshow--transition-prx') ? 'prx' : 'slide';
-		this.animatingClass = 'slideshow--is-animating';
-		initSlideshow(this);
-		initSlideshowEvents(this);
-		initAnimationEndEvents(this);
-	};
-
-	Slideshow.prototype.showNext = function() {
-		showNewItem(this, this.selectedSlide + 1, 'next');
-	};
-
-	Slideshow.prototype.showPrev = function() {
-		showNewItem(this, this.selectedSlide - 1, 'prev');
-	};
-
-	Slideshow.prototype.showItem = function(index) {
-		showNewItem(this, index, false);
-	};
-
-	Slideshow.prototype.startAutoplay = function() {
-		var self = this;
-		if(this.options.autoplay && !this.autoplayId && !this.autoplayPaused) {
-			self.autoplayId = setInterval(function(){
-				self.showNext();
-			}, self.options.autoplayInterval);
-		}
-	};
-
-	Slideshow.prototype.pauseAutoplay = function() {
-		var self = this;
-		if(this.options.autoplay) {
-			clearInterval(self.autoplayId);
-			self.autoplayId = false;
-		}
-	};
-
-	function slideshowAssignOptions(defaults, opts) {
-		// initialize the object options
-		var mergeOpts = {};
-		mergeOpts.element = (typeof opts.element !== "undefined") ? opts.element : defaults.element;
-		mergeOpts.navigation = (typeof opts.navigation !== "undefined") ? opts.navigation : defaults.navigation;
-		mergeOpts.autoplay = (typeof opts.autoplay !== "undefined") ? opts.autoplay : defaults.autoplay;
-		mergeOpts.autoplayInterval = (typeof opts.autoplayInterval !== "undefined") ? opts.autoplayInterval : defaults.autoplayInterval;
-		mergeOpts.swipe = (typeof opts.swipe !== "undefined") ? opts.swipe : defaults.swipe;
-		return mergeOpts;
-	};
-
-	function initSlideshow(slideshow) { // basic slideshow settings
-		// if no slide has been selected -> select the first one
-		if(slideshow.element.getElementsByClassName('slideshow__item--selected').length < 1) Util.addClass(slideshow.items[0], 'slideshow__item--selected');
-		slideshow.selectedSlide = Util.getIndexInArray(slideshow.items, slideshow.element.getElementsByClassName('slideshow__item--selected')[0]);
-		// create an element that will be used to announce the new visible slide to SR
-		var srLiveArea = document.createElement('div');
-		Util.setAttributes(srLiveArea, {'class': 'sr-only js-slideshow__aria-live', 'aria-live': 'polite', 'aria-atomic': 'true'});
-		slideshow.element.appendChild(srLiveArea);
-		slideshow.ariaLive = srLiveArea;
-	};
-
-	function initSlideshowEvents(slideshow) {
-		// if slideshow navigation is on -> create navigation HTML and add event listeners
-		if(slideshow.options.navigation) {
-			// check if navigation has already been included
-			if(slideshow.element.getElementsByClassName('js-slideshow__navigation').length == 0) {
-				var navigation = document.createElement('ol'),
-					navChildren = '';
-
-				var navClasses = 'slideshow__navigation js-slideshow__navigation';
-				if(slideshow.items.length <= 1) {
-					navClasses = navClasses + ' is-hidden';
-				} 
-				
-				navigation.setAttribute('class', navClasses);
-				for(var i = 0; i < slideshow.items.length; i++) {
-					var className = (i == slideshow.selectedSlide) ? 'class="slideshow__nav-item slideshow__nav-item--selected js-slideshow__nav-item"' :  'class="slideshow__nav-item js-slideshow__nav-item"',
-						navCurrentLabel = (i == slideshow.selectedSlide) ? '<span class="sr-only js-slideshow__nav-current-label">Current Item</span>' : '';
-					navChildren = navChildren + '<li '+className+'><button class="reset"><span class="sr-only">'+ (i+1) + '</span>'+navCurrentLabel+'</button></li>';
-				}
-				navigation.innerHTML = navChildren;
-				slideshow.element.appendChild(navigation);
-			}
-			
-			slideshow.navCurrentLabel = slideshow.element.getElementsByClassName('js-slideshow__nav-current-label')[0]; 
-			slideshow.navigation = slideshow.element.getElementsByClassName('js-slideshow__nav-item');
-
-			var dotsNavigation = slideshow.element.getElementsByClassName('js-slideshow__navigation')[0];
-
-			dotsNavigation.addEventListener('click', function(event){
-				navigateSlide(slideshow, event, true);
-			});
-			dotsNavigation.addEventListener('keyup', function(event){
-				navigateSlide(slideshow, event, (event.key.toLowerCase() == 'enter'));
-			});
-		}
-		// slideshow arrow controls
-		if(slideshow.controls.length > 0) {
-			// hide controls if one item available
-			if(slideshow.items.length <= 1) {
-				Util.addClass(slideshow.controls[0], 'is-hidden');
-				Util.addClass(slideshow.controls[1], 'is-hidden');
-			}
-			slideshow.controls[0].addEventListener('click', function(event){
-				event.preventDefault();
-				slideshow.showPrev();
-				updateAriaLive(slideshow);
-			});
-			slideshow.controls[1].addEventListener('click', function(event){
-				event.preventDefault();
-				slideshow.showNext();
-				updateAriaLive(slideshow);
-			});
-		}
-		// swipe events
-		if(slideshow.options.swipe) {
-			//init swipe
-			new SwipeContent(slideshow.element);
-			slideshow.element.addEventListener('swipeLeft', function(event){
-				slideshow.showNext();
-			});
-			slideshow.element.addEventListener('swipeRight', function(event){
-				slideshow.showPrev();
-			});
-		}
-		// autoplay
-		if(slideshow.options.autoplay) {
-			slideshow.startAutoplay();
-			// pause autoplay if user is interacting with the slideshow
-			slideshow.element.addEventListener('mouseenter', function(event){
-				slideshow.pauseAutoplay();
-				slideshow.autoplayPaused = true;
-			});
-			slideshow.element.addEventListener('focusin', function(event){
-				slideshow.pauseAutoplay();
-				slideshow.autoplayPaused = true;
-			});
-			slideshow.element.addEventListener('mouseleave', function(event){
-				slideshow.autoplayPaused = false;
-				slideshow.startAutoplay();
-			});
-			slideshow.element.addEventListener('focusout', function(event){
-				slideshow.autoplayPaused = false;
-				slideshow.startAutoplay();
-			});
-		}
-		// detect if external buttons control the slideshow
-		var slideshowId = slideshow.element.getAttribute('id');
-		if(slideshowId) {
-			var externalControls = document.querySelectorAll('[data-controls="'+slideshowId+'"]');
-			for(var i = 0; i < externalControls.length; i++) {
-				(function(i){externalControlSlide(slideshow, externalControls[i]);})(i);
-			}
-		}
-		// custom event to trigger selection of a new slide element
-		slideshow.element.addEventListener('selectNewItem', function(event){
-			// check if slide is already selected
-			if(event.detail) {
-				if(event.detail - 1 == slideshow.selectedSlide) return;
-				showNewItem(slideshow, event.detail - 1, false);
-			}
-		});
-
-		// keyboard navigation
-		slideshow.element.addEventListener('keydown', function(event){
-			if(event.keyCode && event.keyCode == 39 || event.key && event.key.toLowerCase() == 'arrowright') {
-				slideshow.showNext();
-			} else if(event.keyCode && event.keyCode == 37 || event.key && event.key.toLowerCase() == 'arrowleft') {
-				slideshow.showPrev();
-			}
-		});
-	};
-
-	function navigateSlide(slideshow, event, keyNav) { 
-		// user has interacted with the slideshow navigation -> update visible slide
-		var target = ( Util.hasClass(event.target, 'js-slideshow__nav-item') ) ? event.target : event.target.closest('.js-slideshow__nav-item');
-		if(keyNav && target && !Util.hasClass(target, 'slideshow__nav-item--selected')) {
-			slideshow.showItem(Util.getIndexInArray(slideshow.navigation, target));
-			slideshow.moveFocus = true;
-			updateAriaLive(slideshow);
-		}
-	};
-
-	function initAnimationEndEvents(slideshow) {
-		// remove animation classes at the end of a slide transition
-		for( var i = 0; i < slideshow.items.length; i++) {
-			(function(i){
-				slideshow.items[i].addEventListener('animationend', function(){resetAnimationEnd(slideshow, slideshow.items[i]);});
-				slideshow.items[i].addEventListener('transitionend', function(){resetAnimationEnd(slideshow, slideshow.items[i]);});
-			})(i);
-		}
-	};
-
-	function resetAnimationEnd(slideshow, item) {
-		setTimeout(function(){ // add a delay between the end of animation and slideshow reset - improve animation performance
-			if(Util.hasClass(item,'slideshow__item--selected')) {
-				if(slideshow.moveFocus) Util.moveFocus(item);
-				emitSlideshowEvent(slideshow, 'newItemVisible', slideshow.selectedSlide);
-				slideshow.moveFocus = false;
-			}
-			Util.removeClass(item, 'slideshow__item--'+slideshow.animationType+'-out-left slideshow__item--'+slideshow.animationType+'-out-right slideshow__item--'+slideshow.animationType+'-in-left slideshow__item--'+slideshow.animationType+'-in-right');
-			item.removeAttribute('aria-hidden');
-			slideshow.animating = false;
-			Util.removeClass(slideshow.element, slideshow.animatingClass); 
-		}, 100);
-	};
-
-	function showNewItem(slideshow, index, bool) {
-		if(slideshow.items.length <= 1) return;
-		if(slideshow.animating && slideshow.supportAnimation) return;
-		slideshow.animating = true;
-		Util.addClass(slideshow.element, slideshow.animatingClass); 
-		if(index < 0) index = slideshow.items.length - 1;
-		else if(index >= slideshow.items.length) index = 0;
-		// skip slideshow item if it is hidden
-		if(bool && Util.hasClass(slideshow.items[index], 'is-hidden')) {
-			slideshow.animating = false;
-			index = bool == 'next' ? index + 1 : index - 1;
-			showNewItem(slideshow, index, bool);
-			return;
-		}
-		// index of new slide is equal to index of slide selected item
-		if(index == slideshow.selectedSlide) {
-			slideshow.animating = false;
-			return;
-		}
-		var exitItemClass = getExitItemClass(slideshow, bool, slideshow.selectedSlide, index);
-		var enterItemClass = getEnterItemClass(slideshow, bool, slideshow.selectedSlide, index);
-		// transition between slides
-		if(!slideshow.animationOff) Util.addClass(slideshow.items[slideshow.selectedSlide], exitItemClass);
-		Util.removeClass(slideshow.items[slideshow.selectedSlide], 'slideshow__item--selected');
-		slideshow.items[slideshow.selectedSlide].setAttribute('aria-hidden', 'true'); //hide to sr element that is exiting the viewport
-		if(slideshow.animationOff) {
-			Util.addClass(slideshow.items[index], 'slideshow__item--selected');
-		} else {
-			Util.addClass(slideshow.items[index], enterItemClass+' slideshow__item--selected');
-		}
-		// reset slider navigation appearance
-		resetSlideshowNav(slideshow, index, slideshow.selectedSlide);
-		slideshow.selectedSlide = index;
-		// reset autoplay
-		slideshow.pauseAutoplay();
-		slideshow.startAutoplay();
-		// reset controls/navigation color themes
-		resetSlideshowTheme(slideshow, index);
-		// emit event
-		emitSlideshowEvent(slideshow, 'newItemSelected', slideshow.selectedSlide);
-		if(slideshow.animationOff) {
-			slideshow.animating = false;
-			Util.removeClass(slideshow.element, slideshow.animatingClass);
-		}
-	};
-
-	function getExitItemClass(slideshow, bool, oldIndex, newIndex) {
-		var className = '';
-		if(bool) {
-			className = (bool == 'next') ? 'slideshow__item--'+slideshow.animationType+'-out-right' : 'slideshow__item--'+slideshow.animationType+'-out-left'; 
-		} else {
-			className = (newIndex < oldIndex) ? 'slideshow__item--'+slideshow.animationType+'-out-left' : 'slideshow__item--'+slideshow.animationType+'-out-right';
-		}
-		return className;
-	};
-
-	function getEnterItemClass(slideshow, bool, oldIndex, newIndex) {
-		var className = '';
-		if(bool) {
-			className = (bool == 'next') ? 'slideshow__item--'+slideshow.animationType+'-in-right' : 'slideshow__item--'+slideshow.animationType+'-in-left'; 
-		} else {
-			className = (newIndex < oldIndex) ? 'slideshow__item--'+slideshow.animationType+'-in-left' : 'slideshow__item--'+slideshow.animationType+'-in-right';
-		}
-		return className;
-	};
-
-	function resetSlideshowNav(slideshow, newIndex, oldIndex) {
-		if(slideshow.navigation) {
-			Util.removeClass(slideshow.navigation[oldIndex], 'slideshow__nav-item--selected');
-			Util.addClass(slideshow.navigation[newIndex], 'slideshow__nav-item--selected');
-			slideshow.navCurrentLabel.parentElement.removeChild(slideshow.navCurrentLabel);
-			slideshow.navigation[newIndex].getElementsByTagName('button')[0].appendChild(slideshow.navCurrentLabel);
-		}
-	};
-
-	function resetSlideshowTheme(slideshow, newIndex) {
-		var dataTheme = slideshow.items[newIndex].getAttribute('data-theme');
-		if(dataTheme) {
-			if(slideshow.navigation) slideshow.navigation[0].parentElement.setAttribute('data-theme', dataTheme);
-			if(slideshow.controls[0]) slideshow.controls[0].parentElement.setAttribute('data-theme', dataTheme);
-		} else {
-			if(slideshow.navigation) slideshow.navigation[0].parentElement.removeAttribute('data-theme');
-			if(slideshow.controls[0]) slideshow.controls[0].parentElement.removeAttribute('data-theme');
-		}
-	};
-
-	function emitSlideshowEvent(slideshow, eventName, detail) {
-		var event = new CustomEvent(eventName, {detail: detail});
-		slideshow.element.dispatchEvent(event);
-	};
-
-	function updateAriaLive(slideshow) {
-		slideshow.ariaLive.innerHTML = 'Item '+(slideshow.selectedSlide + 1)+' of '+slideshow.items.length;
-	};
-
-	function externalControlSlide(slideshow, button) { // control slideshow using external element
-		button.addEventListener('click', function(event){
-			var index = button.getAttribute('data-index');
-			if(!index || index == slideshow.selectedSlide + 1) return;
-			event.preventDefault();
-			showNewItem(slideshow, index - 1, false);
-		});
-	};
-
-	Slideshow.defaults = {
-    element : '',
-    navigation : true,
-    autoplay : false,
-    autoplayInterval: 5000,
-    swipe: false
-  };
-
-	window.Slideshow = Slideshow;
-	
-	//initialize the Slideshow objects
-	var slideshows = document.getElementsByClassName('js-slideshow');
-	if( slideshows.length > 0 ) {
-		for( var i = 0; i < slideshows.length; i++) {
-			(function(i){
-				var navigation = (slideshows[i].getAttribute('data-navigation') && slideshows[i].getAttribute('data-navigation') == 'off') ? false : true,
-					autoplay = (slideshows[i].getAttribute('data-autoplay') && slideshows[i].getAttribute('data-autoplay') == 'on') ? true : false,
-					autoplayInterval = (slideshows[i].getAttribute('data-autoplay-interval')) ? slideshows[i].getAttribute('data-autoplay-interval') : 5000,
-					swipe = (slideshows[i].getAttribute('data-swipe') && slideshows[i].getAttribute('data-swipe') == 'on') ? true : false;
-				new Slideshow({element: slideshows[i], navigation: navigation, autoplay : autoplay, autoplayInterval : autoplayInterval, swipe : swipe});
-			})(i);
-		}
-	}
-}());
-// File#: _3_dashboard-navigation
-// Usage: codyhouse.co/license
-(function() {
-  var appUi = document.getElementsByClassName('js-app-ui');
-  if(appUi.length > 0) {
-    var appMenuBtn = appUi[0].getElementsByClassName('js-app-ui__menu-btn');
-    if(appMenuBtn.length < 1) return;
-    var appExpandedClass = 'app-ui--nav-expanded';
-    var firstFocusableElement = false,
-      // we'll use these to store the node that needs to receive focus when the mobile menu is closed 
-      focusMenu = false;
-
-    // toggle navigation on mobile
-    appMenuBtn[0].addEventListener('click', function(event) {
-      var openMenu = !Util.hasClass(appUi[0], appExpandedClass);
-      Util.toggleClass(appUi[0], appExpandedClass, openMenu);
-      appMenuBtn[0].setAttribute('aria-expanded', openMenu);
-			if(openMenu) {
-        firstFocusableElement = getMenuFirstFocusable();
-        if(firstFocusableElement) firstFocusableElement.focus(); // move focus to first focusable element
-      } else if(focusMenu) {
-				focusMenu.focus();
-				focusMenu = false;
-			}
-    });
-
-    // listen for key events
-		window.addEventListener('keyup', function(event){
-			// listen for esc key
-			if( (event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape' )) {
-				// close navigation on mobile if open
-				if(appMenuBtn[0].getAttribute('aria-expanded') == 'true' && isVisible(appMenuBtn[0])) {
-					focusMenu = appMenuBtn[0]; // move focus to menu trigger when menu is close
-					appMenuBtn[0].click();
-				}
-			}
-			// listen for tab key
-			if( (event.keyCode && event.keyCode == 9) || (event.key && event.key.toLowerCase() == 'tab' )) {
-				// close navigation on mobile if open when nav loses focus
-				if(appMenuBtn[0].getAttribute('aria-expanded') == 'true' && isVisible(appMenuBtn[0]) && !document.activeElement.closest('.js-app-ui__nav')) appMenuBtn[0].click();
-			}
-    });
-    
-    // listen for resize
-		var resizingId = false;
-		window.addEventListener('resize', function() {
-			clearTimeout(resizingId);
-			resizingId = setTimeout(doneResizing, 500);
-		});
-
-		function doneResizing() {
-			if( !isVisible(appMenuBtn[0]) && Util.hasClass(appUi[0], appExpandedClass)) appMenuBtn[0].click();
-		};
-
-    function getMenuFirstFocusable() {
-      var mobileNav = appUi[0].getElementsByClassName('js-app-ui__nav');
-      if(mobileNav.length < 1) return false;
-			var focusableEle = mobileNav[0].querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"]), [controls], summary'),
-        firstFocusable = false;
-			for(var i = 0; i < focusableEle.length; i++) {
-				if( focusableEle[i].offsetWidth || focusableEle[i].offsetHeight || focusableEle[i].getClientRects().length ) {
-					firstFocusable = focusableEle[i];
-					break;
-				}
-      }
-      
-			return firstFocusable;
-    };
-    
-    function isVisible(element) {
-      return (element.offsetWidth || element.offsetHeight || element.getClientRects().length);
-    };
-  }
-}());
-// File#: _3_expandable-img-gallery
-// Usage: codyhouse.co/license
-
-(function() {
-  var ExpGallery = function(element) {
-    this.element = element;
-    this.slideshow = this.element.getElementsByClassName('js-exp-lightbox__body')[0];
-    this.slideshowList = this.element.getElementsByClassName('js-exp-lightbox__slideshow')[0];
-    this.slideshowId = this.element.getAttribute('id')
-    this.gallery = document.querySelector('[data-controls="'+this.slideshowId+'"]');
-    this.galleryItems = this.gallery.getElementsByClassName('js-exp-gallery__item');
-    this.lazyload = this.gallery.getAttribute('data-placeholder');
-    this.animationRunning = false;
-    // menu bar
-    this.menuBar = this.element.getElementsByClassName('js-menu-bar');
-    initNewContent(this);
-    initLightboxMarkup(this);
-    lazyLoadLightbox(this);
-    initSlideshow(this);
-    initModal(this);
-    initModalEvents(this);
-  };
-
-  function initNewContent(gallery) {
-    // if the gallery uses the infinite load - make sure to update the modal gallery when new content is loaded
-    gallery.infiniteScrollParent = gallery.gallery.closest('[data-container]');
-    
-    if(!gallery.infiniteScrollParent && Util.hasClass(gallery.gallery, 'js-infinite-scroll')) {
-      gallery.infiniteScrollParent = gallery.gallery;
-    }
-    
-    if(gallery.infiniteScrollParent) {
-      gallery.infiniteScrollParent.addEventListener('content-loaded', function(event){
-        initLightboxMarkup(gallery);
-        initSlideshow(gallery);
-      });
-    }
-  };
-
-  function initLightboxMarkup(gallery) {
-    // create items inside lightbox - modal slideshow
-    var slideshowContent = '';
-    for(var i = 0; i < gallery.galleryItems.length; i++) {
-      var caption = gallery.galleryItems[i].getElementsByClassName('js-exp-gallery__caption'),
-        image = gallery.galleryItems[i].getElementsByTagName('img')[0],
-        caption = gallery.galleryItems[i].getElementsByClassName('js-exp-gallery__caption');
-      // details
-      var src = image.getAttribute('data-modal-src');
-      if(!src) src = image.getAttribute('data-src');
-      if(!src) src = image.getAttribute('src');
-      var altAttr = image.getAttribute('alt')
-      altAttr = altAttr ? 'alt="'+altAttr+'"' : '';
-      var draggable = gallery.slideshow.getAttribute('data-swipe') == 'on' ? 'draggable="false" ondragstart="return false;"' : '';
-      var imgBlock = gallery.lazyload 
-        ? '<img data-src="'+src+'" data-loading="lazy" src="'+gallery.lazyload+'" '+altAttr+' '+draggable+' class=" pointer-events-auto">'
-        : '<img src="'+src+'" data-loading="lazy" '+draggable+' class=" pointer-events-auto">';
-
-      var captionBlock = caption.length > 0
-        ? '<figcaption class="exp-lightbox__caption pointer-events-auto">'+caption[0].textContent+'</figcaption>'
-        : '';
-
-      slideshowContent = slideshowContent + '<li class="slideshow__item js-slideshow__item"><figure class="exp-lightbox__media"><div class="exp-lightbox__media-outer"><div class="exp-lightbox__media-inner">'+imgBlock+'</div></div>'+captionBlock+'</li>';
-    }
-    gallery.slideshowList.innerHTML = slideshowContent;
-    gallery.slides = gallery.slideshowList.getElementsByClassName('js-slideshow__item');
-
-    // append the morphing image - we will animate it from the selected slide to the final position (and viceversa)
-    var imgMorph = document.createElement("div");
-    Util.setAttributes(imgMorph, {'aria-hidden': 'true', 'class': 'exp-lightbox__clone-img-wrapper js-exp-lightbox__clone-img-wrapper', 'data-exp-morph': gallery.slideshowId});
-    imgMorph.innerHTML = '<svg><defs><clipPath id="'+gallery.slideshowId+'-clip"><rect/></clipPath></defs><image height="100%" width="100%" clip-path="url(#'+gallery.slideshowId+'-clip)"></image></svg>';
-    document.body.appendChild(imgMorph);
-    gallery.imgMorph = document.querySelector('.js-exp-lightbox__clone-img-wrapper[data-exp-morph="'+gallery.slideshowId+'"]');
-    gallery.imgMorphSVG = gallery.imgMorph.getElementsByTagName('svg')[0];
-    gallery.imgMorphRect = gallery.imgMorph.getElementsByTagName('rect')[0];
-    gallery.imgMorphImg = gallery.imgMorph.getElementsByTagName('image')[0];
-    
-    // append image for zoom in effect
-    if(gallery.slideshow.getAttribute('data-zoom') == 'on') {
-      var zoomImg = document.createElement("div");
-      Util.setAttributes(zoomImg, {'aria-hidden': 'true', 'class': 'exp-lightbox__zoom exp-lightbox__zoom--no-transition js-exp-lightbox__zoom'});
-      zoomImg.innerHTML = '<img>';
-      gallery.element.appendChild(zoomImg);
-      gallery.zoomImg = gallery.element.getElementsByClassName('js-exp-lightbox__zoom')[0];
-    }
-  };
-
-  function lazyLoadLightbox(gallery) {
-    // lazyload media of selected slide/prev slide/next slide
-    gallery.slideshow.addEventListener('newItemSelected', function(event){
-      // 'newItemSelected' is emitted by the Slideshow object when a new slide is selected
-      gallery.selectedSlide = event.detail;
-      lazyLoadSlide(gallery);
-      // menu element - trigger new slide event
-      triggerMenuEvent(gallery);
-    });
-  };
-
-  function lazyLoadSlide(gallery) {
-    setSlideMedia(gallery, gallery.selectedSlide);
-    setSlideMedia(gallery, gallery.selectedSlide + 1);
-    setSlideMedia(gallery, gallery.selectedSlide - 1);
-  };
-
-  function setSlideMedia(gallery, index) {
-    if(index < 0) index = gallery.slides.length - 1;
-    if(index > gallery.slides.length - 1) index = 0;
-    var imgs = gallery.slides[index].querySelectorAll('img[data-src]');
-    for(var i = 0; i < imgs.length; i++) {
-      imgs[i].src = imgs[i].getAttribute('data-src');
-    }
-  };
-
-  function initSlideshow(gallery) { 
-    // reset slideshow navigation
-    resetSlideshowControls(gallery);
-    gallery.slideshowNav = gallery.element.getElementsByClassName('js-slideshow__control');
-
-    if(gallery.slides.length <= 1) {
-      toggleSlideshowElements(gallery, true);
-      return;
-    } 
-    var swipe = (gallery.slideshow.getAttribute('data-swipe') && gallery.slideshow.getAttribute('data-swipe') == 'on') ? true : false;
-    gallery.slideshowObj = new Slideshow({element: gallery.slideshow, navigation: false, autoplay : false, swipe : swipe});
-  };
-
-  function resetSlideshowControls(gallery) {
-    var arrowControl = gallery.element.getElementsByClassName('js-slideshow__control');
-    if(arrowControl.length == 0) return;
-    var controlsWrapper = arrowControl[0].parentElement;
-    if(!controlsWrapper) return;
-    controlsWrapper.innerHTML = controlsWrapper.innerHTML;
-  };
-
-  function toggleSlideshowElements(gallery, bool) { // hide slideshow controls if gallery is composed by one item only
-    if(gallery.slideshowNav.length > 0) {
-      for(var i = 0; i < gallery.slideshowNav.length; i++) {
-        bool ? Util.addClass(gallery.slideshowNav[i], 'is-hidden') : Util.removeClass(gallery.slideshowNav[i], 'is-hidden');
-      }
-    }
-  };
-
-  function initModal(gallery) {
-    Util.addClass(gallery.element, 'exp-lightbox--no-transition'); // add no-transition class to lightbox - used to select the first visible slide
-    gallery.element.addEventListener('modalIsClose', function(event){ // add no-transition class
-      Util.addClass(gallery.element, 'exp-lightbox--no-transition');
-      gallery.imgMorph.style = '';
-    });
-    // trigger modal lightbox
-    gallery.gallery.addEventListener('click', function(event){
-      openModalLightbox(gallery, event);
-    });
-  };
-
-  function initModalEvents(gallery) {
-   if(gallery.zoomImg) { // image zoom
-      gallery.slideshow.addEventListener('click', function(event){
-        if(event.target.tagName.toLowerCase() == 'img' && event.target.closest('.js-slideshow__item') && !gallery.modalSwiping) modalZoomImg(gallery, event.target);
-      });
-
-      gallery.zoomImg.addEventListener('click', function(event){
-        modalZoomImg(gallery, false);
-      });
-
-      gallery.element.addEventListener('modalIsClose', function(event){
-        modalZoomImg(gallery, false); // close zoom-in image if open
-        closeModalAnimation(gallery);
-      });
-    }
-
-    if(!gallery.slideshowObj) return;
-
-    if(gallery.slideshowObj.options.swipe) { // close gallery when you swipeUp/SwipeDown
-      gallery.slideshowObj.element.addEventListener('swipeUp', function(event){
-        closeModal(gallery);
-      });
-      gallery.slideshowObj.element.addEventListener('swipeDown', function(event){
-        closeModal(gallery);
-      });
-    }
-    
-    if(gallery.zoomImg && gallery.slideshowObj.options.swipe) {
-      gallery.slideshowObj.element.addEventListener('swipeLeft', function(event){
-        gallery.modalSwiping = true;
-      });
-      gallery.slideshowObj.element.addEventListener('swipeRight', function(event){
-        gallery.modalSwiping = true;
-      });
-      gallery.slideshowObj.element.addEventListener('newItemVisible', function(event){
-        gallery.modalSwiping = false;
-      });
-    }
-  };
-
-  function openModalLightbox(gallery, event) {
-    var item = event.target.closest('.js-exp-gallery__item');
-    if(!item) return;
-    // reset slideshow items visibility
-    resetSlideshowItemsVisibility(gallery);
-    gallery.selectedSlide = Util.getIndexInArray(gallery.galleryItems, item);
-    setSelectedItem(gallery);
-    lazyLoadSlide(gallery);
-    if(animationSupported) { // start expanding animation
-      window.requestAnimationFrame(function(){
-        animateSelectedImage(gallery);
-        openModal(gallery, item);
-      });
-    } else { // no expanding animation -> show modal
-      openModal(gallery, item);
-      Util.removeClass(gallery.element, 'exp-lightbox--no-transition');
-    }
-    // menu element - trigger new slide event
-    triggerMenuEvent(gallery);
-  };
-
-  function resetSlideshowItemsVisibility(gallery) {
-    var index = 0;
-    for(var i = 0; i < gallery.galleryItems.length; i++) {
-      var itemVisible = isVisible(gallery.galleryItems[i]);
-      if(itemVisible) {
-        index = index + 1;
-        Util.removeClass(gallery.slides[i], 'is-hidden');
-      } else {
-        Util.addClass(gallery.slides[i], 'is-hidden');
-      }
-    }
-    toggleSlideshowElements(gallery, index < 2);
-  };
-
-  function setSelectedItem(gallery) {
-    // if a specific slide was selected -> make sure to show that item first
-    var lastSelected = gallery.slideshow.getElementsByClassName('slideshow__item--selected');
-    if(lastSelected.length > 0 ) Util.removeClass(lastSelected[0], 'slideshow__item--selected');
-    Util.addClass(gallery.slides[gallery.selectedSlide], 'slideshow__item--selected');
-    if(gallery.slideshowObj) gallery.slideshowObj.selectedSlide = gallery.selectedSlide;
-  };
-
-  function openModal(gallery, item) {
-    gallery.element.dispatchEvent(new CustomEvent('openModal', {detail: item}));
-    gallery.modalSwiping = false;
-  };
-
-  function closeModal(gallery) {
-    gallery.modalSwiping = true;
-    modalZoomImg(gallery, false);
-    gallery.element.dispatchEvent(new CustomEvent('closeModal'));
-  };
-
-  function closeModalAnimation(gallery) { // modal is already closing -> start image closing animation
-    gallery.selectedSlide = gallery.slideshowObj ? gallery.slideshowObj.selectedSlide : 0;
-    // on close - make sure last selected image (of the gallery) is in the viewport
-    var boundingRect = gallery.galleryItems[gallery.selectedSlide].getBoundingClientRect();
-		if(boundingRect.top < 0 || boundingRect.top > window.innerHeight) {
-			var windowScrollTop = window.scrollY || document.documentElement.scrollTop;
-			window.scrollTo(0, boundingRect.top + windowScrollTop);
-		}
-    // animate on close
-    animateSelectedImage(gallery, true);
-  };
-
-  function modalZoomImg(gallery, img) { // toggle zoom-in image
-    if(!gallery.zoomImg) return;
-    var bool = false;
-    if(img) { // open zoom-in image
-      gallery.originImg = img;
-      gallery.zoomImg.children[0].setAttribute('src', img.getAttribute('src'));
-      bool = true;
-    }
-    (animationSupported) 
-      ? requestAnimationFrame(function(){animateZoomImg(gallery, bool)})
-      : Util.toggleClass(gallery.zoomImg, 'exp-lightbox__zoom--is-visible', bool);
-  };
-
-  function animateZoomImg(gallery, bool) {
-    if(!gallery.originImg) return;
-    
-    var originImgPosition = gallery.originImg.getBoundingClientRect(),
-      originStyle = 'translateX('+originImgPosition.left+'px) translateY('+(originImgPosition.top + gallery.zoomImg.scrollTop)+'px) scale('+ originImgPosition.width/gallery.zoomImg.scrollWidth+')',
-      finalStyle = 'scale(1)';
-
-    if(bool) {
-      gallery.zoomImg.children[0].style.transform = originStyle;
-    } else {
-      gallery.zoomImg.addEventListener('transitionend', function cb(){
-        Util.addClass(gallery.zoomImg, 'exp-lightbox__zoom--no-transition');
-        gallery.zoomImg.scrollTop = 0;
-        gallery.zoomImg.removeEventListener('transitionend', cb);
-      });
-    }
-    setTimeout(function(){
-      Util.removeClass(gallery.zoomImg, 'exp-lightbox__zoom--no-transition');
-      Util.toggleClass(gallery.zoomImg, 'exp-lightbox__zoom--is-visible', bool);
-      gallery.zoomImg.children[0].style.transform = (bool) ? finalStyle : originStyle;
-    }, 50);
-  };
-
-  function animateSelectedImage(gallery, bool) { // create morphing image effect
-    var imgInit = gallery.galleryItems[gallery.selectedSlide].getElementsByTagName('img')[0],
-      imgInitPosition = imgInit.getBoundingClientRect(),
-      imgFinal = gallery.slides[gallery.selectedSlide].getElementsByTagName('img')[0],
-      imgFinalPosition = imgFinal.getBoundingClientRect();
-
-    if(bool) {
-      runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool);
-    } else {
-      imgFinal.style.visibility = 'hidden';
-      gallery.animationRunning = false;
-      var image = new Image();
-      image.onload = function () {
-        if(gallery.animationRunning) return;
-        imgFinalPosition = imgFinal.getBoundingClientRect();
-        runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool);
-      }
-      image.src = imgFinal.getAttribute('data-src') ? imgFinal.getAttribute('data-src') : imgFinal.getAttribute('src');
-      if(image.complete) {
-        gallery.animationRunning = true;
-        imgFinalPosition = imgFinal.getBoundingClientRect();
-        runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool);
-      }
-    }
-  };
-
-  function runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool) {
-    // retrieve all animation params
-    var scale = imgFinalPosition.width > imgFinalPosition.height ? imgFinalPosition.height/imgInitPosition.height : imgFinalPosition.width/imgInitPosition.width;
-    var initHeight = imgFinalPosition.width > imgFinalPosition.height ? imgInitPosition.height : imgFinalPosition.height/scale,
-      initWidth = imgFinalPosition.width > imgFinalPosition.height ? imgFinalPosition.width/scale : imgInitPosition.width;
-
-    var initTranslateY = (imgInitPosition.height - initHeight)/2,
-      initTranslateX = (imgInitPosition.width - initWidth)/2,
-      initTop = imgInitPosition.top + initTranslateY,
-      initLeft = imgInitPosition.left + initTranslateX;
-
-    // get final states
-    var translateX = imgFinalPosition.left - imgInitPosition.left,
-      translateY = imgFinalPosition.top - imgInitPosition.top;
-
-    var finTranslateX = translateX - initTranslateX,
-    finTranslateY = translateY - initTranslateY;
-
-    var initScaleX = imgInitPosition.width/initWidth,
-      initScaleY = imgInitPosition.height/initHeight,
-      finScaleX = 1,
-      finScaleY = 1;
-
-    if(bool) { // update params if this is a closing animation
-      scale = 1/scale;
-      finScaleX = initScaleX;
-      finScaleY = initScaleY;
-      initScaleX = 1;
-      initScaleY = 1;
-      finTranslateX = -1*finTranslateX;
-      finTranslateY = -1*finTranslateY;
-      initTop = imgFinalPosition.top;
-      initLeft = imgFinalPosition.left;
-      initHeight = imgFinalPosition.height;
-      initWidth = imgFinalPosition.width;
-    }
-    
-    if(!bool) {
-      imgFinal.style.visibility = ''; // reset visibility
-    }
-
-    // set initial status
-    gallery.imgMorph.setAttribute('style', 'height: '+initHeight+'px; width: '+initWidth+'px; top: '+initTop+'px; left: '+initLeft+'px;');
-    gallery.imgMorphSVG.setAttribute('viewbox', '0 0 '+initWidth+' '+initHeight);
-    Util.setAttributes(gallery.imgMorphImg, {'xlink:href': imgInit.getAttribute('src'), 'href': imgInit.getAttribute('src')});
-    Util.setAttributes(gallery.imgMorphRect, {'style': 'height: '+initHeight+'px; width: '+initWidth+'px;', 'transform': 'translate('+(initWidth/2)*(1 - initScaleX)+' '+(initHeight/2)*(1 - initScaleY)+') scale('+initScaleX+','+initScaleY+')'});
-
-    // reveal image and start animation
-    Util.addClass(gallery.imgMorph, 'exp-lightbox__clone-img-wrapper--is-visible');
-    Util.addClass(gallery.slideshowList, 'slideshow__content--is-hidden');
-    Util.addClass(gallery.galleryItems[gallery.selectedSlide], 'exp-gallery-item-hidden');
-
-    gallery.imgMorph.addEventListener('transitionend', function cb(event){ // reset elements once animation is over
-      if(event.propertyName.indexOf('transform') < 0) return;
-			Util.removeClass(gallery.element, 'exp-lightbox--no-transition');
-      Util.removeClass(gallery.imgMorph, 'exp-lightbox__clone-img-wrapper--is-visible');
-      Util.removeClass(gallery.slideshowList, 'slideshow__content--is-hidden');
-      gallery.imgMorph.removeAttribute('style');
-      gallery.imgMorphRect.removeAttribute('style');
-      gallery.imgMorphRect.removeAttribute('transform');
-      gallery.imgMorphImg.removeAttribute('href');
-      gallery.imgMorphImg.removeAttribute('xlink:href');
-      Util.removeClass(gallery.galleryItems[gallery.selectedSlide], 'exp-gallery-item-hidden');
-			gallery.imgMorph.removeEventListener('transitionend', cb);
-    });
-
-    // trigger expanding/closing animation
-    gallery.imgMorph.style.transform = 'translateX('+finTranslateX+'px) translateY('+finTranslateY+'px) scale('+scale+')';
-    animateRectScale(gallery.imgMorphRect, initScaleX, initScaleY, finScaleX, finScaleY, initWidth, initHeight);
-  };
-
-  function animateRectScale(rect, scaleX, scaleY, finScaleX, finScaleY, width, height) {
-    var currentTime = null,
-      duration =  parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--exp-gallery-animation-duration'))*1000 || 300;
-
-    var animateScale = function(timestamp){  
-      if (!currentTime) currentTime = timestamp;         
-      var progress = timestamp - currentTime;
-      if(progress > duration) progress = duration;
-
-      var valX = easeOutQuad(progress, scaleX, finScaleX-scaleX, duration),
-        valY = easeOutQuad(progress, scaleY, finScaleY-scaleY, duration);
-
-      rect.setAttribute('transform', 'translate('+(width/2)*(1 - valX)+' '+(height/2)*(1 - valY)+') scale('+valX+','+valY+')');
-      if(progress < duration) {
-        window.requestAnimationFrame(animateScale);
-      }
-    };
-
-    function easeOutQuad(t, b, c, d) {
-      t /= d;
-      return -c * t*(t-2) + b;
-    };
-    
-    window.requestAnimationFrame(animateScale);
-  };
-
-  function keyboardNavigateLightbox(gallery, direction) {
-    if(!Util.hasClass(gallery.element, 'modal--is-visible')) return;
-    if(!document.activeElement.closest('.js-exp-lightbox__body') && document.activeElement.closest('.js-modal')) return;
-    if(!gallery.slideshowObj) return;
-    (direction == 'next') ? gallery.slideshowObj.showNext() : gallery.slideshowObj.showPrev();
-  };
-
-  function triggerMenuEvent(gallery) {
-    if(gallery.menuBar.length < 1) return;
-    var event = new CustomEvent('update-menu', 
-      {detail: {
-        index: gallery.selectedSlide,
-        item: gallery.slides[gallery.selectedSlide]
-      }});
-    gallery.menuBar[0].dispatchEvent(event);
-  };
-
-  function isVisible(element) {
-    return (element.offsetWidth || element.offsetHeight || element.getClientRects().length);
-  };
-
-  window.ExpGallery = ExpGallery;
-
-  // init ExpGallery objects
-  var expGalleries = document.getElementsByClassName('js-exp-lightbox'),
-    animationSupported = window.requestAnimationFrame && !Util.osHasReducedMotion();
-  if( expGalleries.length > 0 ) {
-    var expGalleriesArray = [];
-    for( var i = 0; i < expGalleries.length; i++) {
-      (function(i){ expGalleriesArray.push(new ExpGallery(expGalleries[i]));})(i);
-
-      // Lightbox gallery navigation with keyboard
-      window.addEventListener('keydown', function(event){
-        if(event.keyCode && event.keyCode == 39 || event.key && event.key.toLowerCase() == 'arrowright') {
-          updateLightbox('next');
-        } else if(event.keyCode && event.keyCode == 37 || event.key && event.key.toLowerCase() == 'arrowleft') {
-          updateLightbox('prev');
-        }
-      });
-
-      function updateLightbox(direction) {
-        for( var i = 0; i < expGalleriesArray.length; i++) {
-          (function(i){keyboardNavigateLightbox(expGalleriesArray[i], direction);})(i);
-        };
-      };
-    }
-  }
-}());
 // File#: _3_explorer
 // Usage: codyhouse.co/license
-(function () {
+(function() {
   /// 👇you should remove this from your live code
 
+  // demo only: array of static results -> replace with your real values
+  var explorerQuickLinks = [
+    { 
+      label: 'New File', 
+      class: 'js-explorer__command',
+      icon: '<svg class="icon" viewBox="0 0 20 20"><g stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"><line x1="1" y1="19" x2="19" y2="19" /><polygon points="13 1 17 5 8 14 3 15 4 10 13 1" /></g></svg>',
+      shortcut: '<i class="explorer__shortcut">N</i>',
+      template: 'button'
+    },
+    { 
+      label: 'New Project', 
+      class: 'js-explorer__command',
+      icon: '<svg class="icon" viewBox="0 0 20 20"><g stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M10,19H4a3,3,0,0,1-3-3V1H8l2,4h9v5" /><line x1="15" y1="11" x2="15" y2="19" /><line x1="11" y1="15" x2="19" y2="15" /></g></svg>',
+      shortcut: '<i class="explorer__shortcut">P</i>',
+      template: 'button'
+    },
+    { 
+      label: 'Move to Project', 
+      class: 'js-explorer__command',
+      icon: '<svg class="icon" viewBox="0 0 20 20"><g stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M11,19H4a3,3,0,0,1-3-3V1H8l2,4h9V9" /><line x1="9" y1="14" x2="19" y2="14" /><polyline points="15 10 19 14 15 18" /></g></svg>',
+      shortcut: '<i class="explorer__shortcut">M</i>',
+      template: 'button'
+    },
+    { 
+      label: 'Delete File', 
+      class: 'js-explorer__command',
+      icon: '<svg class="icon" viewBox="0 0 20 20"><g stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="10" cy="10" r="9" /><line x1="6" y1="6" x2="14" y2="14" /><line x1="14" y1="6" x2="6" y2="14" /></g></svg>',
+      shortcut: '<i class="explorer__shortcut">⌘</i> <i class="explorer__shortcut">D</i>',
+      template: 'button'
+    }
+  ];
 
+  var explorerAdditionalLinks = [
+    { 
+      label: 'Remove from Project', 
+      class: 'js-explorer__command',
+      icon: '<svg class="icon" viewBox="0 0 20 20"><g stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M10,19H4a3,3,0,0,1-3-3V1H8l2,4h9v5" /><line x1="11" y1="15" x2="19" y2="15" /></g></svg>',
+      shortcut: '<i class="explorer__shortcut">R</i>',
+      template: 'button'
+    }
+  ];
+
+  if(document.getElementById('explorer-link-variation')) { // --link variation
+    // use different results for the --link variation 
+    explorerQuickLinks = [
+      { 
+        label: 'Link 1', 
+        class: 'js-explorer__link',
+        url: '#0',
+        category: 'Category',
+        template: 'link'
+      },
+      { 
+        label: 'Project 1', 
+        class: 'js-explorer__link',
+        url: '#0',
+        category: 'Category',
+        template: 'link'
+      },
+      { 
+        label: 'Link 2', 
+        class: 'js-explorer__link',
+        url: '#0',
+        category: 'Category',
+        template: 'link'
+      }
+    ];
+  
+    explorerAdditionalLinks = [
+      { 
+        label: 'Project 2', 
+        class: 'js-explorer__link',
+        url: '#0',
+        category: 'Category',
+        template: 'link'
+      }
+    ];
+  }
 
   /// 👆end of demo code
 
-
-  function explorerSearch(query, cb) {
+  
+  function explorerSearch(query, cb) { 
     // get search results
     // more info: https://codyhouse.co/ds/components/info/autocomplete#search-data
-
+    
     // quick links - visible when the input is empty
-    if (query == '') {
+    if(query == '') {
       cb(explorerQuickLinks); // pass your real list of quick links
       return;
-    }
+    } 
 
     // 👇 get results - you should modify this with your real data
-    var quickLinks = explorerQuickLinks.filter(function (item) {
+    var quickLinks = explorerQuickLinks.filter(function(item){
       // return item if item['label'] contains 'query'
       return item['label'].toLowerCase().indexOf(query.toLowerCase()) > -1;
     });
-    var data = explorerAdditionalLinks.filter(function (item) {
+    var data = explorerAdditionalLinks.filter(function(item){
       // return item if item['label'] contains 'query'
       return item['label'].toLowerCase().indexOf(query.toLowerCase()) > -1;
     });
     data = quickLinks.concat(data);
     // 👆 get results - you should modify this with your real data
 
-    if (data.length == 0) { // fallback for no results found
+    if(data.length == 0) { // fallback for no results found
       // no results found
       data = [{
         label: 'No results',
@@ -5451,284 +3488,37 @@ function initAlertEvent(element) {
     cb(data);
   };
 
-  function explorerClick(option, obj, event) {
+  function explorerClick(option, obj, event) { 
     // custom function to be execute when user selects an option
     // more info: https://codyhouse.co/ds/components/info/autocomplete#on-click
-    click();
     event.preventDefault();
   };
 
   var explorer = document.getElementsByClassName('js-explorer');
-  if (explorer.length > 0) {
+  if(explorer.length > 0) {
     var modalExplorer = explorer[0].closest('.js-modal');
-    var explorerInput = explorer[0].getElementsByClassName('js-autocomplete__input');
+    var explorerInput =  explorer[0].getElementsByClassName('js-autocomplete__input');
     new Autocomplete({
       element: explorer[0],
       characters: 0,
-      searchData: function (value, cb) { // function that gets result data
+      searchData: function(value, cb) { // function that gets result data
         explorerSearch(value, cb);
       },
-      onClick: function (option, obj, event) { // function to be executed on click
+      onClick: function(option, obj, event) { // function to be executed on click
         explorerClick(option, obj, event);
       }
     });
 
-    if (modalExplorer) {
-      modalExplorer.addEventListener('modalIsClose', function (event) {
+    if(modalExplorer) {
+      modalExplorer.addEventListener('modalIsClose', function(event){
         // reset search input when closing the modal window
-        if (explorerInput.length > 0) {
+        if(explorerInput.length > 0) {
           explorerInput[0].value = '';
         }
       });
-    }
+    } 
   }
 }());
-// File#: _3_mega-site-navigation
-// Usage: codyhouse.co/license
-(function() {
-    var MegaNav = function(element) {
-      this.element = element;
-      this.search = this.element.getElementsByClassName('js-mega-nav__search');
-      this.searchActiveController = false;
-      this.menu = this.element.getElementsByClassName('js-mega-nav__nav');
-      this.menuItems = this.menu[0].getElementsByClassName('js-mega-nav__item');
-      this.menuActiveController = false;
-      this.itemExpClass = 'mega-nav__item--expanded';
-      this.classIconBtn = 'mega-nav__icon-btn--state-b';
-      this.classSearchVisible = 'mega-nav__search--is-visible';
-      this.classNavVisible = 'mega-nav__nav--is-visible';
-      this.classMobileLayout = 'mega-nav--mobile';
-      this.classDesktopLayout = 'mega-nav--desktop';
-      this.layout = 'mobile';
-      // store dropdown elements (if present)
-      this.dropdown = this.element.getElementsByClassName('js-dropdown');
-      // expanded class - added to header when subnav is open
-      this.expandedClass = 'mega-nav--expanded';
-      initMegaNav(this);
-    };
-  
-    function initMegaNav(megaNav) {
-      setMegaNavLayout(megaNav); // switch between mobile/desktop layout
-      initSearch(megaNav); // controll search navigation
-      initMenu(megaNav); // control main menu nav - mobile only
-      initSubNav(megaNav); // toggle sub navigation visibility
-      
-      megaNav.element.addEventListener('update-menu-layout', function(event){
-        setMegaNavLayout(megaNav); // window resize - update layout
-      });
-    };
-  
-    function setMegaNavLayout(megaNav) {
-      var layout = getComputedStyle(megaNav.element, ':before').getPropertyValue('content').replace(/\'|"/g, '');
-      if(layout == megaNav.layout) return;
-      megaNav.layout = layout;
-      Util.toggleClass(megaNav.element, megaNav.classDesktopLayout, megaNav.layout == 'desktop');
-      Util.toggleClass(megaNav.element, megaNav.classMobileLayout, megaNav.layout != 'desktop');
-      if(megaNav.layout == 'desktop') {
-        closeSubNav(megaNav, false);
-        // if the mega navigation has dropdown elements -> make sure they are in the right position (viewport awareness)
-        triggerDropdownPosition(megaNav);
-      } 
-      closeSearch(megaNav, false);
-      resetMegaNavOffset(megaNav); // reset header offset top value
-      resetNavAppearance(megaNav); // reset nav expanded appearance
-    };
-  
-    function resetMegaNavOffset(megaNav) {
-      document.documentElement.style.setProperty('--mega-nav-offset-y', megaNav.element.getBoundingClientRect().top+'px');
-    };
-  
-    function closeNavigation(megaNav) { // triggered by Esc key press
-      // close search
-      closeSearch(megaNav);
-      // close nav
-      if(Util.hasClass(megaNav.menu[0], megaNav.classNavVisible)) {
-        toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuActiveController, true);
-      }
-      //close subnav 
-      closeSubNav(megaNav, false);
-      resetNavAppearance(megaNav); // reset nav expanded appearance
-    };
-  
-    function closeFocusNavigation(megaNav) { // triggered by Tab key pressed
-      // close search when focus is lost
-      if(Util.hasClass(megaNav.search[0], megaNav.classSearchVisible) && !document.activeElement.closest('.js-mega-nav__search')) {
-        toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchActiveController, true);
-      }
-      // close nav when focus is lost
-      if(Util.hasClass(megaNav.menu[0], megaNav.classNavVisible) && !document.activeElement.closest('.js-mega-nav__nav')) {
-        toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuActiveController, true);
-      }
-      // close subnav when focus is lost
-      for(var i = 0; i < megaNav.menuItems.length; i++) {
-        if(!Util.hasClass(megaNav.menuItems[i], megaNav.itemExpClass)) continue;
-        var parentItem = document.activeElement.closest('.js-mega-nav__item');
-        if(parentItem && parentItem == megaNav.menuItems[i]) continue;
-        closeSingleSubnav(megaNav, i);
-      }
-      resetNavAppearance(megaNav); // reset nav expanded appearance
-    };
-  
-    function closeSearch(megaNav, bool) {
-      if(megaNav.search.length < 1) return;
-      if(Util.hasClass(megaNav.search[0], megaNav.classSearchVisible)) {
-        toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchActiveController, bool);
-      }
-    } ;
-  
-    function initSearch(megaNav) {
-      if(megaNav.search.length == 0) return;
-      // toggle search
-      megaNav.searchToggles = document.querySelectorAll('[aria-controls="'+megaNav.search[0].getAttribute('id')+'"]');
-      for(var i = 0; i < megaNav.searchToggles.length; i++) {(function(i){
-        megaNav.searchToggles[i].addEventListener('click', function(event){
-          // toggle search
-          toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchToggles[i], true);
-          // close nav if it was open
-          if(Util.hasClass(megaNav.menu[0], megaNav.classNavVisible)) {
-            toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuActiveController, false);
-          }
-          // close subnavigation if open
-          closeSubNav(megaNav, false);
-          resetNavAppearance(megaNav); // reset nav expanded appearance
-        });
-      })(i);}
-    };
-  
-    function initMenu(megaNav) {
-      if(megaNav.menu.length == 0) return;
-      // toggle nav
-      megaNav.menuToggles = document.querySelectorAll('[aria-controls="'+megaNav.menu[0].getAttribute('id')+'"]');
-      for(var i = 0; i < megaNav.menuToggles.length; i++) {(function(i){
-        megaNav.menuToggles[i].addEventListener('click', function(event){
-          // toggle nav
-          toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuToggles[i], true);
-          // close search if it was open
-          if(Util.hasClass(megaNav.search[0], megaNav.classSearchVisible)) {
-            toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchActiveController, false);
-          }
-          resetNavAppearance(megaNav); // reset nav expanded appearance
-        });
-      })(i);}
-    };
-  
-    function toggleMenu(megaNav, element, controller, visibleClass, toggle, moveFocus) {
-      var menuIsVisible = Util.hasClass(element, visibleClass);
-      Util.toggleClass(element, visibleClass, !menuIsVisible);
-      Util.toggleClass(toggle, megaNav.classIconBtn, !menuIsVisible);
-      menuIsVisible ? toggle.removeAttribute('aria-expanded') : toggle.setAttribute('aria-expanded', 'true');
-      if(menuIsVisible) {
-        if(toggle && moveFocus) toggle.focus();
-        megaNav[controller] = false;
-      } else {
-        if(toggle) megaNav[controller] = toggle;
-        getFirstFocusable(element).focus(); // move focus to first focusable element
-      }
-    };
-  
-    function getFirstFocusable(element) {
-      var focusableEle = element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary'),
-        firstFocusable = false;
-      for(var i = 0; i < focusableEle.length; i++) {
-        if( focusableEle[i].offsetWidth || focusableEle[i].offsetHeight || focusableEle[i].getClientRects().length ) {
-          firstFocusable = focusableEle[i];
-          break;
-        }
-      }
-      return firstFocusable;
-    };
-  
-    function initSubNav(megaNav) {
-      // toggle subnavigation visibility
-      megaNav.element.addEventListener('click', function(event){
-        var triggerBtn = event.target.closest('.js-mega-nav__control');
-        if(!triggerBtn) return;
-        var mainItem = triggerBtn.closest('.js-mega-nav__item');
-        if(!mainItem) return;
-        var itemExpanded = Util.hasClass(mainItem, megaNav.itemExpClass);
-        Util.toggleClass(mainItem, megaNav.itemExpClass, !itemExpanded);
-        itemExpanded ? triggerBtn.removeAttribute('aria-expanded') : triggerBtn.setAttribute('aria-expanded', 'true');
-        if(megaNav.layout == 'desktop' && !itemExpanded) closeSubNav(megaNav, mainItem);
-        // close search if open
-        closeSearch(megaNav, false);
-        resetNavAppearance(megaNav); // reset nav expanded appearance
-      });
-    };
-  
-    function closeSubNav(megaNav, selectedItem) {
-      // close subnav when a new sub nav element is open
-      if(megaNav.menuItems.length == 0 ) return;
-      for(var i = 0; i < megaNav.menuItems.length; i++) {
-        if(megaNav.menuItems[i] != selectedItem) closeSingleSubnav(megaNav, i);
-      }
-    };
-  
-    function closeSingleSubnav(megaNav, index) {
-      Util.removeClass(megaNav.menuItems[index], megaNav.itemExpClass);
-      var triggerBtn = megaNav.menuItems[index].getElementsByClassName('js-mega-nav__control');
-      if(triggerBtn.length > 0) triggerBtn[0].removeAttribute('aria-expanded');
-    };
-  
-    function triggerDropdownPosition(megaNav) {
-      // emit custom event to properly place dropdown elements - viewport awarness
-      if(megaNav.dropdown.length == 0) return;
-      for(var i = 0; i < megaNav.dropdown.length; i++) {
-        megaNav.dropdown[i].dispatchEvent(new CustomEvent('placeDropdown'));
-      }
-    };
-  
-    function resetNavAppearance(megaNav) {
-      ( (megaNav.element.getElementsByClassName(megaNav.itemExpClass).length > 0 && megaNav.layout == 'desktop') || megaNav.element.getElementsByClassName(megaNav.classSearchVisible).length > 0 ||(megaNav.element.getElementsByClassName(megaNav.classNavVisible).length > 0 && megaNav.layout == 'mobile'))
-        ? Util.addClass(megaNav.element, megaNav.expandedClass)
-        : Util.removeClass(megaNav.element, megaNav.expandedClass);
-    };
-  
-    //initialize the MegaNav objects
-    var megaNav = document.getElementsByClassName('js-mega-nav');
-    if(megaNav.length > 0) {
-      var megaNavArray = [];
-      for(var i = 0; i < megaNav.length; i++) {
-        (function(i){megaNavArray.push(new MegaNav(megaNav[i]));})(i);
-      }
-  
-      // key events
-      window.addEventListener('keyup', function(event){
-        if( (event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape' )) { // listen for esc key events
-          for(var i = 0; i < megaNavArray.length; i++) {(function(i){
-            closeNavigation(megaNavArray[i]);
-          })(i);}
-        }
-        // listen for tab key
-        if( (event.keyCode && event.keyCode == 9) || (event.key && event.key.toLowerCase() == 'tab' )) { // close search or nav if it looses focus
-          for(var i = 0; i < megaNavArray.length; i++) {(function(i){
-            closeFocusNavigation(megaNavArray[i]);
-          })(i);}
-        }
-      });
-  
-      window.addEventListener('click', function(event){
-        if(!event.target.closest('.js-mega-nav')) closeNavigation(megaNavArray[0]);
-      });
-      
-      // resize - update menu layout
-      var resizingId = false,
-        customEvent = new CustomEvent('update-menu-layout');
-      window.addEventListener('resize', function(event){
-        clearTimeout(resizingId);
-        resizingId = setTimeout(doneResizing, 200);
-      });
-  
-      function doneResizing() {
-        for( var i = 0; i < megaNavArray.length; i++) {
-          (function(i){megaNavArray[i].element.dispatchEvent(customEvent)})(i);
-        };
-      };
-  
-      (window.requestAnimationFrame) // init mega site nav layout
-        ? window.requestAnimationFrame(doneResizing)
-        : doneResizing();
-    }
-  }());
 // File#: _3_select-autocomplete
 // Usage: codyhouse.co/license
 (function() {
@@ -5938,6 +3728,8 @@ function initAlertEvent(element) {
     }
     element.select[0].dispatchEvent(new Event('change'));
   };
+
+  window.SelectAuto = SelectAuto;
 
   // init the SelectAuto object
   var selectAuto = document.getElementsByClassName('js-select-auto');

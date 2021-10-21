@@ -16,8 +16,9 @@
     <noscript>
       <link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">
     </noscript>
-    <link rel="stylesheet" href="{{ asset('css/admin/app.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
+
 <livewire:styles />
     <title>Управление сайтом Topfitnesbraslet</title>
 </head>
@@ -39,7 +40,7 @@
               </svg>
             </a>
           </div>
-      
+
           <!-- (mobile-only) menu button -->
           <button class="reset app-ui__menu-btn hide@md js-app-ui__menu-btn js-tab-focus" aria-label="Toggle menu" aria-controls="app-ui-navigation">
             <svg class="icon" viewBox="0 0 24 24">
@@ -50,7 +51,7 @@
               </g>
             </svg>
           </button>
-      
+
           <!-- (desktop-only) header menu -->
           <div class="display@md flex flex-grow height-100% items-center justify-between padding-x-sm">
             <button class="btn btn--primary" aria-controls="modal-explorer">Быстрый доступ</button>
@@ -97,19 +98,19 @@
             </div>
           </div>
         </header>
-      
+
         <!-- navigation -->
         <div class="app-ui__nav js-app-ui__nav" id="app-ui-navigation">
-          
-      
+
+
           <!-- side navigation -->
           <nav class="sidenav padding-y-sm js-sidenav">
             <div class="sidenav__label margin-bottom-xxxs">
               <span class="text-sm color-contrast-medium text-xs@md">Главное меню</span>
             </div>
-      
+
             <ul class="sidenav__list">
-      
+
               <li class="sidenav__item">
                 <a href="{{ route('brands.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'brands') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -192,7 +193,7 @@
                   </svg>
                   <span class="sidenav__text text-sm@md">Статьи блога</span>
                 </a>
-              </li>        
+              </li>
 
               <li class="sidenav__item">
                 <a href="{{ route('overviews.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'overviews') ? 'page' : '' }}">
@@ -204,8 +205,8 @@
                   </svg>
                   <span class="sidenav__text text-sm@md">Обзоры</span>
                 </a>
-              </li>        
-              
+              </li>
+
               <li class="sidenav__item">
                 <a href="{{ route('menuitems.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'menuitems') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -216,7 +217,7 @@
                   </svg>
                   <span class="sidenav__text text-sm@md">Настройка меню</span>
                 </a>
-              </li>        
+              </li>
 
               <li class="sidenav__item">
                 <a href="{{ route('groupmenus.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'groupmenus') ? 'page' : '' }}">
@@ -228,7 +229,7 @@
                   </svg>
                   <span class="sidenav__text text-sm@md">Группировка меню</span>
                 </a>
-              </li>        
+              </li>
 
               <li class="sidenav__item">
                 <a href="{{ route('comments.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'comments') ? 'page' : '' }}">
@@ -242,15 +243,15 @@
                 </a>
               </li>
             </ul>
-      
+
             <div class="sidenav__divider margin-y-xs" role="presentation"></div>
-      
+
             <div class="sidenav__label margin-bottom-xxxs">
               <span class="text-sm color-contrast-medium text-xs@md">Другое</span>
             </div>
-      
+
             <ul class="sidenav__list">
-      
+
               <li class="sidenav__item">
                 <a href="{{ route('profile.index') }}" class="sidenav__link">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -264,7 +265,7 @@
               </li>
             </ul>
           </nav>
-      
+
           <div class="padding-md padding-sm@md margin-top-auto">
             <button class="btn btn--primary width-100% text-sm@md">Button</button>
           </div>
@@ -274,7 +275,7 @@
         @section('content')
         @show
         </main>
-        
+
       </div>
 @section('scripts')
 
@@ -284,55 +285,55 @@
 
 <script>
   if(document.getElementById('explorer-link-variation')) { // --link variation
-    // use different results for the --link variation 
+    // use different results for the --link variation
     explorerQuickLinks = [
-      { 
-        label: 'Добавить бренд', 
+      {
+        label: 'Добавить бренд',
         class: 'js-explorer__link',
         url: '{{ route('brands.create') }}',
         category: 'Бренды',
         template: 'link'
       },
-      { 
-        label: 'Добавить браслет', 
+      {
+        label: 'Добавить браслет',
         class: 'js-explorer__link',
         url: '{{ route('bracelets.create') }}',
         category: 'Браслеты',
         template: 'link'
       },
-      { 
-        label: 'Добавить рейтинг', 
+      {
+        label: 'Добавить рейтинг',
         class: 'js-explorer__link',
         url: '{{ route('ratings.create') }}',
         category: 'Рейтинги',
         template: 'link'
       },
-      { 
-        label: 'Добавить статью в блог', 
+      {
+        label: 'Добавить статью в блог',
         class: 'js-explorer__link',
         url: '{{ route('posts.create') }}',
         category: 'Блог',
         template: 'link'
       }
     ];
-  
+
     explorerAdditionalLinks = [
-      { 
-        label: 'Добавить оценку', 
+      {
+        label: 'Добавить оценку',
         class: 'js-explorer__link',
         url: '{{ route('grades.create') }}',
         category: 'Оценки',
         template: 'link'
       },
-      { 
-        label: 'Добавить продавца', 
+      {
+        label: 'Добавить продавца',
         class: 'js-explorer__link',
         url: '{{ route('sellers.create') }}',
         category: 'Продавцы',
         template: 'link'
       },
-      { 
-        label: 'Добавить отзыв', 
+      {
+        label: 'Добавить отзыв',
         class: 'js-explorer__link',
         url: '{{ route('reviews.create') }}',
         category: 'Отзывы',
