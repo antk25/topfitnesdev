@@ -10,18 +10,6 @@
 
 @if (count($ratings))
 <div class="tbl text-sm">
-<form action="" method="GET">
-  <div class="grid gap-xxs margin-top-md">
-    <div class="col-2@md">
-      <div class="search-input search-input--icon-right">
-        <input class="search-input__input form-control" type="search" name="filter[name]" id="search-input" placeholder="Поиск по заголовку..." aria-label="Search">
-        <button class="search-input__btn">
-          <svg class="icon" viewBox="0 0 24 24"><title>Submit</title><g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" stroke="currentColor" fill="none" stroke-miterlimit="10"><line x1="22" y1="22" x2="15.656" y2="15.656"></line><circle cx="10" cy="10" r="8"></circle></g></svg>
-        </button>
-      </div>
-    </div>
-  </div>
-</form>
 
 <table class="tbl__table border-bottom border-2" aria-label="Table Example">
     <thead class="tbl__header border-bottom border-2">
@@ -37,7 +25,7 @@
         <th class="tbl__cell text-left" scope="col">
         <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Slug</span>
         </th>
-        
+
         <th class="tbl__cell text-left" scope="col">
         <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Опубликован</span>
         </th>
@@ -47,7 +35,7 @@
         </th>
     </tr>
     </thead>
-    
+
     <tbody class="tbl__body">
 @foreach ($ratings as $rating)
     <tr class="tbl__row">
@@ -73,23 +61,23 @@
         </td>
 
         <td class="tbl__cell text-right" role="cell">
-         
+
           <div class="grid gap-sm">
             <div class="col-6@md">
               <a class="btn btn--primary text-sm" href="{{ route('ratings.edit', ['rating' => $rating->id]) }}">
                 Изменить
               </a>
             </div>
-            
+
             <div class="col-6@md">
-              
+
               <button class="btn btn--accent text-sm" aria-controls="dialog-{{ $loop->index }}">Удалить</button>
 
-              
+
             </div>
-            
+
           </div>
-          
+
         </td>
     </tr>
     <div id="dialog-{{ $loop->index }}" class="dialog js-dialog" data-animation="on">
@@ -112,7 +100,7 @@
       </div>
     </div>
 @endforeach
-    
+
 
     </tbody>
 </table>
@@ -135,12 +123,12 @@
 </div>
 </div>
 @endif
-  
-  
+
+
     <div class="items-center justify-between padding-top-sm">
       {{ $ratings->links() }}
     </div>
   </div>
 
 </div>
-@endsection 
+@endsection
