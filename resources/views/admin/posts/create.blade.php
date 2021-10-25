@@ -17,11 +17,11 @@
               <option value="{{ $k }}">{{ $v }}</option>
             @endforeach
           </select>
-          
+
           <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
         </div>
       </div>
-  
+
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название</label>
@@ -34,12 +34,12 @@
         <input class="form-control width-100%" type="text" name="slug" id="slug">
         </div>
       </div>
-  
+
       <div class="margin-bottom-xs">
         <label class="form-label margin-bottom-xxs" for="title">Title</label>
         <input class="form-control width-100%" type="text" name="title" id="title">
       </div>
-  
+
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="subtitle">Subtitle (h1)</label>
@@ -66,55 +66,27 @@
       </div>
     </fieldset>
 
-    <section class="bg bg-white padding-sm">
-      <p class="color-contrast-medium margin-bottom-sm">Добавить картинки</p>
-              <div class="row" x-data="handler()">
-                <table class="tbl__table border-bottom border-2" aria-label="Table Example">
-                    <thead class="tbl__header border-bottom border-2">
-                      <tr class="tbl__row">
-                        <th class="tbl__cell text-left" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span>
-                          </th>
-  
-                          <th class="tbl__cell text-left" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span>
-                          </th>
-  
-                          <th class="tbl__cell text-left" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span>
-                          </th>
-  
-                          <th class="tbl__cell" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
-                          </th>
-                      </tr>
-                    </thead>
-                    <tbody class="tbl__body">
-                      <template x-for="(field, index) in fields" :key="index">
-                      <tr class="tbl__row">
-                        <td x-text="index + 1"></td>
-                        <td class="tbl__cell" role="cell">
-  
-  
-                            <input type="file" class="file-upload__input" name="files[]">
-  
-                         </td>
-                        <td class="tbl__cell" role="cell">
-                          <input x-model="field.nameimg" class="form-control" type="text" name="nameimg[]">
-                        </td>
-                         <td class="tbl__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
-                      </tr>
-                     </template>
-                    </tbody>
-                    <tfoot>
-                      <tr class="tbl__cell">
-                         <td colspan="4" class="text-left"><button type="button" class="btn btn--success text-sm" @click="addNewField()">+ Добавить картинку</button></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-              </div>
-            </section>
-  
+    {{-- Add images --}}
+    <section class="margin-bottom-md">
+      <div class="text-component margin-y-sm">
+        <h4>Добавить изображения для обзора</h4>
+        <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После публикации можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
+      </div>
+
+      <div class="file-upload inline-block">
+        <label for="files" class="file-upload__label btn btn--primary">
+          <span class="flex items-center">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
+
+            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
+          </span>
+        </label>
+
+        <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
+      </div>
+    </section>
+{{-- End add images --}}
+
             <div class="margin-y-md">
               <button type="submit" class="btn btn--success">Обновить статью</button>
             </div>
@@ -159,5 +131,5 @@
 
       }
   }
-    </script>    
+    </script>
 @endsection

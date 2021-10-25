@@ -79,54 +79,26 @@
         <textarea class="form-control width-100% text-sm" spellcheck="false" name="content" id="text">{{ $overview->content }}</textarea>
       </div>
     </fieldset>
-<section class="bg bg-white padding-sm">
-    <p class="color-contrast-medium margin-bottom-sm">Добавить картинки</p>
-            <div class="row" x-data="handler()">
-              <table class="tbl__table border-bottom border-2" aria-label="Table Example">
-                  <thead class="tbl__header border-bottom border-2">
-                    <tr class="tbl__row">
-                      <th class="tbl__cell text-left" scope="col">
-                        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span>
-                        </th>
+{{-- Add images --}}
+    <section class="margin-bottom-md">
+      <div class="text-component margin-y-sm">
+        <h4>Добавить изображения для обзора</h4>
+        <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После публикации можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
+      </div>
 
-                        <th class="tbl__cell text-left" scope="col">
-                        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span>
-                        </th>
+      <div class="file-upload inline-block">
+        <label for="files" class="file-upload__label btn btn--primary">
+          <span class="flex items-center">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
 
-                        <th class="tbl__cell text-left" scope="col">
-                        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span>
-                        </th>
+            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
+          </span>
+        </label>
 
-                        <th class="tbl__cell" scope="col">
-                        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
-                        </th>
-                    </tr>
-                  </thead>
-                  <tbody class="tbl__body">
-                    <template x-for="(field, index) in fields" :key="index">
-                    <tr class="tbl__row">
-                      <td x-text="index + 1"></td>
-                      <td class="tbl__cell" role="cell">
-
-
-                          <input type="file" class="file-upload__input" name="files[]">
-
-                       </td>
-                      <td class="tbl__cell" role="cell">
-                        <input x-model="field.nameimg" class="form-control" type="text" name="nameimg[]">
-                      </td>
-                       <td class="tbl__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
-                    </tr>
-                   </template>
-                  </tbody>
-                  <tfoot>
-                    <tr class="tbl__cell">
-                       <td colspan="4" class="text-left"><button type="button" class="btn btn--success text-sm" @click="addNewField()">+ Добавить картинку</button></td>
-                    </tr>
-                  </tfoot>
-                </table>
-            </div>
-          </section>
+        <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
+      </div>
+    </section>
+{{-- End add images --}}
     <div class="margin-y-md">
       <button type="submit" class="btn btn--success">Обновить статью</button>
     </div>

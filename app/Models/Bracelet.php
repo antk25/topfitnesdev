@@ -35,7 +35,7 @@ class Bracelet extends Model implements HasMedia
     // Связываем с Рейтингами
 
     public function ratings() {
-        return $this->belongsToMany(Rating::class)->withPivot('position', 'text_rating');
+        return $this->belongsToMany(Rating::class)->withPivot('position', 'text_rating', 'head_rating');
     }
 
     // Связываем с отзывами
@@ -70,14 +70,14 @@ class Bracelet extends Model implements HasMedia
         return $this->belongsToMany(Seller::class)->withPivot('link', 'price', 'old_price');
     }
 
-    // Связь с статьями-сравнениями 
+    // Связь с статьями-сравнениями
 
     public function comparison() {
         return $this->belongsToMany(Comparison::class);
     }
 
-    // Связь с таблицей CompareItems 
-    
+    // Связь с таблицей CompareItems
+
     public function compareitem() {
         return $this->belongsToMany(CompareItem::class);
     }
@@ -94,22 +94,22 @@ class Bracelet extends Model implements HasMedia
     {
         $this->attributes['material'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-    
+
     public function setPlusAttribute($value)
     {
         $this->attributes['plus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-    
+
     public function setMinusAttribute($value)
     {
         $this->attributes['minus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-    
+
     public function setBuyersLikeAttribute($value)
     {
         $this->attributes['buyers_like'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-    
+
     public function setColorsAttribute($value)
     {
         $this->attributes['colors'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
@@ -124,17 +124,17 @@ class Bracelet extends Model implements HasMedia
     {
         $this->attributes['terms_of_use'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-    
+
     public function setSensorsAttribute($value)
     {
         $this->attributes['sensors'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-   
+
     public function setOtherInterfacesAttribute($value)
     {
         $this->attributes['other_interfaces'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     }
-    
+
     public function setMonitoringAttribute($value)
     {
         $this->attributes['monitoring'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
@@ -149,13 +149,13 @@ class Bracelet extends Model implements HasMedia
     {
         $this->addMediaConversion('320')
             ->width(320);
-        
+
         $this->addMediaConversion('640')
             ->width(640);
-        
+
         $this->addMediaConversion('960')
             ->width(960);
-        
+
         $this->addMediaConversion('1280')
             ->width(1280);
 
@@ -168,10 +168,10 @@ class Bracelet extends Model implements HasMedia
         $this->attributes['slug'] = Str::slug($value, '-');
     }
 
-    
+
     public function scopeFilter($query, QueryFilters $filters)
     {
         return $filters->apply($query);
     }
-    
+
 }

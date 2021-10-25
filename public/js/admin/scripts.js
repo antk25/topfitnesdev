@@ -1014,6 +1014,184 @@ function initAlertEvent(element) {
 		}
 	};
 }());
+// File#: _1_circular-progress-bar
+// Usage: codyhouse.co/license
+(function() {
+  var CProgressBar = function(element) {
+    this.element = element;
+    this.fill = this.element.getElementsByClassName('c-progress-bar__fill')[0];
+    this.fillLength = getProgressBarFillLength(this);
+    this.label = this.element.getElementsByClassName('js-c-progress-bar__value');
+    this.value = parseFloat(this.element.getAttribute('data-progress'));
+    // before checking if data-animation is set -> check for reduced motion
+    updatedProgressBarForReducedMotion(this);
+    this.animate = this.element.hasAttribute('data-animation') && this.element.getAttribute('data-animation') == 'on';
+    this.animationDuration = this.element.hasAttribute('data-duration') ? this.element.getAttribute('data-duration') : 1000;
+    // animation will run only on browsers supporting IntersectionObserver
+    this.canAnimate = ('IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype);
+    // this element is used to announce the percentage value to SR
+    this.ariaLabel = this.element.getElementsByClassName('js-c-progress-bar__aria-value');
+    // check if we need to update the bar color
+    this.changeColor =  Util.hasClass(this.element, 'c-progress-bar--color-update') && Util.cssSupports('color', 'var(--color-value)');
+    if(this.changeColor) {
+      this.colorThresholds = getProgressBarColorThresholds(this);
+    }
+    initProgressBar(this);
+    // store id to reset animation
+    this.animationId = false;
+  };
+
+  // public function
+  CProgressBar.prototype.setProgressBarValue = function(value) {
+    setProgressBarValue(this, value);
+  };
+
+  function getProgressBarFillLength(progressBar) {
+    return parseFloat(2*Math.PI*progressBar.fill.getAttribute('r')).toFixed(2);
+  };
+
+  function getProgressBarColorThresholds(progressBar) {
+    var thresholds = [];
+    var i = 1;
+    while (!isNaN(parseInt(getComputedStyle(progressBar.element).getPropertyValue('--c-progress-bar-color-'+i)))) {
+      thresholds.push(parseInt(getComputedStyle(progressBar.element).getPropertyValue('--c-progress-bar-color-'+i)));
+      i = i + 1;
+    }
+    return thresholds;
+  };
+
+  function updatedProgressBarForReducedMotion(progressBar) {
+    // if reduced motion is supported and set to reduced -> remove animations
+    if(osHasReducedMotion) progressBar.element.removeAttribute('data-animation');
+  };
+
+  function initProgressBar(progressBar) {
+    // set shape initial dashOffset
+    setShapeOffset(progressBar);
+    // set initial bar color
+    if(progressBar.changeColor) updateProgressBarColor(progressBar, progressBar.value);
+    // if data-animation is on -> reset the progress bar and animate when entering the viewport
+    if(progressBar.animate && progressBar.canAnimate) animateProgressBar(progressBar);
+    else setProgressBarValue(progressBar, progressBar.value);
+    // reveal fill and label -> --animate and --color-update variations only
+    setTimeout(function(){Util.addClass(progressBar.element, 'c-progress-bar--init');}, 30);
+
+    // dynamically update value of progress bar
+    progressBar.element.addEventListener('updateProgress', function(event){
+      // cancel request animation frame if it was animating
+      if(progressBar.animationId) window.cancelAnimationFrame(progressBar.animationId);
+
+      var final = event.detail.value,
+        duration = (event.detail.duration) ? event.detail.duration : progressBar.animationDuration;
+      var start = getProgressBarValue(progressBar);
+      // trigger update animation
+      updateProgressBar(progressBar, start, final, duration, function(){
+        emitProgressBarEvents(progressBar, 'progressCompleted', progressBar.value+'%');
+        // update value of label for SR
+        if(progressBar.ariaLabel.length > 0) progressBar.ariaLabel[0].textContent = final+'%';
+      });
+    });
+  };
+
+  function setShapeOffset(progressBar) {
+    var center = progressBar.fill.getAttribute('cx');
+    progressBar.fill.setAttribute('transform', "rotate(-90 "+center+" "+center+")");
+    progressBar.fill.setAttribute('stroke-dashoffset', progressBar.fillLength);
+    progressBar.fill.setAttribute('stroke-dasharray', progressBar.fillLength);
+  };
+
+  function animateProgressBar(progressBar) {
+    // reset inital values
+    setProgressBarValue(progressBar, 0);
+
+    // listen for the element to enter the viewport -> start animation
+    var observer = new IntersectionObserver(progressBarObserve.bind(progressBar), { threshold: [0, 0.1] });
+    observer.observe(progressBar.element);
+  };
+
+  function progressBarObserve(entries, observer) { // observe progressBar position -> start animation when inside viewport
+    var self = this;
+    if(entries[0].intersectionRatio.toFixed(1) > 0 && !this.animationTriggered) {
+      updateProgressBar(this, 0, this.value, this.animationDuration, function(){
+        emitProgressBarEvents(self, 'progressCompleted', self.value+'%');
+      });
+    }
+  };
+
+  function setProgressBarValue(progressBar, value) {
+    var offset = ((100 - value)*progressBar.fillLength/100).toFixed(2);
+    progressBar.fill.setAttribute('stroke-dashoffset', offset);
+    if(progressBar.label.length > 0 ) progressBar.label[0].textContent = value;
+    if(progressBar.changeColor) updateProgressBarColor(progressBar, value);
+  };
+
+  function updateProgressBar(progressBar, start, to, duration, cb) {
+    var change = to - start,
+      currentTime = null;
+
+    var animateFill = function(timestamp){
+      if (!currentTime) currentTime = timestamp;
+      var progress = timestamp - currentTime;
+      var val = parseInt((progress/duration)*change + start);
+      // make sure value is in correct range
+      if(change > 0 && val > to) val = to;
+      if(change < 0 && val < to) val = to;
+      if(progress >= duration) val = to;
+
+      setProgressBarValue(progressBar, val);
+      if(progress < duration) {
+        progressBar.animationId = window.requestAnimationFrame(animateFill);
+      } else {
+        progressBar.animationId = false;
+        cb();
+      }
+    };
+    if ( window.requestAnimationFrame && !osHasReducedMotion ) {
+      progressBar.animationId = window.requestAnimationFrame(animateFill);
+    } else {
+      setProgressBarValue(progressBar, to);
+      cb();
+    }
+  };
+
+  function updateProgressBarColor(progressBar, value) {
+    var className = 'c-progress-bar--fill-color-'+ progressBar.colorThresholds.length;
+    for(var i = progressBar.colorThresholds.length; i > 0; i--) {
+      if( !isNaN(progressBar.colorThresholds[i - 1]) && value <= progressBar.colorThresholds[i - 1]) {
+        className = 'c-progress-bar--fill-color-' + i;
+      }
+    }
+
+    removeProgressBarColorClasses(progressBar);
+    Util.addClass(progressBar.element, className);
+  };
+
+  function removeProgressBarColorClasses(progressBar) {
+    var classes = progressBar.element.className.split(" ").filter(function(c) {
+      return c.lastIndexOf('c-progress-bar--fill-color-', 0) !== 0;
+    });
+    progressBar.element.className = classes.join(" ").trim();
+  };
+
+  function getProgressBarValue(progressBar) {
+    return (100 - Math.round((parseFloat(progressBar.fill.getAttribute('stroke-dashoffset'))/progressBar.fillLength)*100));
+  };
+
+  function emitProgressBarEvents(progressBar, eventName, detail) {
+    progressBar.element.dispatchEvent(new CustomEvent(eventName, {detail: detail}));
+  };
+
+  window.CProgressBar = CProgressBar;
+
+  //initialize the CProgressBar objects
+  var circularProgressBars = document.getElementsByClassName('js-c-progress-bar');
+  var osHasReducedMotion = Util.osHasReducedMotion();
+  if( circularProgressBars.length > 0 ) {
+    for( var i = 0; i < circularProgressBars.length; i++) {
+      (function(i){new CProgressBar(circularProgressBars[i]);})(i);
+    }
+  }
+}());
 // File#: _1_collapse
 // Usage: codyhouse.co/license
 (function() {
@@ -1089,6 +1267,317 @@ function initAlertEvent(element) {
 	if( collapses.length > 0 ) {
     for( var i = 0; i < collapses.length; i++) {
       new Collapse(collapses[i]);
+    }
+  }
+}());
+// File#: _1_custom-select
+// Usage: codyhouse.co/license
+(function() {
+  // NOTE: you need the js code only when using the --custom-dropdown variation of the Custom Select component. Default version does nor require JS.
+
+  var CustomSelect = function(element) {
+    this.element = element;
+    this.select = this.element.getElementsByTagName('select')[0];
+    this.optGroups = this.select.getElementsByTagName('optgroup');
+    this.options = this.select.getElementsByTagName('option');
+    this.selectedOption = getSelectedOptionText(this);
+    this.selectId = this.select.getAttribute('id');
+    this.trigger = false;
+    this.dropdown = false;
+    this.customOptions = false;
+    this.arrowIcon = this.element.getElementsByTagName('svg');
+    this.label = document.querySelector('[for="'+this.selectId+'"]');
+
+    this.optionIndex = 0; // used while building the custom dropdown
+
+    initCustomSelect(this); // init markup
+    initCustomSelectEvents(this); // init event listeners
+  };
+
+  function initCustomSelect(select) {
+    // create the HTML for the custom dropdown element
+    select.element.insertAdjacentHTML('beforeend', initButtonSelect(select) + initListSelect(select));
+
+    // save custom elements
+    select.dropdown = select.element.getElementsByClassName('js-select__dropdown')[0];
+    select.trigger = select.element.getElementsByClassName('js-select__button')[0];
+    select.customOptions = select.dropdown.getElementsByClassName('js-select__item');
+
+    // hide default select
+    Util.addClass(select.select, 'is-hidden');
+    if(select.arrowIcon.length > 0 ) select.arrowIcon[0].style.display = 'none';
+
+    // place dropdown
+    placeDropdown(select);
+  };
+
+  function initCustomSelectEvents(select) {
+    // option selection in dropdown
+    initSelection(select);
+
+    // click events
+    select.trigger.addEventListener('click', function(){
+      toggleCustomSelect(select, false);
+    });
+    if(select.label) {
+      // move focus to custom trigger when clicking on <select> label
+      select.label.addEventListener('click', function(){
+        Util.moveFocus(select.trigger);
+      });
+    }
+    // keyboard navigation
+    select.dropdown.addEventListener('keydown', function(event){
+      if(event.keyCode && event.keyCode == 38 || event.key && event.key.toLowerCase() == 'arrowup') {
+        keyboardCustomSelect(select, 'prev', event);
+      } else if(event.keyCode && event.keyCode == 40 || event.key && event.key.toLowerCase() == 'arrowdown') {
+        keyboardCustomSelect(select, 'next', event);
+      }
+    });
+    // native <select> element has been updated -> update custom select as well
+    select.element.addEventListener('select-updated', function(event){
+      resetCustomSelect(select);
+    });
+  };
+
+  function toggleCustomSelect(select, bool) {
+    var ariaExpanded;
+    if(bool) {
+      ariaExpanded = bool;
+    } else {
+      ariaExpanded = select.trigger.getAttribute('aria-expanded') == 'true' ? 'false' : 'true';
+    }
+    select.trigger.setAttribute('aria-expanded', ariaExpanded);
+    if(ariaExpanded == 'true') {
+      var selectedOption = getSelectedOption(select);
+      Util.moveFocus(selectedOption); // fallback if transition is not supported
+      select.dropdown.addEventListener('transitionend', function cb(){
+        Util.moveFocus(selectedOption);
+        select.dropdown.removeEventListener('transitionend', cb);
+      });
+      placeDropdown(select); // place dropdown based on available space
+    }
+  };
+
+  function placeDropdown(select) {
+    // remove placement classes to reset position
+    Util.removeClass(select.dropdown, 'select__dropdown--right select__dropdown--up');
+    var triggerBoundingRect = select.trigger.getBoundingClientRect();
+    Util.toggleClass(select.dropdown, 'select__dropdown--right', (document.documentElement.clientWidth - 5 < triggerBoundingRect.left + select.dropdown.offsetWidth));
+    // check if there's enough space up or down
+    var moveUp = (window.innerHeight - triggerBoundingRect.bottom - 5) < triggerBoundingRect.top;
+    Util.toggleClass(select.dropdown, 'select__dropdown--up', moveUp);
+    // check if we need to set a max width
+    var maxHeight = moveUp ? triggerBoundingRect.top - 20 : window.innerHeight - triggerBoundingRect.bottom - 20;
+    // set max-height based on available space
+    select.dropdown.setAttribute('style', 'max-height: '+maxHeight+'px; width: '+triggerBoundingRect.width+'px;');
+  };
+
+  function keyboardCustomSelect(select, direction, event) { // navigate custom dropdown with keyboard
+    event.preventDefault();
+    var index = Util.getIndexInArray(select.customOptions, document.activeElement);
+    index = (direction == 'next') ? index + 1 : index - 1;
+    if(index < 0) index = select.customOptions.length - 1;
+    if(index >= select.customOptions.length) index = 0;
+    Util.moveFocus(select.customOptions[index]);
+  };
+
+  function initSelection(select) { // option selection
+    select.dropdown.addEventListener('click', function(event){
+      var option = event.target.closest('.js-select__item');
+      if(!option) return;
+      selectOption(select, option);
+    });
+  };
+
+  function selectOption(select, option) {
+    if(option.hasAttribute('aria-selected') && option.getAttribute('aria-selected') == 'true') {
+      // selecting the same option
+      select.trigger.setAttribute('aria-expanded', 'false'); // hide dropdown
+    } else {
+      var selectedOption = select.dropdown.querySelector('[aria-selected="true"]');
+      if(selectedOption) selectedOption.setAttribute('aria-selected', 'false');
+      option.setAttribute('aria-selected', 'true');
+      select.trigger.getElementsByClassName('js-select__label')[0].textContent = option.textContent;
+      select.trigger.setAttribute('aria-expanded', 'false');
+      // new option has been selected -> update native <select> element _ arai-label of trigger <button>
+      updateNativeSelect(select, option.getAttribute('data-index'));
+      updateTriggerAria(select);
+    }
+    // move focus back to trigger
+    select.trigger.focus();
+  };
+
+  function updateNativeSelect(select, index) {
+    select.select.selectedIndex = index;
+    select.select.dispatchEvent(new CustomEvent('change', {bubbles: true})); // trigger change event
+  };
+
+  function updateTriggerAria(select) {
+    select.trigger.setAttribute('aria-label', select.options[select.select.selectedIndex].innerHTML+', '+select.label.textContent);
+  };
+
+  function getSelectedOptionText(select) {// used to initialize the label of the custom select button
+    var label = '';
+    if('selectedIndex' in select.select) {
+      label = select.options[select.select.selectedIndex].text;
+    } else {
+      label = select.select.querySelector('option[selected]').text;
+    }
+    return label;
+
+  };
+
+  function initButtonSelect(select) { // create the button element -> custom select trigger
+    // check if we need to add custom classes to the button trigger
+    var customClasses = select.element.getAttribute('data-trigger-class') ? ' '+select.element.getAttribute('data-trigger-class') : '';
+
+    var label = select.options[select.select.selectedIndex].innerHTML+', '+select.label.textContent;
+
+    var button = '<button type="button" class="js-select__button select__button'+customClasses+'" aria-label="'+label+'" aria-expanded="false" aria-controls="'+select.selectId+'-dropdown"><span aria-hidden="true" class="js-select__label select__label">'+select.selectedOption+'</span>';
+    if(select.arrowIcon.length > 0 && select.arrowIcon[0].outerHTML) {
+      var clone = select.arrowIcon[0].cloneNode(true);
+      Util.removeClass(clone, 'select__icon');
+      button = button +clone.outerHTML;
+    }
+
+    return button+'</button>';
+
+  };
+
+  function initListSelect(select) { // create custom select dropdown
+    var list = '<div class="js-select__dropdown select__dropdown" aria-describedby="'+select.selectId+'-description" id="'+select.selectId+'-dropdown">';
+    list = list + getSelectLabelSR(select);
+    if(select.optGroups.length > 0) {
+      for(var i = 0; i < select.optGroups.length; i++) {
+        var optGroupList = select.optGroups[i].getElementsByTagName('option'),
+          optGroupLabel = '<li><span class="select__item select__item--optgroup">'+select.optGroups[i].getAttribute('label')+'</span></li>';
+        list = list + '<ul class="select__list" role="listbox">'+optGroupLabel+getOptionsList(select, optGroupList) + '</ul>';
+      }
+    } else {
+      list = list + '<ul class="select__list" role="listbox">'+getOptionsList(select, select.options) + '</ul>';
+    }
+    return list;
+  };
+
+  function getSelectLabelSR(select) {
+    if(select.label) {
+      return '<p class="sr-only" id="'+select.selectId+'-description">'+select.label.textContent+'</p>'
+    } else {
+      return '';
+    }
+  };
+
+  function resetCustomSelect(select) {
+    // <select> element has been updated (using an external control) - update custom select
+    var selectedOption = select.dropdown.querySelector('[aria-selected="true"]');
+    if(selectedOption) selectedOption.setAttribute('aria-selected', 'false');
+    var option = select.dropdown.querySelector('.js-select__item[data-index="'+select.select.selectedIndex+'"]');
+    option.setAttribute('aria-selected', 'true');
+    select.trigger.getElementsByClassName('js-select__label')[0].textContent = option.textContent;
+    select.trigger.setAttribute('aria-expanded', 'false');
+    updateTriggerAria(select);
+  };
+
+  function getOptionsList(select, options) {
+    var list = '';
+    for(var i = 0; i < options.length; i++) {
+      var selected = options[i].hasAttribute('selected') ? ' aria-selected="true"' : ' aria-selected="false"';
+      list = list + '<li><button type="button" class="reset js-select__item select__item select__item--option" role="option" data-value="'+options[i].value+'" '+selected+' data-index="'+select.optionIndex+'">'+options[i].text+'</button></li>';
+      select.optionIndex = select.optionIndex + 1;
+    };
+    return list;
+  };
+
+  function getSelectedOption(select) {
+    var option = select.dropdown.querySelector('[aria-selected="true"]');
+    if(option) return option;
+    else return select.dropdown.getElementsByClassName('js-select__item')[0];
+  };
+
+  function moveFocusToSelectTrigger(select) {
+    if(!document.activeElement.closest('.js-select')) return
+    select.trigger.focus();
+  };
+
+  function checkCustomSelectClick(select, target) { // close select when clicking outside it
+    if( !select.element.contains(target) ) toggleCustomSelect(select, 'false');
+  };
+
+  //initialize the CustomSelect objects
+  var customSelect = document.getElementsByClassName('js-select');
+  if( customSelect.length > 0 ) {
+    var selectArray = [];
+    for( var i = 0; i < customSelect.length; i++) {
+      (function(i){selectArray.push(new CustomSelect(customSelect[i]));})(i);
+    }
+
+    // listen for key events
+    window.addEventListener('keyup', function(event){
+      if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
+        // close custom select on 'Esc'
+        selectArray.forEach(function(element){
+          moveFocusToSelectTrigger(element); // if focus is within dropdown, move it to dropdown trigger
+          toggleCustomSelect(element, 'false'); // close dropdown
+        });
+      }
+    });
+    // close custom select when clicking outside it
+    window.addEventListener('click', function(event){
+      selectArray.forEach(function(element){
+        checkCustomSelectClick(element, event.target);
+      });
+    });
+  }
+}());
+// File#: _1_details
+// Usage: codyhouse.co/license
+(function() {
+  var Details = function(element, index) {
+    this.element = element;
+    this.summary = this.element.getElementsByClassName('js-details__summary')[0];
+    this.details = this.element.getElementsByClassName('js-details__content')[0];
+    this.htmlElSupported = 'open' in this.element;
+    this.initDetails(index);
+    this.initDetailsEvents();
+  };
+
+  Details.prototype.initDetails = function(index) {
+    // init aria attributes
+    Util.setAttributes(this.summary, {'aria-expanded': 'false', 'aria-controls': 'details--'+index, 'role': 'button'});
+    Util.setAttributes(this.details, {'aria-hidden': 'true', 'id': 'details--'+index});
+  };
+
+  Details.prototype.initDetailsEvents = function() {
+    var self = this;
+    if( this.htmlElSupported ) { // browser supports the <details> element
+      this.element.addEventListener('toggle', function(event){
+        var ariaValues = self.element.open ? ['true', 'false'] : ['false', 'true'];
+        // update aria attributes when details element status change (open/close)
+        self.updateAriaValues(ariaValues);
+      });
+    } else { //browser does not support <details>
+      this.summary.addEventListener('click', function(event){
+        event.preventDefault();
+        var isOpen = self.element.getAttribute('open'),
+          ariaValues = [];
+
+        isOpen ? self.element.removeAttribute('open') : self.element.setAttribute('open', 'true');
+        ariaValues = isOpen ? ['false', 'true'] : ['true', 'false'];
+        self.updateAriaValues(ariaValues);
+      });
+    }
+  };
+
+  Details.prototype.updateAriaValues = function(values) {
+    this.summary.setAttribute('aria-expanded', values[0]);
+    this.details.setAttribute('aria-hidden', values[1]);
+  };
+
+  //initialize the Details objects
+  var detailsEl = document.getElementsByClassName('js-details');
+  if( detailsEl.length > 0 ) {
+    for( var i = 0; i < detailsEl.length; i++) {
+      (function(i){new Details(detailsEl[i], i);})(i);
     }
   }
 }());
@@ -1455,6 +1944,63 @@ function initAlertEvent(element) {
 			(function(i){new Exsidenav(exsidenav[i]);})(i);
 		}
 	}
+}());
+// File#: _1_file-upload
+// Usage: codyhouse.co/license
+(function() {
+  var InputFile = function(element) {
+    this.element = element;
+    this.input = this.element.getElementsByClassName('file-upload__input')[0];
+    this.label = this.element.getElementsByClassName('file-upload__label')[0];
+    this.multipleUpload = this.input.hasAttribute('multiple'); // allow for multiple files selection
+
+    // this is the label text element -> when user selects a file, it will be changed from the default value to the name of the file
+    this.labelText = this.element.getElementsByClassName('file-upload__text')[0];
+    this.initialLabel = this.labelText.textContent;
+
+    initInputFileEvents(this);
+  };
+
+  function initInputFileEvents(inputFile) {
+    // make label focusable
+    inputFile.label.setAttribute('tabindex', '0');
+    inputFile.input.setAttribute('tabindex', '-1');
+
+    // move focus from input to label -> this is triggered when a file is selected or the file picker modal is closed
+    inputFile.input.addEventListener('focusin', function(event){
+      inputFile.label.focus();
+    });
+
+    // press 'Enter' key on label element -> trigger file selection
+    inputFile.label.addEventListener('keydown', function(event) {
+      if( event.keyCode && event.keyCode == 13 || event.key && event.key.toLowerCase() == 'enter') {inputFile.input.click();}
+    });
+
+    // file has been selected -> update label text
+    inputFile.input.addEventListener('change', function(event){
+      updateInputLabelText(inputFile);
+    });
+  };
+
+  function updateInputLabelText(inputFile) {
+    var label = '';
+    if(inputFile.input.files && inputFile.input.files.length < 1) {
+      label = inputFile.initialLabel; // no selection -> revert to initial label
+    } else if(inputFile.multipleUpload && inputFile.input.files && inputFile.input.files.length > 1) {
+      label = inputFile.input.files.length+ ' files'; // multiple selection -> show number of files
+    } else {
+      label = inputFile.input.value.split('\\').pop(); // single file selection -> show name of the file
+    }
+    inputFile.labelText.textContent = label;
+  };
+
+  //initialize the InputFile objects
+  var inputFiles = document.getElementsByClassName('file-upload');
+  if( inputFiles.length > 0 ) {
+    for( var i = 0; i < inputFiles.length; i++) {
+      (function(i){new InputFile(inputFiles[i]);})(i);
+    }
+  }
 }());
 // File#: _1_form-validator
 // Usage: codyhouse.co/license

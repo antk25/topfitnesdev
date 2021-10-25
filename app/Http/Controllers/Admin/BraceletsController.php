@@ -62,7 +62,6 @@ class BraceletsController extends Controller
     public function store(BraceletRequest $request)
     {
 
-        // dd($request->replaceable_strap);
         $bracelet = Bracelet::create([
            'name' => request('name'),
            'slug' => request('slug'),
@@ -135,59 +134,76 @@ class BraceletsController extends Controller
 
         $files = request('files');
 
-        $nameimg = request('nameimg');
-
         if ($files != '') {
             $lastbracelet = Bracelet::find($bracelet->id);
             $i = 0;
             foreach ($files as $file) {
                 $lastbracelet->addMedia($file)
-                    ->usingName($nameimg[$i++])
                     ->toMediaCollection('bracelet');
             }
         }
 
-        $ratings = $request->input('ratings', []);
+        /**
+         * Подготовка данных по рейтингам для прикрепления их к товару
+         *
+         * Используется PHP функция для работы с массивами array_column
+         * https://www.php.net/manual/ru/function.array-column.php
+         *
+         */
 
-        $position_rating = $request->input('position_rating', []);
+        $allratings = $request->input('allratings');
 
-        $text_rating = $request->input('text_rating', []);
+        if ($allratings != '') {
+            $ratings = array_column($allratings, 'ratings');
+            $position_rating = array_column($allratings, 'position_rating');
+            $text_rating = array_column($allratings, 'text_rating');
+            $head_rating = array_column($allratings, 'head_rating');
 
+            /**
+            * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
+            *
+            * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
+            *
+            */
 
-        $grades = $request->input('grades', []);
+            for ($rating=0; $rating < count($ratings); $rating++) {
 
-        $position_grade = $request->input('position_grade', []);
+                    $bracelet->ratings()->attach($ratings[$rating], ['position' => $position_rating[$rating], 'text_rating' => $text_rating[$rating], 'head_rating' => $head_rating[$rating]]);
 
-        $value = $request->input('value', []);
-
-
-
-        $sellers = $request->input('sellers', []);
-
-        $link = $request->input('link', []);
-
-        $price = $request->input('price', []);
-
-        $old_price = $request->input('old_price', []);
-
-
-        for ($rating=0; $rating < count($ratings); $rating++) {
-            if ($ratings[$rating] != '') {
-                $bracelet->ratings()->attach($ratings[$rating], ['position' => $position_rating[$rating], 'text_rating' => $text_rating[$rating]]);
             }
         }
 
-        for ($grade=0; $grade < count($grades); $grade++) {
-            if ($grades[$grade] != '') {
-                $bracelet->grades()->attach($grades[$grade], ['position' => $position_grade[$grade], 'value' => $value[$grade]]);
+
+        $allgrades = $request->input('allgrades');
+
+        if ($allgrades != '') {
+            $grades = array_column($allgrades, 'grades');
+            $position_grade = array_column($allgrades, 'position_grade');
+            $value_grade = array_column($allgrades, 'value_grade');
+
+            for ($grade=0; $grade < count($grades); $grade++) {
+                if ($grades[$grade] != '') {
+                    $bracelet->grades()->attach($grades[$grade], ['position' => $position_grade[$grade], 'value' => $value_grade[$grade]]);
+                }
             }
         }
 
-        for ($seller=0; $seller < count($sellers); $seller++) {
-            if ($sellers[$seller] != '') {
-                $bracelet->sellers()->attach($sellers[$seller], ['link' => $link[$seller], 'price' => $price[$seller], 'old_price' => $old_price[$seller]]);
+        $allsellers = $request->input('allsellers');
+
+        if ($allsellers != '') {
+            $sellers = array_column($allsellers, 'sellers');
+            $link_seller = array_column($allsellers, 'link_seller');
+            $price_seller = array_column($allsellers, 'price_seller');
+            $old_price_seller = array_column($allsellers, 'old_price_seller');
+
+            for ($seller=0; $seller < count($sellers); $seller++) {
+                if ($sellers[$seller] != '') {
+                    $bracelet->sellers()->attach($sellers[$seller], ['link' => $link_seller[$seller], 'price' => $price_seller[$seller], 'old_price' => $old_price_seller[$seller]]);
+                }
             }
         }
+
+
 
         return redirect()->route('bracelets.index');
     }
@@ -231,33 +247,25 @@ class BraceletsController extends Controller
 
         $bracelet = Bracelet::find($id);
 
-        $ratings = $request->ratings;
 
-        $position_rating = $request->position_rating;
+        $allratings = $request->input('allratings');
 
-        $text_rating = $request->text_rating;
+        if ($allratings != '') {
+            $ratings = array_column($allratings, 'ratings');
+            $position_rating = array_column($allratings, 'position_rating');
+            $text_rating = array_column($allratings, 'text_rating');
+            $head_rating = array_column($allratings, 'head_rating');
 
+            /**
+            * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
+            *
+            * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
+            *
+            */
 
-        $grades = $request->grades;
-
-        $value = $request->value;
-
-        $position_grade = $request->position_grade;
-
-
-        $sellers = $request->sellers;
-
-        $link = $request->link;
-
-        $price = $request->price;
-
-        $old_price = $request->old_price;
-
-        if ($ratings != '') {
-
-            $extra = array_map(function($p, $r){
-                return ['position' => $p, 'text_rating' => $r];
-            }, $position_rating, $text_rating);
+            $extra = array_map(function($p, $t, $h){
+                return ['position' => $p, 'text_rating' => $t, 'head_rating' => $h];
+            }, $position_rating, $text_rating, $head_rating);
 
             $data = array_combine($ratings, $extra);
 
@@ -269,25 +277,51 @@ class BraceletsController extends Controller
             $bracelet->ratings()->detach($ratings);
         }
 
-        if ($grades != '') {
-            $extra2 = array_map(function($p, $r){
-                return ['value' => $p, 'position' => $r];
-            }, $value, $position_grade);
+
+        $allgrades = $request->input('allgrades');
+
+        if ($allgrades != '') {
+            $grades = array_column($allgrades, 'grades');
+            $position_grade = array_column($allgrades, 'position_grade');
+            $value_grade = array_column($allgrades, 'value_grade');
+
+            $extra2 = array_map(function($v, $p){
+                return ['value' => $v, 'position' => $p];
+            }, $value_grade, $position_grade);
 
             $data2 = array_combine($grades, $extra2);
 
             $bracelet->grades()->sync($data2);
+
+        }
+        // Для того, чтобы при удалении всех оценок - были удалены все связи, обязательно нужен след код:
+        else {
+            $grades = $bracelet->grades->pluck('id')->all();
+            $bracelet->grades()->detach($grades);
         }
 
-        if ($sellers != '') {
-            $extra3 = array_map(function($p, $r, $s){
-                return ['link' => $p, 'price' => $r, 'old_price' => $s];
-            }, $link, $price, $old_price);
+        $allsellers = $request->input('allsellers');
+
+        if ($allsellers != '') {
+            $sellers = array_column($allsellers, 'sellers');
+            $link_seller = array_column($allsellers, 'link_seller');
+            $price_seller = array_column($allsellers, 'price_seller');
+            $old_price_seller = array_column($allsellers, 'old_price_seller');
+
+            $extra3 = array_map(function($l, $p, $o){
+                return ['link' => $l, 'price' => $p, 'old_price' => $o];
+            }, $link_seller, $price_seller, $old_price_seller);
 
             $data3 = array_combine($sellers, $extra3);
 
             $bracelet->sellers()->sync($data3);
         }
+        // Для того, чтобы при удалении всех продавцов - были удалены все связи, обязательно нужен след код:
+        else {
+            $sellers = $bracelet->sellers->pluck('id')->all();
+            $bracelet->sellers()->detach($sellers);
+        }
+
         // Вычисление средней цены по продавцам
         $avg_price = collect($request->price);
 
@@ -448,7 +482,7 @@ class BraceletsController extends Controller
                'grade_bracelet' => $brgrade
            ]);
         }
-        
+
         return back();
 
     }

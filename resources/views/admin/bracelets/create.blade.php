@@ -11,19 +11,7 @@
         <p>Добавить новый браслет в каталог.</p>
       </div>
 
-      <div class="margin-y-sm">
-        <input class="checkbox" type="checkbox" id="popular" name="popular">
-        <label for="popular">Популярный</label>&nbsp;&nbsp;&nbsp;
-        
-        <input class="checkbox" type="checkbox" id="hit" name="hit">
-        <label for="hit">Лидер</label>&nbsp;&nbsp;&nbsp;
-        
-        <input class="checkbox" type="checkbox" id="published" name="published" checked>
-        <label for="published">Опубликован</label>&nbsp;&nbsp;&nbsp;
-        
-        <input class="checkbox" type="checkbox" id="selection" name="selection">
-        <label for="selection">Учавствует в подборе</label>&nbsp;&nbsp;&nbsp;
-      </div>
+
 
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
@@ -120,10 +108,110 @@
         </div>
       </div>
 
-      <div class="margin-bottom-xs">
-        <label class="form-label margin-bottom-xxs" for="about">Описание</label>
-            <textarea class="form-control width-100%" name="about" id="code"></textarea>
+      <section class="margin-y-md">
+
+      <div class="text-component">
+        <h4>Настройки публикации</h4>
       </div>
+
+      <div class="tbl settings-tbl space-unit-em">
+        <table class="tbl__table text-sm border-bottom border-2" aria-label="Настройки публикации">
+          <thead class="tbl__header border-bottom border-2">
+            <tr class="tbl__row">
+              <th class="tbl__cell text-left" scope="col">
+                <span class="font-semibold">Опция</span>
+              </th>
+
+              <th class="sr-only" scope="col">Вкл/выкл опцию</span></th>
+            </tr>
+          </thead>
+
+          <tbody class="tbl__body">
+            <tr class="tbl__row">
+              <td class="tbl__cell" role="cell">
+                <p>Популярный</p>
+              </td>
+
+              <td class="tbl__cell" role="cell">
+                <div class="flex justify-end">
+
+                  <div class="switch ">
+                    <input class="switch__input" type="checkbox" id="popular" name="popular">
+                    <label class="switch__label" for="popular" aria-hidden="true">Популярный</label>
+                    <div class="switch__marker" aria-hidden="true"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <tr class="tbl__row">
+              <td class="tbl__cell" role="cell">
+                <p>Лидер</p>
+              </td>
+
+              <td class="tbl__cell" role="cell">
+                <div class="flex justify-end">
+
+                  <div class="switch ">
+                    <input class="switch__input" type="checkbox" id="hit" name="hit">
+                    <label class="switch__label" for="hit" aria-hidden="true">Лидер</label>
+                    <div class="switch__marker" aria-hidden="true"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <tr class="tbl__row">
+              <td class="tbl__cell" role="cell">
+                <p>Опубликован</p>
+              </td>
+
+              <td class="tbl__cell" role="cell">
+                <div class="flex justify-end">
+
+                  <div class="switch ">
+                    <input class="switch__input" type="checkbox" id="published" name="published" checked>
+                    <label class="switch__label" for="published" aria-hidden="true">Опубликован</label>
+                    <div class="switch__marker" aria-hidden="true"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <tr class="tbl__row">
+              <td class="tbl__cell" role="cell">
+                <p>Участвует в подборе</p>
+              </td>
+
+              <td class="tbl__cell" role="cell">
+                <div class="flex justify-end">
+
+                  <div class="switch ">
+                    <input class="switch__input" type="checkbox" id="selection" name="selection">
+                    <label class="switch__label" for="selection" aria-hidden="true">Участвует в подборе</label>
+                    <div class="switch__marker" aria-hidden="true"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="margin-y-md radius-md border padding-sm">
+      <div class="text-component margin-bottom-sm">
+        <h4>Описание браслета</h4>
+        <p class="text-md color-contrast-medium">
+          Нажать F11 для переключения редактора на полный экран, ESC для выхода.
+        </p>
+      </div>
+      <div class="margin-bottom-sm">
+        <textarea rows="20" class="form-control width-100% text-sm text" spellcheck="false" name="about" id="about">{{ old('about') }}</textarea>
+      </div>
+    </section>
     </fieldset>
 
 
@@ -653,7 +741,7 @@
           <input class="form-control width-100%" type="number" name="standby_time" min="3" max="2000" step="1" value="">
         </div>
       </div>
-      
+
       <div class="grid gap-xxs margin-y-sm">
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxxs" for="real_time">Реальное время работы (дней)</label>
@@ -670,215 +758,195 @@
       </div>
 
     </fieldset>
-      
-    
-    <input type="file" multiple name="files[]">
+
+    {{-- Add ratings --}}
+    <section class="margin-bottom-md">
+      <div class="text-component">
+        <h4>Добавить рейтинги в которые входит товар</h4>
+      </div>
+      <div class="js-repeater" data-repeater-input-name="allratings[n]">
+        <div class="js-repeater__list">
+          <div class="grid grid-col-8 gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-2@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allratings[0][ratings]" id="allratings[0][ratings]"
+                        class="form-control">
+                    <option value="">-- Выбрать рейтинг --</option>
+                    @foreach ($ratings as $k => $v)
+                              <option value="{{ $k }}">{{ $v }}</option>
+                            @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+            </div>
+            <div class="col-3@md">
+              <input class="form-control width-100%" type="text" name="allratings[0][head_rating]" id="allratings[][head_rating]" placeholder="Заголовок H2 для рейтинга">
+            </div>
+            <div class="col-3@md">
+              <label class="form-label margin-bottom-xxs" for="allratings[0][position_rating]">Позиция:</label>
+                <input class="form-control" type="number" name="allratings[0][position_rating]" id="allratings[0][position_rating]" min="0" max="20" step="1" value="1">
+
+            </div>
+
+            <div class="col-8@md">
+              <textarea class="form-control width-100%" name="allratings[0][text_rating]" id="allratings[][text_rating]" cols="33" rows="5" placeholder="Описание браслета для выбранного рейтинга"></textarea>
 
 
-      <div class="row" x-data="handler()">
-        <div class="col">
+              <button class="btn width-100% margin-y-sm btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
 
-          <table class="table table--expanded@xs position-relative z-index-1 width-100% js-table">
-            <thead class="table__header">
-              <tr class="table__row">
-                <th class="table__cell text-left" scope="col">#</th>
-                <th class="table__cell text-left" scope="col">Рейтинг</th>
-                <th class="table__cell text-right" scope="col">Позиция</th>
-                <th class="table__cell text-right" scope="col">Текст</th>
-                <th class="table__cell text-right" scope="col">Удалить</th>
-              </tr>
-            </thead>
-            <tbody class="table__body">
-              <template x-for="(field, index) in fields" :key="index">
-              <tr class="table__row">
-                <td x-text="index + 1"></td>
-                <td class="table__cell" role="cell">
-                  <div class="select">
-                    <select class="select__input form-control" name="ratings[]"  x-model="field.ratings">
-                      @foreach ($ratings as $k => $v)
-                        <option value="{{ $k }}">{{ $v }}</option>
-                      @endforeach
-                    </select>
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+            </div>
 
-                    <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-                  </div>
-                </td>
-                <td class="table__cell  text-left" role="cell">
-                  <input x-model="field.position" class="form-control" type="number" name="position[]" min="0" max="20" step="1">
-                </td>
-                <td class="table__cell" role="cell">
-                  <textarea class="form-control width-100%" name="text_rating[]" id="code"></textarea>
-                </td>
-                 <td class="table__cell" role="cell"><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
-              </tr>
-             </template>
-            </tbody>
-            <tfoot>
-              <tr class="table__row">
-                 <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить рейтинг</button></td>
-              </tr>
-            </tfoot>
-          </table>
+          </div>
         </div>
+        <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить рейтинг</button>
+      </div>
+    </section>
+    {{-- End add ratings --}}
+
+
+    {{-- Add grades --}}
+    <section class="margin-bottom-md">
+      <div class="text-component">
+        <h4>Оценки для браслета</h4>
+      </div>
+      <div class="js-repeater" data-repeater-input-name="allgrades[n]">
+        <div class="js-repeater__list">
+          <div class="grid gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-4@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allgrades[0][grades]" id="allgrades[0][grades]"
+                        class="form-control">
+                    <option value="">-- Что оцениваем --</option>
+                    @foreach ($grades as $k => $v)
+                      <option value="{{ $k }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+            </div>
+            <div class="col-4@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allgrades[0][value_grade]">Оценка:</label>
+              <input class="form-control col" type="number" name="allgrades[0][value_grade]" id="allgrades[][value_grade]" min="0" max="10" step="0.1" placeholder="Оценка 1-10">
+            </div>
+            <div class="col-3@md">
+              <label class="form-label margin-bottom-xxs" for="allgrades[0][position_grade]">Позиция:</label>
+                <input class="form-control" type="number" name="allgrades[0][position_grade]" id="allgrades[0][position_grade]" min="1" max="5" step="1" value="1">
+            </div>
+            <div class="col-1@md">
+              <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
+
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+
+            </div>
+          </div>
+        </div>
+        <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить оценку</button>
+      </div>
+    </section>
+    {{-- End add grades --}}
+
+
+    {{-- Add sellers --}}
+    <section class="margin-bottom-md">
+      <div class="text-component">
+        <h4>Продавцы</h4>
+      </div>
+      <div class="js-repeater" data-repeater-input-name="allsellers[n]">
+        <div class="js-repeater__list">
+          <div class="grid gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-3@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allsellers[0][sellers]" id="allsellers[0][sellers]"
+                        class="form-control">
+                    <option value="">-- Выбрать магазин --</option>
+                    @foreach ($sellers as $k => $v)
+                      <option value="{{ $k }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+
+            </div>
+            <div class="col-4@md">
+                <input class="form-control" type="text" name="allsellers[0][link_seller]" id="allsellers[0][position_grade]" placeholder="Ссылка">
+            </div>
+            <div class="col-2@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allsellers[0][price_seller]">Цена:</label>
+              <input class="form-control" type="number" name="allsellers[0][price_seller]" id="allsellers[][price_seller]" min="300" max="60000" step="1" placeholder="Цена">
+
+            </div>
+            <div class="col-2@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allsellers[0][old_price_seller]">Старая цена:</label>
+              <input class="form-control" type="number" name="allsellers[0][old_price_seller]" id="allsellers[][old_price_seller]" min="300" max="60000" step="1" placeholder="Старая цена">
+            </div>
+            <div class="col-1@md">
+              <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
+
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+
+            </div>
+          </div>
+        </div>
+        <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить продавца</button>
+      </div>
+    </section>
+    {{-- End add sellers --}}
+
+  {{-- Add images --}}
+    <section class="margin-bottom-md">
+      <div class="text-component margin-y-sm">
+        <h4>Добавить изображения браслета</h4>
+        <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После публикации браслета можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
       </div>
 
+      <div class="file-upload inline-block">
+        <label for="files" class="file-upload__label btn btn--primary">
+          <span class="flex items-center">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
 
-      <h2>Оценки</h2>
+            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
+          </span>
+        </label>
 
-      <div class="row" x-data="handler2()">
-        <div class="col">
-
-          <table class="table table--expanded@xs position-relative z-index-1 width-100% js-table">
-            <thead class="table__header">
-              <tr class="table__row">
-                <th class="table__cell text-left" scope="col">#</th>
-                <th class="table__cell text-left" scope="col">Оценка</th>
-                <th class="table__cell text-right" scope="col">Значение</th>
-                <th class="table__cell text-right" scope="col">Позиция</th>
-                <th class="table__cell text-right" scope="col">Удалить</th>
-              </tr>
-            </thead>
-            <tbody class="table__body">
-              <template x-for="(field, index) in fields" :key="index">
-              <tr class="table__row">
-                <td x-text="index + 1"></td>
-                <td class="table__cell" role="cell">
-                  <div class="select">
-                    <select class="select__input form-control" name="grades[]"  x-model="field.grades">
-                      @foreach ($grades as $k => $v)
-                        <option value="{{ $k }}">{{ $v }}</option>
-                      @endforeach
-                    </select>
-
-                    <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-                  </div>
-                </td>
-                <td class="table__cell  text-left" role="cell">
-                  <input x-model="field.value" class="form-control" type="number" name="value[]" min="0" max="20" step="1">
-                </td>
-                <td class="table__cell  text-left" role="cell">
-                  <input x-model="field.position_grade" class="form-control" type="number" name="position_grade[]" min="0" max="20" step="1">
-                </td>
-                 <td class="table__cell" role="cell"><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
-              </tr>
-             </template>
-            </tbody>
-            <tfoot>
-              <tr class="table__row">
-                 <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить оценку</button></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+        <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
       </div>
+    </section>
+{{-- End add images --}}
 
-
-      <h2>Продавцы</h2>
-
-      <div class="row" x-data="handler3()">
-        <div class="col">
-
-          <table class="table table--expanded@xs position-relative z-index-1 width-100% js-table">
-            <thead class="table__header">
-              <tr class="table__row">
-                <th class="table__cell text-left" scope="col">#</th>
-                <th class="table__cell text-left" scope="col">Название</th>
-                <th class="table__cell text-right" scope="col">Значение</th>
-                <th class="table__cell text-right" scope="col">Позиция</th>
-                <th class="table__cell text-right" scope="col">Удалить</th>
-              </tr>
-            </thead>
-            <tbody class="table__body">
-              <template x-for="(field, index) in fields" :key="index">
-              <tr class="table__row">
-                <td x-text="index + 1"></td>
-                <td class="table__cell" role="cell">
-                  <div class="select">
-                    <select class="select__input form-control" name="sellers[]"  x-model="field.sellers">
-                      @foreach ($sellers as $k => $v)
-                        <option value="{{ $k }}">{{ $v }}</option>
-                      @endforeach
-                    </select>
-
-                    <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-                  </div>
-                </td>
-                <td class="table__cell  text-left" role="cell">
-                  <input x-model="field.link" class="form-control" type="text" name="link[]">
-                </td>
-                <td class="table__cell  text-left" role="cell">
-                  <input x-model="field.price" class="form-control" type="text" name="price[]">
-                </td>
-
-                <td class="table__cell  text-left" role="cell">
-                  <input x-model="field.old_price" class="form-control" type="text" name="old_price[]">
-                </td>
-                 <td class="table__cell" role="cell"><button type="button" class="btn btn-danger btn-small" @click="removeField(index)">&times;</button></td>
-              </tr>
-             </template>
-            </tbody>
-            <tfoot>
-              <tr class="table__row">
-                 <td colspan="4" class="text-right"><button type="button" class="btn btn-info" @click="addNewField()">+ Добавить оценку</button></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-      
-      
-      <section class="bg bg-white padding-sm">
-      <p class="color-contrast-medium margin-bottom-sm">Добавить картинки</p>
-              <div class="row" x-data="handler4()">
-                <table class="tbl__table border-bottom border-2" aria-label="Table Example">
-                    <thead class="tbl__header border-bottom border-2">
-                      <tr class="tbl__row">
-                        <th class="tbl__cell text-left" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span>
-                          </th>
-  
-                          <th class="tbl__cell text-left" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span>
-                          </th>
-  
-                          <th class="tbl__cell text-left" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span>
-                          </th>
-  
-                          <th class="tbl__cell" scope="col">
-                          <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
-                          </th>
-                      </tr>
-                    </thead>
-                    <tbody class="tbl__body">
-                      <template x-for="(field, index) in fields" :key="index">
-                      <tr class="tbl__row">
-                        <td x-text="index + 1"></td>
-                        <td class="tbl__cell" role="cell">
-  
-  
-                            <input type="file" class="file-upload__input" name="files[]">
-  
-                         </td>
-                        <td class="tbl__cell" role="cell">
-                          <input x-model="field.nameimg" class="form-control" type="text" name="nameimg[]">
-                        </td>
-                         <td class="tbl__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
-                      </tr>
-                     </template>
-                    </tbody>
-                    <tfoot>
-                      <tr class="tbl__cell">
-                         <td colspan="4" class="text-left"><button type="button" class="btn btn--success text-sm" @click="addNewField()">+ Добавить картинку</button></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-              </div>
-            </section>
     <div class="text-right">
       <button type="submit" class="btn btn--primary">Отправить</button>
     </div>
   </form>
+
+
 
 </div>
 
@@ -887,35 +955,32 @@
 @section('scripts')
 @parent
 <script src="{{ asset("js/admin/alpine.min.js") }}"></script>
-<script src="{{ asset("js/admin/codemirror.js") }}"></script>
-    <script src="{{ asset("js/admin/closetag.js") }}"></script>
-    <script src="{{ asset("js/admin/htmlmixed.js") }}"></script>
-    <script src="{{ asset("js/admin/css.js") }}"></script>
-    <script src="{{ asset("js/admin/javascript.js") }}"></script>
-    <script src="{{ asset("js/admin/xml.js") }}"></script>
+<script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
     <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
+    <script src="{{ asset("js/admin/closetag.js") }}"></script>
+    <script src="{{ asset("js/admin/matchtags.js") }}"></script>
+    <script src="{{ asset("js/admin/trailingspace.js") }}"></script>
+    <script src="{{ asset("js/admin/xml.js") }}"></script>
+    <script src="{{ asset("js/admin/fullscreen.js") }}"></script>
     <script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        mode: 'text/html',
-        autoCloseTags: true
-      });
-
-  function handler() {
-      return {
-        fields: [],
-        addNewField() {
-            this.fields.push({
-                ratings: '',
-                position: '',
-                text_rating: ''
-            });
-          },
-          removeField(index) {
-            this.fields.splice(index, 1);
-          }
+      var myCodeMirror = CodeMirror.fromTextArea((about), {
+        lineNumbers: true,
+        tabSize: 2,
+        mode: "text/html",
+        autoCloseTags: true,
+        lineWrapping: true,
+        matchTags: {bothTags: true},
+        extraKeys: {"Ctrl-J": "toMatchingTag"},
+        showTrailingSpace: true,
+        extraKeys: {
+        "F11": function(cm) {
+          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function(cm) {
+          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
         }
-  }
-
+      }
+      });
 
   function handler2() {
       return {

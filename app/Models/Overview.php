@@ -39,14 +39,14 @@ class Overview extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-    // Связываем с комментариями 
+    // Связываем с комментариями
 
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
-    // Связываем с меню 
+    // Связываем с меню
 
     public function menuitem()
     {
@@ -58,9 +58,18 @@ class Overview extends Model implements HasMedia
     {
         $this->addMediaConversion('320')
             ->width(320);
-        
+
         $this->addMediaConversion('640')
             ->width(640);
+
+        $this->addMediaConversion('960')
+            ->width(960);
+
+        $this->addMediaConversion('1280')
+            ->width(1280);
+
+        $this->addMediaConversion('thumb')
+        ->crop('crop-center', 300, 300);
 
     }
 

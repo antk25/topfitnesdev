@@ -7,6 +7,7 @@ use App\Models\Rating;
 use App\Models\Bracelet;
 use App\Http\Requests\Admin\RatingRequest;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class RatingsController extends Controller
 {
@@ -19,7 +20,7 @@ class RatingsController extends Controller
     {
 
         $ratings = Rating::paginate(20);
-        
+
         return view('admin.ratings.index', compact('ratings'));
     }
 
@@ -57,44 +58,55 @@ class RatingsController extends Controller
                     'description' => request('description'),
                     'text' => request('text')
                 ]);
-// Старый код при использовании alpine для repeat fields
-        // $bracelets = $request->input('bracelets', []);
 
-        // $position_rating = $request->input('position_rating', []);
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
 
-        // $text_rating = $request->input('text_rating', []);
+        $files = request('files');
 
-        // for ($bracelet=0; $bracelet < count($bracelets); $bracelet++) {
-            // if ($bracelets[$bracelet] != '') {
-                // $rating->bracelets()->attach($bracelets[$bracelet], ['position' => $position_rating[$bracelet], 'text_rating' => $text_rating[$bracelet]]);
-            // }
-        // }
-// Конец старого кода
+        if ($files != '') {
+            $lastrating = Rating::find($rating->id);
+            $i = 0;
+            foreach ($files as $file) {
+                $lastrating->addMedia($file)
+                    ->toMediaCollection('rating');
+            }
+        }
 
 
+        /**
+         * Подготовка данных по товарам для прикрепления их к рейтингу
+         *
+         * Используется PHP функция для работы с массивами array_column
+         * https://www.php.net/manual/ru/function.array-column.php
+         *
+         */
 
-        // foreach ($request->braceletRating as $bracelet) {
-            // $rating->bracelets()->attach($bracelet['bracelet_id'], ['position' => $bracelet['position_rating'], 'text_rating' => $bracelet['text_rating']]);
-        // }
+        $allbracelets = $request->input('allbracelets');
 
-        if ($request->ratingBracelets) 
-            foreach ($request->ratingBracelets as $bracelet) {
-                $rating->bracelets()->attach($bracelet['bracelet_id'],
-                    ['position' => $bracelet['position'], 'text_rating' => $bracelet['text_rating']]);
+        if ($allbracelets != '') {
+            $bracelets = array_column($allbracelets, 'bracelets');
+            $position_rating = array_column($allbracelets, 'position_rating');
+            $text_rating = array_column($allbracelets, 'text_rating');
+            $head_rating = array_column($allbracelets, 'head_rating');
+
+            /**
+            * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
+            *
+            * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
+            *
+            */
+
+            for ($bracelet=0; $bracelet < count($bracelets); $bracelet++) {
+
+                $rating->bracelets()->attach($bracelets[$bracelet], ['position' => $position_rating[$bracelet], 'text_rating' => $text_rating[$bracelet], 'head_rating' => $head_rating[$bracelet]]);
+
             }
 
-        // if($request->files) {
 
-        // $files = request('files');
+        }
 
-        // $lastrating = Rating::find($rating->id);
-
-        // foreach ($files as $file) {
-        //     $lastrating->addMedia($file)
-        //         ->toMediaCollection('ratings');
-        // }
-
-        // }
 
         return redirect()->route('ratings.index');
     }
@@ -150,20 +162,53 @@ class RatingsController extends Controller
             'description' => request('description'),
             'text' => request('text')
         ]);
-        
-        if ($request->ratingBracelets)
-        $rating->bracelets()->sync($request->ratingBracelets);
 
 
-        // if ($request->ratingBracelets) 
-            // foreach ($request->ratingBracelets as $bracelet) {
-                // $rating->bracelets()->sync($bracelet['bracelet_id'],
-                    // ['position' => $bracelet['position'], 'text_rating' => $bracelet['text_rating']]);
-            // }
+        $allbracelets = $request->input('allbracelets');
+
+        if ($allbracelets != '') {
+            $bracelets = array_column($allbracelets, 'bracelets');
+            $position_rating = array_column($allbracelets, 'position_rating');
+            $text_rating = array_column($allbracelets, 'text_rating');
+            $head_rating = array_column($allbracelets, 'head_rating');
+
+            /**
+            * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
+            *
+            * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
+            *
+            */
+
+            $extra = array_map(function($p, $t, $h){
+                return ['position' => $p, 'text_rating' => $t, 'head_rating' => $h];
+            }, $position_rating, $text_rating, $head_rating);
+
+            $data = array_combine($bracelets, $extra);
+
+            $rating->bracelets()->sync($data);
+        }
+        // Для того, чтобы при удалении всех браслетов - были удалены все связи, обязательно нужен след код:
+        else {
+            $bracelets = $rating->bracelets->pluck('id')->all();
+            $rating->bracelets()->detach($bracelets);
+        }
 
 
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
 
-        // $rating->bracelets()->sync($data);
+        $files = request('files');
+
+        if ($files != '') {
+            $lastrating = Rating::find($rating->id);
+            $i = 0;
+            foreach ($files as $file) {
+                $lastrating->addMedia($file)
+                    ->toMediaCollection('rating');
+            }
+        }
+
 
         return redirect()->route('ratings.index');
     }
@@ -174,7 +219,7 @@ class RatingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
+
     public function destroy($id)
     {
         Rating::destroy($id);

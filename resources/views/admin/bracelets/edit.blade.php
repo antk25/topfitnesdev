@@ -19,39 +19,39 @@
             <div class="text-component margin-bottom-md text-center">
               <h2>Редактирование браслета {{ $bracelet->name }}</h2>
             </div>
-  
+
             <div class="margin-y-sm">
               <input class="checkbox" type="checkbox" id="popular" name="popular" @if ($bracelet->popular == 1)checked @endif>
               <label for="popular">Популярный</label>&nbsp;&nbsp;&nbsp;
-              
+
               <input class="checkbox" type="checkbox" id="hit" name="hit" @if ($bracelet->hit == 1)checked @endif>
               <label for="hit">Лидер</label>&nbsp;&nbsp;&nbsp;
-              
+
               <input class="checkbox" type="checkbox" id="published" name="published" @if ($bracelet->published == 1)checked @endif>
               <label for="published">Опубликован</label>&nbsp;&nbsp;&nbsp;
-        
+
               <input class="checkbox" type="checkbox" id="selection" name="selection">
               <label for="selection">Учавствует в подборе</label>&nbsp;&nbsp;&nbsp;
             </div>
-      
+
             <div class="grid gap-xxs margin-bottom-xs">
               <div class="col-6@md">
                 <label class="form-label margin-bottom-xxs" for="name">Название модели</label>
                 <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $bracelet->name }}">
                 <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
               </div>
-      
+
               <div class="col-6@md">
                 <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
               <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $bracelet->slug }}">
               </div>
             </div>
-      
+
             <div class="margin-bottom-xs">
               <label class="form-label margin-bottom-xxs" for="title">Title</label>
               <input class="form-control width-100%" type="text" name="title" id="title" value="{{ $bracelet->title }}">
             </div>
-      
+
             <div class="grid gap-xxs margin-bottom-xs">
               <div class="col-6@md">
                 <label class="form-label margin-bottom-xxs" for="subtitle">Subtitle (h1)</label>
@@ -67,13 +67,13 @@
                   <div class="character-count__helper character-count__helper--static text-sm margin-top-xxxs">Макс 300 символов</div>
                 </div>
               </div>
-            </div> 
+            </div>
 
             <div class="grid gap-xxs margin-bottom-xs">
               <div class="col-6@md">
                 <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
                           <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать бренд:</label>
-      
+
                           <!-- select -->
                           <select name="brand_id" id="brand_id" class="js-select-auto__select">
                               @foreach ($brands as $k => $v)
@@ -81,20 +81,20 @@
                                 selected
                               @endif>{{ $v }}</option>
                               @endforeach
-      
+
                           </select>
-      
+
                           <!-- input -->
                           <div class="select-auto__input-wrapper">
                             <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать бренд" autocomplete="off" value="{{ $braceletbrand->name }}">
-      
+
                             <div class="select-auto__input-icon-wrapper">
                               <!-- arrow icon -->
                               <svg class="icon" viewBox="0 0 16 16">
                                 <title>Open selection</title>
                                 <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                               </svg>
-      
+
                               <!-- close X icon -->
                               <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
                                 <svg class="icon" viewBox="0 0 16 16">
@@ -104,35 +104,35 @@
                               </button>
                             </div>
                           </div>
-      
+
                           <!-- dropdown -->
                           <div class="autocomplete__results select-auto__results js-autocomplete__results">
                             <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
                               <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
                                 <span class="text-truncate text-sm" data-autocomplete-label></span>
                               </li>
-      
+
                               <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
                                 <span class="is-hidden" data-autocomplete-value></span>
                                 <div class="text-truncate" data-autocomplete-label></div>
                               </li>
-      
+
                               <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
                             </ul>
                           </div>
-      
+
                           <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
                         </div>
               </div>
-      
+
               <div class="col-6@md">
                 <label class="form-label margin-bottom-xxs" for="position">Позиция для каталога</label>
               <input class="form-control width-100%" type="number" name="position" id="position" min="0" max="300" step="1" value="{{ $bracelet->position }}">
               </div>
             </div>
 
-            
-  
+
+
             <div class="margin-bottom-xs">
               <label class="form-label margin-bottom-xxs text-bold" for="about">Описание браслета:</label>
               <div class="margin-y-sm">Код</div>
@@ -154,11 +154,11 @@
                   <li class="js-repeater__item">
                     <div class="grid gap-xs">
                       <input class="form-control col" type="text" name="plus[{{ $loop->index }}]" id="plus[{{ $loop->index }}]" value="{{ $plus }}">
-        
+
                       <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove" type="button">
                         <svg class="icon" viewBox="0 0 20 20">
                           <title>Remove item</title>
-        
+
                           <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                             <line x1="1" y1="5" x2="19" y2="5"/>
                             <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
@@ -170,7 +170,7 @@
                   </li>
                   @endforeach
                 </ul>
-        
+
                 <button class="btn btn--success width-100% margin-top-xs js-repeater__add" type="button">+ Плюс</button>
               </div>
               </div>
@@ -181,11 +181,11 @@
                   <li class="js-repeater__item">
                     <div class="grid gap-xs">
                       <input class="form-control col" type="text" name="minus[{{ $loop->index }}]" id="minus[{{ $loop->index }}]" value="{{ $minus }}">
-        
+
                       <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove" type="button">
                         <svg class="icon" viewBox="0 0 20 20">
                           <title>Remove item</title>
-        
+
                           <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                             <line x1="1" y1="5" x2="19" y2="5"/>
                             <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
@@ -197,11 +197,11 @@
                   </li>
                   @endforeach
                 </ul>
-        
+
                 <button class="btn btn--accent width-100% margin-top-xs js-repeater__add" type="button">+ Минус</button>
               </div>
               </div>
-        
+
             </div>
         <div class="text-component margin-bottom-md text-center">
                   <h2>Покупателям нравится</h2>
@@ -212,11 +212,11 @@
                 <li class="js-repeater__item">
                   <div class="grid gap-xs">
                     <input class="form-control col" type="text" name="buyers_like[{{ $loop->index }}]" id="buyers_like[{{ $loop->index }}]" value="{{ $buyers_like }}">
-        
+
                     <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove" type="button">
                       <svg class="icon" viewBox="0 0 20 20">
                         <title>Remove item</title>
-        
+
                         <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                           <line x1="1" y1="5" x2="19" y2="5"/>
                           <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
@@ -228,7 +228,7 @@
                 </li>
                 @endforeach
               </ul>
-        
+
               <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить поле</button>
             </div>
             </fieldset>
@@ -238,7 +238,7 @@
               <div class="text-component margin-bottom-md text-center">
                 <h2>Общие</h2>
               </div>
-      
+
             <div class="grid gap-xxs margin-bottom-xs">
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxs" for="year">Год выпуска</label>
@@ -247,7 +247,7 @@
               <div class="col-4@md">
                 <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
                           <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать страну:</label>
-      
+
                           <!-- select -->
                           <select name="country" id="country" class="js-select-auto__select">
                             <option value="Китай" @if ($bracelet->country == 'Китай')selected @endif>Китай</option>
@@ -258,18 +258,18 @@
                             <option value="Канада" @if ($bracelet->country == 'Канада')selected @endif>Канада</option>
                             <option value="Финляндия" @if ($bracelet->country == 'Финляндия')selected @endif>Финляндия</option>
                           </select>
-      
+
                           <!-- input -->
                           <div class="select-auto__input-wrapper">
                             <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать страну" autocomplete="off" value="{{ $bracelet->country }}">
-      
+
                             <div class="select-auto__input-icon-wrapper">
                               <!-- arrow icon -->
                               <svg class="icon" viewBox="0 0 16 16">
                                 <title>Open selection</title>
                                 <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                               </svg>
-      
+
                               <!-- close X icon -->
                               <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
                                 <svg class="icon" viewBox="0 0 16 16">
@@ -279,23 +279,23 @@
                               </button>
                             </div>
                           </div>
-      
+
                           <!-- dropdown -->
                           <div class="autocomplete__results select-auto__results js-autocomplete__results">
                             <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
                               <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
                                 <span class="text-truncate text-sm" data-autocomplete-label></span>
                               </li>
-      
+
                               <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
                                 <span class="is-hidden" data-autocomplete-value></span>
                                 <div class="text-truncate" data-autocomplete-label></div>
                               </li>
-      
+
                               <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
                             </ul>
                           </div>
-      
+
                           <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
                         </div>
               </div>
@@ -309,7 +309,7 @@
                 <label class="form-label margin-bottom-xxs" for="assistant_app">Приложение ассистент</label>
                 <input class="form-control width-100%" type="text" name="assistant_app" id="assistant_app" value="{{ $bracelet->assistant_app }}">
               </div>
-      
+
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxs" for="avg_price">Средняя цена</label>
                 <input class="form-control width-100%" type="text" name="avg_price" id="avg_price" value="{{ $bracelet->avg_price }}">
@@ -336,7 +336,7 @@
                       <option value="нейлон" @if(in_array('нейлон', $bracelet->material)) selected @endif>нейлон</option>
                       <option value="термополиуретан" @if(in_array('термополиуретан', $bracelet->material)) selected @endif>термополиуретан</option>
                     </select>
-      
+
                     <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                   </div>
               </div>
@@ -361,7 +361,7 @@
                   </div>
               </div>
             </div>
-      
+
             <div class="grid gap-xxs margin-y-md">
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxs" for="protect_stand">Стандарты защиты</label>
@@ -377,7 +377,7 @@
                       <option value="IP65" @if(in_array('IP65', $bracelet->protect_stand)) selected @endif>IP65</option>
                       <option value="IP56" @if(in_array('IP56', $bracelet->protect_stand)) selected @endif>IP56</option>
                     </select>
-      
+
                     <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                   </div>
               </div>
@@ -396,18 +396,18 @@
                   </div>
               </div>
             </div>
-      
+
             <div class="margin-y-sm">
               <input class="checkbox" type="checkbox" id="replaceable_strap" name="replaceable_strap" @if ($bracelet->replaceable_strap == 1)
-                 checked 
+                 checked
               @endif>
               <label for="replaceable_strap">Сменный браслет/ремешок</label>&nbsp;&nbsp;&nbsp;
               <input class="checkbox" type="checkbox" id="lenght_adj" name="lenght_adj" @if ($bracelet->lenght_adj == 1)
-              checked 
+              checked
               @endif>
               <label for="lenght_adj">Регулировка длины ремешка</label>&nbsp;&nbsp;&nbsp;
             </div>
-      
+
             <div class="grid gap-xxs">
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="dimensions">Размеры</label>
@@ -419,12 +419,12 @@
               </div>
             </div>
           </fieldset>
-          
+
           <fieldset class="margin-y-md padding-bottom-md border-bottom">
             <div class="text-component margin-bottom-md text-center">
               <h2>Дисплей</h2>
             </div>
-      
+
             <div class="grid gap-xxs">
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_tech">Технология дисплея:</label>
@@ -452,7 +452,7 @@
                 <input class="form-control width-100%" type="number" name="disp_ppi" value="{{ $bracelet->disp_ppi }}" min="100" max="1000" step="1" value="">
               </div>
             </div>
-      
+
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_brightness">Яркость (нит)</label>
@@ -468,7 +468,7 @@
               </div>
               <div class="col-3@md"></div>
             </div>
-      
+
             <div class="margin-y-sm">
               <input class="checkbox" type="checkbox" id="disp_sens" name="disp_sens" @if ($bracelet->disp_sens == 1) checked @endif>
               <label for="disp_sens">Сенсорный</label>&nbsp;&nbsp;&nbsp;
@@ -477,14 +477,14 @@
               <input class="checkbox" type="checkbox" id="disp_aod" name="disp_aod" @if ($bracelet->disp_aod == 1) checked @endif>
               <label for="disp_aod">Always on Display (AoD)</label>
             </div>
-      
+
           </fieldset>
-      
+
           <fieldset class="margin-y-md padding-bottom-md border-bottom">
             <div class="text-component margin-bottom-md text-center">
               <h2>Модули и датчики</h2>
             </div>
-      
+
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxs" for="sensors">Датчики</label>
@@ -524,21 +524,21 @@
                 <input class="form-control width-100%" type="number" name="blue_ver" value="{{ $bracelet->blue_ver }}" min="2" max="8" step="0.1" value="">
               </div>
             </div>
-      
+
             <div class="margin-y-sm">
               <input class="checkbox" type="checkbox" id="gps" name="gps" @if ($bracelet->gps == 1) checked @endif>
               <label for="gps">Встроенный GPS</label>&nbsp;&nbsp;&nbsp;
               <input class="checkbox" type="checkbox" id="vibration" name="vibration" @if ($bracelet->vibration == 1) checked @endif>
               <label for="vibration">Вибромотор</label>&nbsp;&nbsp;&nbsp;
             </div>
-      
+
           </fieldset>
-      
+
           <fieldset class="margin-y-md padding-bottom-md border-bottom">
             <div class="text-component margin-bottom-md text-center">
               <h2>Связь</h2>
             </div>
-      
+
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="phone_calls">Телефонные звонки</label>
@@ -554,9 +554,9 @@
               </div>
               <div class="col-3@md"></div>
             </div>
-      
+
           </fieldset>
-      
+
           <fieldset class="margin-y-md padding-bottom-md border-bottom">
             <div class="text-component margin-bottom-md text-center">
               <h2>Функционал</h2>
@@ -624,10 +624,10 @@
                 <textarea class="form-control width-100% text-sm" name="additional_info" spellcheck="false" id="additional_info">{{ $bracelet->additional_info }}</textarea>
               </div>
               <div class="col-3@md">
-      
+
               </div>
             </div>
-      
+
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-6@md">
                 <input class="checkbox" type="checkbox" id="heart_rate" name="heart_rate" @if ($bracelet->heart_rate == 1) checked @endif>
@@ -663,7 +663,7 @@
               </div>
             </div>
           </fieldset>
-      
+
           <fieldset class="margin-y-md padding-bottom-md border-bottom">
             <div class="text-component margin-bottom-md text-center">
               <h2>Аккумулятор</h2>
@@ -689,7 +689,7 @@
                 <input class="form-control width-100%" type="number" name="standby_time" value="{{ $bracelet->standby_time }}" min="3" max="2000" step="1" value="">
               </div>
             </div>
-            
+
             <div class="grid gap-xxs margin-y-sm">
               <div class="col-4@md">
                 <label class="form-label margin-bottom-xxxs" for="real_time">Реальное время работы (дней)</label>
@@ -704,212 +704,331 @@
                 <input class="form-control width-100%" type="text" name="charger" value="{{ $bracelet->charger }}">
               </div>
             </div>
-      
+
           </fieldset>
-          
-            <h2>Рейтинги</h2>
-            <div class="row" x-data="handler()">
-              <div class="col">
-  
-                <table class="table table--expanded@xs position-relative z-index-1 width-100% js-table">
-                  <thead class="table__header">
-                    <tr class="table__row">
-                      <th class="table__cell text-left" scope="col">#</th>
-                      <th class="table__cell text-left" scope="col">Рейтинг</th>
-                      <th class="table__cell text-right" scope="col">Позиция</th>
-                      <th class="table__cell text-right" scope="col">Текст</th>
-                      <th class="table__cell text-right" scope="col">Удалить</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table__body">
-                    <template x-for="(field, index) in fields" :key="index">
-                    <tr class="table__row">
-                      <td x-text="index + 1"></td>
-                      <td class="table__cell" role="cell">
-                        <div class="select">
-                          <select class="select__input form-control" name="ratings[]"  x-model="field.ratings">
-                            @foreach ($ratings as $k => $v)
-                              <option value="{{ $k }}">{{ $v }}</option>
+
+    {{-- Add ratings --}}
+    <section class="margin-bottom-md">
+      <div class="text-component">
+        <h4>Добавить рейтинги в которые входит товар</h4>
+      </div>
+      <div class="js-repeater" data-repeater-input-name="allratings[n]">
+        <div class="js-repeater__list">
+          {{-- Используем функцию forelse, чтобы при отсутствии связей вывести пустую форму --}}
+          @forelse ($bracelet->ratings as $item)
+          <div class="grid grid-col-8 gap-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-2@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allratings[{{ $loop->index }}][ratings]" id="allratings[0][ratings]"
+                        class="form-control">
+                    <option value="">-- Выбрать рейтинг --</option>
+                    @foreach ($ratings as $k => $v)
+                              <option value="{{ $k }}" @if ($item->id == $k)
+                                selected
+                                @endif >{{ $v }}</option>
                             @endforeach
-                          </select>
-  
-                          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-                        </div>
-                      </td>
-                      <td class="table__cell  text-left" role="cell">
-                        <input x-model="field.position" class="form-control" type="number" name="position_rating[]" min="0" max="20" step="1">
-                      </td>
-                      <td class="table__cell" role="cell">
-                        <textarea x-model="field.text_rating" class="form-control width-100% text-sm" spellcheck="false" rows="5" name="text_rating[]" id="code"></textarea>
-                      </td>
-                       <td class="table__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
-                    </tr>
-                   </template>
-                  </tbody>
-                  <tfoot>
-                    <tr class="table__row">
-                       <td colspan="4" class="text-right"><button type="button" class="btn btn--success text-sm margin-y-sm" @click="addNewField()">+ Добавить рейтинг</button></td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+
             </div>
-  
-  
-            <h2>Оценки</h2>
-  
-            <div class="row" x-data="handler2()">
-              <div class="col">
-  
-                <table class="table table--expanded@xs position-relative z-index-1 width-100% js-table">
-                  <thead class="table__header">
-                    <tr class="table__row">
-                      <th class="table__cell text-left" scope="col">#</th>
-                      <th class="table__cell text-left" scope="col">Оценка</th>
-                      <th class="table__cell text-right" scope="col">Значение</th>
-                      <th class="table__cell text-right" scope="col">Позиция</th>
-                      <th class="table__cell text-right" scope="col">Удалить</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table__body">
-                    <template x-for="(field, index) in fields" :key="index">
-                    <tr class="table__row">
-                      <td x-text="index + 1"></td>
-                      <td class="table__cell" role="cell">
-                        <div class="select">
-                          <select class="select__input form-control" name="grades[]"  x-model="field.grades">
-                            @foreach ($grades as $k => $v)
-                              <option value="{{ $k }}">{{ $v }}</option>
-                            @endforeach
-                          </select>
-  
-                          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-                        </div>
-                      </td>
-                      <td class="table__cell  text-left" role="cell">
-                        <input x-model="field.value" class="form-control" type="number" name="value[]" min="1" max="10" step="0.01">
-                      </td>
-                      <td class="table__cell  text-left" role="cell">
-                        <input x-model="field.position_grade" class="form-control" type="number" name="position_grade[]" min="0" max="10" step="1">
-                      </td>
-                       <td class="table__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
-                    </tr>
-                   </template>
-                  </tbody>
-                  <tfoot>
-                    <tr class="table__row">
-                       <td colspan="4" class="text-right"><button type="button" class="btn btn--success text-sm margin-y-sm" @click="addNewField()">+ Добавить оценку</button></td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
+            <div class="col-3@md">
+              <input class="form-control width-100%" type="text" name="allratings[{{ $loop->index }}][head_rating]" id="allratings[][head_rating]" value="{{ $item->pivot->head_rating }}" placeholder="Заголовок H2 для рейтинга">
             </div>
-  
-            <h2>Продавцы</h2>
-  
-        <div class="row" x-data="handler3()">
-          <div class="col">
-    
-            <table class="table table--expanded@xs position-relative z-index-1 width-100% js-table">
-              <thead class="table__header">
-                <tr class="table__row">
-                  <th class="table__cell text-left" scope="col">#</th>
-                  <th class="table__cell text-left" scope="col">Продавец</th>
-                  <th class="table__cell text-right" scope="col">Ссылка</th>
-                  <th class="table__cell text-right" scope="col">Цена</th>
-                  <th class="table__cell text-right" scope="col">Старая цена</th>
-                  <th class="table__cell text-right" scope="col">Удалить</th>
-                </tr>
-              </thead>
-              <tbody class="table__body">
-                <template x-for="(field, index) in fields" :key="index">
-                <tr class="table__row">
-                  <td x-text="index + 1"></td>
-                  <td class="table__cell" role="cell">
-                    <div class="select">
-                      <select class="select__input form-control" name="sellers[]"  x-model="field.sellers">
-                        @foreach ($sellers as $k => $v)
-                          <option value="{{ $k }}">{{ $v }}</option>
-                        @endforeach
-                      </select>
-                      
-                      <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-                    </div>
-                  </td>
-                  <td class="table__cell  text-left" role="cell">
-                    <input x-model="field.link" class="form-control" type="text" name="link[]">
-                  </td>
-                  <td class="table__cell  text-left" role="cell">
-                    <input x-model="field.price" class="form-control" type="text" name="price[]">
-                  </td>
-  
-                  <td class="table__cell  text-left" role="cell">
-                    <input x-model="field.old_price" class="form-control" type="text" name="old_price[]">
-                  </td>
-                   <td class="table__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
-                </tr>
-               </template>
-              </tbody>
-              <tfoot>
-                <tr class="table__row">
-                   <td colspan="4" class="text-right"><button type="button" class="btn btn--success text-sm margin-y-sm" @click="addNewField()">+ Добавить оценку</button></td>
-                </tr>
-              </tfoot>
-            </table>
+
+            <div class="col-3@md">
+                <label class="form-label margin-bottom-xxs" for="allratings[{{ $loop->index }}][position_rating]">Позиция:</label>
+                <input class="form-control" type="number" name="allratings[{{ $loop->index }}][position_rating]" id="allratings[0][position_rating]" min="0" max="20" step="1" value="{{ $item->pivot->position }}">
+            </div>
+
+            <div class="col-8@md">
+            <textarea class="form-control width-100%" rows="10" name="allratings[{{ $loop->index }}][text_rating]" id="allratings[][text_rating]" placeholder="Описание браслета для рейтинга (только если нужно уникальное)">{!! $item->pivot->text_rating !!}</textarea>
+
+            <button class="btn width-100% btn--subtle margin-y-sm col-content js-repeater__remove btn--accent" type="button">
+              <svg class="icon" viewBox="0 0 20 20">
+                <title>Remove item</title>
+
+                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                  <line x1="1" y1="5" x2="19" y2="5"/>
+                  <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                  <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                </g>
+              </svg>
+            </button>
           </div>
+          </div>
+          {{-- Пустая форма при отсутствии связей --}}
+          @empty
+          <div class="grid grid-col-8 gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-2@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allratings[0][ratings]" id="allratings[0][ratings]"
+                        class="form-control">
+                    <option value="">-- Выбрать рейтинг --</option>
+                    @foreach ($ratings as $k => $v)
+                              <option value="{{ $k }}">{{ $v }}</option>
+                            @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+            </div>
+            <div class="col-3@md">
+              <input class="form-control width-100%" type="text" name="allratings[0][head_rating]" id="allratings[][head_rating]" placeholder="Заголовок H2 для рейтинга">
+            </div>
+            <div class="col-3@md">
+              <label class="form-label margin-bottom-xxs" for="allratings[0][position_rating]">Позиция:</label>
+                <input class="form-control" type="number" name="allratings[0][position_rating]" id="allratings[0][position_rating]" min="0" max="20" step="1" value="1">
+            </div>
+
+            <div class="col-8@md">
+              <textarea class="form-control width-100%" name="allratings[0][text_rating]" id="allratings[][text_rating]" cols="33" rows="5" placeholder="Описание браслета для выбранного рейтинга"></textarea>
+
+              <button class="btn width-100% margin-y-sm btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
+
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+          @endforelse
         </div>
-        
-        <section class="bg bg-white padding-sm">
-          <p class="color-contrast-medium margin-bottom-sm">Добавить картинки</p>
-                  <div class="row" x-data="handler4()">
-                    <table class="tbl__table border-bottom border-2" aria-label="Table Example">
-                        <thead class="tbl__header border-bottom border-2">
-                          <tr class="tbl__row">
-                            <th class="tbl__cell text-left" scope="col">
-                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span>
-                              </th>
-      
-                              <th class="tbl__cell text-left" scope="col">
-                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span>
-                              </th>
-      
-                              <th class="tbl__cell text-left" scope="col">
-                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span>
-                              </th>
-      
-                              <th class="tbl__cell" scope="col">
-                              <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
-                              </th>
-                          </tr>
-                        </thead>
-                        <tbody class="tbl__body">
-                          <template x-for="(field, index) in fields" :key="index">
-                          <tr class="tbl__row">
-                            <td x-text="index + 1"></td>
-                            <td class="tbl__cell" role="cell">
-      
-      
-                                <input type="file" class="file-upload__input" name="files[]">
-      
-                             </td>
-                            <td class="tbl__cell" role="cell">
-                              <input x-model="field.nameimg" class="form-control" type="text" name="nameimg[]">
-                            </td>
-                             <td class="tbl__cell" role="cell"><button type="button" class="btn btn--accent text-sm" @click="removeField(index)">&times;</button></td>
-                          </tr>
-                         </template>
-                        </tbody>
-                        <tfoot>
-                          <tr class="tbl__cell">
-                             <td colspan="4" class="text-left"><button type="button" class="btn btn--success text-sm" @click="addNewField()">+ Добавить картинку</button></td>
-                          </tr>
-                        </tfoot>
-                      </table>
-                  </div>
-                </section>
-  
+        <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить рейтинг</button>
+      </div>
+    </section>
+    {{-- End add ratings --}}
+
+
+    {{-- Add grades --}}
+    <section class="margin-bottom-md">
+      <div class="text-component">
+        <h4>Оценки для браслета</h4>
+      </div>
+      <div class="js-repeater" data-repeater-input-name="allgrades[n]">
+        <div class="js-repeater__list">
+          {{-- Используем функцию forelse, чтобы при отсутствии связей вывести пустую форму --}}
+          @forelse ($bracelet->grades as $item)
+          <div class="grid grid-col-4 gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-1@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allgrades[{{ $loop->index }}][grades]" id="allgrades[0][grades]"
+                        class="form-control">
+                    <option value="">-- Что оцениваем --</option>
+                    @foreach ($grades as $k => $v)
+                      <option value="{{ $k }}" @if ($item->id == $k)
+                                selected
+                                @endif >{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+            </div>
+            <div class="col-1@md">
+              <label class="form-label margin-bottom-xxs" for="allgrades[{{ $loop->index }}][value_grade]">Оценка:</label>
+              <input class="form-control col" type="number" name="allgrades[{{ $loop->index }}][value_grade]" id="allgrades[{{ $loop->index }}][value_grade]" min="0" max="10" step="0.1" value="{{ $item->pivot->value }}">
+            </div>
+            <div class="col-1@md">
+              <label class="form-label margin-bottom-xxs" for="allgrades[{{ $loop->index }}][position_grade]">Позиция:</label>
+                <input class="form-control" type="number" name="allgrades[{{ $loop->index }}][position_grade]" id="allgrades[{{ $loop->index }}][position_grade]" min="1" max="5" step="1" value="{{ $item->pivot->position }}">
+            </div>
+            <div class="col-1@md">
+              <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
+
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+
+            </div>
+          </div>
+          {{-- Пустая форма при отсутствии связей --}}
+          @empty
+          <div class="grid gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-4@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allgrades[0][grades]" id="allgrades[0][grades]"
+                        class="form-control">
+                    <option value="">-- Что оцениваем --</option>
+                    @foreach ($grades as $k => $v)
+                      <option value="{{ $k }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+            </div>
+            <div class="col-4@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allgrades[0][value_grade]">Оценка:</label>
+              <input class="form-control col" type="number" name="allgrades[0][value_grade]" id="allgrades[][value_grade]" min="0" max="10" step="0.1" placeholder="Оценка 1-10">
+            </div>
+            <div class="col-3@md">
+              <label class="form-label margin-bottom-xxs" for="allgrades[0][position_grade]">Позиция:</label>
+                <input class="form-control" type="number" name="allgrades[0][position_grade]" id="allgrades[0][position_grade]" min="1" max="5" step="1" value="1">
+            </div>
+            <div class="col-1@md">
+              <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
+
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+
+            </div>
+          </div>
+          @endforelse
+        </div>
+        <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить оценку</button>
+      </div>
+    </section>
+    {{-- End add grades --}}
+
+
+    {{-- Add sellers --}}
+    <section class="margin-bottom-md">
+      <div class="text-component">
+        <h4>Продавцы</h4>
+      </div>
+      <div class="js-repeater" data-repeater-input-name="allsellers[n]">
+        <div class="js-repeater__list">
+          {{-- Используем функцию forelse, чтобы при отсутствии связей вывести пустую форму --}}
+          @forelse ($bracelet->sellers as $item)
+          <div class="grid gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-3@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allsellers[{{ $loop->index }}][sellers]" id="allsellers[{{ $loop->index }}][sellers]"
+                        class="form-control">
+                    <option value="">-- Выбрать магазин --</option>
+                    @foreach ($sellers as $k => $v)
+                      <option value="{{ $k }}" @if ($item->id == $k)
+                                selected
+                                @endif >{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+
+            </div>
+            <div class="col-4@md">
+                <input class="form-control" type="text" name="allsellers[{{ $loop->index }}][link_seller]" id="allsellers[{{ $loop->index }}][position_grade]" placeholder="Ссылка" value="{{ $item->pivot->link }}">
+            </div>
+            <div class="col-2@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allsellers[{{ $loop->index }}][price_seller]">Цена:</label>
+              <input class="form-control" type="number" name="allsellers[{{ $loop->index }}][price_seller]" id="allsellers[{{ $loop->index }}][price_seller]" min="300" max="60000" step="1" placeholder="Цена" value="{{ $item->pivot->price }}">
+
+            </div>
+            <div class="col-2@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allsellers[{{ $loop->index }}][old_price_seller]">Старая цена:</label>
+              <input class="form-control" type="number" name="allsellers[{{ $loop->index }}][old_price_seller]" id="allsellers[{{ $loop->index }}][old_price_seller]" min="300" max="60000" step="1" placeholder="Старая цена" value="{{ $item->pivot->old_price }}">
+            </div>
+            <div class="col-1@md">
+              <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
+
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+
+            </div>
+          </div>
+          {{-- Пустая форма при отсутствии связей --}}
+          @empty
+          <div class="grid gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+            <div class="col-3@md">
+              <div class="select margin-bottom-xxs">
+                <select class="select__input form-control" name="allsellers[0][sellers]" id="allsellers[0][sellers]"
+                        class="form-control">
+                    <option value="">-- Выбрать магазин --</option>
+                    @foreach ($sellers as $k => $v)
+                      <option value="{{ $k }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
+
+            </div>
+            <div class="col-4@md">
+                <input class="form-control" type="text" name="allsellers[0][link_seller]" id="allsellers[0][position_grade]" placeholder="Ссылка">
+            </div>
+            <div class="col-2@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allsellers[0][price_seller]">Цена:</label>
+              <input class="form-control" type="number" name="allsellers[0][price_seller]" id="allsellers[][price_seller]" min="300" max="60000" step="1" placeholder="Цена">
+
+            </div>
+            <div class="col-2@md">
+              <label class="form-label margin-bottom-xxs sr-only" for="allsellers[0][old_price_seller]">Старая цена:</label>
+              <input class="form-control" type="number" name="allsellers[0][old_price_seller]" id="allsellers[][old_price_seller]" min="300" max="60000" step="1" placeholder="Старая цена">
+            </div>
+            <div class="col-1@md">
+              <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                <svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
+
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"/>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                  </g>
+                </svg>
+              </button>
+
+            </div>
+          </div>
+          @endforelse
+        </div>
+        <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить продавца</button>
+      </div>
+    </section>
+    {{-- End add sellers --}}
+
+     {{-- Add images --}}
+    <section class="margin-bottom-md">
+      <div class="text-component margin-y-sm">
+        <h4>Добавить изображения браслета</h4>
+        <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После сохранения изменений можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
+      </div>
+
+      <div class="file-upload inline-block">
+        <label for="files" class="file-upload__label btn btn--primary">
+          <span class="flex items-center">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
+
+            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
+          </span>
+        </label>
+
+        <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
+      </div>
+    </section>
+{{-- End add images --}}
+
           <div class="margin-y-sm">
-            <button type="submit" class="btn btn--success width-100%">Обновить/Сохранить</button>
+            <button type="submit" class="btn btn--primary width-100%">Обновить/Сохранить</button>
           </div>
         </form>
       </section>
@@ -921,9 +1040,9 @@
 
           <div class="bg radius-md padding-md shadow-xs">
             <p class="color-contrast-medium margin-bottom-sm">Таблица отзывов</p>
-          
+
             <div class="int-table-actions padding-bottom-xxxs border-bottom border-contrast-lower" data-table-controls="table-1">
-          
+
               <menu class="menu-bar js-int-table-actions__no-items-selected js-menu-bar">
                 <li class="menu-bar__item menu-bar__item--trigger js-menu-bar__trigger" role="menuitem" aria-label="More options">
                   <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -931,7 +1050,7 @@
                     <circle cx="1.5" cy="7.5" r="1.5" />
                     <circle cx="14.5" cy="7.5" r="1.5" /></svg>
                 </li>
-          
+
                 <li class="menu-bar__item " role="menuitem">
                   <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
@@ -941,7 +1060,7 @@
                   </svg>
                   <span class="menu-bar__label">Refresh</span>
                 </li>
-          
+
                 <li class="menu-bar__item " role="menuitem">
                   <a href="{{ route('reviews.create') }}"><svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
@@ -953,7 +1072,7 @@
                 </a>
                 </li>
               </menu>
-          
+
               <menu class="menu-bar is-hidden js-int-table-actions__items-selected js-menu-bar">
                 <li class="menu-bar__item menu-bar__item--trigger js-menu-bar__trigger" role="menuitem" aria-label="More options">
                   <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -961,7 +1080,7 @@
                     <circle cx="1.5" cy="7.5" r="1.5" />
                     <circle cx="14.5" cy="7.5" r="1.5" /></svg>
                 </li>
-          
+
                 <li class="menu-bar__item " role="menuitem">
                   <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
@@ -971,7 +1090,7 @@
                   </svg>
                   <span class="menu-bar__label">Delete</span>
                 </li>
-          
+
                 <li class="menu-bar__item " role="menuitem">
                   <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
@@ -980,7 +1099,7 @@
                   </svg>
                   <span class="menu-bar__label">Archive</span>
                 </li>
-          
+
                 <li class="menu-bar__item " role="menuitem">
                   <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
                     <g>
@@ -990,10 +1109,10 @@
                   </svg>
                   <span class="menu-bar__label">Hide</span>
                 </li>
-          
+
               </menu>
             </div>
-          
+
             <div id="table-1" class="int-table text-sm js-int-table">
               <div class="int-table__inner">
                 @if (count($reviews))
@@ -1006,112 +1125,112 @@
                           <div class="custom-checkbox__control" aria-hidden="true"></div>
                         </div>
                       </td>
-          
+
                       <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort">
                         <div class="flex items-center">
                           <span>ID</span>
-          
+
                           <svg class="icon icon--xxs margin-left-xxxs int-table__sort-icon" aria-hidden="true" viewBox="0 0 12 12">
                             <polygon class="arrow-up" points="6 0 10 5 2 5 6 0" />
                             <polygon class="arrow-down" points="6 12 2 7 10 7 6 12" /></svg>
                         </div>
-          
+
                         <ul class="sr-only js-int-table__sort-list">
                           <li>
                             <input type="radio" name="sortingId" id="sortingIdNone" value="none" checked>
                             <label for="sortingIdNone">No sorting</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingId" id="sortingIdAsc" value="asc">
                             <label for="sortingIdAsc">Sort in ascending order</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingId" id="sortingIdDes" value="desc">
                             <label for="sortingIdDes">Sort in descending order</label>
                           </li>
                         </ul>
                       </th>
-          
+
                       <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort">
                         <div class="flex items-center">
                           <span>Название</span>
-          
+
                           <svg class="icon icon--xxs margin-left-xxxs int-table__sort-icon" aria-hidden="true" viewBox="0 0 12 12">
                             <polygon class="arrow-up" points="6 0 10 5 2 5 6 0" />
                             <polygon class="arrow-down" points="6 12 2 7 10 7 6 12" /></svg>
                         </div>
-          
+
                         <ul class="sr-only js-int-table__sort-list">
                           <li>
                             <input type="radio" name="sortingName" id="sortingNameNone" value="none" checked>
                             <label for="sortingNameNone">No sorting</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingName" id="sortingNameAsc" value="asc">
                             <label for="sortingNameAsc">Sort in ascending order</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingName" id="sortingNameDes" value="desc">
                             <label for="sortingNameDes">Sort in descending order</label>
                           </li>
                         </ul>
                       </th>
-          
+
                       <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort">
                         <div class="flex items-center">
                           <span>Title</span>
-          
+
                           <svg class="icon icon--xxs margin-left-xxxs int-table__sort-icon" aria-hidden="true" viewBox="0 0 12 12">
                             <polygon class="arrow-up" points="6 0 10 5 2 5 6 0" />
                             <polygon class="arrow-down" points="6 12 2 7 10 7 6 12" /></svg>
                         </div>
-          
+
                         <ul class="sr-only js-int-table__sort-list">
                           <li>
                             <input type="radio" name="sortingEmail" id="sortingEmailNone" value="none" checked>
                             <label for="sortingEmailNone">No sorting</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingEmail" id="sortingEmailAsc" value="asc">
                             <label for="sortingEmailAsc">Sort in ascending order</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingEmail" id="sortingEmailDes" value="desc">
                             <label for="sortingEmailDes">Sort in descending order</label>
                           </li>
                         </ul>
                       </th>
-          
+
                       <th class="int-table__cell int-table__cell--th text-left">
                         Description
                       </th>
-          
+
                       <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort" data-date-format="dd-mm-yyyy">
                         <div class="flex items-center">
                           <span>Добавлен</span>
-          
+
                           <svg class="icon icon--xxs margin-left-xxxs int-table__sort-icon" aria-hidden="true" viewBox="0 0 12 12">
                             <polygon class="arrow-up" points="6 0 10 5 2 5 6 0" />
                             <polygon class="arrow-down" points="6 12 2 7 10 7 6 12" /></svg>
                         </div>
-          
+
                         <ul class="sr-only js-int-table__sort-list">
                           <li>
                             <input type="radio" name="sortingDate" id="sortingDateNone" value="none" checked>
                             <label for="sortingDateNone">No sorting</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingDate" id="sortingDateAsc" value="asc">
                             <label for="sortingDateAsc">Sort in ascending order</label>
                           </li>
-          
+
                           <li>
                             <input type="radio" name="sortingDate" id="sortingDateDes" value="desc">
                             <label for="sortingDateDes">Sort in descending order</label>
@@ -1121,7 +1240,7 @@
                         <th class="int-table__cell int-table__cell--th text-left">Action</th>
                     </tr>
                   </thead>
-          
+
                   <tbody class="int-table__body js-int-table__body">
                     @foreach ($reviews as $review)
                     <tr class="int-table__row">
@@ -1137,7 +1256,7 @@
                       <td class="int-table__cell max-width-xxxxs">{{ $review->review_text }}</td>
                       <td class="int-table__cell">{{ $review->created_at->diffForHumans() }}</td>
                       <td class="int-table__cell">
-        
+
                         <form method="POST" action="{{ route('reviews.destroy', ['review' => $review->id]) }}">
                           @csrf
                           @method('DELETE')
@@ -1148,19 +1267,18 @@
                     @endforeach
                   </tbody>
                 </table>
-        
+
                 @else
                  <p>Таблица брендов пустая</p>
                 @endif
               </div>
             </div>
-          
-          
+
+
             <div class="flex items-center justify-between padding-top-sm">
-              <p class="text-sm">450 results</p>
-          
+
               {{ $reviews->links() }}
-              
+
             </div>
           </div>
         </div>
@@ -1229,7 +1347,6 @@
 
 @section('scripts')
 @parent
-<script src="{{ asset("js/admin/alpine.min.js") }}"></script>
 
 <script src="{{ asset("js/admin/ace.js") }}"></script>
     <script
@@ -1250,98 +1367,5 @@
 
    textarea.val(editor.getSession().getValue());
 
-
-
-  function handler() {
-    return {
-      fields: [
-        @foreach ($bracelet->ratings as $item)
-        {
-          'ratings': '{{ $item->id }}',
-          'position': '{{ $item->pivot->position }}',
-          'text_rating': '{!! $item->pivot->text_rating !!}'
-        },
-        @endforeach
-      ],
-      addNewField() {
-          this.fields.push({
-              ratings: '',
-              position: '',
-              text_rating: '',
-           });
-        },
-        removeField(index) {
-           this.fields.splice(index, 1);
-         }
-      }
-  }
-
-  function handler2() {
-      return {
-        fields: [
-          @foreach ($bracelet->grades as $item)
-        {
-          'grades': '{{ $item->id }}',
-          'value': '{{ $item->pivot->value }}',
-          'position_grade': '{{ $item->pivot->position }}'
-        },
-        @endforeach
-        ],
-        addNewField() {
-            this.fields.push({
-                grades: '',
-                value: '',
-                position_grade: ''
-            });
-          },
-          removeField(index) {
-            this.fields.splice(index, 1);
-          }
-        }
-  }
-
-
-  function handler3() {
-      return {
-        fields: [
-          @foreach ($bracelet->sellers as $item)
-        {
-          'sellers': '{{ $item->id }}',
-          'link': '{{ $item->pivot->link }}',
-          'price': '{{ $item->pivot->price }}',
-          'old_price': '{{ $item->pivot->old_price }}'
-        },
-        @endforeach
-        ],
-        addNewField() {
-            this.fields.push({
-                sellers: '',
-                link: '',
-                price: '',
-                old_price: ''
-            });
-          },
-          removeField(index) {
-            this.fields.splice(index, 1);
-          }
-        }
-  }
-
-  function handler4() {
-    return {
-      fields: [],
-      addNewField() {
-          this.fields.push({
-              files: '',
-              nameimg: '',
-              sizeimg: '',
-           });
-        },
-        removeField(index) {
-           this.fields.splice(index, 1);
-         }
-
-      }
-  }
     </script>
 @endsection
