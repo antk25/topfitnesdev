@@ -16,6 +16,7 @@
     <noscript>
       <link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">
     </noscript>
+    <link rel="stylesheet" href="{{ asset('css/admin/prism.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
     <livewire:styles />

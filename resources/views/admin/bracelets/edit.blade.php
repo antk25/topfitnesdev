@@ -3,15 +3,15 @@
 @section('content')
 
 <div class="container">
-  <div class="tabs js-tabs">
-    <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
-      <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Браслет</a></li>
-      <li><a href="#tab1Panel2" class="tabs__control">Отзывы</a></li>
-      <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
+  <div class="tabs-v3 js-tabs">
+    <ul class="tabs-v3__controls js-tabs__controls" aria-label="Tabs Interface">
+      <li><a href="#tab1Panel1" class="tabs-v3__control js-tab-focus" aria-selected="true">Браслет</a></li>
+      <li><a href="#tab1Panel2" class="tabs-v3__control js-tab-focus">Отзывы</a></li>
+      <li><a href="#tab1Panel3" class="tabs-v3__control js-tab-focus">Картинки</a></li>
     </ul>
 
-    <div class="js-tabs__panels">
-      <section id="tab1Panel1" class="padding-top-md js-tabs__panel">
+    <div class="tabs-v3__panels js-tabs__panels">
+      <section id="tab1Panel1" class="tabs-v3__panel is-visible js-tabs__panel">
         <form class="form-template-v3" method="POST" action="{{ route('bracelets.update', ['bracelet' => $bracelet->id]) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
@@ -1033,7 +1033,7 @@
         </form>
       </section>
 
-      <section id="tab1Panel2" class="padding-top-md js-tabs__panel">
+      <section id="tab1Panel2" class="tabs-v3__panel js-tabs__panel">
         <div class="text-component">
           <h1 class="text-lg">Отзывы</h1>
           <p>Список отзывов для браслета</p>
@@ -1284,62 +1284,128 @@
         </div>
       </section>
 
-      <section id="tab1Panel3" class="padding-top-md js-tabs__panel">
+      <section id="tab1Panel3" class="tabs-v3__panel js-tabs__panel">
+
         <p class="color-contrast-medium margin-bottom-sm">Все картинки статьи</p>
 
-  <table class="tbl__table border-bottom border-2" aria-label="Table Example">
-    <thead class="tbl__header border-bottom border-2">
-      <tr class="tbl__row">
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Код для вставки</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span></th>
-      </tr>
-    </thead>
-    <tbody class="tbl__body">
-      @foreach ($media as $image)
-      <tr class="tbl__row">
-        <td>{{ $image->id }}</td>
-        <td class="tbl__cell" role="cell">
-          <img width="200px" src="{{ $image->getFullUrl('320') }}" alt=""><br>
-          <strong>{{ $image->human_readable_size }}</strong>
-         </td>
-        <td class="tbl__cell  text-left" role="cell">
-          <form method="POST" action="{{ route('bracelets.updimg') }}">
-            @csrf
-          <div class="margin-bottom-md">
-            <input type="text" hidden value="{{ $image->id }}" name="imgid">
-            <div class="input-group">
-              <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
-              <button class="btn btn--success" type="submit">
-                <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
-                  <g>
-                    <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
-                    <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
-                  </g>
-                </svg>
-              </button>
-            </div>
+        <div class="tbl">
+          <table class="tbl__table text-unit-em text-sm border-bottom border-2" aria-label="Table Example">
+            <thead class="tbl__header border-bottom border-2">
+              <tr class="tbl__row">
+                <th class="tbl__cell text-left" scope="col">
+                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Картинка</span>
+                </th>
+
+                <th class="tbl__cell text-left" scope="col">
+                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Код и Alt</span>
+                </th>
+
+                <th class="tbl__cell text-left" scope="col">
+                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="tbl__body">
+              @foreach ($media as $image)
+              <tr class="tbl__row">
+                <td class="tbl__cell" role="cell">
+                  <div class="items-center">
+                    <figure class="width-lg height-lg overflow-hidden margin-right-xs">
+                      <img class="block width-100% height-100% object-cover" src="{{ $image->getFullUrl('thumb') }}">
+                    </figure>
+
+                    <div class="line-height-xs">
+                      <p class="color-contrast-medium">{{ $image->human_readable_size }}</p>
+                    </div>
+                  </div>
+                </td>
+
+                <td class="tbl__cell" role="cell">
+                  <pre><code class="language-html">
+                    &lt;img src="{{ $image->getFullUrl() }}"
+                    srcset="{{ $image->getFullUrl('320') }} 320w,
+                    {{ $image->getFullUrl('640') }} 640w"
+                    alt="{{ $image->name }}"&gt;
+                    </code>
+                  </pre>
+
+
+                  <form method="POST" action="{{ route('bracelets.updimg') }}">
+                    @csrf
+                    <input type="text" hidden value="{{ $image->id }}" name="imgid">
+                    <div class="input-group">
+                      <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
+                      <button class="btn btn--primary" type="submit">
+                        <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
+                          <g>
+                            <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
+                            <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
+                          </g>
+                        </svg>
+                      </button>
+                    </div>
+                </form>
+                </td>
+
+                <td class="tbl__cell" role="cell">
+
+                </td>
+
+                <td class="tbl__cell" role="cell">
+                  <form method="POST" action="{{ route('bracelets.delimg') }}">
+                    @csrf
+                    <input type="text" hidden value="{{ $image->id }}" name="imgid">
+                    <button type="submit" class="btn btn--accent text-sm">&times;</button>
+                  </form>
+                </td>
+              </tr>
+              @endforeach
+
+            </tbody>
+          </table>
+        </div>
+
+        {{-- <table>
+        @foreach ($media as $image)
+        <tr>
+          <td>
+          <img width="200px" src="{{ $image->getFullUrl('thumb') }}" alt=""><br>
+            <strong>{{ $image->human_readable_size }}</strong>
+          </td>
+          <td>
+          <div class="width-50% margin-y-sm">
+            <pre><code class="language-html">
+              &lt;img src="{{ $image->getFullUrl() }}" srcset="{{ $image->getFullUrl('320') }} 320w, {{ $image->getFullUrl('640') }} 640w" alt="{{ $image->name }}"&gt;
+              </code>
+            </pre>
           </div>
-        </form>
-        </td>
-        <td class="tbl__cell" role="cell">
-          <pre class="code-snippet margin-y-sm">
-            <code>&lt;img src="{{ $image->getFullUrl() }}"<br> srcset="{{ $image->getFullUrl('320') }} 320w,<br> {{ $image->getFullUrl('640') }} 640w"<br> alt="{{ $image->name }}"&gt;</code>
-          </pre>
-        </td>
-         <td class="tbl__cell" role="cell">
+            <form method="POST" action="{{ route('bracelets.updimg') }}">
+              @csrf
+              <input type="text" hidden value="{{ $image->id }}" name="imgid">
+              <div class="input-group">
+                <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
+                <button class="btn btn--success" type="submit">
+                  <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
+                      <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
+                    </g>
+                  </svg>
+                </button>
+              </div>
+          </form>
+
+
           <form method="POST" action="{{ route('bracelets.delimg') }}">
             @csrf
             <input type="text" hidden value="{{ $image->id }}" name="imgid">
             <button type="submit" class="btn btn--accent text-sm">&times;</button>
           </form>
           </td>
-      </tr>
-      @endforeach
-    </tbody>
-  </table>
+        @endforeach
+        </tr>
+        </table> --}}
       </section>
     </div>
 </div>
@@ -1347,7 +1413,7 @@
 
 @section('scripts')
 @parent
-
+<script src="{{ asset("js/admin/prism.min.js") }}"></script>
 <script src="{{ asset("js/admin/ace.js") }}"></script>
     <script
 			  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
