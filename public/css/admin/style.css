@@ -15009,6 +15009,220 @@ Usage: codyhouse.co/license
   color: var(--color-contrast-higher);
 }
 
+/* --------------------------------
+
+File#: _1_bg-gradients
+Title: Background Gradients
+Descr: Customizable background gradients
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.bg-gradient-1, .bg-gradient-2, .bg-gradient-3, .bg-gradient-4, .bg-gradient-5 {
+  background-repeat: no-repeat;
+  background-position: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bg-gradient-1[data-bg-animate=on], .bg-gradient-2[data-bg-animate=on], .bg-gradient-3[data-bg-animate=on], .bg-gradient-4[data-bg-animate=on], .bg-gradient-5[data-bg-animate=on] {
+    will-change: background-position;
+  }
+}
+
+.bg-gradient-1 {
+  background-color: #0E131F;
+  background-image: radial-gradient(ellipse at 90% 30%, #0E131F 20%, rgba(14, 19, 31, 0) 50%), radial-gradient(ellipse at 70% 0%, #FF0035 0%, rgba(255, 0, 53, 0) 50%), radial-gradient(ellipse at 20% 10%, #38405F 10%, rgba(56, 64, 95, 0) 70%), radial-gradient(ellipse at 50% 100%, #FF0035 0%, rgba(255, 0, 53, 0) 50%);
+  background-size: 200% 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bg-gradient-1[data-bg-animate=on] {
+    background-size: 400% 200%;
+    background-position: 0% 0%;
+    -webkit-animation: bg-gradient-anim-1 30s linear infinite;
+            animation: bg-gradient-anim-1 30s linear infinite;
+  }
+}
+
+@-webkit-keyframes bg-gradient-anim-1 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 100%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+@keyframes bg-gradient-anim-1 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 100%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+.bg-gradient-2 {
+  background-color: #FFFCF2;
+  background-image: radial-gradient(ellipse at 10% 20%, #E980FC 0%, rgba(233, 128, 252, 0) 40%), radial-gradient(ellipse at 50% 0%, #FFFCF2 25%, rgba(255, 252, 242, 0) 75%), radial-gradient(ellipse at 100% 100%, #BCB6FF 35%, rgba(188, 182, 255, 0) 70%), radial-gradient(ellipse at 50% 100%, #FFFCF2 20%, rgba(255, 252, 242, 0) 70%);
+  background-size: 120% 200%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bg-gradient-2[data-bg-animate=on] {
+    background-size: 240% 400%;
+    background-position: 0% 0%;
+    -webkit-animation: bg-gradient-anim-2 30s linear infinite;
+            animation: bg-gradient-anim-2 30s linear infinite;
+  }
+}
+
+@-webkit-keyframes bg-gradient-anim-2 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 100%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+@keyframes bg-gradient-anim-2 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 100%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+.bg-gradient-3 {
+  background-color: #30C5FF;
+  background-image: radial-gradient(ellipse at 25% 90%, #5C946E 10%, rgba(92, 148, 110, 0) 70%), radial-gradient(ellipse at 55% 90%, #FFFCF2 0%, rgba(255, 252, 242, 0) 70%), radial-gradient(ellipse at 100% 100%, #EB5E28 5%, rgba(235, 94, 40, 0) 60%), radial-gradient(ellipse at 0% 0%, #5C946E 15%, rgba(92, 148, 110, 0) 50%), radial-gradient(ellipse at 100% 0%, #FFFCF2 30%, rgba(255, 252, 242, 0) 70%);
+  background-size: 100% 140%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bg-gradient-3[data-bg-animate=on] {
+    background-size: 200% 280%;
+    background-position: 50% 0%;
+    -webkit-animation: bg-gradient-anim-3 30s linear infinite;
+            animation: bg-gradient-anim-3 30s linear infinite;
+  }
+}
+
+@-webkit-keyframes bg-gradient-anim-3 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  33% {
+    background-position: 100% 0%;
+  }
+  66% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes bg-gradient-anim-3 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  33% {
+    background-position: 100% 0%;
+  }
+  66% {
+    background-position: 100% 100%;
+  }
+}
+.bg-gradient-4 {
+  background-color: #1D1128;
+  background-image: radial-gradient(ellipse at 70% 0%, rgba(60, 31, 132, 0.7) 0%, rgba(60, 31, 132, 0) 30%), radial-gradient(circle at 90% 0%, rgba(238, 68, 105, 0.5) 0%, rgba(238, 68, 105, 0) 30%), radial-gradient(ellipse at 0% 0%, rgba(60, 185, 174, 0.15) 0%, rgba(60, 185, 174, 0) 40%), radial-gradient(circle at 30% 100%, rgba(60, 31, 132, 0.7) 0%, rgba(60, 31, 132, 0) 40%), radial-gradient(ellipse at 10% 100%, rgba(238, 68, 105, 0.5) 0%, rgba(238, 68, 105, 0) 40%), radial-gradient(ellipse at 100% 100%, rgba(60, 185, 174, 0.15) 0%, rgba(60, 185, 174, 0) 40%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bg-gradient-4[data-bg-animate=on] {
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    -webkit-animation: bg-gradient-anim-4 30s linear infinite;
+            animation: bg-gradient-anim-4 30s linear infinite;
+  }
+}
+
+@-webkit-keyframes bg-gradient-anim-4 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+@keyframes bg-gradient-anim-4 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+.bg-gradient-5 {
+  background-color: #e6e5f7;
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(225, 91, 151, 0.35) 0%, rgba(225, 91, 151, 0) 30%), radial-gradient(ellipse at 100% 0%, rgba(132, 19, 134, 0.32) 0%, rgba(132, 19, 134, 0) 60%);
+  background-size: 200% 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bg-gradient-5[data-bg-animate=on] {
+    background-size: 400% 200%;
+    background-position: 0% 0%;
+    -webkit-animation: bg-gradient-anim-5 20s linear infinite;
+            animation: bg-gradient-anim-5 20s linear infinite;
+  }
+}
+
+@-webkit-keyframes bg-gradient-anim-5 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  40%, 60% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes bg-gradient-anim-5 {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  40%, 60% {
+    background-position: 100% 0%;
+  }
+}
 /* -------------------------------- 
 
 File#: _1_button-effects

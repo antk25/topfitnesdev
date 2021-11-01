@@ -57,13 +57,18 @@
         </div>
       </div>
 
-      <div class="margin-bottom-xs">
-        <label class="form-label margin-bottom-xxs" for="content">Текст статьи</label>
-        <div class="margin-y-sm">Код</div>
-              <div id="editor"></div>
-              <div class="margin-y-sm">Textarea</div>
-            <textarea class="form-control width-100% text-sm" spellcheck="false" name="content" id="content"></textarea>
+
+      <section class="margin-y-sm">
+        <div class="text-component padding-y-sm">
+          <h4>Основной контент</h4>
+          <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
+        </div>
+      <div class="border radius-md padding-sm bg-gradient-3">
+        <label class="form-label margin-bottom-xxs sr-only" for="text">Основной контент</label>
+            <textarea rows="20" class="form-control width-100% text-sm text" spellcheck="false" name="content" id="content">{{ old('content') }}</textarea>
       </div>
+    </section>
+
     </fieldset>
 
     {{-- Add images --}}
@@ -96,40 +101,31 @@
 @section('scripts')
 @parent
 <script src="{{ asset("js/admin/alpine.min.js") }}"></script>
-    <script src="{{ asset("js/admin/ace.js") }}"></script>
-    <script
-			  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-			  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
-			  crossorigin="anonymous"></script>
+    <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
+    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
+    <script src="{{ asset("js/admin/closetag.js") }}"></script>
+    <script src="{{ asset("js/admin/matchtags.js") }}"></script>
+    <script src="{{ asset("js/admin/trailingspace.js") }}"></script>
+    <script src="{{ asset("js/admin/xml.js") }}"></script>
+    <script src="{{ asset("js/admin/fullscreen.js") }}"></script>
     <script>
-
-     var textarea = $('#content');
-
-   var editor = ace.edit("editor");
-   editor.setTheme("ace/theme/twilight");
-   editor.getSession().setMode("ace/mode/html");
-
-   editor.getSession().on('change', function () {
-       textarea.val(editor.getSession().getValue());
-   });
-
-   textarea.val(editor.getSession().getValue());
-
-      function handler() {
-    return {
-      fields: [],
-      addNewField() {
-          this.fields.push({
-              files: '',
-              nameimg: '',
-              sizeimg: '',
-           });
+      var myCodeMirror = CodeMirror.fromTextArea((content), {
+        lineNumbers: true,
+        tabSize: 2,
+        mode: "text/html",
+        autoCloseTags: true,
+        lineWrapping: true,
+        matchTags: {bothTags: true},
+        extraKeys: {"Ctrl-J": "toMatchingTag"},
+        showTrailingSpace: true,
+        extraKeys: {
+        "F11": function(cm) {
+          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
         },
-        removeField(index) {
-           this.fields.splice(index, 1);
-         }
-
+        "Esc": function(cm) {
+          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        }
       }
-  }
+      });
     </script>
 @endsection

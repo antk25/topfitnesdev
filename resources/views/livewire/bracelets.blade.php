@@ -8,13 +8,13 @@
 <section>
     <div class="grid gap-sm text-sm border padding-sm">
         <div class="col-3@md">
-            
+
             <label class="form-label margin-bottom-xxxs text-bold" for="brand">Бренд:</label>
                 <div class="select">
                     <select class="select__input form-control" name="brand" id="brand" wire:model="brand">
                         <option value="">Любой</option>
                         @foreach ($brands as $v => $k)
-                           <option value="{{ $k }}">{{ $v }}</option> 
+                           <option value="{{ $k }}">{{ $v }}</option>
                         @endforeach
                     </select>
 
@@ -29,7 +29,7 @@
 
 
             <ul class="flex flex-column gap-xxxs margin-y-sm">
-               
+
                <li>
                 <input class="checkbox" type="checkbox" name="disp_sens" id="disp_sens"  wire:model="disp_sens">
                 <label for="disp_sens">Сенсорный дисплей</label>
@@ -56,11 +56,11 @@
                         </g>
                     </svg>
                 </div>
-                
+
         </div>
         <div class="col-3@md">
             <fieldset>
-                  
+
     <legend class="form-legend">Защита</legend>
 
     <ul class="flex flex-column gap-xxxs">
@@ -110,7 +110,7 @@
                 <input class="checkbox" type="checkbox" name="nfc" id="nfc"  wire:model="nfc">
                 <label for="nfc">NFC</label>
                </li>
-               
+
             </ul>
         </div>
 
@@ -121,8 +121,14 @@
 <div class="padding-y-md padding-0@md">
 
             @if (request() != '')
+
+
+            <ul class="flex flex-wrap gap-xxs">
+
+
                  <div class="margin-y-md">
-                    
+                    <ul class="flex flex-wrap gap-xxs">
+
                     {!! $heart_rate != '' ? '<span wire:click.prevent="clearFilter(`heart_rate`)" class="badge badge--primary-light text-sm margin-right-xs">Постоянное измерение пульса
                                                 <a href="#0"><svg class="icon icon--xxs margin-left-xxxs" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
                         <line x1="1" y1="1" x2="11" y2="11" />
@@ -150,25 +156,37 @@
                     <line x1="1" y1="1" x2="11" y2="11" />
                     <line x1="11" y1="1" x2="1" y2="11" /></svg>
                     </span>' : '' !!}
-                    {!! $nfc != '' ? '<span wire:click.prevent="clearFilter(`nfc`)" class="badge badge--primary-light text-sm margin-right-xs">NFC
-                        <svg class="icon icon--xxs margin-left-xxxs" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-                    <line x1="1" y1="1" x2="11" y2="11" />
-                    <line x1="11" y1="1" x2="1" y2="11" /></svg>
-                    </span>' : '' !!}
-                    
+
+                    @if ($nfc != '')
+                    <li>
+                        <span class="chip text-sm">
+                          <i class="chip__label">NFC</i>
+
+                          <button class="chip__btn"  wire:click.prevent="clearFilter(`nfc`)">
+                            <svg class="icon" viewBox="0 0 12 12"><title>Delete attribute</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></g></svg>
+                          </button>
+                        </span>
+                    </li>
+                    @endif
+
                     @if ($protect_stand == 'middle')
-                    <span wire:click.prevent="clearFilter(`protect_stand`)" class="badge badge--primary-light text-sm margin-right-xs">Средняя защита
-                        <svg class="icon icon--xxs margin-left-xxxs" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-                            <line x1="1" y1="1" x2="11" y2="11" />
-                            <line x1="11" y1="1" x2="1" y2="11" /></svg>
-                    </span>
+                    <li>
+                        <span class="chip text-sm">
+                          <i class="chip__label">Средняя защита</i>
+
+                          <button class="chip__btn"  wire:click.prevent="clearFilter(`protect_stand`)">
+                            <svg class="icon" viewBox="0 0 12 12"><title>Delete attribute</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></g></svg>
+                          </button>
+                        </span>
+                    </li>
+
                     @elseif ($protect_stand == 'high')
-                    <span wire:click.prevent="clearFilter(`protect_stand`)" class="badge badge--primary-light text-sm margin-right-xs">Высокая защита 
+                    <span wire:click.prevent="clearFilter(`protect_stand`)" class="badge badge--primary-light text-sm margin-right-xs">Высокая защита
                         <svg class="icon icon--xxs margin-left-xxxs" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
                         <line x1="1" y1="1" x2="11" y2="11" />
                         <line x1="11" y1="1" x2="1" y2="11" /></svg>
                     </span>
-                    @endif 
+                    @endif
 
                     @if ($disp_tech != '')
                     <span wire:click.prevent="clearFilter(`disp_tech`)" class="badge badge--primary-light text-sm margin-right-xs">{{ $disp_tech }}
@@ -177,7 +195,9 @@
                             <line x1="11" y1="1" x2="1" y2="11" /></svg>
                     </span>
                     @endif
-                    
+
+                    </ul>
+
 
                  </div>
             @endif
@@ -189,7 +209,7 @@
             {{ $bracelets->links('vendor.pagination.livewire') }}
           </div>
 </section>
-          
+
 </div>
 </section>
 

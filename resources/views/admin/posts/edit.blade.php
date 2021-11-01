@@ -57,11 +57,18 @@
         </div>
       </div>
 
-      <div class="margin-bottom-xs">
-        <label class="form-label margin-bottom-xxs" for="content">Текст статьи</label>
-        <div class="margin-y-sm">Textarea</div>
-        <textarea class="form-control width-100% text-sm" spellcheck="false" name="content" id="content">{{ $post->content }}</textarea>
+
+      <section class="margin-y-sm">
+        <div class="text-component padding-y-sm">
+          <h4>Основной контент</h4>
+          <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
+        </div>
+      <div class="border radius-md padding-sm bg-gradient-3">
+        <label class="form-label margin-bottom-xxs sr-only" for="text">Основной контент</label>
+            <textarea rows="20" class="form-control width-100% text-sm text" spellcheck="false" name="content" id="content">{{ $post->content }}</textarea>
       </div>
+    </section>
+
     </fieldset>
 {{-- Add images --}}
     <section class="margin-bottom-md">
