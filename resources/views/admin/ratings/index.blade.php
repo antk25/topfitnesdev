@@ -1,44 +1,46 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="text-component">
+<div class="margin-bottom-md">
   <h1 class="text-lg">Рейтинги</h1>
-  <p class="text-sm color-contrast-medium">Таблица рейтингов.</p>
-  <div class="bg radius-md padding-md shadow-xs">
-    <p class="color-contrast-medium margin-bottom-sm">Таблица рейтингов</p>
-  <a class="btn btn--success text-sm" href="{{ route('ratings.create') }}">Добавить рейтинг</a>
+</div>
 
-@if (count($ratings))
-<div class="tbl text-sm">
+<div class="grid gap-sm">
+  <!-- basic table -->
+  <div class="bg radius-md padding-md shadow-xs col-12">
+    <a class="btn btn--success text-sm margin-bottom-md" href="{{ route('ratings.create') }}">Создать</a>
 
-<table class="tbl__table border-bottom border-2" aria-label="Table Example">
-    <thead class="tbl__header border-bottom border-2">
-    <tr class="tbl__row">
-        <th class="tbl__cell text-left" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">ID</span>
-        </th>
+    @if (count($ratings))
 
-        <th class="tbl__cell text-left" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Название</span>
-        </th>
+    <div class="tbl text-sm">
+      <table class="tbl__table border-bottom" aria-label="Таблица фитнес-браслетов">
+        <thead class="tbl__header border-bottom">
+          <tr class="tbl__row">
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">ID</span>
+            </th>
 
-        <th class="tbl__cell text-left" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Slug</span>
-        </th>
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Название/slug</span>
+            </th>
 
-        <th class="tbl__cell text-left" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Опубликован</span>
-        </th>
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Опубликован</span>
+            </th>
 
-        <th class="tbl__cell text-right" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Действия</span>
-        </th>
-    </tr>
-    </thead>
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Дата</span>
+            </th>
 
-    <tbody class="tbl__body">
-@foreach ($ratings as $rating)
-    <tr class="tbl__row">
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Действия</span>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="tbl__body">
+          @foreach ($ratings as $rating)
+        <tr class="tbl__row">
         <td class="tbl__cell" role="cell">
             {{ $rating->id }}
         </td>
@@ -52,29 +54,20 @@
             </div>
         </td>
 
-        <td class="tbl__cell" role="cell">{{ $rating->slug }}</td>
+        <td class="tbl__cell" role="cell">{{ $rating->published }}</td>
+
+        <td class="tbl__cell" role="cell">{{ $rating->created_at->diffForHumans() }}</td>
+
 
         <td class="tbl__cell" role="cell">
-        <span class="inline-block text-sm bg-success bg-opacity-20% color-success-darker radius-full padding-y-xxxs padding-x-xs">
-            {{ $rating->created_at->diffForHumans() }}
-        </span>
-        </td>
 
-        <td class="tbl__cell text-right" role="cell">
-
-          <div class="grid gap-sm">
-            <div class="col-6@md">
-              <a class="btn btn--primary text-sm" href="{{ route('ratings.edit', ['rating' => $rating->id]) }}">
+          <div class="flex flex-wrap gap-xs">
+              <a class="btn btn--primary btn--sm" href="{{ route('ratings.edit', ['rating' => $rating->id]) }}">
                 Изменить
               </a>
-            </div>
-
-            <div class="col-6@md">
-
-              <button class="btn btn--accent text-sm" aria-controls="dialog-{{ $loop->index }}">Удалить</button>
 
 
-            </div>
+              <button class="btn btn--accent btn--sm" aria-controls="dialog-{{ $loop->index }}">Удалить</button>
 
           </div>
 
@@ -101,34 +94,16 @@
     </div>
 @endforeach
 
-
-    </tbody>
-</table>
-</div>
-@else
-<div class="alert alert--warning alert--is-visible padding-sm radius-md js-alert" role="alert">
-<div class="flex items-center">
-  <svg class="icon icon--sm alert__icon margin-right-sm" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M12,0C5.383,0,0,5.383,0,12s5.383,12,12,12s12-5.383,12-12S18.617,0,12,0z M13.645,5L13,14h-2l-0.608-9 H13.645z M12,20c-1.105,0-2-0.895-2-2c0-1.105,0.895-2,2-2c1.105,0,2,0.895,2,2C14,19.105,13.105,20,12,20z"></path>
-  </svg>
-
-  <p class="text-sm"><strong>Рейтингов нет</strong></p>
-</div>
-
-<div class="flex margin-top-xxxs">
-  <!-- 👇 spacer - occupy same space of alert__icon -->
-  <svg class="icon icon--sm margin-right-sm" aria-hidden="true"></svg>
-
-  <p class="text-sm opacity-70%">Вы еще не добавили ни одного рейтинга.</p>
-</div>
-</div>
-@endif
-
-
-    <div class="items-center justify-between padding-top-sm">
-      {{ $ratings->links() }}
+        </tbody>
+      </table>
     </div>
+    @endif
   </div>
 
+
+  <div class="items-center justify-between padding-top-sm">
+    {{ $ratings->links() }}
+  </div>
 </div>
+
 @endsection

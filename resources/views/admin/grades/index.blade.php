@@ -1,29 +1,34 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="text-component">
+<div class="margin-bottom-md">
   <h1 class="text-lg">Оценки</h1>
-  <div class="bg radius-md padding-md shadow-xs">
-    <p class="color-contrast-medium margin-bottom-sm">Таблица оценок</p>
+</div>
+
+<div class="grid gap-sm">
+  <!-- basic table -->
+  <div class="bg radius-md padding-md shadow-xs col-12">
+    <a class="btn btn--success text-sm margin-bottom-md" href="{{ route('grades.create') }}">Создать</a>
+
   @if (count($grades))
 <div class="tbl text-sm">
 
-<table class="tbl__table border-bottom border-2" aria-label="Table Example">
-    <thead class="tbl__header border-bottom border-2">
-    <tr class="tbl__row">
-        <th class="tbl__cell text-left" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">ID</span>
-        </th>
+<table class="tbl__table border-bottom" aria-label="Таблица оценок">
+    <thead class="tbl__header border-bottom">
+          <tr class="tbl__row">
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">ID</span>
+            </th>
 
-        <th class="tbl__cell text-left" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Оценка</span>
-        </th>
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Оценка</span>
+            </th>
 
-        <th class="tbl__cell text-right" scope="col">
-        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Действия</span>
-        </th>
-    </tr>
-    </thead>
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Действия</span>
+            </th>
+          </tr>
+        </thead>
 
     <tbody class="tbl__body">
 @foreach ($grades as $grade)
@@ -33,28 +38,17 @@
         </td>
 
         <td class="tbl__cell" role="cell">
-            <div class="flex items-center">
-                <div class="line-height-xs">
-                <p class="margin-bottom-xxxxs">{{ $grade->name }}</p>
-                </div>
-            </div>
+                {{ $grade->name }}
         </td>
 
-        <td class="tbl__cell text-right" role="cell">
+        <td class="tbl__cell" role="cell">
 
-          <div class="grid gap-sm">
-            <div class="col-6@md">
-              <a class="btn btn--primary text-sm" href="{{ route('grades.edit', ['grade' => $grade->id]) }}">
+          <div class="flex flex-wrap gap-xs">
+              <a class="btn btn--primary btn--sm" href="{{ route('grades.edit', ['grade' => $grade->id]) }}">
                 Изменить
               </a>
-            </div>
 
-            <div class="col-6@md">
-
-              <button class="btn btn--accent text-sm" aria-controls="dialog-{{ $loop->index }}">Удалить</button>
-
-
-            </div>
+              <button class="btn btn--accent btn--sm" aria-controls="dialog-{{ $loop->index }}">Удалить</button>
 
           </div>
 
@@ -64,7 +58,7 @@
       <div class="dialog__content max-width-xxs" role="alertdialog" aria-labelledby="dialog-title-{{ $loop->index }}" aria-describedby="dialog-description-{{ $loop->index }}">
         <div class="text-component">
           <h4 id="dialog-title-{{ $loop->index }}">Вы уверены, что хотите удалить оценку {{ $grade->name }}?</h4>
-          <p id="dialog-description-{{ $loop->index }}">После подтверждения оценка будет удалена <mark>безвозвратно</mark>!!!.</p>
+          <p id="dialog-description-{{ $loop->index }}">После подтверждения оценка будет удалена <mark>безвозвратно</mark> и соответствующие значения этой оценки для товаров тоже будут удалены!!!.</p>
         </div>
 
         <footer class="margin-top-md">
@@ -84,23 +78,6 @@
 
     </tbody>
 </table>
-</div>
-@else
-<div class="alert alert--warning alert--is-visible padding-sm radius-md js-alert" role="alert">
-<div class="flex items-center">
-  <svg class="icon icon--sm alert__icon margin-right-sm" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M12,0C5.383,0,0,5.383,0,12s5.383,12,12,12s12-5.383,12-12S18.617,0,12,0z M13.645,5L13,14h-2l-0.608-9 H13.645z M12,20c-1.105,0-2-0.895-2-2c0-1.105,0.895-2,2-2c1.105,0,2,0.895,2,2C14,19.105,13.105,20,12,20z"></path>
-  </svg>
-
-  <p class="text-sm"><strong>Оценок нет</strong></p>
-</div>
-
-<div class="flex margin-top-xxxs">
-  <!-- 👇 spacer - occupy same space of alert__icon -->
-  <svg class="icon icon--sm margin-right-sm" aria-hidden="true"></svg>
-
-  <p class="text-sm opacity-70%">Вы еще не добавили ни одного рейтинга.</p>
-</div>
 </div>
 @endif
 

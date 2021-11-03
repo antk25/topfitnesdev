@@ -17,7 +17,10 @@
 
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
-        <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $rating->slug }}">
+          <div class="input-group">
+            <input class="form-control flex-grow" type="text" name="slug" id="slug" value="{{ $rating->slug }}">
+            <a href="/{{ $rating->slug }}" target="_blank" class="btn btn--primary">Открыть</a>
+          </div>
         </div>
       </div>
 

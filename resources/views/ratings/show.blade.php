@@ -11,16 +11,16 @@
 @section('content')
 <div class="position-relative z-index-1 bg-contrast-lower padding-y-lg">
   <div class="container max-width-adaptive-md">
-    
+
     <article class="t-article-v4 bg padding-md padding-x-lg@md padding-y-xl@md">
-      
+
       <div class="text-component text-center line-height-lg v-space-xxl max-width-xs margin-x-auto">
         <p class="text-xs text-uppercase letter-spacing-lg color-contrast-medium">{{ $rating->created_at->diffForHumans() }}</p>
         <h1>{{ $rating->subtitle }}</h1>
       </div>
-  
+
       <div class="t-article-v4__divider margin-y-lg" aria-hidden="true"><span></span></div>
-  
+
       <div class="text-component line-height-lg v-space-md">
         <div class="tbl text-sm margin-y-md">
           <table class="tbl__table border-bottom border-2" aria-label="Table Example">
@@ -29,21 +29,21 @@
                 <th class="tbl__cell text-left" scope="col">
                   <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Модель</span>
                 </th>
-        
+
                 <th class="tbl__cell text-left" scope="col">
                   <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Время работы</span>
                 </th>
-        
+
                 <th class="tbl__cell" scope="col">
                   <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Цветной дисплей</span>
                 </th>
-                
+
                 <th class="tbl__cell text-left" scope="col">
                   <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Рейтинг</span>
                 </th>
               </tr>
             </thead>
-            
+
             <tbody class="tbl__body">
               @foreach ($rating->bracelets as $bracelet)
               <tr class="tbl__row">
@@ -52,15 +52,15 @@
                     <figure class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
                       <img class="block width-100% height-100% object-cover" src="{{ $bracelet->getFirstMediaUrl('bracelet', 'thumb') }}">
                     </figure>
-        
+
                     <div class="line-height-xs">
                       <p class="margin-bottom-xxxxs text-bold">{{ $bracelet->name }}</p>
                     </div>
                   </div>
                 </td>
-        
+
                 <td class="tbl__cell" role="cell">{{ $bracelet->real_time }} {{ trans_choice('день|дня|дней',$bracelet->real_time) }}</td>
-        
+
                 <td class="tbl__cell text-center" role="cell">
                   @if ($bracelet->disp_color == 1)
                   <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
@@ -68,7 +68,7 @@
                   <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
                 @endif
                 </td>
-        
+
                 <td class="tbl__cell" role="cell">
                   <span class="inline-block text-sm bg-success bg-opacity-20% text-bold radius-full padding-y-xxxs padding-x-xs ws-nowrap">{{ $bracelet->grade_bracelet }}</span>
                 </td>
@@ -79,10 +79,10 @@
         </div>
 
         {!! $rating->text !!}
-        
+
         @foreach ($rating->bracelets as $bracelet)
             <h2>{{ $bracelet->name }}</h2>
-            
+
             <div class="grid grid-gap-md items-center">
               <div class="col-4@sm">
               <img loading="lazy" data-src="{{ $bracelet->getFirstMediaUrl('bracelet') }}" src="/assets/theme/back-image/lazy-load-placeholder.svg"
@@ -99,7 +99,7 @@
                   <th class="prop-table__cell prop-table__cell--th">Страна-производитель</th>
                   <td class="prop-table__cell">{{ $bracelet->country }}</td>
                 </tr>
-                
+
                 <tr class="prop-table__row">
                   <th class="prop-table__cell prop-table__cell--th">Год выпуска</th>
                   <td class="prop-table__cell">{{ $bracelet->year }}</td>
@@ -108,7 +108,7 @@
                   <th class="prop-table__cell prop-table__cell--th">Время работы на одной зарядке</th>
                   <td class="prop-table__cell">{{ $bracelet->real_time }} {{ trans_choice('день|дня|дней',$bracelet->real_time) }}</td>
                 </tr>
-      
+
                 <tr class="prop-table__row">
                   <th class="prop-table__cell prop-table__cell--th">Цветной дисплей</th>
                   <td class="prop-table__cell">@if ($bracelet->disp_color == 1) <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Опция доступна</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg> @else <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Опция недоступна</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg> @endif</td>
@@ -132,22 +132,22 @@
                       @if ($loop->last)
                          {{ $monitoring }}
                      @else
-                     {{ $monitoring }}, 
+                     {{ $monitoring }},
                      @endif
                      @endforeach
                     </td>
                 </tr>
-      
+
                 <tr class="prop-table__row">
                   <th class="prop-table__cell prop-table__cell--th">NFC</th>
                   <td class="prop-table__cell">@if ($bracelet->nfc != '') <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Опция доступна</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg> @else <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Опция недоступна</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg> @endif</td>
                 </tr>
-      
+
                 <tr class="prop-table__row">
                   <th class="prop-table__cell prop-table__cell--th">GPS</th>
                   <td class="prop-table__cell">@if ($bracelet->gps == 1) <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Опция доступна</title><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg> @else <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Опция недоступна</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg> @endif</td>
                 </tr>
-                
+
               </tbody>
             </table>
           </div>
@@ -157,9 +157,9 @@
             @foreach ($bracelet->grades as $grade)
         <div class="progress-bar progress-bar--color-update js-progress-bar flex flex-column items-center margin-y-xxs">
           <p class="sr-only" aria-live="polite" aria-atomic="true">Оценка составляет <span class="js-progress-bar__aria-value">{{ $grade->pivot->value * 10 }}%</span></p>
-        
+
           <div class="margin-y-xxs width-100%">{{ $grade->name }} <span class="text-bold float-right">{{ number_format($grade->pivot->value, 1) }}</span></div>
-          
+
           <div class="progress-bar__bg width-100%" aria-hidden="true">
             <div class="progress-bar__fill" style="width: {{ $grade->pivot->value * 10 }}%;"></div>
           </div>
@@ -241,7 +241,7 @@
                   </td>
                 </tr>
               @endforeach
-            </tbody> 
+            </tbody>
           </table>
         </div>
       </div>
@@ -255,13 +255,13 @@
               <div class="container grid">
                 <div class="col-6@sm">
                   <h3 class="margin-y-sm text-center">Плюсы</h3>
-                  
+
                   <ul class="list list--icons">
                     @foreach ($bracelet->plus as $plus)
                     <li>
                       <div class="flex items-start">
                         <svg class="list__icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
-                        
+
                         <div>{{ $plus }}</div>
                       </div>
                     </li>
@@ -275,7 +275,7 @@
                     <li>
                       <div class="flex items-start">
                         <svg class="list__icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
-                        
+
                         <div>{{ $minus }}</div>
                       </div>
                     </li>
@@ -283,10 +283,10 @@
                   </ul>
                 </div>
               </div>
-              
+
             </section>
         @endforeach
-       
+
       </div>
     </article>
 
@@ -300,7 +300,7 @@
         <div class="cart__product-img margin-right-sm">
           <a href="#0" class="radius-md shadow-md"><img src="{{ $topbracelet->getFirstMediaUrl('bracelet', 'thumb') }}"></a>
         </div>
-  
+
         <div class="cart__product-info">
           <div class="text-component v-space-sm">
             <h2 class="text-md"><a class="link-fx-5" href="/katalog/{{ $topbracelet->slug }}" class="color-inherit">{{ $topbracelet->name }}</a></h2>
@@ -310,14 +310,14 @@
                       @if ($loop->last)
                          {{ $monitoring }}
                      @else
-                     {{ $monitoring }}, 
+                     {{ $monitoring }},
                      @endif
                      @endforeach
             </p>
           </div>
 
           <div class="cart__product-tot">
-            
+
             <div>
               <p class="text-md"><span class="text-sm">Средняя цена:</span> {{ $topbracelet->avg_price }} Р.</p>
 
@@ -328,7 +328,7 @@
       </li>
      @endforeach
 </ol>
-     
+
     </div>
 
 
@@ -339,6 +339,43 @@
       </div>
   </div>
 </div>
+@if (Auth::check())
+@can('view-admin-panel')
+<div class="fab fab--bottom-right js-fab">
+  <div class="position-relative container max-width-sm height-100%">
+    <button class="reset fab__btn js-tab-focus js-fab__btn" aria-label="Toggle new message popover">
+      <span class="fab__icon-wrapper">
+        <svg class="icon fab__icon" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><line x1="12" y1="3" x2="12" y2="21"/><line x1="21" y1="12" x2="3" y2="12"/></g></svg>
+      </span>
+
+      <span class="fab__icon-wrapper">
+        <svg class="icon fab__icon" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><line x1="19" y1="19" x2="5" y2="5"/></g></svg>
+      </span>
+    </button>
+
+    <div class="fab__popover js-fab__popover" role="dialog">
+      <div class="fab__popover-inner js-fab__popover-inner">
+        <div class="fab__content">
+          <menu class="fab__menu">
+
+            <li>
+              <a class="fab__menu-item fab__menu-item--cta text-sm@md js-tab-focus" href="/admin/ratings/{{ $rating->id }}/edit">
+                <figure class="fab__menu-img">
+                  <svg class="icon" viewBox="0 0 16 16"><g><path d="M15.207,8.793l-5.5-5.5c-0.391-0.391-1.023-0.391-1.414,0l-7,7c-0.128,0.128-0.219,0.289-0.263,0.464l-1,4 c-0.085,0.341,0.015,0.701,0.263,0.95C0.483,15.897,0.738,16,1,16c0.081,0,0.162-0.01,0.243-0.03l4-1 c0.176-0.044,0.336-0.135,0.464-0.263L12,8.414L13.086,9.5l-3.293,3.293c-0.391,0.391-0.391,1.023,0,1.414 c0.391,0.391,1.023,0.391,1.414,0l4-4C15.598,9.816,15.598,9.184,15.207,8.793z"></path><path d="M11.121,1.879l3,3l1.258-1.258c0.828-0.828,0.828-2.172,0-3v0c-0.828-0.828-2.172-0.828-3,0 L11.121,1.879L11.121,1.879z"></path></g></svg>
+                </figure>
+
+                <span class="fab__menu-label">Редактировать</span>
+              </a>
+            </li>
+          </menu>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@endcan
+@endif
+
 
 @endsection
 
