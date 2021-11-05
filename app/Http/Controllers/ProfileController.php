@@ -18,7 +18,7 @@ class ProfileController extends Controller
 
     if(\Gate::check('view-admin-panel'))
         {
-        return view('admin.account', compact('user'));
+        return view('admin.profile.index', compact('user'));
         }
     return view('profile.index', compact('user'));
 

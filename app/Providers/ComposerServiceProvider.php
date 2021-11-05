@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\ViewComposers\NavHeaderComposer;
 use App\Http\ViewComposers\NavGroupHeaderComposer;
+use App\Http\ViewComposers\NotifyAdminComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -34,5 +35,6 @@ class ComposerServiceProvider extends ServiceProvider
 
         View::composer('layouts.parts.header', NavHeaderComposer::class);
         View::composer('layouts.parts.header-group', NavGroupHeaderComposer::class);
+        View::composer('admin.layouts.base', NotifyAdminComposer::class);
     }
 }

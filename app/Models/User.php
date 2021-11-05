@@ -25,6 +25,11 @@ class User extends Authenticatable implements HasMedia
         'name',
         'email',
         'password',
+        'about',
+        'whatsapp',
+        'telegram',
+        'facebook',
+        'vk'
     ];
 
     /**
@@ -59,7 +64,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Overview::class);
     }
-    
+
     // Связываем с рейтингами
 
     public function ratings()

@@ -13,7 +13,7 @@
               <img src="/storage/theme/comments-placeholder.svg" alt="{{ $user->name }} - avatar">
             </a>
             @endif
-          
+
             <div class="author__content text-component">
               <h2>{{ $user->name }}</h2>
               <p><span class="text-bold">Email:</span> {{ $user->email }}</p>
@@ -27,7 +27,7 @@
                   Редактировать профиль
                 </a>
               <a class="btns__btn btn--sm" href="{{ route('profile.password') }}">
-                  Изменить пароль 
+                  Изменить пароль
               </a>
               <a class="btns__btn btn--sm" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   {{ __('Logout') }}
@@ -48,7 +48,7 @@
               </div>
             </div>
           </div>
-        
+
           <ul class="margin-bottom-md">
         @foreach ($user->comments as $comment)
             <li class="comments__comment">
@@ -56,14 +56,14 @@
                 <div class="text-component text-sm v-space-xs line-height-sm read-more js-read-more" data-characters="200" data-btn-class="comments__readmore-btn js-tab-focus">
                   <p>{{ $comment->comment }}</p>
                 </div>
-        
+
                 <div class="margin-top-xs text-sm">
                   <div class="flex gap-xxs items-center">
-          
+
                     <a href="{{$comment->commentable->getLink()}}#c{{ $comment->id }}" class="reset comments__label-btn js-tab-focus">Перейти к комментарию</a>
-          
+
                     <span class="comments__inline-divider" aria-hidden="true"></span>
-        
+
                     <time class="comments__time" aria-label="{{ $comment->created_at->diffForHumans() }}">{{ $comment->created_at->diffForHumans() }}</time>
                   </div>
                 </div>
@@ -72,4 +72,5 @@
             @endforeach
           </ul>
         </section>
-@endsection 
+
+@endsection

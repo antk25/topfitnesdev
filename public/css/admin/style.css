@@ -14798,6 +14798,96 @@ Usage: codyhouse.co/license
   transform: rotate(-90deg);
 }
 
+/* --------------------------------
+
+File#: _1_author
+Title: Author
+Descr: Author introduction card
+Usage: codyhouse.co/license
+
+-------------------------------- */
+:root {
+  --author-img-size: 4em;
+}
+
+.author {
+  display: grid;
+  grid-template-columns: var(--author-img-size) 1fr;
+  grid-gap: var(--space-sm);
+}
+
+.author__img-wrapper {
+  display: inline-block;
+  border-radius: 50%;
+  width: var(--author-img-size);
+  height: var(--author-img-size);
+  overflow: hidden;
+  transition: transform 0.3s var(--ease-out-back);
+}
+.author__img-wrapper:hover {
+  transform: scale(1.1);
+}
+.author__img-wrapper img {
+  display: block;
+  width: inherit;
+  height: inherit;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.author__content a {
+  color: inherit;
+}
+.author__content a:hover {
+  color: var(--color-primary);
+}
+
+.author--meta {
+  --author-img-size: 3em;
+  align-items: center;
+  grid-gap: var(--space-xs);
+}
+
+.author--minimal {
+  --author-img-size: 2.4em;
+  align-items: center;
+  grid-gap: var(--space-xxs);
+}
+
+.author--featured {
+  --author-img-size: 6em;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  text-align: center;
+}
+.author--featured .author__img-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.author__social {
+  --size: 40px;
+  width: var(--size);
+  height: var(--size);
+  display: flex;
+  background-color: hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.1);
+  border-radius: 50%;
+  transition: 0.2s;
+}
+.author__social .icon {
+  --size: 16px;
+  display: block;
+  margin: auto;
+  color: var(--color-contrast-higher);
+  transition: color 0.2s;
+}
+.author__social:hover {
+  background-color: hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.075);
+}
+.author__social:hover .icon {
+  color: var(--color-primary);
+}
+
 /* -------------------------------- 
 
 File#: _1_avatar
@@ -17215,6 +17305,33 @@ html:not(.js) .exsidenav__list .exsidenav__list {
   display: block;
 }
 
+/* --------------------------------
+
+File#: _1_file-upload
+Title: File Upload
+Descr: Custom file input element used to select and upload a file
+Usage: codyhouse.co/license
+
+-------------------------------- */
+html:not(.js) .file-upload__label {
+  display: none;
+}
+
+.js .file-upload__input {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+          clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+}
+.js .file-upload__text--has-max-width {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* -------------------------------- 
 
 File#: _1_form-validator
@@ -18236,6 +18353,77 @@ Usage: codyhouse.co/license
 .pagination__jumper em {
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+/* --------------------------------
+
+File#: _1_password
+Title: Password Visibility Control
+Descr: Password input field with option to toggle password visibility
+Usage: codyhouse.co/license
+
+-------------------------------- */
+:root {
+  --password-btn-width: 3.5em;
+  --password-icon-size: 1.5em;
+}
+
+.password {
+  position: relative;
+}
+
+.password__input {
+  height: 100%;
+}
+
+.password__btn {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  line-height: inherit;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: var(--password-btn-width);
+  background-color: rgba(255, 255, 255, 0);
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+.password__btn:focus {
+  color: var(--color-primary);
+}
+
+.password__btn-label:last-child {
+  display: none;
+}
+.password__btn-label .icon {
+  width: var(--password-icon-size);
+  height: var(--password-icon-size);
+}
+
+.password--text-is-visible .password__btn-label:first-child {
+  display: none;
+}
+.password--text-is-visible .password__btn-label:last-child {
+  display: inline-block;
+}
+
+.js .password__input {
+  padding-right: calc(var(--space-sm) + var(--password-btn-width));
+}
+.js .password__input::-ms-reveal {
+  display: none;
+}
+.js .password__btn {
+  display: flex;
 }
 
 /* -------------------------------- 

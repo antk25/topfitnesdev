@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 // обновление и просмотр профиля пользователя
 
 Route::view('/profile/edit', 'profile.edit')->name('profile.edit')->middleware('auth');
+Route::view('admin/profile/edit', 'admin.profile.edit')->name('admin.profile.edit')->middleware('auth');
 Route::view('/profile/password', 'profile.password')->name('profile.password')->middleware('auth');
+Route::view('admin/profile/password', 'admin.profile.password')->name('admin.profile.password')->middleware('auth');
 Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile.index')->middleware('auth');
 
 // шаблоны страниц
@@ -35,6 +37,8 @@ Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore'
 
 Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::resource('/dashboard', 'MainController');
+    Route::get('/notifications', 'NotificationsController@index')->name('notifications');
+    Route::post('/notifications/mark', 'NotificationsController@markNotification')->name('notifications.markNotification');
     Route::resource('/brands', 'BrandsController');
     Route::resource('/bracelets', 'BraceletsController');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');

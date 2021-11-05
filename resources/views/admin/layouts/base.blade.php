@@ -69,8 +69,9 @@
               <path d="M16,12V7a6,6,0,0,0-6-6h0A6,6,0,0,0,4,7v5L2,16H18Z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" />
               <path d="M7.184,18a2.982,2.982,0,0,0,5.632,0Z" />
             </svg>
-
-            <span class="app-ui__notification-indicator"><i class="sr-only">You have 6 notifications</i></span>
+            @if (count($notifications))
+            <span class="app-ui__notification-indicator"><i class="sr-only">У вас {{ count($notifications) }} уведомлений</i></span>
+            @endif
           </button>
 
           <a class="app-ui__header-btn js-tab-focus" href="settings.html">
@@ -267,11 +268,13 @@
               </li>
 
               <li class="sidenav__item">
-                <a href="notifications.html" class="sidenav__link">
+                <a href="{{ route('notifications') }}" class="sidenav__link">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><path d="M10,14H6c0,1.1,0.9,2,2,2S10,15.1,10,14z"></path> <path d="M15,11h-0.5C13.8,10.3,13,9.3,13,8V5c0-2.8-2.2-5-5-5S3,2.2,3,5v3c0,1.3-0.8,2.3-1.5,3H1c-0.6,0-1,0.4-1,1 s0.4,1,1,1h14c0.6,0,1-0.4,1-1S15.6,11,15,11z"></path></g></svg>
 
-                  <span class="sidenav__text text-sm@md">Notifications</span>
-                  <span class="sidenav__counter">23 <i class="sr-only">notifications</i></span>
+                  <span class="sidenav__text text-sm@md">Уведомления</span>
+                  @if (count($notifications))
+                  <span class="sidenav__counter">{{ count($notifications) }} <i class="sr-only">уведомлений</i></span>
+                  @endif
                 </a>
               </li>
             </ul>
@@ -294,6 +297,7 @@
     </div>
 
       <main class="app-ui__body padding-md js-app-ui__body">
+
         <!-- start main content -->
         @section('content')
         @show
@@ -301,6 +305,28 @@
       </main>
     </div>
   </div>
+</div>
+
+<!-- notification popover -->
+<div id="notifications-popover" class="popover notif-popover bg radius-md shadow-md js-popover" role="dialog">
+  <header class="bg bg-opacity-90% backdrop-blur-10 text-sm padding-sm shadow-xs position-sticky top-0 z-index-2">
+    <div class="flex justify-between items-baseline">
+      <h4 class="text-md">Уведомления</h4>
+      <a href="{{ route('notifications') }}" class="js-tab-focus">Смотреть все</a>
+    </div>
+  </header>
+
+  <ul class="notif text-sm">
+    @foreach ($notifications as $item)
+
+    <li class="notif__item">
+      <div class="padding-sm">
+        <p><i class="font-semibold">{{ $item->data['type'] }}</i> на <a href="{{ $item->data['link'] }}c{{ $item->data['id'] }}">странице</a>.</p>
+      </div>
+    </li>
+    @endforeach
+
+  </ul>
 </div>
 @section('scripts')
 
