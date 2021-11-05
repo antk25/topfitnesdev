@@ -7,20 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
-    <script>
-      if ('CSS' in window && CSS.supports('color', 'var(--color-var)')) {
-        document.write('<link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">');
-      } else {
-        document.write('<link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">');
-      }
-    </script>
-    <noscript>
-      <link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">
-    </noscript>
-    <title>Document</title>
+
+    <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">
+
+    <title>Восстановление пароля | Система управления TopFitnesBraslet</title>
 </head>
-<body>
-    <div class="container max-width-xxs padding-y-lg">
+<body class="bg-contrast-lower min-height-100vh flex flex-center padding-md">
+    <div class="bg container max-width-xxs padding-lg radius-md shadow-sm">
       <form class="sign-up-form" method="POST" action="{{ route('password.request') }}">
         @csrf
         <div class="text-component text-center margin-bottom-md">
@@ -39,7 +32,7 @@
 
                 <p class="text-sm">{{ session('status') }}</p>
               </div>
-  
+
               <button class="reset alert__close-btn margin-left-sm js-alert__close-btn js-tab-focus">
                 <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                   <title>Close alert</title>
@@ -50,7 +43,7 @@
             </div>
           </div>
         @endif
-      
+
         <div class="margin-bottom-sm">
           <label class="form-label margin-bottom-xxxs" for="email">{{ __('E-Mail Address') }}</label>
           <input class="form-control width-100%" type="email" name="email" id="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
@@ -64,7 +57,7 @@
         </div>
       </form>
     </div>
-    
+
     <script src="{{ asset("js/scripts.js") }}"></script>
 </body>
 </html>

@@ -7,25 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
-    <script>
-      if ('CSS' in window && CSS.supports('color', 'var(--color-var)')) {
-        document.write('<link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">');
-      } else {
-        document.write('<link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">');
-      }
-    </script>
-    <noscript>
-      <link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">
-    </noscript>
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">
+
+    <title>Войти | Система управления TopFitnesBraslet</title>
 </head>
-<body>
-    <div class="container max-width-xxs padding-y-lg">
+<body class="bg-contrast-lower min-height-100vh flex flex-center padding-md">
+    <div class="bg container max-width-xxs padding-lg radius-md shadow-sm">
         <form class="login-form" method="POST" action="{{ route('login') }}">
             @csrf
             <div class="text-component text-center margin-bottom-sm">
               <h1>Вход</h1>
-              <p>Введите свой email и пароль</p>
             </div>
 
             <div class="margin-bottom-sm">
@@ -49,13 +40,10 @@
               <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
               @enderror
             </div>
-            
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-              <label class="form-check-label" for="remember">
-                  {{ __('Remember Me') }}
-              </label>
+            <div class="margin-bottom-md">
+              <input class="checkbox" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+              <label for="remember">{{ __('Remember Me') }}</label>
             </div>
 
             <div class="margin-bottom-sm">
