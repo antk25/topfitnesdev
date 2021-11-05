@@ -205,6 +205,12 @@
                       <span class="sidenav__text text-sm@md">Бренды</span>
                     </a>
                   </li>
+
+                  <li class="sidenav__item">
+                    <a href="{{ route('specs.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'specs') ? 'page' : '' }}">
+                      <span class="sidenav__text text-sm@md">Характеристики</span>
+                    </a>
+                  </li>
                 </ul>
               </li>
 

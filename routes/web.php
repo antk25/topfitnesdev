@@ -40,6 +40,7 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::get('/notifications', 'NotificationsController@index')->name('notifications');
     Route::post('/notifications/mark', 'NotificationsController@markNotification')->name('notifications.markNotification');
     Route::resource('/brands', 'BrandsController');
+    Route::resource('/specs', 'SpecsController');
     Route::resource('/bracelets', 'BraceletsController');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
     Route::get('/import', 'BraceletsController@import');

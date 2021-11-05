@@ -17,9 +17,9 @@ class Bracelets extends Component
 
     public function clearFilter($namefilter)
     {
-        
+
         $this->$namefilter = '';
-        
+
     }
 
     protected $queryString = ['heart_rate', 'disp_tech', 'protect_stand', 'max_price', 'min_price', 'blood_oxy', 'blood_pressure', 'smart_alarm', 'gps', 'disp_sens', 'nfc', 'brand'];
@@ -27,7 +27,6 @@ class Bracelets extends Component
 
     public function render(ProuctFiltersPreset $preset)
     {
-        // dd($this->protect_stand);
         $search = $this->search;
         $brand = $this->brand;
         $disp_tech = $this->disp_tech;
@@ -42,24 +41,24 @@ class Bracelets extends Component
         $min_rating = $this->min_rating;
         $min_price = $this->min_price;
         $max_price = $this->max_price;
-        // dd($protect_stand);
+
         if ($protect_stand == 'middle') {
-            
+
             $protect_stand = 'IP67';
-        
+
         }
         elseif ($protect_stand == 'high') {
-            
+
             $protect_stand = [
                 'WR50'
             ];
 
         }
-        
+
         else {
-        
+
             $protect_stand = '';
-        
+
         }
 
         $bracelets = Bracelet::with('sellers', 'media', 'brands')->filter($preset->getForMarketingMenu($search, $disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $disp_sens, $nfc, $min_rating, $protect_stand, $min_price, $max_price, $brand))->paginate(15);
