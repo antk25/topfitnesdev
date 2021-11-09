@@ -10,6 +10,7 @@ use App\Models\Rating;
 use App\Models\Comment;
 
 use App\Notifications\NewCommentNotification;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 
 class CommentsController extends Controller
@@ -33,11 +34,11 @@ class CommentsController extends Controller
      */
     public function create()
     {
-        $posts = Post::pluck('name', 'id')->all();
+        $posts = Post::get();
 
         $users = User::pluck('email', 'id')->all();
 
-        $ratings = Rating::pluck('name', 'id')->all();
+        $ratings = Rating::get();
 
         return view('admin.comments.create', compact('posts', 'users', 'ratings'));
     }
@@ -50,36 +51,39 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-       $model = request('model_name');
+       $pst = $request->item_id;
+
+       $pst = explode(",", $pst);
 
        $comment = new Comment([
             'comment' => request('comment'),
-            //'user_id' => request('user_id'),
+            // 'parent_id' => request('parent_id'),
+            'user_id' => request('user_id'),
+            'commentable_type' => $pst[1],
+            'commentable_id' => $pst[0],
+            'created_at' => request('created_at'),
+            'username' => request('username'),
+            'useremail' => request('useremail'),
             ]);
 
-       $comment->user()->associate($request->user_id);
+        $comment->save();
 
-       if ($model == 'Post') {
-           $essense = Post::find($request->get('post_id'));
-       }
-       elseif ($model == 'Rating') {
-           $essense = Rating::find($request->get('rating_id'));
-       }
-
-       $essense->comments()->save($comment);
+    //    $comment->user()->associate($request->user_id);
 
        return back();
     }
 
     public function replyStore(Request $request)
     {
-
        $reply = new Comment([
             'comment' => request('comment'),
             'parent_id' => request('parent_id'),
             'user_id' => request('user_id'),
             'commentable_type' => request('commentable_type'),
-            'commentable_id' => request('commentable_id')
+            'commentable_id' => request('commentable_id'),
+            'created_at' => request('created_at'),
+            'username' => request('username'),
+            'useremail' => request('useremail'),
             ]);
 
        $reply->save();
@@ -116,12 +120,36 @@ class CommentsController extends Controller
     {
        $comment = Comment::find($id);
 
-       $comment->update([
-        'comment' => request('comment'),
-        'commentable_id' => request('commentable_id'),
-        'commentable_type' => request('commentable_type'),
-        'user_id' => request('user_id'),
-    ]);
+       $data = $request->all();
+
+    //    if (empty($comment->published_at) && isset($data['is_published'])) {
+
+    //     $data['published_at'] = Carbon::now()->format('d/m/Y');
+
+    //    }
+
+       $result = $comment
+            ->fill($data)
+            ->update();
+
+       if ($result) {
+          return redirect()
+                 ->route('comments.edit', $comment->id)
+                 ->with(['success' => 'Успешно сохранено']);
+       } else {
+        return back()
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
+       }
+
+
+    //    $comment->update([
+    //     'comment' => request('comment'),
+    //     'commentable_id' => request('commentable_id'),
+    //     'commentable_type' => request('commentable_type'),
+    //     'user_id' => request('user_id'),
+    //     'created_at' => request('created_at')
+    // ]);
 
        return back();
     }

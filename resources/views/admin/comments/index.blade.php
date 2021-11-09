@@ -30,6 +30,10 @@
             </th>
 
             <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Ответ (id)</span>
+            </th>
+
+            <th class="tbl__cell text-left" scope="col">
               <span class="font-semibold">Текст</span>
             </th>
 
@@ -54,7 +58,8 @@
             <div class="flex items-center">
                 <div class="line-height-xs">
                   @if ($comment->user_id)
-                    {{ $comment->user->name }}
+                    {{ $comment->user->name }}<br>
+                    <span class="text-sm color-contrast-medium">(id: {{ $comment->user->id }})</span>
                   @else
                     {{ $comment->username }}
                   @endif
@@ -76,6 +81,14 @@
          @endif
         </td>
 
+        <td class="tbl__cell" role="cell">
+          @if ($comment->parent_id)
+            {{ $comment->parent_id }}
+          @else
+            --
+          @endif
+        </td>
+
 
         <td class="tbl__cell" width="200px" role="cell">
           {{ Str::limit($comment->comment, 100) }}
@@ -84,7 +97,7 @@
 
 
         <td class="tbl__cell" role="cell">
-            {{ $comment->created_at->diffForHumans() }}
+            {{ $comment->created_at }}
         </td>
 
         <td class="tbl__cell text-right" role="cell">

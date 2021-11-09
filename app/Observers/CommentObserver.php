@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Comment;
 use App\Models\User;
 use App\Notifications\NewCommentNotification;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 
 class CommentObserver
@@ -31,7 +32,7 @@ class CommentObserver
      */
     public function updated(Comment $comment)
     {
-        //
+       $this->setPublishedAt($comment);
     }
 
     /**
@@ -65,5 +66,13 @@ class CommentObserver
     public function forceDeleted(Comment $comment)
     {
         //
+    }
+
+    protected function setPublishedAt (Comment $comment)
+    {
+        if ($comment->published_at == null && $comment->is_published) {
+
+            $comment->published_at = Carbon::now()->format('d/m/Y');
+        }
     }
 }

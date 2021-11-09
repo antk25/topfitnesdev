@@ -93,27 +93,31 @@
 
           <div class="dropdown inline-block js-dropdown">
             <div class="dropdown__wrapper">
-              <a class="app-ui__user-btn js-dropdown__trigger js-tab-focus" href="settings.html">
-                <img src="assets/img/author-img-1.jpg" alt="Author picture">
+              <a class="app-ui__user-btn js-dropdown__trigger js-tab-focus" href="{{ route('profile.index') }}">
+                @if (Auth::user()->getFirstMediaUrl('avatars', 'thumb'))
+                  <img src="{{ Auth::user()->getFirstMediaUrl('avatars', 'thumb') }}">
+                @else
+                  <img src="/storage/theme/comments-placeholder.svg">
+                @endif
               </a>
 
               <ul class="dropdown__menu js-dropdown__menu" aria-label="dropdown">
                 <li>
-                  <a class="dropdown__item" href="settings.html">Settings</a>
+                  <a class="dropdown__item" href="{{ route('profile.index') }}">Профиль</a>
                 </li>
 
                 <li>
-                  <a class="dropdown__item" href="settings-password.html">Password</a>
+                  <a class="dropdown__item" href="{{ route('admin.profile.password') }}">Смена пароля</a>
                 </li>
 
                 <li>
-                  <a class="dropdown__item" href="settings-notifications.html">Notifications</a>
+                  <a class="dropdown__item" href="{{ route('notifications') }}">Уведомления</a>
                 </li>
 
                 <hr class="dropdown__separator" role="separator">
 
                 <li>
-                  <a class="dropdown__item" href="#0">Log Out</a>
+                  <a class="dropdown__item" href="{{ route('logout') }}">Выйти</a>
                 </li>
               </ul>
             </div>
