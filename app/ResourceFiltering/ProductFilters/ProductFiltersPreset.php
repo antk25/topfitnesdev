@@ -9,28 +9,28 @@ use App\ResourceFiltering\ProductFilters\ProductPriceRangeFilter;
 use App\ResourceFiltering\ProductFilters\ProductCheckedFilter;
 use App\ResourceFiltering\ProductFilters\ProductJsonFieldsFilter;
 
-class ProuctFiltersPreset
+class ProductFiltersPreset
 {
-    public function getForMarketingMenu($search, $disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $disp_sens, $nfc, $min_rating, $protect_stand, $min_price, $max_price, $brand)
+    public function getForMarketingMenu($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $min_rating, $protect_stand, $max_price, $brand, $country, $compatibility)
     {
         return new QueryFilters([
-            new ProductSearchFilter($search),
+            // new ProductSearchFilter($search),
             new ProductBrandFilter($brand),
-            new ProductCheckedFilter($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $disp_sens, $nfc),
+            new ProductCheckedFilter($disp_tech, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $country),
             new ProductMinRatingsFilter($min_rating),
-            new ProductJsonFieldsFilter($protect_stand),
-            new ProductPriceRangeFilter($min_price, $max_price),
+            new ProductJsonFieldsFilter($protect_stand, $compatibility),
+            new ProductPriceRangeFilter($max_price),
         ]);
     }
-    
-    public function getForSelection($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $protect_stand, $min_price, $max_price)
-    {
-        return new QueryFilters([
-            new ProductCheckedFilter($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc),
-            new ProductJsonFieldsFilter($protect_stand),
-            new ProductPriceRangeFilter($minPrice, $maxPrice),
-        ]);
-    }
+
+     public function getForSelection($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $protect_stand, $min_price, $max_price)
+     {
+         return new QueryFilters([
+             new ProductCheckedFilter($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc),
+             new ProductJsonFieldsFilter($protect_stand),
+             new ProductPriceRangeFilter($minPrice, $maxPrice),
+         ]);
+     }
 
     // public function getForMarketingMenu($request)
     // {
