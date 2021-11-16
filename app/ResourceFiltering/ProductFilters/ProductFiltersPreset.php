@@ -8,10 +8,11 @@ use App\ResourceFiltering\ProductFilters\ProductMinRatingsFilter;
 use App\ResourceFiltering\ProductFilters\ProductPriceRangeFilter;
 use App\ResourceFiltering\ProductFilters\ProductCheckedFilter;
 use App\ResourceFiltering\ProductFilters\ProductJsonFieldsFilter;
+use App\ResourceFiltering\ProductFilters\BraceletPriceRangeSelect;
 
 class ProductFiltersPreset
 {
-    public function getForMarketingMenu($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $min_rating, $protect_stand, $max_price, $brand, $country, $compatibility)
+    public function getForMarketingMenu($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $min_rating, $protect_stand, $max_price, $brand, $country, $compatibility): QueryFilters
     {
         return new QueryFilters([
             // new ProductSearchFilter($search),
@@ -23,12 +24,12 @@ class ProductFiltersPreset
         ]);
     }
 
-     public function getForSelection($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $protect_stand, $min_price, $max_price)
+     public function getForSelection($protect_stand, $compatibility, $minPrice, $maxPrice): QueryFilters
      {
          return new QueryFilters([
-             new ProductCheckedFilter($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc),
-             new ProductJsonFieldsFilter($protect_stand),
-             new ProductPriceRangeFilter($minPrice, $maxPrice),
+//             new ProductCheckedFilter($minPrice, $maxPrice),
+             new ProductJsonFieldsFilter($protect_stand, $compatibility),
+             new BraceletPriceRangeSelect($minPrice, $maxPrice),
          ]);
      }
 
@@ -43,12 +44,12 @@ class ProductFiltersPreset
         // ]);
     // }
 
-    public function getForAdmin($request)
-    {
-        return new QueryFilters([
-            new ProductSearchFilter($request->search),
-            new ProductMinRatingsFilter($request->min_rating),
-            new ProductPriceRangeFilter($request->min_price, $request->max_price),
-        ]);
-    }
+//    public function getForAdmin($request): QueryFilters
+//    {
+//        return new QueryFilters([
+//            new ProductSearchFilter($request->search),
+//            new ProductMinRatingsFilter($request->min_rating),
+//            new ProductPriceRangeFilter($request->min_price, $request->max_price),
+//        ]);
+//    }
 }

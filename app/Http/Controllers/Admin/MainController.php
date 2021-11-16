@@ -10,7 +10,7 @@ use App\Models\Brand;
 
 class MainController extends Controller
 {
-    public function index() {
+    public function __invoke() {
 
         return view('admin.index');
     }

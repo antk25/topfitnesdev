@@ -12,9 +12,9 @@ abstract class QueryFilter {
     protected $request;
 
     public function __construct(Request $request) {
-   
+
         $this->request = $request;
-   
+
     }
 
     public function apply($builder) {
@@ -32,11 +32,12 @@ abstract class QueryFilter {
         }
 
         return $this->builder;
-    
+
     }
 
 
-    public function filters() {
+    public function filters(): array
+    {
 
         return $this->request->all();
 

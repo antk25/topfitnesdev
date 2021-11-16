@@ -5,6 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\MenuItem
+ *
+ * @property int $id
+ * @property int $post_id
+ * @property int $group_menu_id
+ * @property string $name
+ * @property string|null $place
+ * @property int|null $position
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\GroupMenu $groupmenu
+ * @property-read \App\Models\Post|null $post
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereGroupMenuId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem wherePlace($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class MenuItem extends Model
 {
     protected $fillable = [

@@ -36,7 +36,7 @@ Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore'
 // Админка
 
 Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Route::resource('/dashboard', 'MainController');
+    Route::get('/dashboard', 'MainController')->name('dashboard');
     Route::get('/notifications', 'NotificationsController@index')->name('notifications');
     Route::post('/notifications/mark', 'NotificationsController@markNotification')->name('notifications.markNotification');
     Route::resource('/brands', 'BrandsController');

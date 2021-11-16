@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <div class="container">
   <form class="form-template-v3" method="POST" action="{{ route('bracelets.store') }}"  enctype="multipart/form-data">
     @csrf
@@ -10,8 +11,6 @@
         <h2>Новый браслет</h2>
         <p>Добавить новый браслет в каталог.</p>
       </div>
-
-
 
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
@@ -47,7 +46,6 @@
           </div>
         </div>
       </div>
-
 
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">

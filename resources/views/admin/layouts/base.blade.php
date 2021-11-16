@@ -21,7 +21,7 @@
     <!-- header -->
     <header class="app-ui__header shadow-xs padding-x-md padding-x-0@md">
       <div class="app-ui__logo-wrapper padding-x-sm@md">
-        <a href="index.html" class="app-ui__logo">
+        <a href="{{ route('dashboard') }}" class="app-ui__logo">
           <svg width="104" height="30" viewBox="0 0 104 30" fill="var(--color-contrast-higher)">
             <title>Go to homepage</title>
             <circle cx="15" cy="15" r="15" fill="var(--color-contrast-lower)" />
@@ -343,7 +343,6 @@
 <livewire:scripts />
 
 <script src="{{ asset("js/admin/scripts.js") }}"></script>
-<script src="{{ asset("js/admin/dark-mode.js") }}"></script>
 @show
   </body>
 </html>

@@ -20,10 +20,12 @@
         "maatwebsite/excel": "^3.1",
         "spatie/image": "^1.10",
         "spatie/laravel-backup": "^6.16",
-        "spatie/laravel-medialibrary": "^9.0.0"
+        "spatie/laravel-medialibrary": "^9.0.0",
+        "spatie/laravel-query-builder": "^4.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
+        "barryvdh/laravel-ide-helper": "^2.10",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",

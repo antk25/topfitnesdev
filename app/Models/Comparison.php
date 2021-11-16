@@ -8,6 +8,41 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * App\Models\Comparison
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $title
+ * @property string|null $subtitle
+ * @property string|null $description
+ * @property string|null $content
+ * @property int $published
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bracelet[] $bracelets
+ * @property-read int|null $bracelets_count
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|Media[] $media
+ * @property-read int|null $media_count
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison wherePublished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereSubtitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comparison whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Comparison extends Model implements HasMedia
 {
     use InteractsWithMedia;

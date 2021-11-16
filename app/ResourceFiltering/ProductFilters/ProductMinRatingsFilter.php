@@ -19,11 +19,6 @@ class ProductMinRatingsFilter implements QueryFilterContract
         if (! $this->value) {
             return;
         }
-        $query->addSelect(['average_ratings' => Rating::query()
-            ->selectRaw("AVG(`ratings`.`score`)")
-            ->whereColumn('ratings.product_id', 'products.id')
-            ->groupBy('ratings.product_id')
-        ])
-        ->having('average_ratings', '>=', $this->value);
+        $query->where('grade_bracelet', '>=', $this->value);
     }
 }

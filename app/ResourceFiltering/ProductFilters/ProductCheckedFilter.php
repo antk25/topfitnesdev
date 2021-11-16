@@ -7,24 +7,24 @@ use App\ResourceFiltering\QueryFilterContract;
 class ProductCheckedFilter implements QueryFilterContract
 {
     protected $disp_tech;
-    protected $disp_sens;
     protected $heart_rate;
     protected $blood_pressure;
     protected $smart_alarm;
     protected $gps;
     protected $blood_oxy;
     protected $nfc;
+    protected $country;
 
-    public function __construct($disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $disp_sens, $nfc)
+    public function __construct($disp_tech, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $country)
     {
         $this->heart_rate = $heart_rate;
         $this->disp_tech = $disp_tech;
-        $this->disp_sens = $disp_sens;
         $this->blood_oxy = $blood_oxy;
         $this->blood_pressure = $blood_pressure;
         $this->smart_alarm = $smart_alarm;
         $this->gps = $gps;
         $this->nfc = $nfc;
+        $this->country = $country;
     }
 
     public function apply($query)
@@ -36,9 +36,6 @@ class ProductCheckedFilter implements QueryFilterContract
         })
         ->when($this->heart_rate, function ($query) {
             $query->where('heart_rate', $this->heart_rate);
-        })
-        ->when($this->disp_sens, function ($query) {
-            $query->where('disp_sens', $this->disp_sens);
         })
         ->when($this->blood_pressure, function ($query) {
             $query->where('blood_pressure', $this->blood_pressure);
@@ -54,6 +51,9 @@ class ProductCheckedFilter implements QueryFilterContract
         })
         ->when($this->nfc, function ($query) {
             $query->where('nfc', '!=', '');
+        })
+        ->when($this->country, function ($query) {
+            $query->where('country', $this->country);
         });
     }
 
