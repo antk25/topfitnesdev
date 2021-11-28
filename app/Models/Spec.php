@@ -37,4 +37,8 @@ class Spec extends Model
         'value',
         'slug'
     ];
+
+    protected $casts = [
+        'value' => 'array',
+    ];
 }

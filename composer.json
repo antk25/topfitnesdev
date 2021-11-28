@@ -20,8 +20,7 @@
         "maatwebsite/excel": "^3.1",
         "spatie/image": "^1.10",
         "spatie/laravel-backup": "^6.16",
-        "spatie/laravel-medialibrary": "^9.0.0",
-        "spatie/laravel-query-builder": "^4.0"
+        "spatie/laravel-medialibrary": "^9.0.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

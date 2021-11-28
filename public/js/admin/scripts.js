@@ -4809,6 +4809,105 @@ function initAlertEvent(element) {
 		}
 	}
 }());
+// File#: _1_smooth-scrolling
+// Usage: codyhouse.co/license
+(function() {
+  var SmoothScroll = function(element) {
+    if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) return;
+    this.element = element;
+    this.scrollDuration = parseInt(this.element.getAttribute('data-duration')) || 300;
+    this.dataElementY = this.element.getAttribute('data-scrollable-element-y') || this.element.getAttribute('data-scrollable-element') || this.element.getAttribute('data-element');
+    this.scrollElementY = this.dataElementY ? document.querySelector(this.dataElementY) : window;
+    this.dataElementX = this.element.getAttribute('data-scrollable-element-x');
+    this.scrollElementX = this.dataElementY ? document.querySelector(this.dataElementX) : window;
+    this.initScroll();
+  };
+
+  SmoothScroll.prototype.initScroll = function() {
+    var self = this;
+
+    //detect click on link
+    this.element.addEventListener('click', function(event){
+      event.preventDefault();
+      var targetId = event.target.closest('.js-smooth-scroll').getAttribute('href').replace('#', ''),
+        target = document.getElementById(targetId),
+        targetTabIndex = target.getAttribute('tabindex'),
+        windowScrollTop = self.scrollElementY.scrollTop || document.documentElement.scrollTop;
+
+      // scroll vertically
+      if(!self.dataElementY) windowScrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      var scrollElementY = self.dataElementY ? self.scrollElementY : false;
+
+      var fixedHeight = self.getFixedElementHeight(); // check if there's a fixed element on the page
+      Util.scrollTo(target.getBoundingClientRect().top + windowScrollTop - fixedHeight, self.scrollDuration, function() {
+        // scroll horizontally
+        self.scrollHorizontally(target, fixedHeight);
+        //move the focus to the target element - don't break keyboard navigation
+        Util.moveFocus(target);
+        history.pushState(false, false, '#'+targetId);
+        self.resetTarget(target, targetTabIndex);
+      }, scrollElementY);
+    });
+  };
+
+  SmoothScroll.prototype.scrollHorizontally = function(target, delta) {
+    var scrollEl = this.dataElementX ? this.scrollElementX : false;
+    var windowScrollLeft = this.scrollElementX ? this.scrollElementX.scrollLeft : document.documentElement.scrollLeft;
+    var final = target.getBoundingClientRect().left + windowScrollLeft - delta,
+      duration = this.scrollDuration;
+
+    var element = scrollEl || window;
+    var start = element.scrollLeft || document.documentElement.scrollLeft,
+      currentTime = null;
+
+    if(!scrollEl) start = window.scrollX || document.documentElement.scrollLeft;
+    // return if there's no need to scroll
+    if(Math.abs(start - final) < 5) return;
+        
+    var animateScroll = function(timestamp){
+      if (!currentTime) currentTime = timestamp;        
+      var progress = timestamp - currentTime;
+      if(progress > duration) progress = duration;
+      var val = Math.easeInOutQuad(progress, start, final-start, duration);
+      element.scrollTo({
+        left: val,
+      });
+      if(progress < duration) {
+        window.requestAnimationFrame(animateScroll);
+      }
+    };
+
+    window.requestAnimationFrame(animateScroll);
+  };
+
+  SmoothScroll.prototype.resetTarget = function(target, tabindex) {
+    if( parseInt(target.getAttribute('tabindex')) < 0) {
+      target.style.outline = 'none';
+      !tabindex && target.removeAttribute('tabindex');
+    }	
+  };
+
+  SmoothScroll.prototype.getFixedElementHeight = function() {
+    var scrollElementY = this.dataElementY ? this.scrollElementY : document.documentElement;
+    var fixedElementDelta = parseInt(getComputedStyle(scrollElementY).getPropertyValue('scroll-padding'));
+    if(isNaN(fixedElementDelta) ) { // scroll-padding not supported
+      fixedElementDelta = 0;
+      var fixedElement = document.querySelector(this.element.getAttribute('data-fixed-element'));
+      if(fixedElement) fixedElementDelta = parseInt(fixedElement.getBoundingClientRect().height);
+    }
+    return fixedElementDelta;
+  };
+  
+  //initialize the Smooth Scroll objects
+  var smoothScrollLinks = document.getElementsByClassName('js-smooth-scroll');
+  if( smoothScrollLinks.length > 0 && !Util.cssSupports('scroll-behavior', 'smooth') && window.requestAnimationFrame) {
+    // you need javascript only if css scroll-behavior is not supported
+    for( var i = 0; i < smoothScrollLinks.length; i++) {
+      (function(i){new SmoothScroll(smoothScrollLinks[i]);})(i);
+    }
+  }
+}());
 // File#: _1_swipe-content
 (function() {
 	var SwipeContent = function(element) {
@@ -8277,6 +8376,252 @@ function initAlertEvent(element) {
 		}
 	}
 }());
+// File#: _2_floating-side-nav
+// Usage: codyhouse.co/license
+(function() {
+  var FSideNav = function(element) {
+    this.element = element;
+    this.triggers = document.querySelectorAll('[aria-controls="'+this.element.getAttribute('id')+'"]');
+    this.list = this.element.getElementsByClassName('js-float-sidenav__list')[0];
+    this.anchors = this.list.querySelectorAll('a[href^="#"]');
+    this.sections = getSections(this);
+    this.sectionsContainer = document.getElementsByClassName('js-float-sidenav-target');
+    this.firstFocusable = getFSideNavFirstFocusable(this);
+    this.selectedTrigger = null;
+    this.showClass = "float-sidenav--is-visible";
+    this.clickScrolling = false;
+    this.intervalID = false;
+    initFSideNav(this);
+  };
+
+  function getSections(nav) {
+    var sections = [];
+    // get all content sections
+    for(var i = 0; i < nav.anchors.length; i++) {
+      var section = document.getElementById(nav.anchors[i].getAttribute('href').replace('#', ''));
+      if(section) sections.push(section);
+    }
+    return sections;
+  };
+
+  function getFSideNavFirstFocusable(nav) {
+    var focusableEle = nav.element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary'),
+        firstFocusable = false;
+    for(var i = 0; i < focusableEle.length; i++) {
+      if( focusableEle[i].offsetWidth || focusableEle[i].offsetHeight || focusableEle[i].getClientRects().length ) {
+        firstFocusable = focusableEle[i];
+        break;
+      }
+    }
+
+    return firstFocusable;
+  };
+  
+  function initFSideNav(nav) {
+    initButtonTriggers(nav); // mobile version behaviour
+
+    initAnchorEvents(nav); // select anchor in list
+
+    if(intersectionObserverSupported) {
+      initSectionScroll(nav); // update anchor appearance on scroll
+    } else {
+      Util.addClass(nav.element, 'float-sidenav--on-target');
+    }
+  };
+
+  function initButtonTriggers(nav) { // mobile only
+    if ( !nav.triggers ) return;
+
+    for(var i = 0; i < nav.triggers.length; i++) {
+      nav.triggers[i].addEventListener('click', function(event) {
+        openFSideNav(nav, event);
+      });
+    }
+
+    // close side nav when clicking on close button/bg layer
+    nav.element.addEventListener('click', function(event) {
+      if(event.target.closest('.js-float-sidenav__close-btn') || Util.hasClass(event.target, 'js-float-sidenav')) {
+        closeFSideNav(nav, event);
+      }
+    });
+
+    // listen for key events
+    window.addEventListener('keyup', function(event){
+      // listen for esc key
+      if( (event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape' )) {
+        // close navigation on mobile if open
+        closeFSideNav(nav, event);
+      }
+      // listen for tab key
+      if( (event.keyCode && event.keyCode == 9) || (event.key && event.key.toLowerCase() == 'tab' )) { // close navigation on mobile if open when nav loses focus
+        if( !document.activeElement.closest('.js-float-sidenav')) closeFSideNav(nav, event, true);
+      }
+    });
+  };
+
+  function openFSideNav(nav, event) { // open side nav - mobile only
+    event.preventDefault();
+    nav.selectedTrigger = event.target;
+    event.target.setAttribute('aria-expanded', 'true');
+    Util.addClass(nav.element, nav.showClass);
+    nav.element.addEventListener('transitionend', function cb(event){
+      nav.element.removeEventListener('transitionend', cb);
+      nav.firstFocusable.focus();
+    });
+  };
+
+  function closeFSideNav(nav, event, bool) { // close side nav - mobile only
+    if( !Util.hasClass(nav.element, nav.showClass) ) return;
+    if(event) event.preventDefault();
+    Util.removeClass(nav.element, nav.showClass);
+    if(!nav.selectedTrigger) return;
+    nav.selectedTrigger.setAttribute('aria-expanded', 'false');
+    if(!bool) nav.selectedTrigger.focus();
+    nav.selectedTrigger = false; 
+  };
+
+  function initAnchorEvents(nav) {
+    nav.list.addEventListener('click', function(event){
+      var anchor = event.target.closest('a[href^="#"]');
+      if(!anchor || Util.hasClass(anchor, 'float-sidenav__link--selected')) return;
+      if(nav.clickScrolling) { // a different link has already been clicked
+        event.preventDefault();
+        return;
+      }
+      // reset link apperance 
+      nav.clickScrolling = true;
+      resetAnchors(nav, anchor);
+      closeFSideNav(nav, false, true);
+      if(!canScroll()) window.dispatchEvent(new CustomEvent('scroll'));
+    });
+  };
+
+  function canScroll() {
+    var pageHeight = document.documentElement.offsetHeight,
+      windowHeight = window.innerHeight,
+      scrollPosition = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement && document.documentElement.scrollTop || 0);
+    
+    return !(pageHeight - 2 <= windowHeight + scrollPosition);
+  };
+
+  function resetAnchors(nav, anchor) {
+    if(!intersectionObserverSupported) return;
+    for(var i = 0; i < nav.anchors.length; i++) Util.removeClass(nav.anchors[i], 'float-sidenav__link--selected');
+    if(anchor) Util.addClass(anchor, 'float-sidenav__link--selected');
+  };
+
+  function initSectionScroll(nav) {
+    // check when a new section enters the viewport
+    var observer = new IntersectionObserver(
+      function(entries, observer) { 
+        entries.forEach(function(entry){
+          var threshold = entry.intersectionRatio.toFixed(1);
+          
+          if(!nav.clickScrolling) { // do not update classes if user clicked on a link
+            getVisibleSection(nav);
+          }
+
+          // if first section is not inside the viewport - reset anchors
+          if(nav.sectionsContainer && entry.target == nav.sections[0] && threshold == 0 && nav.sections[0].getBoundingClientRect().top > 0) {
+            setSectionsLimit(nav);
+          }
+        });
+
+        // check if there's a selected dot and toggle the --on-target class from the nav
+        Util.toggleClass(nav.element, 'float-sidenav--on-target', nav.list.getElementsByClassName('float-sidenav__link--selected').length != 0);
+      }, 
+      {
+        rootMargin: "0px 0px -50% 0px"
+      }
+    );
+
+    for(var i = 0; i < nav.sections.length; i++) {
+      observer.observe(nav.sections[i]);
+    }
+
+    // detect when sections container is inside/outside the viewport
+    if(nav.sectionsContainer) {
+      var containerObserver = new IntersectionObserver(
+        function(entries, observer) { 
+          entries.forEach(function(entry){
+            var threshold = entry.intersectionRatio.toFixed(1);
+
+            if(entry.target.getBoundingClientRect().top < 0) {
+              if(threshold == 0) {
+                setSectionsLimit(nav);
+              } else {
+                activateLastSection(nav);
+              }
+            }
+          });
+        },
+        {threshold: [0, 0.1, 1]}
+      );
+
+      containerObserver.observe(nav.sectionsContainer[0]);
+    }
+
+    // detect the end of scrolling -> reactivate IntersectionObserver on scroll
+    nav.element.addEventListener('float-sidenav-scroll', function(event){
+      if(!nav.clickScrolling) getVisibleSection(nav);
+      nav.clickScrolling = false;
+    });
+  };
+
+  function setSectionsLimit(nav) {
+    if(!nav.clickScrolling) resetAnchors(nav, false);
+    Util.removeClass(nav.element, 'float-sidenav--on-target');
+  };
+
+  function activateLastSection(nav) {
+    Util.addClass(nav.element, 'float-sidenav--on-target');
+    if(nav.list.getElementsByClassName('float-sidenav__link--selected').length == 0 ) {
+      Util.addClass(nav.anchors[nav.anchors.length - 1], 'float-sidenav__link--selected');
+    }
+  };
+
+  function getVisibleSection(nav) {
+    if(nav.intervalID) return;
+    nav.intervalID = setTimeout(function(){
+      var halfWindowHeight = window.innerHeight/2,
+      index = -1;
+      for(var i = 0; i < nav.sections.length; i++) {
+        var top = nav.sections[i].getBoundingClientRect().top;
+        if(top < halfWindowHeight) index = i;
+      }
+      if(index > -1) {
+        resetAnchors(nav, nav.anchors[index]);
+      }
+      nav.intervalID = false;
+    }, 100);
+  };
+
+  //initialize the Side Nav objects
+  var fixedNav = document.getElementsByClassName('js-float-sidenav'),
+    intersectionObserverSupported = ('IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype);
+  
+  var fixedNavArray = [];
+  if( fixedNav.length > 0 ) {
+    for( var i = 0; i < fixedNav.length; i++) {
+      (function(i){ fixedNavArray.push(new FSideNav(fixedNav[i])) ; })(i);
+    }
+    
+    // listen to window scroll -> reset clickScrolling property
+    var scrollId = false,
+      customEvent = new CustomEvent('float-sidenav-scroll');
+      
+    window.addEventListener('scroll', function() {
+      clearTimeout(scrollId);
+      scrollId = setTimeout(doneScrolling, 100);
+    });
+
+    function doneScrolling() {
+      for( var i = 0; i < fixedNavArray.length; i++) {
+        (function(i){fixedNavArray[i].element.dispatchEvent(customEvent)})(i);
+      };
+    };
+  }
+}());
 // File#: _2_menu-bar
 // Usage: codyhouse.co/license
 (function() {
@@ -9234,207 +9579,6 @@ function initAlertEvent(element) {
         }
       });
     } 
-  }
-}());
-// File#: _3_interactive-table
-// Usage: codyhouse.co/license
-(function() {
-  var IntTable = function(element) {
-    this.element = element;
-    this.header = this.element.getElementsByClassName('js-int-table__header')[0];
-    this.headerCols = this.header.getElementsByTagName('tr')[0].children;
-    this.body = this.element.getElementsByClassName('js-int-table__body')[0];
-    this.sortingRows = this.element.getElementsByClassName('js-int-table__sort-row');
-    initIntTable(this);
-  };
-
-  function initIntTable(table) {
-    // check if table has actions
-    initIntTableActions(table);
-    // check if there are checkboxes to select/deselect a row/all rows
-    var selectAll = table.element.getElementsByClassName('js-int-table__select-all');
-    if(selectAll.length > 0) initIntTableSelection(table, selectAll);
-    // check if there are sortable columns
-    table.sortableCols = table.element.getElementsByClassName('js-int-table__cell--sort');
-    if(table.sortableCols.length > 0) {
-      // add a data-order attribute to all rows so that we can reset the order
-      setDataRowOrder(table);
-      // listen to the click event on a sortable column
-      table.header.addEventListener('click', function(event){
-        var selectedCol = event.target.closest('.js-int-table__cell--sort');
-        if(!selectedCol || event.target.tagName.toLowerCase() == 'input') return;
-        sortColumns(table, selectedCol);
-      });
-      table.header.addEventListener('change', function(event){ // detect change in selected checkbox (SR only)
-        var selectedCol = event.target.closest('.js-int-table__cell--sort');
-        if(!selectedCol) return;
-        sortColumns(table, selectedCol, event.target.value);
-      });
-      table.header.addEventListener('keydown', function(event){ // keyboard navigation - change sorting on enter
-        if( event.keyCode && event.keyCode == 13 || event.key && event.key.toLowerCase() == 'enter') {
-          var selectedCol = event.target.closest('.js-int-table__cell--sort');
-          if(!selectedCol) return;
-          sortColumns(table, selectedCol);
-        }
-      });
-
-      // change cell style when in focus
-      table.header.addEventListener('focusin', function(event){
-        var closestCell = document.activeElement.closest('.js-int-table__cell--sort');
-        if(closestCell) Util.addClass(closestCell, 'int-table__cell--focus');
-      });
-      table.header.addEventListener('focusout', function(event){
-        for(var i = 0; i < table.sortableCols.length; i++) {
-          Util.removeClass(table.sortableCols[i], 'int-table__cell--focus');
-        }
-      });
-    }
-  };
-
-  function initIntTableActions(table) {
-    // check if table has actions and store them
-    var tableId = table.element.getAttribute('id');
-    if(!tableId) return;
-    var tableActions = document.querySelector('[data-table-controls="'+tableId+'"]');
-    if(!tableActions) return;
-    table.actionsSelection = tableActions.getElementsByClassName('js-int-table-actions__items-selected');
-    table.actionsNoSelection = tableActions.getElementsByClassName('js-int-table-actions__no-items-selected');
-  };
-
-  function initIntTableSelection(table, select) { // checkboxes for rows selection
-    table.selectAll = select[0];
-    table.selectRow = table.element.getElementsByClassName('js-int-table__select-row');
-    // select/deselect all rows
-    table.selectAll.addEventListener('click', function(event){ // we cannot use the 'change' event as on IE/Edge the change from "indeterminate" to either "checked" or "unchecked"  does not trigger that event
-      toggleRowSelection(table);
-    });
-    // select/deselect single row - reset all row selector 
-    table.body.addEventListener('change', function(event){
-      if(!event.target.closest('.js-int-table__select-row')) return;
-      toggleAllSelection(table);
-    });
-    // toggle actions
-    toggleActions(table, table.element.getElementsByClassName('int-table__row--checked').length > 0);
-  };
-
-  function toggleRowSelection(table) { // 'Select All Rows' checkbox has been selected/deselected
-    var status = table.selectAll.checked;
-    for(var i = 0; i < table.selectRow.length; i++) {
-      table.selectRow[i].checked = status;
-      Util.toggleClass(table.selectRow[i].closest('.int-table__row'), 'int-table__row--checked', status);
-    }
-    toggleActions(table, status);
-  };
-
-  function toggleAllSelection(table) { // Single row has been selected/deselected
-    var allChecked = true,
-      oneChecked = false;
-    for(var i = 0; i < table.selectRow.length; i++) {
-      if(!table.selectRow[i].checked) {allChecked = false;}
-      else {oneChecked = true;}
-      Util.toggleClass(table.selectRow[i].closest('.int-table__row'), 'int-table__row--checked', table.selectRow[i].checked);
-    }
-    table.selectAll.checked = oneChecked;
-    // if status if false but one input is checked -> set an indeterminate state for the 'Select All' checkbox
-    if(!allChecked) {
-      table.selectAll.indeterminate = oneChecked;
-    } else if(allChecked && oneChecked) {
-      table.selectAll.indeterminate = false;
-    }
-    toggleActions(table, oneChecked);
-  };
-
-  function setDataRowOrder(table) { // add a data-order to rows element - will be used when resetting the sorting 
-    var rowsArray = table.body.getElementsByTagName('tr');
-    for(var i = 0; i < rowsArray.length; i++) {
-      rowsArray[i].setAttribute('data-order', i);
-    }
-  };
-
-  function sortColumns(table, selectedCol, customOrder) {
-    // determine sorting order (asc/desc/reset)
-    var order = customOrder || getSortingOrder(selectedCol),
-      colIndex = Util.getIndexInArray(table.headerCols, selectedCol);
-    // sort table
-    sortTableContent(table, order, colIndex, selectedCol);
-    
-    // reset appearance of the th column that was previously sorted (if any) 
-    for(var i = 0; i < table.headerCols.length; i++) {
-      Util.removeClass(table.headerCols[i], 'int-table__cell--asc int-table__cell--desc');
-    }
-    // reset appearance for the selected th column
-    if(order == 'asc') Util.addClass(selectedCol, 'int-table__cell--asc');
-    if(order == 'desc') Util.addClass(selectedCol, 'int-table__cell--desc');
-    // reset checkbox selection
-    if(!customOrder) selectedCol.querySelector('input[value="'+order+'"]').checked = true;
-  };
-
-  function getSortingOrder(selectedCol) { // determine sorting order
-    if( Util.hasClass(selectedCol, 'int-table__cell--asc') ) return 'desc';
-    if( Util.hasClass(selectedCol, 'int-table__cell--desc') ) return 'none';
-    return 'asc';
-  };
-
-  function sortTableContent(table, order, index, selctedCol) { // determine the new order of the rows
-    var rowsArray = table.body.getElementsByTagName('tr'),
-      switching = true,
-      i = 0,
-      shouldSwitch;
-    while (switching) {
-      switching = false;
-      for (i = 0; i < rowsArray.length - 1; i++) {
-        var contentOne = (order == 'none') ? rowsArray[i].getAttribute('data-order') : rowsArray[i].children[index].textContent.trim(),
-          contentTwo = (order == 'none') ? rowsArray[i+1].getAttribute('data-order') : rowsArray[i+1].children[index].textContent.trim();
-
-        shouldSwitch = compareValues(contentOne, contentTwo, order, selctedCol);
-        if(shouldSwitch) {
-          table.body.insertBefore(rowsArray[i+1], rowsArray[i]);
-          switching = true;
-          break;
-        }
-      }
-    }
-  };
-
-  function compareValues(val1, val2, order, selctedCol) {
-    var compare,
-      dateComparison = selctedCol.getAttribute('data-date-format');
-    if( dateComparison && order != 'none') { // comparing dates
-      compare =  (order == 'asc' || order == 'none') ? parseCustomDate(val1, dateComparison) > parseCustomDate(val2, dateComparison) : parseCustomDate(val2, dateComparison) > parseCustomDate(val1, dateComparison);
-    } else if( !isNaN(val1) && !isNaN(val2) ) { // comparing numbers
-      compare =  (order == 'asc' || order == 'none') ? Number(val1) > Number(val2) : Number(val2) > Number(val1);
-    } else { // comparing strings
-      compare =  (order == 'asc' || order == 'none') 
-        ? val2.toString().localeCompare(val1) < 0
-        : val1.toString().localeCompare(val2) < 0;
-    }
-    return compare;
-  };
-
-  function parseCustomDate(date, format) {
-    var parts = date.match(/(\d+)/g), 
-      i = 0, fmt = {};
-    // extract date-part indexes from the format
-    format.replace(/(yyyy|dd|mm)/g, function(part) { fmt[part] = i++; });
-
-    return new Date(parts[fmt['yyyy']], parts[fmt['mm']]-1, parts[fmt['dd']]);
-  };
-
-  function toggleActions(table, selection) {
-    if(table.actionsSelection && table.actionsSelection.length > 0) {
-      Util.toggleClass(table.actionsSelection[0], 'is-hidden', !selection);
-    }
-    if(table.actionsNoSelection && table.actionsNoSelection.length > 0) {
-      Util.toggleClass(table.actionsNoSelection[0], 'is-hidden', selection);
-    }
-  };
-
-  //initialize the IntTable objects
-	var intTable = document.getElementsByClassName('js-int-table');
-	if( intTable.length > 0 ) {
-		for( var i = 0; i < intTable.length; i++) {
-			(function(i){new IntTable(intTable[i]);})(i);
-    }
   }
 }());
 // File#: _3_select-autocomplete

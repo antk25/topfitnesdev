@@ -18,7 +18,7 @@
         @forelse ($notifs as $item)
       <li class="notif__item">
         <div class="padding-sm flex">
-          <p><i class="font-semibold">{{ $item->data['type'] }}</i> на <a href="{{ $item->data['link'] }}c{{ $item->data['id'] }}">странице</a>.</p>
+          <p><i class="font-semibold">{{ $item->data['type'] }}</i> на <a href="{{ $item->data['link'] }}#c{{ $item->data['id'] }}">странице</a>.</p>
             <div class="margin-left-auto">
                 <form method="POST" action="{{ route('notifications.markNotification') }}">
                     @csrf

@@ -34,6 +34,6 @@ class Grade extends Model
 
     // Связь с моделями браслетов
     public function bracelets() {
-        return $this->belongsToMany(Bracelet::class)->withPivot('position', 'value');
+        return $this->belongsToMany(Bracelet::class)->withPivot('value');
     }
 }

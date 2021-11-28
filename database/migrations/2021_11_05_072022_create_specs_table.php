@@ -10,15 +10,14 @@ class CreateSpecsTable extends Migration
      * Run the migrations.
      *
      * @return void
-     */
+    */
     public function up()
     {
         Schema::create('specs', function (Blueprint $table) {
             $table->id();
             $table->string('device', 150);
             $table->string('name', 200);
-            $table->string('value', 200);
-            $table->string('slug', 200)->unique();
+            $table->json('value');
             $table->timestamps();
         });
     }

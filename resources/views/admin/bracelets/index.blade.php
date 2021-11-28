@@ -6,11 +6,83 @@
 </div>
 
 <div class="grid gap-sm">
+  <div class="bg radius-md padding-md shadow-xs col-12">
+    <div class="margin-bottom-sm">
+      <h5>Импорт данных</h5>
+    </div>
+
+
+    {{-- @livewire('import') --}}
+
+    <form action="{{ route('bracelets.import') }}" method="POST" enctype="multipart/form-data">
+     @csrf
+     <div class="file-upload inline-block">
+      <label for="importFile" class="file-upload__label btn btn--primary">
+        <span class="flex items-center">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
+
+          <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
+        </span>
+      </label>
+
+      <input type="file" class="file-upload__input" name="importFile" id="importFile">
+    </div>
+     <button class="btn" type="submit">Импортировать</button>
+    </form>
+
+
+
+    @if ($lastfile)
+    <div>
+      <p>Последние импортированные:</p>
+      <a href="/{{ $lastfile }}">Скачать последний импорт</a>
+    </div>
+    @endif
+
+
+    @if (isset($errors) && $errors->any())
+      @foreach ($errors->all() as $error)
+
+        {{ $error }}
+
+      @endforeach
+    @endif
+
+
+    @if (session()->has('failures'))
+     <table>
+       <tr>
+         <th>Row</th>
+         <th>Attribute</th>
+         <th>Errors</th>
+         <th>Value</th>
+       </tr>
+
+       @foreach (session()->get('failures') as $validation)
+
+       <tr>
+         <td>{{ $validation->row() }}</td>
+         <td>{{ $validation->attribute() }}</td>
+         <td>
+           <ul>
+             @foreach ($validation->errors() as $e)
+                 <li>{{ $e }}</li>
+             @endforeach
+           </ul>
+         </td>
+         <td>
+           {{ $validation->values()[$validation->attribute()] }}
+         </td>
+       </tr>
+
+       @endforeach
+    </table>
+    @endif
+  </div>
   <!-- basic table -->
   <div class="bg radius-md padding-md shadow-xs col-12">
     <a class="btn btn--success text-sm margin-bottom-md" href="{{ route('bracelets.create') }}">Создать</a>
     <a class="btn btn--success text-sm margin-bottom-md" href="{{ route('bracelets.updategrades') }}">Обновить средний рейтинг</a>
-
 
     @if (count($bracelets))
 
@@ -42,7 +114,7 @@
 
         <tbody class="tbl__body">
           @foreach ($bracelets as $bracelet)
-        <tr class="tbl__row">
+        <tr class="tbl__row {{ $bracelet->trashed() ? 'color-contrast-lower' : '' }}">
         <td class="tbl__cell" role="cell">
             {{ $bracelet->id }}
         </td>
@@ -68,13 +140,35 @@
         <td class="tbl__cell" role="cell">
 
           <div class="flex flex-wrap gap-xs">
+            @if (! $bracelet->trashed())
               <a class="btn btn--primary btn--sm" href="{{ route('bracelets.edit', ['bracelet' => $bracelet->id]) }}">
                 Изменить
               </a>
 
+              <form method="POST" action="{{ route('bracelets.destroy', ['bracelet' => $bracelet->id]) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn--accent"><svg class="icon" viewBox="0 0 20 20">
+                  <title>Remove item</title>
 
-              <button class="btn btn--accent btn--sm" aria-controls="dialog-{{ $loop->index }}">Удалить</button>
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <line x1="1" y1="5" x2="19" y2="5"></line>
+                    <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"></path>
+                    <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"></path>
+                  </g>
+                </svg></button>
+              </form>
+              @else
+              <a class="btn btn--primary btn--sm" href="{{ route('bracelets.restore', ['bracelet' => $bracelet->id]) }}">
+                Восстановить
+              </a>
 
+              <button class="btn btn--accent btn--sm" aria-controls="dialog-{{ $loop->index }}">
+               Уничтожить
+              </button>
+
+
+              @endif
           </div>
 
         </td>

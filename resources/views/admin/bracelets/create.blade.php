@@ -2,115 +2,165 @@
 
 @section('content')
 
+<div id="float-sidenav-id" class="float-sidenav js-float-sidenav">
+  <nav class="float-sidenav__nav">
+    <button class="reset float-sidenav__close-btn js-float-sidenav__close-btn js-tab-focus" aria-label="Close navigation">
+      <svg class="icon icon--xs" viewBox="0 0 16 16"><g stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><line x1="13.5" y1="2.5" x2="2.5" y2="13.5"></line><line x1="2.5" y1="2.5" x2="13.5" y2="13.5"></line></g></svg>
+    </button>
 
-<div class="container">
-  <form class="form-template-v3" method="POST" action="{{ route('bracelets.store') }}"  enctype="multipart/form-data">
+    <ul class="js-float-sidenav__list">
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#main">
+          <span class="float-sidenav__label">SEO + настройки</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-1">
+          <span class="float-sidenav__label">Плюсы и минусы</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-2">
+          <span class="float-sidenav__label">Покупателям нравится</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-3">
+          <span class="float-sidenav__label">Общие</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-4">
+          <span class="float-sidenav__label">Конструкция</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-5">
+          <span class="float-sidenav__label">Дисплей</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-6">
+          <span class="float-sidenav__label">Модули и датчики</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-7">
+          <span class="float-sidenav__label">Связь</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-8">
+          <span class="float-sidenav__label">Функционал</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-9">
+          <span class="float-sidenav__label">Аккумулятор</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-10">
+          <span class="float-sidenav__label">Рейтинги</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-11">
+          <span class="float-sidenav__label">Оценки</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-12">
+          <span class="float-sidenav__label">Продавцы</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="float-sidenav__link js-smooth-scroll" href="#section-13">
+          <span class="float-sidenav__label">Картинки + Сохранить</span>
+          <span class="float-sidenav__marker" aria-hidden="true"></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  <button class="btn btn--subtle margin-bottom-md hide@md" aria-controls="float-sidenav-id">Показать навигацию</button>
+
+  <div class="margin-bottom-md">
+    <h1 class="text-lg">Новый браслет</h1>
+  </div>
+  <form id="main" class="form-template-v3 js-float-sidenav-target" method="POST" action="{{ route('bracelets.store') }}"  enctype="multipart/form-data">
     @csrf
-    <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Новый браслет</h2>
-        <p>Добавить новый браслет в каталог.</p>
-      </div>
+  <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset>
+      <legend class="form-legend margin-bottom-md">SEO</legend>
 
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название модели</label>
-          <input class="form-control width-100%" type="text" name="name" id="name">
+          <input class="form-control width-100%" type="text" name="name" id="name" value="{{ old('name') }}">
           <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
         </div>
 
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
-        <input class="form-control width-100%" type="text" name="slug" id="slug">
+        <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ old('slug') }}">
         </div>
       </div>
 
       <div class="margin-bottom-xs">
         <label class="form-label margin-bottom-xxs" for="title">Title</label>
-        <input class="form-control width-100%" type="text" name="title" id="title">
+        <input class="form-control width-100%" type="text" name="title" id="title" value="{{ old('title') }}">
       </div>
 
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="subtitle">Subtitle (h1)</label>
-          <input class="form-control width-100%" type="text" name="subtitle" id="subtitle">
+          <input class="form-control width-100%" type="text" name="subtitle" id="subtitle" value="{{ old('subtitle') }}">
         </div>
         <div class="col-6@md">
           <div class="character-count js-character-count">
             <label class="form-label margin-bottom-xxs" for="textareaName">Description:</label>
-            <textarea class="form-control width-100% js-character-count__input" name="description" id="description" maxlength="300"></textarea>
+            <textarea class="form-control width-100% js-character-count__input" name="description" id="description" maxlength="500">{{ old('description') }}</textarea>
             <div class="character-count__helper character-count__helper--dynamic text-sm margin-top-xxxs" aria-live="polite" aria-atomic="true">
               Осталось <span class="js-character-count__counter"></span> символов
             </div>
-            <div class="character-count__helper character-count__helper--static text-sm margin-top-xxxs">Макс 300 символов</div>
+            <div class="character-count__helper character-count__helper--static text-sm margin-top-xxxs">Макс 500 символов</div>
           </div>
         </div>
       </div>
+  </fieldset>
+  </div>
 
-      <div class="grid gap-xxs margin-bottom-xs">
-        <div class="col-6@md">
-          <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
-                    <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать бренд:</label>
-
-                    <!-- select -->
-                    <select name="brand_id" id="brand_id" class="js-select-auto__select">
-                        @foreach ($brands as $k => $v)
-                        <option value="{{ $k }}">{{ $v }}</option>
-                        @endforeach
-
-                    </select>
-
-                    <!-- input -->
-                    <div class="select-auto__input-wrapper">
-                      <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать бренд" autocomplete="off">
-
-                      <div class="select-auto__input-icon-wrapper">
-                        <!-- arrow icon -->
-                        <svg class="icon" viewBox="0 0 16 16">
-                          <title>Open selection</title>
-                          <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                        </svg>
-
-                        <!-- close X icon -->
-                        <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
-                          <svg class="icon" viewBox="0 0 16 16">
-                            <title>Reset selection</title>
-                            <path d="M8,0a8,8,0,1,0,8,8A8,8,0,0,0,8,0Zm3.707,10.293a1,1,0,1,1-1.414,1.414L8,9.414,5.707,11.707a1,1,0,0,1-1.414-1.414L6.586,8,4.293,5.707A1,1,0,0,1,5.707,4.293L8,6.586l2.293-2.293a1,1,0,1,1,1.414,1.414L9.414,8Z" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- dropdown -->
-                    <div class="autocomplete__results select-auto__results js-autocomplete__results">
-                      <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
-                        <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
-                          <span class="text-truncate text-sm" data-autocomplete-label></span>
-                        </li>
-
-                        <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
-                          <span class="is-hidden" data-autocomplete-value></span>
-                          <div class="text-truncate" data-autocomplete-label></div>
-                        </li>
-
-                        <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
-                      </ul>
-                    </div>
-                    <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> нет результатов.</p>
-                  </div>
-        </div>
-
-        <div class="col-6@md">
-          <label class="form-label margin-bottom-xxs" for="position">Позиция для каталога</label>
-        <input class="form-control width-100%" type="number" name="position" id="position" min="0" max="300" step="1" value="1">
-        </div>
-      </div>
-
-      <section class="margin-y-md">
-
-      <div class="text-component">
-        <h4>Настройки публикации</h4>
-      </div>
+  <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset>
+      <legend class="form-legend margin-bottom-md">Настройки публикации</legend>
 
       <div class="tbl settings-tbl space-unit-em">
         <table class="tbl__table text-sm border-bottom border-2" aria-label="Настройки публикации">
@@ -134,7 +184,7 @@
                 <div class="flex justify-end">
 
                   <div class="switch ">
-                    <input class="switch__input" type="checkbox" id="popular" name="popular">
+                    <input class="switch__input" type="checkbox" id="popular" name="popular" value="1" @if (old('popular') == 1)checked @endif>
                     <label class="switch__label" for="popular" aria-hidden="true">Популярный</label>
                     <div class="switch__marker" aria-hidden="true"></div>
                   </div>
@@ -151,7 +201,7 @@
                 <div class="flex justify-end">
 
                   <div class="switch ">
-                    <input class="switch__input" type="checkbox" id="hit" name="hit">
+                    <input class="switch__input" type="checkbox" id="hit" name="hit" value="1" @if (old('hit') == 1)checked @endif>
                     <label class="switch__label" for="hit" aria-hidden="true">Лидер</label>
                     <div class="switch__marker" aria-hidden="true"></div>
                   </div>
@@ -168,7 +218,7 @@
                 <div class="flex justify-end">
 
                   <div class="switch ">
-                    <input class="switch__input" type="checkbox" id="published" name="published" checked>
+                    <input class="switch__input" type="checkbox" id="published" name="published" value="1" @if (old('published') == 1)checked @endif>
                     <label class="switch__label" for="published" aria-hidden="true">Опубликован</label>
                     <div class="switch__marker" aria-hidden="true"></div>
                   </div>
@@ -185,7 +235,7 @@
                 <div class="flex justify-end">
 
                   <div class="switch ">
-                    <input class="switch__input" type="checkbox" id="selection" name="selection">
+                    <input class="switch__input" type="checkbox" id="selection" name="selection" value="1" @if (old('selection') == 1)checked @endif>
                     <label class="switch__label" for="selection" aria-hidden="true">Участвует в подборе</label>
                     <div class="switch__marker" aria-hidden="true"></div>
                   </div>
@@ -197,26 +247,25 @@
           </tbody>
         </table>
       </div>
-    </section>
-
-    <section class="margin-y-md radius-md border padding-sm">
-      <div class="text-component margin-bottom-sm">
-        <h4>Описание браслета</h4>
-        <p class="text-md color-contrast-medium">
-          Нажать F11 для переключения редактора на полный экран, ESC для выхода.
-        </p>
-      </div>
-      <div class="margin-bottom-sm">
-        <textarea rows="20" class="form-control width-100% text-sm text" spellcheck="false" name="about" id="about">{{ old('about') }}</textarea>
-      </div>
-    </section>
     </fieldset>
+  </div>  
 
+  <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+    <section>
+      <div class="text-component padding-y-sm">
+        <h4>Описание браслета</h4>
+        <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
+      </div>
+      <div class="border radius-md padding-sm bg-gradient-3">
+        <label class="form-label margin-bottom-xxs sr-only" for="text">Описание браслета</label>
+        <textarea class="form-control width-100% text-sm text" spellcheck="false" name="about" id="about"></textarea>
+      </div>
+    </section>
+  </div>
 
-    <fieldset>
-    <div class="text-component margin-bottom-md text-center">
-      <h2>Плюсы - Минусы</h2>
-    </div>
+  <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-1">
+      <legend class="form-legend margin-bottom-md">Плюсы и минусы</legend>
      <div class="grid gap-xs margin-y-xs">
       <div class="col-6@md">
         <div class="js-repeater" data-repeater-input-name="plus[n]">
@@ -268,11 +317,13 @@
         <button class="btn btn--accent width-100% margin-top-xs js-repeater__add" type="button">+ Минус</button>
       </div>
       </div>
-
     </div>
-<div class="text-component margin-bottom-md text-center">
-          <h2>Покупателям нравится</h2>
-        </div>
+  </fieldset>
+  </div>
+
+  <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-2">
+      <legend class="form-legend margin-bottom-md">Покупателям нравится</legend>
     <div class="js-repeater" data-repeater-input-name="buyers_like[n]">
       <ul class="grid gap-xs js-repeater__list">
         <li class="js-repeater__item">
@@ -297,11 +348,11 @@
       <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить поле</button>
     </div>
     </fieldset>
+  </div>
 
-    <fieldset class="margin-y-md padding-bottom-md border-bottom">
-        <div class="text-component margin-bottom-md text-center">
-          <h2>Общие</h2>
-        </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-3">
+      <legend class="form-legend margin-bottom-md">Общие</legend>
 
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-4@md">
@@ -309,62 +360,76 @@
           <input class="form-control width-100%" type="number" name="year" id="year" min="2010" max="2022" step="1" value="2020">
         </div>
         <div class="col-4@md">
-          <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
-            <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать страну:</label>
+          <label class="form-label margin-bottom-xxxs" for="country">Выбрать страну:</label>
+                <div class="select">
+                  <select class="select__input form-control" name="country" id="country">
+                      <option value="">Выбрать из списка</option>
 
-            <!-- select -->
-            <select name="country" id="country" class="js-select-auto__select">
-                <option value="Россия">Россия</option>
-                <option value="Китай">Китай</option>
-                <option value="США">США</option>
-                <option value="Южная Корея">Южная Корея</option>
-                <option value="Канада">Канада</option>
-                <option value="Финляндия">Финляндия</option>
-                <option value="Япония">Япония</option>
-            </select>
+                      @foreach ($specs as $spec)
 
-            <!-- input -->
-            <div class="select-auto__input-wrapper">
-              <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать страну" autocomplete="off">
+                        @if ($spec->name == 'country')
 
-              <div class="select-auto__input-icon-wrapper">
-                <!-- arrow icon -->
-                <svg class="icon" viewBox="0 0 16 16">
-                  <title>Open selection</title>
-                  <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                </svg>
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
 
-                <!-- close X icon -->
-                <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
-                  <svg class="icon" viewBox="0 0 16 16">
-                    <title>Reset selection</title>
-                    <path d="M8,0a8,8,0,1,0,8,8A8,8,0,0,0,8,0Zm3.707,10.293a1,1,0,1,1-1.414,1.414L8,9.414,5.707,11.707a1,1,0,0,1-1.414-1.414L6.586,8,4.293,5.707A1,1,0,0,1,5.707,4.293L8,6.586l2.293-2.293a1,1,0,1,1,1.414,1.414L9.414,8Z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+                        @endif
 
-            <!-- dropdown -->
-            <div class="autocomplete__results select-auto__results js-autocomplete__results">
-              <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
-                <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
-                  <span class="text-truncate text-sm" data-autocomplete-label></span>
-                </li>
-
-                <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
-                  <span class="is-hidden" data-autocomplete-value></span>
-                  <div class="text-truncate" data-autocomplete-label></div>
-                </li>
-
-                <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
-              </ul>
-            </div>
-            <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> results found.</p>
-          </div>
+                      @endforeach
+                  </select>
+                  <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                </div>
         </div>
         <div class="col-4@md">
-          <label class="form-label margin-bottom-xxs" for="compatibility">Совместимость</label>
-          <input class="form-control width-100%" type="text" name="compatibility" id="compatibility">
+          <div class="autocomplete position-relative select-auto js-select-auto js-autocomplete" data-autocomplete-dropdown-visible-class="autocomplete--results-visible">
+              <label class="form-label margin-bottom-xxs" for="autocomplete-input-id">Выбрать бренд:</label>
+
+              <!-- select -->
+              <select name="brand_id" id="brand_id" class="js-select-auto__select">
+                  @foreach ($brands as $k => $v)
+                   <option value="{{ $k }}">{{ $v }}</option>
+                  @endforeach
+
+              </select>
+
+              <!-- input -->
+              <div class="select-auto__input-wrapper">
+                <input class="form-control js-autocomplete__input js-select-auto__input" type="text" name="autocomplete-input-id" id="autocomplete-input-id" placeholder="Выбрать бренд" autocomplete="off">
+
+                <div class="select-auto__input-icon-wrapper">
+                  <!-- arrow icon -->
+                  <svg class="icon" viewBox="0 0 16 16">
+                    <title>Open selection</title>
+                    <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                  </svg>
+
+                  <!-- close X icon -->
+                  <button class="reset select-auto__input-btn js-select-auto__input-btn js-tab-focus">
+                    <svg class="icon" viewBox="0 0 16 16">
+                      <title>Reset selection</title>
+                      <path d="M8,0a8,8,0,1,0,8,8A8,8,0,0,0,8,0Zm3.707,10.293a1,1,0,1,1-1.414,1.414L8,9.414,5.707,11.707a1,1,0,0,1-1.414-1.414L6.586,8,4.293,5.707A1,1,0,0,1,5.707,4.293L8,6.586l2.293-2.293a1,1,0,1,1,1.414,1.414L9.414,8Z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- dropdown -->
+              <div class="autocomplete__results select-auto__results js-autocomplete__results">
+                <ul id="autocomplete1" class="autocomplete__list js-autocomplete__list">
+                  <li class="select-auto__group-title padding-y-xs padding-x-sm color-contrast-medium is-hidden js-autocomplete__result" data-autocomplete-template="optgroup" role="presentation">
+                    <span class="text-truncate text-sm" data-autocomplete-label></span>
+                  </li>
+
+                  <li class="select-auto__option padding-y-xs padding-x-sm is-hidden js-autocomplete__result" data-autocomplete-template="option">
+                    <span class="is-hidden" data-autocomplete-value></span>
+                    <div class="text-truncate" data-autocomplete-label></div>
+                  </li>
+
+                  <li class="select-auto__no-results-msg padding-y-xs padding-x-sm text-truncate is-hidden js-autocomplete__result" data-autocomplete-template="no-results" role="presentation"></li>
+                </ul>
+              </div>
+              <p class="sr-only" aria-live="polite" aria-atomic="true"><span class="js-autocomplete__aria-results">0</span> нет результатов.</p>
+            </div>
         </div>
       </div>
       <div class="grid gap-xxs">
@@ -373,26 +438,54 @@
           <input class="form-control width-100%" type="text" name="assistant_app" id="assistant_app">
         </div>
 
+        <div class="col-4@md">
+          <label class="form-label margin-bottom-xxs" for="compatibility">Совместимость</label>
+            <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+              <select name="compatibility[]" id="compatibility[]" multiple>
+                @foreach ($specs as $spec)
+
+                    @if ($spec->name == 'compatibility')
+
+                      @foreach ($spec->value as $key => $value)
+                        <option value="{{ $value }}">{{ $key }}</option>
+                      @endforeach
+
+                    @endif
+
+                @endforeach
+              </select>
+              <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+            </div>
+          </div>
+
+        <div class="col-4@md">
+          <label class="form-label margin-bottom-xxs" for="position">Позиция для каталога (<span class="text-xs">На всякий случай</span>)</label>
+          <input class="form-control width-100%" type="number" name="position" id="position" min="0" max="300" step="1" value="1">
+        </div>
+
       </div>
     </fieldset>
+  </div>
 
-    <fieldset class="margin-y-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Конструкция</h2>
-      </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-4">
+      <legend class="form-legend margin-bottom-md">Конструкция</legend>
       <div class="grid gap-xxs">
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxs" for="material">Материал браслета/ремешка</label>
             <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
               <select name="material[]" id="material[]" multiple>
-                <option value="силикон">силикон</option>
-                <option value="металл">металл</option>
-                <option value="резина">резина</option>
-                <option value="кожа">кожа</option>
-                <option value="фторэластомер">фторэластомер</option>
-                <option value="текстиль">текстиль</option>
-                <option value="нейлон">нейлон</option>
-                <option value="термополиуретан">термополиуретан</option>
+                @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'material')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
               </select>
 
 
@@ -403,18 +496,17 @@
           <label class="form-label margin-bottom-xxs" for="colors">Возможные цвета</label>
             <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
               <select name="colors[]" id="colors[]" multiple>
-                <option value="черный">черный</option>
-                <option value="белый">белый</option>
-                <option value="голубой">голубой</option>
-                <option value="желтый">желтый</option>
-                <option value="зеленый">зеленый</option>
-                <option value="коричневый">коричневый</option>
-                <option value="красный">красный</option>
-                <option value="оранжевый">оранжевый</option>
-                <option value="розовый">розовый</option>
-                <option value="серый">серый</option>
-                <option value="синий">синий</option>
-                <option value="фиолетовый">фиолетовый</option>
+                @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'colors')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
               </select>
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
             </div>
@@ -426,15 +518,17 @@
           <label class="form-label margin-bottom-xxs" for="protect_stand">Стандарты защиты</label>
             <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
               <select name="protect_stand[]" id="protect_stand[]" multiple>
-                <option value="IP68">IP68</option>
-                <option value="IP57">IP57</option>
-                <option value="WR50">WR50</option>
-                <option value="IP67">IP67</option>
-                <option value="WR20">WR20</option>
-                <option value="WR30">WR30</option>
-                <option value="IPX5">IPX5</option>
-                <option value="IP65">IP65</option>
-                <option value="IP56">IP56</option>
+                @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'protection_stands')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
               </select>
 
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
@@ -444,12 +538,17 @@
           <label class="form-label margin-bottom-xxs" for="terms_of_use">Допустимые условия использования</label>
             <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
               <select name="terms_of_use[]" id="terms_of_use[]" multiple>
-                <option value="пыль">пыль</option>
-                <option value="брызги">брызги</option>
-                <option value="дождь">дождь</option>
-                <option value="мытье рук">мытье рук</option>
-                <option value="душ">душ</option>
-                <option value="плавание">плавание</option>
+                @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'terms_of_use')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
               </select>
               <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
             </div>
@@ -474,24 +573,29 @@
         </div>
       </div>
     </fieldset>
+  </div>
 
-    <fieldset class="margin-y-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Дисплей</h2>
-      </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-5">
+      <legend class="form-legend margin-bottom-md">Дисплей</legend>
 
       <div class="grid gap-xxs">
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxxs" for="disp_tech">Технология дисплея:</label>
           <div class="select">
             <select class="select__input form-control" name="disp_tech" id="disp_tech">
-                <option value="">Выбрать из списка</option>
-                <option value="AMOLED">AMOLED</option>
-                <option value="IPS">IPS</option>
-                <option value="TFT">TFT</option>
-                <option value="POLED">POLED</option>
-                <option value="OLED">OLED</option>
-                <option value="LCD">LCD</option>
+              <option value="">Выбрать</option>
+                @foreach ($specs as $spec)
+
+                  @if ($spec->name == 'display_tech')
+
+                    @foreach ($spec->value as $key => $value)
+                      <option value="{{ $value }}">{{ $key }}</option>
+                    @endforeach
+
+                  @endif
+
+                @endforeach
             </select>
             <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
           </div>
@@ -532,24 +636,28 @@
       </div>
 
     </fieldset>
+  </div>
 
-    <fieldset class="margin-y-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Модули и датчики</h2>
-      </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-6">
+      <legend class="form-legend margin-bottom-md">Модули и датчики</legend>
 
       <div class="grid gap-xxs margin-y-sm">
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxs" for="sensors">Датчики</label>
           <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
             <select name="sensors[]" id="sensors[]" multiple>
-              <option value="акселерометр">акселерометр</option>
-              <option value="GPS">GPS</option>
-              <option value="пульсометр">пульсометр</option>
-              <option value="гироскоп">гироскоп</option>
-              <option value="датчик освещенности">датчик освещенности</option>
-              <option value="термометр">термометр</option>
-              <option value="высотомер">высотомер</option>
+              @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'sensors')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
             </select>
             <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
           </div>
@@ -558,23 +666,46 @@
           <label class="form-label margin-bottom-xxs" for="other_interfaces">Другие интерфейсы</label>
           <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
             <select name="other_interfaces[]" id="other_interfaces[]" multiple>
-              <option value="Wi-Fi">Wi-Fi</option>
-              <option value="USB">USB</option>
-              <option value="BLE">BLE</option>
-              <option value="ANT+">ANT+</option>
-              <option value="BR">BR</option>
-              <option value="EDR">EDR</option>
+              @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'interfaces')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
             </select>
             <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
           </div>
         </div>
         <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="nfc">NFC</label>
-          <input class="form-control width-100%" type="text" name="nfc">
+          <label class="form-label margin-bottom-xxxs" for="nfc_inf">Информация об NFC</label>
+          <input class="form-control width-100%" type="text" name="nfc_inf">
         </div>
         <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="blue_ver">Весия Bluetooth</label>
-          <input class="form-control width-100%" type="number" name="blue_ver" min="2" max="8" step="0.1" value="">
+          <label class="form-label margin-bottom-xxxs" for="blue_ver">Версия Bluetooth:</label>
+            <div class="select">
+              <select class="select__input form-control" name="blue_ver" id="blue_ver">
+                  <option value="">Выбрать из списка</option>
+                  
+                  @foreach ($specs as $spec)
+
+                    @if ($spec->name == 'bluetooth_versions')
+
+                      @foreach ($spec->value as $key => $value)
+                        <option value="{{ $value }}">{{ $key }}</option>
+                      @endforeach
+
+                    @endif
+
+                  @endforeach
+
+              </select>
+              <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+            </div>
         </div>
       </div>
 
@@ -583,14 +714,17 @@
         <label for="gps">Встроенный GPS</label>&nbsp;&nbsp;&nbsp;
         <input class="checkbox" type="checkbox" id="vibration" name="vibration">
         <label for="vibration">Вибромотор</label>&nbsp;&nbsp;&nbsp;
+        <input class="checkbox" type="checkbox" id="nfc" name="nfc">
+        <label for="nfc">Есть NFC</label>&nbsp;&nbsp;&nbsp;
       </div>
 
     </fieldset>
+  </div>
 
-    <fieldset class="margin-y-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Связь</h2>
-      </div>
+
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-7">
+      <legend class="form-legend margin-bottom-md">Связь</legend>
 
       <div class="grid gap-xxs margin-y-sm">
         <div class="col-3@md">
@@ -602,28 +736,34 @@
           <input class="form-control width-100%" type="text" name="notification">
         </div>
         <div class="col-3@md">
-          <label class="form-label margin-bottom-xxxs" for="send_messages">Отправка сообщений с браслета</label>
-          <input class="form-control width-100%" type="text" name="send_messages">
+          <input class="checkbox" type="checkbox" id="send_messages" name="send_messages" value="1">
+                <label for="send_messages">Отправка сообщений с браслета</label>&nbsp;&nbsp;&nbsp;
         </div>
         <div class="col-3@md"></div>
       </div>
 
     </fieldset>
+  </div>
 
-    <fieldset class="margin-y-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Функционал</h2>
-      </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-8">
+      <legend class="form-legend margin-bottom-md">Функционал</legend>
       <div class="grid gap-xxs margin-y-sm">
         <div class="col-3@md">
           <label class="form-label margin-bottom-xxs" for="monitoring">Мониторинг</label>
           <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
             <select name="monitoring[]" id="monitoring[]" multiple>
-              <option value="пульса">пульса</option>
-              <option value="сна">сна</option>
-              <option value="калорий">калорий</option>
-              <option value="физической активности">физической активности</option>
-              <option value="стресса">стресса</option>
+              @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'monitoring')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}">{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
             </select>
             <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
           </div>
@@ -632,42 +772,17 @@
           <label class="form-label margin-bottom-xxs" for="training_modes">Тренировочные режимы</label>
           <div class="multi-select js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
             <select name="training_modes[]" id="training_modes[]" multiple>
-                <option value="ходьба на улице">ходьба на улице</option>
-                <option value="ходьба">ходьба</option>
-                <option value="велотренажер">велотренажер</option>
-                <option value="бег на улице">бег на улице</option>
-                <option value="бег">бег</option>
-                <option value="беговая дорожка">беговая дорожка</option>
-                <option value="ходьба на дорожке">ходьба на дорожке</option>
-                <option value="свободная тренировка">свободная тренировка</option>
-                <option value="скакалка">скакалка</option>
-                <option value="велосипед">велосипед</option>
-                <option value="подъем на гору">подъем на гору</option>
-                <option value="плавание">плавание</option>
-                <option value="пресс">пресс</option>
-                <option value="альпинизм">альпинизм</option>
-                <option value="скалолазание">скалолазание</option>
-                <option value="баскетбол">баскетбол</option>
-                <option value="футбол">футбол</option>
-                <option value="поход">поход</option>
-                <option value="горный спорт">горный спорт</option>
-                <option value="настольный теннис">настольный теннис</option>
-                <option value="эллиптический тренажер">эллиптический тренажер</option>
-                <option value="игра с мячом">игра с мячом</option>
-                <option value="90 альтернативных активностей">90 альтернативных активностей</option>
-                <option value="плавание в бассейне">плавание в бассейне</option>
-                <option value="жиросжигательный бег">жиросжигательный бег</option>
-                <option value="гребной тренажер">гребной тренажер</option>
-                <option value="плавание в открытом водоеме">плавание в открытом водоеме</option>
-                <option value="степпер">степпер</option>
-                <option value="бадминтон">бадминтон</option>
-                <option value="прыжки на скакалке">прыжки на скакалке</option>
-                <option value="йога">йога</option>
-                <option value="скручивания">скручивания</option>
-                <option value="выпады">выпады</option>
-                <option value="приседания">приседания</option>
-                <option value="прыжки звезда">прыжки звезда</option>
-                <option value="пилатес">пилатес</option>
+              @foreach ($specs as $spec)
+
+                @if ($spec->name == 'training_modes')
+
+                  @foreach ($spec->value as $key => $value)
+                    <option value="{{ $value }}">{{ $key }}</option>
+                  @endforeach
+
+                @endif
+
+              @endforeach
             </select>
             <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
           </div>
@@ -713,19 +828,28 @@
         </div>
       </div>
     </fieldset>
+  </div>
 
-    <fieldset class="margin-y-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Аккумулятор</h2>
-      </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <fieldset id="section-9">
+      <legend class="form-legend margin-bottom-md">Аккумулятор</legend>
       <div class="grid gap-xxs margin-y-sm">
         <div class="col-4@md">
           <label class="form-label margin-bottom-xxxs" for="type_battery">Тип:</label>
           <div class="select">
             <select class="select__input form-control" name="type_battery" id="type_battery">
                 <option value="">Выбрать из списка</option>
-                <option value="Li-Ion">Li-Ion</option>
-                <option value="Li-Pol">Li-Pol</option>
+                @foreach ($specs as $spec)
+
+                  @if ($spec->name == 'type_battery')
+
+                    @foreach ($spec->value as $key => $value)
+                      <option value="{{ $value }}">{{ $key }}</option>
+                    @endforeach
+
+                  @endif
+
+                @endforeach
             </select>
             <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
           </div>
@@ -756,11 +880,12 @@
       </div>
 
     </fieldset>
+  </div>
 
     {{-- Add ratings --}}
-    <section class="margin-bottom-md">
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
       <div class="text-component">
-        <h4>Добавить рейтинги в которые входит товар</h4>
+        <h4 id="section-10">Рейтинги</h4>
       </div>
       <div class="js-repeater" data-repeater-input-name="allratings[n]">
         <div class="js-repeater__list">
@@ -808,14 +933,14 @@
         </div>
         <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить рейтинг</button>
       </div>
-    </section>
+    </div>
     {{-- End add ratings --}}
 
 
     {{-- Add grades --}}
-    <section class="margin-bottom-md">
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
       <div class="text-component">
-        <h4>Оценки для браслета</h4>
+        <h4 id="section-11">Оценки для браслета</h4>
       </div>
       <div class="js-repeater" data-repeater-input-name="allgrades[n]">
         <div class="js-repeater__list">
@@ -837,10 +962,6 @@
               <label class="form-label margin-bottom-xxs sr-only" for="allgrades[0][value_grade]">Оценка:</label>
               <input class="form-control col" type="number" name="allgrades[0][value_grade]" id="allgrades[][value_grade]" min="0" max="10" step="0.1" placeholder="Оценка 1-10">
             </div>
-            <div class="col-3@md">
-              <label class="form-label margin-bottom-xxs" for="allgrades[0][position_grade]">Позиция:</label>
-                <input class="form-control" type="number" name="allgrades[0][position_grade]" id="allgrades[0][position_grade]" min="1" max="5" step="1" value="1">
-            </div>
             <div class="col-1@md">
               <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
                 <svg class="icon" viewBox="0 0 20 20">
@@ -859,14 +980,14 @@
         </div>
         <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить оценку</button>
       </div>
-    </section>
+    </div>
     {{-- End add grades --}}
 
 
     {{-- Add sellers --}}
-    <section class="margin-bottom-md">
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
       <div class="text-component">
-        <h4>Продавцы</h4>
+        <h4 id="section-12">Продавцы</h4>
       </div>
       <div class="js-repeater" data-repeater-input-name="allsellers[n]">
         <div class="js-repeater__list">
@@ -915,13 +1036,13 @@
         </div>
         <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить продавца</button>
       </div>
-    </section>
+    </div>
     {{-- End add sellers --}}
 
   {{-- Add images --}}
-    <section class="margin-bottom-md">
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
       <div class="text-component margin-y-sm">
-        <h4>Добавить изображения браслета</h4>
+        <h4 id="section-13">Добавить изображения браслета</h4>
         <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После публикации браслета можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
       </div>
 
@@ -936,15 +1057,14 @@
 
         <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
       </div>
-    </section>
+    </div>
 {{-- End add images --}}
 
-    <div class="text-right">
-      <button type="submit" class="btn btn--primary">Отправить</button>
-    </div>
+    <div class="margin-y-sm">
+            <button type="submit" class="btn btn--primary width-100%">Сохранить</button>
+          </div>
+
   </form>
-
-
 
 </div>
 

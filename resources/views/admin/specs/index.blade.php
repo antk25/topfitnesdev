@@ -26,11 +26,7 @@
             </th>
 
             <th class="tbl__cell text-left" scope="col">
-              <span class="font-semibold">Значение</span>
-            </th>
-
-            <th class="tbl__cell text-left" scope="col">
-              <span class="font-semibold">Slug</span>
+              <span class="font-semibold">Значения</span>
             </th>
 
             <th class="tbl__cell text-left" scope="col">
@@ -51,11 +47,9 @@
         </td>
 
         <td class="tbl__cell" role="cell">
-              {{ $spec->value }}
-        </td>
-
-        <td class="tbl__cell" role="cell">
-              {{ $spec->slug }}
+              @foreach ($spec->value as $key => $value)
+                @if(! $loop->last) {{ $key }}, @else {{ $key }} @endif
+              @endforeach
         </td>
 
         <td class="tbl__cell text-right" role="cell">

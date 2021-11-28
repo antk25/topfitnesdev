@@ -40,10 +40,12 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::get('/notifications', 'NotificationsController@index')->name('notifications');
     Route::post('/notifications/mark', 'NotificationsController@markNotification')->name('notifications.markNotification');
     Route::resource('/brands', 'BrandsController');
+    Route::post('/brands/import', 'BrandsController@import')->name('brands.import');
     Route::resource('/specs', 'SpecsController');
     Route::resource('/bracelets', 'BraceletsController');
+    Route::get('/bracelet/restore/{bracelet}', 'BraceletsController@restore')->name('bracelets.restore');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
-    Route::get('/import', 'BraceletsController@import');
+    Route::post('/import', 'BraceletsController@import')->name('bracelets.import');
     Route::post('importExcel', 'BraceletsController@importExcel');
     Route::resource('/ratings', 'RatingsController');
     Route::resource('/menuitems', 'MenuItemsController');

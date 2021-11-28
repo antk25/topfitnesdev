@@ -9,6 +9,7 @@ use App\Models\Spec;
 
 class SpecsController extends Controller
 {
+
      /**
      * Display a listing of the resource.
      *
@@ -40,15 +41,22 @@ class SpecsController extends Controller
      */
     public function store(Request $request)
     {
-        $slug = $request->slug;
+        // $slug = $request->slug;
 
-        $slug = Str::slug($slug, '-');
+        // $slug = Str::slug($slug, '-');
+
+        $allvalues = $request->allvalues;
+
+        $values = array_column($allvalues, 'value');
+
+        $slugs = array_map(array($this, 'slugAr') , $values);
+
+        $values = array_combine($values, $slugs);
 
         Spec::create([
             'device' => request('device'),
             'name' => request('name'),
-            'value' => request('value'),
-            'slug' => $slug,
+            'value' => $values,
         ]);
 
         return redirect()->route('specs.index');
@@ -79,15 +87,22 @@ class SpecsController extends Controller
     {
         $spec = Spec::find($id);
 
-        $slug = $request->slug;
+        // $slug = $request->slug;
 
-        $slug = Str::slug($slug, '-');
+        // $slug = Str::slug($slug, '-');
+
+
+        $allvalues = $request->allvalues;
+
+        $values = array_column($allvalues, 'value');
+        $slugs = array_column($allvalues, 'slug');
+
+        $values = array_combine($values, $slugs);
 
         $spec->update([
             'device' => request('device'),
             'name' => request('name'),
-            'value' => request('value'),
-            'slug' => $slug,
+            'value' => $values,
         ]);
 
         return back();
@@ -104,6 +119,13 @@ class SpecsController extends Controller
     {
         Spec::destroy($id);
 
-        return redirect()->route('admin.specs.index');
+        return redirect()->route('specs.index');
     }
+
+    private function slugAr($values)
+    {
+       return (Str::slug($values, '-')); 
+    }
+
+
 }

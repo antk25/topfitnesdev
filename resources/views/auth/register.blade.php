@@ -20,7 +20,7 @@
 
         <div class="margin-bottom-sm">
           <label class="form-label margin-bottom-xxxs" for="name">Имя</label>
-          <input class="form-control width-100%" type="text" name="name" id="name">
+          <input class="form-control width-100%" type="text" name="name" id="name" value="{{ old('name') }}">
           @error('name')
           <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
           @enderror
@@ -28,7 +28,7 @@
 
         <div class="margin-bottom-sm">
           <label class="form-label margin-bottom-xxxs" for="email">Email</label>
-          <input class="form-control width-100%" type="email" name="email" id="email" placeholder="email@myemail.com">
+          <input class="form-control width-100%" type="email" name="email" id="email" placeholder="email@myemail.com" value="{{ old('email') }}">
           @error('email')
           <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
           @enderror
@@ -47,12 +47,6 @@
           <label class="form-label margin-bottom-xxxs" for="password-confirm">Повторите пароль</label>
           <input class="form-control width-100%" type="password" name="password_confirmation" id="password-confirm" autocomplete="new-password">
 
-        </div>
-
-
-        <div class="margin-bottom-md">
-          <label class="form-label margin-bottom-xxxs" for="password-confirm">Повторите пароль</label>
-          <input class="form-control width-100%" type="password" name="password_confirmation" id="password-confirm" autocomplete="new-password">
         </div>
 
         <!-- input avatar -->

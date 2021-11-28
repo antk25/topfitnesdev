@@ -4,12 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Imports\BraceletsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
-use App\Models\Bracelet;
-use App\Models\Rating;
-use App\Models\Review;
-use App\Models\Grade;
-use App\Models\Seller;
+use App\Models\{Brand, Bracelet, Rating, Review, Grade, Seller, Spec};
 use Illuminate\Support\Str;
 use App\Http\Requests\Admin\BraceletRequest;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -18,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Support\Facades\Storage;
 
 class BraceletsController extends Controller
 {
@@ -30,9 +25,13 @@ class BraceletsController extends Controller
     public function index()
     {
 
-        $bracelets = Bracelet::with('brands')->paginate(20);
+        $bracelets = Bracelet::withTrashed()->with('brands')->paginate(20);
 
-        return view('admin.bracelets.index', compact('bracelets'));
+        $lastfile = head(Storage::files('import'));
+
+        // $lastfile = Storage::url($lastfile);
+
+        return view('admin.bracelets.index', compact('bracelets', 'lastfile'));
     }
 
     /**
@@ -50,7 +49,9 @@ class BraceletsController extends Controller
 
         $sellers = Seller::pluck('name', 'id')->all();
 
-        return view('admin.bracelets.create', compact('brands', 'ratings', 'grades', 'sellers'));
+        $specs = Spec::where('device', 'bracelet')->get();
+
+        return view('admin.bracelets.create', compact('brands', 'ratings', 'grades', 'sellers', 'specs'));
     }
 
     /**
@@ -74,17 +75,17 @@ class BraceletsController extends Controller
            'plus' => request('plus'),
            'minus' => request('minus'),
            'buyers_like' => request('buyers_like'),
-           'popular' => request('popular') == 'on' ? '1' : '0',
-           'hit' => request('hit') == 'on' ? '1' : '0',
-           'selection' => request('selection') == 'on' ? '1' : '0',
-           'published' => request('published') == 'on' ? '1' : '0',
+           'popular' => $request->has('popular') ? true : false,
+           'hit' => $request->has('hit') ? true : false,
+           'selection' => $request->has('selection') ? true : false,
+           'published' => $request->has('published') ? true : false,
            'year' => request('year'),
            'country' => request('country'),
            'compatibility' => request('compatibility'),
            'assistant_app' => request('assistant_app'),
            'material' => request('material'),
-           'replaceable_strap' => request('replaceable_strap') == 'on' ? '1' : '0',
-           'lenght_adj' => request('lenght_adj') == 'on' ? '1' : '0',
+           'replaceable_strap' => $request->has('replaceable_strap') ? true : false,
+           'lenght_adj' => $request->has('lenght_adj') ? true : false,
            'colors' => request('colors'),
            'protect_stand' => request('protect_stand'),
            'terms_of_use' => request('terms_of_use'),
@@ -93,36 +94,37 @@ class BraceletsController extends Controller
            'disp_tech' => request('disp_tech'),
            'disp_resolution' => request('disp_resolution'),
            'disp_ppi' => request('disp_ppi'),
-           'disp_sens' => request('disp_sens') == 'on' ? '1' : '0',
-           'disp_color' => request('disp_color') == 'on' ? '1' : '0',
+           'disp_sens' => $request->has('disp_sens') ? true : false,
+           'disp_color' => $request->has('disp_color') ? true : false,
            'disp_brightness' => request('disp_brightness'),
            'disp_col_depth' => request('disp_col_depth'),
-           'disp_aod' => request('disp_aod') == 'on' ? '1' : '0',
+           'disp_aod' => $request->has('disp_aod') ? true : false,
            'sensors' => request('sensors'),
-           'gps' => request('gps') == 'on' ? '1' : '0',
-           'vibration' => request('vibration') == 'on' ? '1' : '0',
+           'gps' => $request->has('gps') ? true : false,
+           'vibration' => $request->has('vibration') ? true : false,
            'blue_ver' => request('blue_ver'),
-           'nfc' => request('nfc'),
+           'nfc' => $request->has('nfc') ? true : false,
+           'nfc_inf' => request('nfc_inf'),
            'other_interfaces' => request('other_interfaces'),
            'phone_calls' => request('phone_calls'),
            'notification' => request('notification'),
-           'send_messages' => request('send_messages'),
+           'send_messages' => $request->has('send_messages') ? true : false,
            'monitoring' => request('monitoring'),
-           'heart_rate' => request('heart_rate') == 'on' ? '1' : '0',
-           'blood_oxy' => request('blood_oxy') == 'on' ? '1' : '0',
-           'blood_pressure' => request('blood_pressure') == 'on' ? '1' : '0',
-           'stress' => request('stress') == 'on' ? '1' : '0',
+           'heart_rate' => $request->has('heart_rate') ? true : false,
+           'blood_oxy' => $request->has('blood_oxy') ? true : false,
+           'blood_pressure' => $request->has('blood_pressure') ? true : false,
+           'stress' => $request->has('stress') ? true : false,
            'training_modes' => request('training_modes'),
-           'workout_recognition' => request('workout_recognition') == 'on' ? '1' : '0',
-           'inactivity_reminder' => request('inactivity_reminder') == 'on' ? '1' : '0',
-           'search_smartphone' => request('search_smartphone') == 'on' ? '1' : '0',
-           'smart_alarm' => request('smart_alarm') == 'on' ? '1' : '0',
-           'camera_control' => request('camera_control') == 'on' ? '1' : '0',
-           'player_control' => request('player_control') == 'on' ? '1' : '0',
-           'timer' => request('timer') == 'on' ? '1' : '0',
-           'stopwatch' => request('stopwatch') == 'on' ? '1' : '0',
-           'women_calendar' => request('women_calendar') == 'on' ? '1' : '0',
-           'weather_forecast' => request('weather_forecast') == 'on' ? '1' : '0',
+           'workout_recognition' => $request->has('workout_recognition') ? true : false,
+           'inactivity_reminder' => $request->has('inactivity_reminder') ? true : false,
+           'search_smartphone' => $request->has('search_smartphone') ? true : false,
+           'smart_alarm' => $request->has('smart_alarm') ? true : false,
+           'camera_control' => $request->has('camera_control') ? true : false,
+           'player_control' => $request->has('player_control') ? true : false,
+           'timer' => $request->has('timer') ? true : false,
+           'stopwatch' => $request->has('stopwatch') ? true : false,
+           'women_calendar' => $request->has('women_calendar') ? true : false,
+           'weather_forecast' => $request->has('weather_forecast') ? true : false,
            'additional_info' => request('additional_info'),
            'type_battery' => request('type_battery'),
            'capacity_battery' => request('capacity_battery'),
@@ -130,6 +132,8 @@ class BraceletsController extends Controller
            'real_time' => request('real_time'),
            'full_charge_time' => request('full_charge_time'),
            'charger' => request('charger'),
+           // 'avg_price' => $price_seller_avg,
+           // 'grade_bracelet' => $value_grade_avg
         ]);
 
         $files = request('files');
@@ -173,20 +177,44 @@ class BraceletsController extends Controller
             }
         }
 
+        /**
+         * Подготовка данных по оценкам для прикрепления их к товару
+         *
+         * Используется PHP функция для работы с массивами array_column
+         * https://www.php.net/manual/ru/function.array-column.php
+         *
+         */
+
 
         $allgrades = $request->input('allgrades');
 
         if ($allgrades != '') {
             $grades = array_column($allgrades, 'grades');
-            $position_grade = array_column($allgrades, 'position_grade');
             $value_grade = array_column($allgrades, 'value_grade');
+
+
+        /**
+        * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
+        *
+        * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
+        *
+        */
 
             for ($grade=0; $grade < count($grades); $grade++) {
                 if ($grades[$grade] != '') {
-                    $bracelet->grades()->attach($grades[$grade], ['position' => $position_grade[$grade], 'value' => $value_grade[$grade]]);
+                    $bracelet->grades()->attach($grades[$grade], ['value' => $value_grade[$grade]]);
                 }
             }
         }
+
+
+        /**
+         * Подготовка данных по продавцам для прикрепления их к товару
+         *
+         * Используется PHP функция для работы с массивами array_column
+         * https://www.php.net/manual/ru/function.array-column.php
+         *
+         */
 
         $allsellers = $request->input('allsellers');
 
@@ -196,6 +224,14 @@ class BraceletsController extends Controller
             $price_seller = array_column($allsellers, 'price_seller');
             $old_price_seller = array_column($allsellers, 'old_price_seller');
 
+
+        /**
+        * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
+        *
+        * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
+        *
+        */
+
             for ($seller=0; $seller < count($sellers); $seller++) {
                 if ($sellers[$seller] != '') {
                     $bracelet->sellers()->attach($sellers[$seller], ['link' => $link_seller[$seller], 'price' => $price_seller[$seller], 'old_price' => $old_price_seller[$seller]]);
@@ -204,8 +240,16 @@ class BraceletsController extends Controller
         }
 
 
+        if ($bracelet) {
+          return redirect()
+                 ->route('bracelets.edit', $bracelet->id)
+                 ->with(['success' => 'Новый браслет успешно добавлен. Отредактируйте данные, если нужно']);
+           } else {
+            return back()
+                    ->withErrors(['msg' => 'Ошибка сохранения'])
+                    ->withInput();
+           }
 
-        return redirect()->route('bracelets.index');
     }
 
     /**
@@ -232,7 +276,9 @@ class BraceletsController extends Controller
 
         $media = $bracelet->getMedia('bracelet');
 
-        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings', 'grades', 'sellers', 'reviews', 'media'));
+        $specs = Spec::where('device', 'bracelet')->get();
+
+        return view('admin.bracelets.edit', compact('brands', 'bracelet', 'braceletbrand', 'ratings', 'grades', 'sellers', 'reviews', 'media', 'specs'));
     }
 
     /**
@@ -248,7 +294,23 @@ class BraceletsController extends Controller
         $bracelet = Bracelet::find($id);
 
 
+        if (empty($bracelet)) {
+            return back()
+                ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
+                ->withInput();
+        }
+
+
+        // $request->merge(["avg_price" => $avg_price]);
+
+
+        // работа обсервера
+
+        // Обновление/добавление рейтингов, в которых присутствует браслет
+
         $allratings = $request->input('allratings');
+
+        // $allratings = array_filter($allratings, array($this, 'delNull'));
 
         if ($allratings != '') {
             $ratings = array_column($allratings, 'ratings');
@@ -267,9 +329,16 @@ class BraceletsController extends Controller
                 return ['position' => $p, 'text_rating' => $t, 'head_rating' => $h];
             }, $position_rating, $text_rating, $head_rating);
 
+
             $data = array_combine($ratings, $extra);
 
-            $bracelet->ratings()->sync($data);
+            if(!is_null($ratings[0]))
+            {
+
+                $bracelet->ratings()->sync($data);
+
+            }
+
         }
         // Для того, чтобы при удалении всех рейтингов - были удалены все связи, обязательно нужен след код:
         else {
@@ -278,20 +347,36 @@ class BraceletsController extends Controller
         }
 
 
+        // Обновление/Добавление различных оценок для браслета
+
         $allgrades = $request->input('allgrades');
+
+        // $allgrades = array_filter($allgrades, array($this, 'delNull'));
 
         if ($allgrades != '') {
             $grades = array_column($allgrades, 'grades');
-            $position_grade = array_column($allgrades, 'position_grade');
             $value_grade = array_column($allgrades, 'value_grade');
 
-            $extra2 = array_map(function($v, $p){
-                return ['value' => $v, 'position' => $p];
-            }, $value_grade, $position_grade);
+            $extra2 = array_map(function($v){
+                return ['value' => $v];
+            }, $value_grade);
 
             $data2 = array_combine($grades, $extra2);
 
-            $bracelet->grades()->sync($data2);
+
+            if(!is_null($grades[0]))
+            {
+
+                $bracelet->grades()->sync($data2);
+                // Вычисление среднего рейтинга по оценкам grades
+                $value_grade_col = collect($value_grade);
+
+                $value_grade_avg = $value_grade_col->avg();
+
+                $bracelet->update([
+                    'grade_bracelet' => $value_grade_avg
+                ]);
+            }
 
         }
         // Для того, чтобы при удалении всех оценок - были удалены все связи, обязательно нужен след код:
@@ -300,7 +385,12 @@ class BraceletsController extends Controller
             $bracelet->grades()->detach($grades);
         }
 
+        // Обновление/Добавление продавцов и цен для браслета
+
         $allsellers = $request->input('allsellers');
+
+
+        // $allsellers = array_filter($allsellers, array($this, 'delNull'));
 
         if ($allsellers != '') {
             $sellers = array_column($allsellers, 'sellers');
@@ -314,7 +404,21 @@ class BraceletsController extends Controller
 
             $data3 = array_combine($sellers, $extra3);
 
-            $bracelet->sellers()->sync($data3);
+            if(!is_null($sellers[0]))
+            {
+
+                $bracelet->sellers()->sync($data3);
+
+                // Вычисление средней цены по продавцам. Будет сразу записано в соотеветствующий столбец
+                $price_seller_col = collect($price_seller);
+
+                $price_seller_avg = $price_seller_col->avg();
+
+                $bracelet->update([
+                    'avg_price' => $price_seller_avg
+                ]);
+            }
+
         }
         // Для того, чтобы при удалении всех продавцов - были удалены все связи, обязательно нужен след код:
         else {
@@ -322,92 +426,11 @@ class BraceletsController extends Controller
             $bracelet->sellers()->detach($sellers);
         }
 
-        // Вычисление средней цены по продавцам
-        $avg_price = collect($request->price);
-
-        $avg_price = $avg_price->avg();
-
-        // Вычисление среднего рейтинга по оценкам grades
-        $avg_grade = collect($request->value);
-
-        $avg_grade = $avg_grade->avg();
-
-        $bracelet->update([
-           'name' => request('name'),
-           'slug' => request('slug'),
-           'title' => request('title'),
-           'subtitle' => request('subtitle'),
-           'description' => request('description'),
-           'about' => request('about'),
-           'brand_id' => request('brand_id'),
-           'position' => request('position'),
-           'plus' => request('plus'),
-           'minus' => request('minus'),
-           'buyers_like' => request('buyers_like'),
-           'popular' => request('popular') == 'on' ? '1' : '0',
-           'hit' => request('hit') == 'on' ? '1' : '0',
-           'selection' => request('selection') == 'on' ? '1' : '0',
-           'published' => request('published') == 'on' ? '1' : '0',
-           'year' => request('year'),
-           'country' => request('country'),
-           'compatibility' => request('compatibility'),
-           'assistant_app' => request('assistant_app'),
-           'material' => request('material'),
-           'replaceable_strap' => request('replaceable_strap') == 'on' ? '1' : '0',
-           'lenght_adj' => request('lenght_adj') == 'on' ? '1' : '0',
-           'colors' => request('colors'),
-           'protect_stand' => request('protect_stand'),
-           'terms_of_use' => request('terms_of_use'),
-           'dimensions' => request('dimensions'),
-           'disp_diag' => request('disp_diag'),
-           'disp_tech' => request('disp_tech'),
-           'disp_resolution' => request('disp_resolution'),
-           'disp_ppi' => request('disp_ppi'),
-           'disp_sens' => request('disp_sens') == 'on' ? '1' : '0',
-           'disp_color' => request('disp_color') == 'on' ? '1' : '0',
-           'disp_brightness' => request('disp_brightness'),
-           'disp_col_depth' => request('disp_col_depth'),
-           'disp_aod' => request('disp_aod') == 'on' ? '1' : '0',
-           'sensors' => request('sensors'),
-           'gps' => request('gps') == 'on' ? '1' : '0',
-           'vibration' => request('vibration') == 'on' ? '1' : '0',
-           'blue_ver' => request('blue_ver'),
-           'nfc' => request('nfc'),
-           'other_interfaces' => request('other_interfaces'),
-           'phone_calls' => request('phone_calls'),
-           'notification' => request('notification'),
-           'send_messages' => request('send_messages'),
-           'monitoring' => request('monitoring'),
-           'heart_rate' => request('heart_rate') == 'on' ? '1' : '0',
-           'blood_oxy' => request('blood_oxy') == 'on' ? '1' : '0',
-           'blood_pressure' => request('blood_pressure') == 'on' ? '1' : '0',
-           'stress' => request('stress') == 'on' ? '1' : '0',
-           'training_modes' => request('training_modes'),
-           'workout_recognition' => request('workout_recognition') == 'on' ? '1' : '0',
-           'inactivity_reminder' => request('inactivity_reminder') == 'on' ? '1' : '0',
-           'search_smartphone' => request('search_smartphone') == 'on' ? '1' : '0',
-           'smart_alarm' => request('smart_alarm') == 'on' ? '1' : '0',
-           'camera_control' => request('camera_control') == 'on' ? '1' : '0',
-           'player_control' => request('player_control') == 'on' ? '1' : '0',
-           'timer' => request('timer') == 'on' ? '1' : '0',
-           'stopwatch' => request('stopwatch') == 'on' ? '1' : '0',
-           'women_calendar' => request('women_calendar') == 'on' ? '1' : '0',
-           'weather_forecast' => request('weather_forecast') == 'on' ? '1' : '0',
-           'additional_info' => request('additional_info'),
-           'type_battery' => request('type_battery'),
-           'capacity_battery' => request('capacity_battery'),
-           'standby_time' => request('standby_time'),
-           'real_time' => request('real_time'),
-           'full_charge_time' => request('full_charge_time'),
-           'charger' => request('charger'),
-           'avg_price' => $avg_price,
-           'grade_bracelet' => $avg_grade
-        ]);
 
         $files = request('files');
         $nameimg = request('nameimg');
 
-        if ($files != '' && $nameimg[0] != '') {
+        if ($files != '' && isset($nameimg[0])) {
             $lastbracelet = Bracelet::find($bracelet->id);
             $i = 0;
             foreach ($files as $file) {
@@ -425,7 +448,89 @@ class BraceletsController extends Controller
         }
 
 
-        return redirect()->route('bracelets.index');
+        $result = $bracelet->update([
+           'name' => request('name'),
+           'slug' => request('slug'),
+           'title' => request('title'),
+           'subtitle' => request('subtitle'),
+           'description' => request('description'),
+           'about' => request('about'),
+           'brand_id' => request('brand_id'),
+           'position' => request('position'),
+           'plus' => request('plus'),
+           'minus' => request('minus'),
+           'buyers_like' => request('buyers_like'),
+           'popular' => $request->has('popular') ? true : false,
+           'hit' => $request->has('hit') ? true : false,
+           'selection' => $request->has('selection') ? true : false,
+           'published' => $request->has('published') ? true : false,
+           'year' => request('year'),
+           'country' => request('country'),
+           'compatibility' => request('compatibility'),
+           'assistant_app' => request('assistant_app'),
+           'material' => request('material'),
+           'replaceable_strap' => $request->has('replaceable_strap') ? true : false,
+           'lenght_adj' => $request->has('lenght_adj') ? true : false,
+           'colors' => request('colors'),
+           'protect_stand' => request('protect_stand'),
+           'terms_of_use' => request('terms_of_use'),
+           'dimensions' => request('dimensions'),
+           'disp_diag' => request('disp_diag'),
+           'disp_tech' => request('disp_tech'),
+           'disp_resolution' => request('disp_resolution'),
+           'disp_ppi' => request('disp_ppi'),
+           'disp_sens' => $request->has('disp_sens') ? true : false,
+           'disp_color' => $request->has('disp_color') ? true : false,
+           'disp_brightness' => request('disp_brightness'),
+           'disp_col_depth' => request('disp_col_depth'),
+           'disp_aod' => $request->has('disp_aod') ? true : false,
+           'sensors' => request('sensors'),
+           'gps' => $request->has('gps') ? true : false,
+           'vibration' => $request->has('vibration') ? true : false,
+           'blue_ver' => request('blue_ver'),
+           'nfc' => $request->has('nfc') ? true : false,
+           'nfc_inf' => request('nfc_inf'),
+           'other_interfaces' => request('other_interfaces'),
+           'phone_calls' => request('phone_calls'),
+           'notification' => request('notification'),
+           'send_messages' => $request->has('send_messages') ? true : false,
+           'monitoring' => request('monitoring'),
+           'heart_rate' => $request->has('heart_rate') ? true : false,
+           'blood_oxy' => $request->has('blood_oxy') ? true : false,
+           'blood_pressure' => $request->has('blood_pressure') ? true : false,
+           'stress' => $request->has('stress') ? true : false,
+           'training_modes' => request('training_modes'),
+           'workout_recognition' => $request->has('workout_recognition') ? true : false,
+           'inactivity_reminder' => $request->has('inactivity_reminder') ? true : false,
+           'search_smartphone' => $request->has('search_smartphone') ? true : false,
+           'smart_alarm' => $request->has('smart_alarm') ? true : false,
+           'camera_control' => $request->has('camera_control') ? true : false,
+           'player_control' => $request->has('player_control') ? true : false,
+           'timer' => $request->has('timer') ? true : false,
+           'stopwatch' => $request->has('stopwatch') ? true : false,
+           'women_calendar' => $request->has('women_calendar') ? true : false,
+           'weather_forecast' => $request->has('weather_forecast') ? true : false,
+           'additional_info' => request('additional_info'),
+           'type_battery' => request('type_battery'),
+           'capacity_battery' => request('capacity_battery'),
+           'standby_time' => request('standby_time'),
+           'real_time' => request('real_time'),
+           'full_charge_time' => request('full_charge_time'),
+           'charger' => request('charger'),
+           // 'avg_price' => $price_seller_avg,
+           // 'grade_bracelet' => $value_grade_avg
+        ]);
+
+        if ($result) {
+          return redirect()
+                 ->route('bracelets.edit', $bracelet->id)
+                 ->with(['success' => 'Внесенные изменения были сохранены']);
+           } else {
+            return back()
+                    ->withErrors(['msg' => 'Ошибка сохранения'])
+                    ->withInput();
+           }
+
     }
 
     /**
@@ -436,10 +541,32 @@ class BraceletsController extends Controller
      */
     public function destroy($id)
     {
-        Bracelet::destroy($id);
+        $bracelet = Bracelet::withTrashed()->find($id);
+
+        if ($bracelet->trashed())
+            {
+                $bracelet->forceDelete();
+            }
+        else
+            {
+                $bracelet->delete();
+            }
+
 
         return back();
     }
+
+    public function restore($id)
+    {
+
+        $bracelet = Bracelet::onlyTrashed()->find($id);
+
+        $bracelet->restore();
+
+        return back();
+
+    }
+
 
 
     public function imgdelete(Request $request) {
@@ -468,7 +595,7 @@ class BraceletsController extends Controller
 
     }
 
-    public function gradeUpdate() {
+    protected function gradeUpdate() {
 
         $bracelets = Bracelet::with('grades')->select('id')->get();
 
@@ -487,11 +614,32 @@ class BraceletsController extends Controller
 
     }
 
-    public function import()
+    public function import(Request $request)
     {
-        Excel::import(new BraceletsImport, 'all_bracelets_1.xlsx');
 
-        return back()->with('success', 'Завершено!');
+       $request->validate([
+        'importFile' => 'required',
+       ]);
+
+       $file = $request->file('importFile')->store('import');
+
+       $import = new BraceletsImport();
+
+       $import->import($file);
+
+
+       if ($import->failures()->isNotEmpty())
+       {
+           return back()->withFailures($import->failures());
+       }
+
+
+       return back()->with('success', 'Завершено!');
     }
+
+    // private function delNull($item)
+    // {
+    //     return $item != null;
+    // }
 }
 

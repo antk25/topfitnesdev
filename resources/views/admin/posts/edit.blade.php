@@ -58,7 +58,7 @@
       </div>
 
 
-      <section class="margin-y-sm">
+    <section class="margin-y-sm">
         <div class="text-component padding-y-sm">
           <h4>Основной контент</h4>
           <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>

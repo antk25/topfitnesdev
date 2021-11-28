@@ -14,17 +14,18 @@ class CreateBraceletsTable extends Migration
     public function up()
     {
         Schema::create('bracelets', function (Blueprint $table) {
-            $table->id();            
+            $table->id();
             $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->string('title', 200);
-            $table->string('subtitle', 200)->nullable();
+            $table->string('title', 300);
+            $table->string('subtitle', 300)->nullable();
             $table->string('description', 1000)->nullable();
             $table->text('about')->nullable();
-            $table->integer('brand_id')->unsinged();
+            $table->unsignedBigInteger('brand_id');
             $table->integer('position')->unsigned()->nullable();
             $table->float('rating_bracelet', 4, 2)->unsinged()->nullable();
             $table->float('grade_bracelet', 4, 2)->unsinged()->nullable();
+            $table->decimal('avg_price', $precision = 18, $scale = 2)->nullable();
             $table->json('plus')->nullable();
             $table->json('minus')->nullable();
             $table->json('buyers_like')->nullable();
@@ -33,7 +34,7 @@ class CreateBraceletsTable extends Migration
             $table->boolean('selection')->default(0);
             $table->integer('year')->unsinged()->nullable();
             $table->string('country')->nullable();
-            $table->string('compatibility')->nullable();
+            $table->json('compatibility')->nullable();
             $table->string('assistant_app')->nullable();
             $table->json('material')->nullable();
             $table->boolean('replaceable_strap')->default(0);
@@ -55,16 +56,17 @@ class CreateBraceletsTable extends Migration
             $table->json('sensors')->nullable();
             $table->boolean('gps')->default(0);
             $table->boolean('vibration')->default(0);
-            $table->float('blue_ver', 2, 1)->nullable()->unsinged();
-            $table->string('nfc')->nullable();
+            $table->string('blue_ver')->nullable();
+            $table->boolean('nfc')->default(0)->nullable();
+            $table->string('nfc_inf')->nullable();
             $table->json('other_interfaces')->nullable();
-            $table->string('phone_calls')->nullable();
-            $table->string('notification')->nullable();
-            $table->string('send_messages')->nullable();
+            $table->json('phone_calls')->nullable();
+            $table->json('notification')->nullable();
+            $table->boolean('send_messages')->default(0);
             $table->json('monitoring')->nullable();
-            $table->boolean('heart_rate')->default(false);
-            $table->boolean('blood_oxy')->default(false);
-            $table->boolean('blood_pressure')->default(false);
+            $table->boolean('heart_rate')->default(0);
+            $table->boolean('blood_oxy')->default(0);
+            $table->boolean('blood_pressure')->default(0);
             $table->boolean('stress')->default(0);
             $table->json('training_modes')->nullable();
             $table->boolean('workout_recognition')->default(0);
@@ -77,18 +79,21 @@ class CreateBraceletsTable extends Migration
             $table->boolean('stopwatch')->default(0);
             $table->boolean('women_calendar')->default(0);
             $table->boolean('weather_forecast')->default(0);
-            $table->string('additional_info')->nullable();
+            $table->string('additional_info', 2000)->nullable();
             $table->string('type_battery')->nullable();
             $table->integer('capacity_battery')->nullable()->unsinged();
             $table->integer('standby_time')->nullable()->unsinged();
-            $table->string('real_time')->nullable();
+            $table->integer('real_time')->nullable();
             $table->integer('full_charge_time')->nullable()->unsinged();
             $table->string('charger')->nullable();
+            $table->json('destination')->nullable();
             $table->boolean('published')->default(1);
             $table->timestamps();
-        });
-    }
-    
+            $table->softDeletes();
+    });
+
+}
+
     /**
      * Reverse the migrations.
      *

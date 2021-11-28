@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Http\Requests\Admin\BrandRequest;
+use App\Imports\BrandsImport;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
 
 class BrandsController extends Controller
 {
@@ -18,7 +20,10 @@ class BrandsController extends Controller
     public function index()
     {
         $brands = Brand::paginate(20);
-        return view('admin.brands.index', compact('brands'));
+
+        $lastfile = head(Storage::files('import/brands'));
+
+        return view('admin.brands.index', compact('brands', 'lastfile'));
     }
 
     /**
@@ -64,7 +69,7 @@ class BrandsController extends Controller
     public function edit($id)
     {
         $brand = Brand::find($id);
-        
+
         return view('admin.brands.edit', compact('brand'));
     }
 
@@ -93,6 +98,23 @@ class BrandsController extends Controller
         return redirect()->route('brands.index');
     }
 
+    public function import(Request $request)
+    {
+        $file = $request->file('importFile')->store('import/brands');
+
+        $import = new BrandsImport();
+
+        $import->import($file);
+
+
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
+        }
+
+        return back()->with('success', 'Завершено!');
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -104,7 +126,7 @@ class BrandsController extends Controller
         // $brand = Brand::find($id);
         // $brand->delete();
         Brand::destroy($id);
-        
+
         return redirect()->route('brands.index');
     }
 }
