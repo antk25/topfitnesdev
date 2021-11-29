@@ -137,6 +137,13 @@
             </div>
 
 
+            <select name="brand" wire:model="brand">
+                <option value="">Выбрать бренд</option>
+                @foreach ($brands as $v => $k)
+                   <option value="{{ $k }}">{{ $v }}</option>
+                @endforeach
+            </select>
+
 <section>
     {{-- <div class="grid gap-sm text-sm border padding-sm">
         <div class="col-3@md">

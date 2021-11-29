@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
+use App\Filters\CheckedAdminFilter;
+use App\Filters\NameFilter;
+use App\Filters\PublishedFilter;
 use App\Imports\BraceletsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
@@ -14,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Pricecurrent\LaravelEloquentFilters\EloquentFilters;
 
 class BraceletsController extends Controller
 {
@@ -22,10 +27,14 @@ class BraceletsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $bracelets = Bracelet::withTrashed()->with('brands')->paginate(20);
+        $filters = EloquentFilters::make([new CheckedAdminFilter($request->published, $request->selection),
+                                          new NameFilter($request->name)
+                                        ]);
+
+        $bracelets = Bracelet::withTrashed()->with('brands')->filter($filters)->paginate(20);
 
         $lastfile = head(Storage::files('import'));
 

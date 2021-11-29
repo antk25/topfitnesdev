@@ -7,6 +7,7 @@ use App\ResourceFiltering\ProductFilters\ProductSearchFilter;
 use App\ResourceFiltering\ProductFilters\ProductMinRatingsFilter;
 use App\ResourceFiltering\ProductFilters\ProductPriceRangeFilter;
 use App\ResourceFiltering\ProductFilters\ProductCheckedFilter;
+use App\ResourceFiltering\ProductFilters\ProductCheckedFilterAdmin;
 use App\ResourceFiltering\ProductFilters\ProductJsonFieldsFilter;
 use App\ResourceFiltering\ProductFilters\BraceletPriceRangeSelect;
 
@@ -44,12 +45,11 @@ class ProductFiltersPreset
         // ]);
     // }
 
-//    public function getForAdmin($request): QueryFilters
-//    {
-//        return new QueryFilters([
-//            new ProductSearchFilter($request->search),
-//            new ProductMinRatingsFilter($request->min_rating),
-//            new ProductPriceRangeFilter($request->min_price, $request->max_price),
-//        ]);
-//    }
+   public function getForAdmin($search, $published, $selection): QueryFilters
+   {
+       return new QueryFilters([
+           new ProductSearchFilter($search),
+           new ProductCheckedFilterAdmin($published, $selection),
+       ]);
+   }
 }

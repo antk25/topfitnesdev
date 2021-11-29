@@ -86,6 +86,40 @@
 
     @if (count($bracelets))
 
+    <form action="">
+      <div class="flex gap-xxs">
+        <div>
+          <ul class="flex gap-xs text-sm margin-top-xxs">
+            <li>
+             <input class="checkbox" type="checkbox" name="selection" value="1" id="selection" @if (request('selection') == 1)
+           checked
+          @endif>
+             <label for="selection">Участвует в подборе</label>
+            </li>
+            <li>
+             <input class="checkbox" type="checkbox" name="published" value="1" id="published" @if (request('published') == 1)
+           checked
+          @endif>
+             <label for="published">Опубликован</label>
+            </li>
+
+         </ul>
+        </div>
+
+        <div>
+
+          <input class="form-control" type="text" name="name" id="name" @if (request('name'))
+            value="{{ request('name') }}" @endif placeholder="Поиск по названию">
+        </div>
+
+        <div>
+          <button class="btn btn--primary btn--sm" type="submit">Применить фильтр</button>
+        </div>
+
+      </div>
+
+    </form>
+
     <div class="tbl text-sm">
       <table class="tbl__table border-bottom" aria-label="Таблица фитнес-браслетов">
         <thead class="tbl__header border-bottom">

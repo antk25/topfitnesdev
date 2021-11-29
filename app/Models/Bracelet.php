@@ -11,12 +11,13 @@ use Illuminate\Support\Str;
 use App\ResourceFiltering\QueryFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Pricecurrent\LaravelEloquentFilters\Filterable;
 use Spatie\Image\Image;
 
 
 class Bracelet extends Model implements HasMedia
 {
-    use InteractsWithMedia, SoftDeletes;
+    use InteractsWithMedia, SoftDeletes, Filterable;
 
     protected $fillable = [
            'name',
@@ -206,9 +207,9 @@ class Bracelet extends Model implements HasMedia
     }
 
 
-    public function scopeFilter($query, QueryFilters $filters)
-    {
-        return $filters->apply($query);
-    }
+    // public function scopeFilter($query, QueryFilters $filters)
+    // {
+    //     return $filters->apply($query);
+    // }
 
 }

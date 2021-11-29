@@ -5,4 +5,5 @@
 @livewire('bracelets')
 
 @endsection
+
 @section('footerScripts')

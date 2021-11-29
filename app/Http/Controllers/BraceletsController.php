@@ -5,11 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Bracelet;
 use App\Models\Brand;
-use App\ResourceFiltering\QueryFilters;
-use App\ResourceFiltering\ProductFilters\ProductSearchFilter;
-use App\ResourceFiltering\ProductFilters\ProuctFiltersPreset;
-use App\ResourceFiltering\ProductFilters\ProductMinRatingsFilter;
-use App\ResourceFiltering\ProductFilters\ProductPriceRangeFilter;
 
 class BraceletsController extends Controller
 {
@@ -20,7 +15,7 @@ class BraceletsController extends Controller
     //     return view('bracelets.index', compact('bracelets'));
     // }
 
-    public function index(Request $request)
+    public function index()
     {
 
         return view('bracelets.index');
