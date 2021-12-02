@@ -162,7 +162,7 @@
             </div>
           @endif
           {{-- Конец сообщения об успешности сохранения --}}
-            
+
 
             <div class="grid gap-xxs margin-bottom-xs">
               <div class="col-6@md">
@@ -306,7 +306,7 @@
           <textarea class="form-control width-100% text-sm text" spellcheck="false" name="about" id="about">{{ $bracelet->about }}</textarea>
         </div>
       </section>
-    </div>  
+    </div>
 
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
@@ -588,6 +588,25 @@
                 <label class="form-label margin-bottom-xxs" for="avg_price">Средняя цена (<span class="text-xs">Будет обновлена на основе добавленных продавцов</span>)</label>
                 <input class="form-control width-100%" type="text" name="avg_price" id="avg_price" value="{{ $bracelet->avg_price }}">
               </div>
+              <div class="col-4@md">
+                <label class="form-label margin-bottom-xxs" for="destination">Предназначение (для подбора)</label>
+                <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрать" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                  <select name="destination[]" id="destination[]" multiple>
+                    @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'destination')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}" {{ in_array($value, $bracelet->destination) ? 'selected' : '' }} >{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
+                  </select>
+                  <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                </div>
+              </div>
             </div>
           </fieldset>
         </div>
@@ -791,7 +810,7 @@
                         @endif
 
                     @endforeach
-                    
+
                   </select>
                   <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                 </div>
@@ -825,7 +844,7 @@
                 <div class="select">
                   <select class="select__input form-control" name="blue_ver" id="blue_ver">
                       <option value="">Выбрать из списка</option>
-                      
+
                       @foreach ($specs as $spec)
 
                         @if ($spec->name == 'bluetooth_versions')
@@ -841,7 +860,7 @@
                   </select>
                   <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
                 </div>
-                
+
               </div>
             </div>
 
@@ -867,9 +886,28 @@
                 <input class="form-control width-100%" type="text" name="phone_calls" value="{{ $bracelet->phone_calls }}">
               </div>
               <div class="col-3@md">
-                <label class="form-label margin-bottom-xxxs" for="notification">Уведомления</label>
-                <input class="form-control width-100%" type="text" name="notification" value="{{ $bracelet->notification }}">
+                <label class="form-label margin-bottom-xxs" for="notification">Уведомления</label>
+                <div class="multi-select  js-multi-select" data-trigger-class="btn btn--success justify-between" data-no-select-text="Выбрано" data-multi-select-text="{n} выбрано" data-inset-label="on">
+                  <select name="notification[]" id="notification[]" multiple>
+                    @foreach ($specs as $spec)
+
+                        @if ($spec->name == 'notifications')
+
+                          @foreach ($spec->value as $key => $value)
+                            <option value="{{ $value }}" {{ in_array($value, $bracelet->notification) ? 'selected' : '' }} >{{ $key }}</option>
+                          @endforeach
+
+                        @endif
+
+                    @endforeach
+                  </select>
+                  <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
+                </div>
               </div>
+
+
+
+
               <div class="col-3@md">
                 <input class="checkbox" type="checkbox" id="send_messages" name="send_messages" value="1" @if ($bracelet->send_messages == 1) checked @endif>
                 <label for="send_messages">Отправка сообщений с браслета</label>&nbsp;&nbsp;&nbsp;
@@ -919,7 +957,7 @@
                         @endif
 
                     @endforeach
-                    
+
                   </select>
                   <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M10.947,3.276A.5.5,0,0,0,10.5,3h-9a.5.5,0,0,0-.4.8l4.5,6a.5.5,0,0,0,.8,0l4.5-6A.5.5,0,0,0,10.947,3.276Z"/></svg>
                 </div>
@@ -1191,7 +1229,7 @@
               <label class="form-label margin-bottom-xxs sr-only" for="allgrades[0][value_grade]">Оценка:</label>
               <input class="form-control col" type="number" name="allgrades[0][value_grade]" id="allgrades[][value_grade]" min="0" max="10" step="0.1" placeholder="Оценка 1-10">
             </div>
-            
+
             <div class="col-1@md">
               <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
                 <svg class="icon" viewBox="0 0 20 20">

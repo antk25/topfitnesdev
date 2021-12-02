@@ -33,6 +33,7 @@
                 <option value="charger">Зарядное устройство</option>
                 <option value="compatibility">Совместимость</option>
                 <option value="terms_of_use">Допустимые условия использования</option>
+                <option value="destination">Предназначение</option>
             </select>
 
             <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
@@ -60,14 +61,14 @@
       </div>
       <div class="js-repeater" data-repeater-input-name="allvalues[n]">
         <div class="js-repeater__list">
-          
+
           <div class="grid gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
             <div class="col-6@md">
               <input class="form-control" type="text" name="allvalues[0][value]" id="allvalues[0][value]" placeholder="Значение">
 
             </div>
-            
-           
+
+
             <div class="col-1@md">
               <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
                 <svg class="icon" viewBox="0 0 20 20">
@@ -91,7 +92,7 @@
 
 
 
-          
+
         </div>
 
           <div class="col-6@md">

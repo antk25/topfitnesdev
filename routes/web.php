@@ -42,6 +42,7 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::resource('/brands', 'BrandsController');
     Route::post('/brands/import', 'BrandsController@import')->name('brands.import');
     Route::resource('/specs', 'SpecsController');
+    Route::post('/specs/import', 'SpecsController@import')->name('specs.import');
     Route::resource('/bracelets', 'BraceletsController');
     Route::get('/bracelet/restore/{bracelet}', 'BraceletsController@restore')->name('bracelets.restore');
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\SpecsImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Spec;
+use Illuminate\Support\Facades\Storage;
 
 class SpecsController extends Controller
 {
@@ -18,7 +20,10 @@ class SpecsController extends Controller
     public function index()
     {
         $specs = Spec::paginate(20);
-        return view('admin.specs.index', compact('specs'));
+
+        $lastfile = head(Storage::files('import/specs'));
+
+        return view('admin.specs.index', compact('specs', 'lastfile'));
     }
 
     /**
@@ -124,7 +129,31 @@ class SpecsController extends Controller
 
     private function slugAr($values)
     {
-       return (Str::slug($values, '-')); 
+       return (Str::slug($values, '-'));
+    }
+
+
+    public function import(Request $request)
+    {
+
+       $request->validate([
+        'importFile' => 'required',
+       ]);
+
+       $file = $request->file('importFile')->store('import/specs');
+
+       $import = new SpecsImport();
+
+       $import->import($file);
+
+
+       if ($import->failures()->isNotEmpty())
+       {
+           return back()->withFailures($import->failures());
+       }
+
+
+       return back()->with('success', 'Завершено!');
     }
 
 

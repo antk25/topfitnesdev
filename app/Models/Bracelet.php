@@ -8,11 +8,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Support\Str;
-use App\ResourceFiltering\QueryFilters;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Pricecurrent\LaravelEloquentFilters\Filterable;
-use Spatie\Image\Image;
 
 
 class Bracelet extends Model implements HasMedia
@@ -88,6 +85,7 @@ class Bracelet extends Model implements HasMedia
            'real_time',
            'full_charge_time',
            'charger',
+           'destination'
     ];
 
     protected $casts = [
@@ -103,6 +101,8 @@ class Bracelet extends Model implements HasMedia
         'other_interfaces' => 'array',
         'training_modes' => 'array',
         'compatibility' => 'array',
+        'notification' => 'array',
+        'destination' => 'array',
     ];
 
     protected $dates = [

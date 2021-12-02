@@ -248,7 +248,7 @@
         </table>
       </div>
     </fieldset>
-  </div>  
+  </div>
 
   <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
     <section>
@@ -690,7 +690,7 @@
             <div class="select">
               <select class="select__input form-control" name="blue_ver" id="blue_ver">
                   <option value="">Выбрать из списка</option>
-                  
+
                   @foreach ($specs as $spec)
 
                     @if ($spec->name == 'bluetooth_versions')
