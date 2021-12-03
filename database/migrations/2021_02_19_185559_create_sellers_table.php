@@ -15,14 +15,9 @@ class CreateSellersTable extends Migration
     {
         Schema::create('sellers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('title', 200);
-            $table->string('subtitle', 200)->nullable();
-            $table->text('description')->nullable();
+            $table->string('name')->unique();
+            $table->string('marketplace')->nullable();
             $table->text('about')->nullable();
-            $table->float('rating', 3, 2)->nullable();
-            $table->boolean('published')->default(1);
             $table->timestamps();
         });
     }

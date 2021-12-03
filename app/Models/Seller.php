@@ -40,13 +40,8 @@ use Illuminate\Database\Eloquent\Model;
 class Seller extends Model
 {
     protected $fillable = [
-        'published',
         'name',
-        'slug',
-        'title',
-        'subtitle',
-        'description',
-        'rating',
+        'marketplace',
         'about'
     ];
 

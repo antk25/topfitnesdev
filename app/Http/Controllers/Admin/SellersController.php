@@ -39,13 +39,10 @@ class SellersController extends Controller
      */
     public function store(SellerRequest $request)
     {
+
         Seller::create([
             'name' => request('name'),
-            'slug' => request('slug'),
-            'title' => request('title'),
-            'subtitle' => request('subtitle'),
-            'description' => request('description'),
-            'rating' => request('rating'),
+            'marketplace' => request('marketplace'),
             'about' => request('about')
         ]);
 

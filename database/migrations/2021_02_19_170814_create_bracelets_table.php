@@ -26,6 +26,7 @@ class CreateBraceletsTable extends Migration
             $table->float('rating_bracelet', 4, 2)->unsinged()->nullable();
             $table->float('grade_bracelet', 4, 2)->unsinged()->nullable();
             $table->decimal('avg_price', $precision = 18, $scale = 2)->nullable();
+            $table->integer('id_ecat')->nullable()->unsigned();
             $table->json('plus')->nullable();
             $table->json('minus')->nullable();
             $table->json('buyers_like')->nullable();
