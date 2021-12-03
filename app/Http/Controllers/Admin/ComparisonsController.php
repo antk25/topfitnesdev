@@ -46,9 +46,14 @@ class ComparisonsController extends Controller
      */
     public function store(Request $request)
     {
-        $slug = $request->slug;
-
-        $slug = Str::slug($slug, '-');
+        if ($request->slug)
+        {
+            $slug = Str::slug($request->slug, '-');
+        }
+        else
+        {
+            $slug = Str::slug($request->name, '-');
+        }
 
         $comparison = Comparison::create([
             'user_id' => request('user_id'),
@@ -60,23 +65,28 @@ class ComparisonsController extends Controller
             'content' => request('content')
         ]);
 
-        $comparison->bracelets()->attach($request->input('bracelets', []));
+        $comparison->bracelets()->attach($request->input('allbracelets', []));
 
         $files = request('files');
 
-        $nameimg = request('nameimg');
-        
         if ($files != '') {
-            $lastpost = Comparison::find($comparison->id);
             $i = 0;
             foreach ($files as $file) {
-                $lastpost->addMedia($file)
-                    ->usingName($nameimg[$i++])
+                $comparison->addMedia($file)
                     ->toMediaCollection('comparisons');
             }
         }
 
-        return redirect()->route('comparisons.index');
+        if ($comparison) {
+            return redirect()
+                 ->route('comparisons.edit', $comparison->id)
+                 ->with(['success' => 'Новая статья успешно добавлена. Отредактируйте данные, если нужно']);
+           } else {
+            return back()
+                    ->withErrors(['msg' => 'Ошибка сохранения'])
+                    ->withInput();
+           }
+
     }
 
     /**
@@ -87,14 +97,14 @@ class ComparisonsController extends Controller
      */
     public function edit($id)
     {
-        $comparison = Comparison::find($id);
+        $comparison = Comparison::with('bracelets')->find($id);
 
         $users = User::pluck('name', 'id')->all();
-        
+
+        $media = $comparison->getMedia('comparisons');
+
         $bracelets = Bracelet::pluck('name', 'id')->all();
 
-        $media = $comparison->getMedia('images');
-        
         return view('admin.comparisons.edit', compact('comparison', 'media', 'users', 'bracelets'));
     }
 
@@ -109,8 +119,14 @@ class ComparisonsController extends Controller
     {
         $comparison = Comparison::find($id);
 
-        $slug = $request->slug;
-        $slug = Str::slug($slug, '-');
+        if ($request->slug)
+        {
+            $slug = Str::slug($request->slug, '-');
+        }
+        else
+        {
+            $slug = Str::slug($request->name, '-');
+        }
 
         $comparison->update([
             'user_id' => request('user_id'),
@@ -122,24 +138,13 @@ class ComparisonsController extends Controller
             'content' => request('content')
         ]);
 
-        $comparison->bracelets()->sync($request->input('bracelets', []));
+        $comparison->bracelets()->sync($request->input('allbracelets', []));
 
         $files = request('files');
-        $nameimg = request('nameimg');
-        
-        if ($files != '' && $nameimg[0] != '') {
-            $lastpost = Comparison::find($comparison->id);
-            $i = 0;
+
+        if ($files != '') {
             foreach ($files as $file) {
-                $lastpost->addMedia($file)
-                    ->usingName($nameimg[$i++])
-                    ->toMediaCollection('comparisons');
-            }
-        }
-        elseif ($files != '') {
-            $lastpost = Comparison::find($comparison->id);
-            foreach ($files as $file) {
-                $lastpost->addMedia($file)
+                $comparison->addMedia($file)
                     ->toMediaCollection('comparisons');
             }
         }
@@ -156,12 +161,12 @@ class ComparisonsController extends Controller
     public function destroy($id)
     {
         Comparison::destroy($id);
-        
+
         return redirect()->route('comparisons.index');
     }
 
     public function imgdelete(Request $request) {
-        
+
         $imgid = $request->imgid;
 
         $mediaItems = Media::find($imgid);
@@ -169,7 +174,7 @@ class ComparisonsController extends Controller
         $mediaItems->delete();
 
         return back();
-    
+
     }
 
     public function imgupdate(Request $request) {
@@ -180,8 +185,8 @@ class ComparisonsController extends Controller
             'name' => request('nameimg')
         ]);
 
-        
+
         return back();
-    
+
     }
 }

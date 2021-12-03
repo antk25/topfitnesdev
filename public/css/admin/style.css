@@ -14168,6 +14168,14 @@ mark {
   box-shadow: inset 0px 1px 0px hsla(var(--color-white-h), var(--color-white-s), var(--color-white-l), 0.15), 0px 0px 0px 2px hsla(var(--color-accent-h), var(--color-accent-s), var(--color-accent-l), 0.2);
 }
 
+.btn--success {
+  background: var(--color-success-light);
+  box-shadow: var(--shadow-xs);
+}
+.btn--success:hover {
+  background: var(--color-success-lighter);
+}
+
 .btn--disabled, .btn[disabled], .btn[readonly] {
   opacity: 0.6;
   cursor: not-allowed;

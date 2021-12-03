@@ -52,7 +52,7 @@
       </div>
 
 
-      {{-- Add ratings --}}
+    {{-- Add bracelets --}}
     <section class="margin-bottom-md">
       <div class="text-component">
         <h4>Добавить браслеты для рейтинга</h4>

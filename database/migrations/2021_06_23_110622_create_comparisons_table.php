@@ -15,7 +15,7 @@ class CreateComparisonsTable extends Migration
     {
         Schema::create('comparisons', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsigned();
+            $table->unsignedBigInteger('user_id');
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->string('title', 200)->nullable();

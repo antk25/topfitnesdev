@@ -87,7 +87,7 @@ class BrandsController extends Controller
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
 
-        $brand->update([
+        $result = $brand->update([
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
@@ -95,7 +95,16 @@ class BrandsController extends Controller
             'about' => request('about')
         ]);
 
-        return redirect()->route('brands.index');
+        if ($result) {
+            return redirect()
+                   ->route('brands.edit', $brand->id)
+                   ->with(['success' => 'Внесенные изменения были сохранены']);
+             } else {
+              return back()
+                      ->withErrors(['msg' => 'Ошибка сохранения'])
+                      ->withInput();
+             }
+
     }
 
     public function import(Request $request)
