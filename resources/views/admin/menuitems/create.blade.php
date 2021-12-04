@@ -9,16 +9,16 @@
         <h2>Создать пункт меню</h2>
       </div>
 
-      <label class="form-label margin-y-xs" for="post_id">Ссылка</label>
-        <div class="select">
-          <select class="select__input form-control" name="post_id">
-            @foreach ($posts as $k => $v)
-              <option value="{{ $k }}">{{ $v }}</option>
-            @endforeach
-          </select>
-          
-          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+        <div class="grid gap-xxs items-center@md">
+          <div class="col-4@md">
+            <label class="form-label" for="link">Ссылка</label>
+          </div>
+
+          <div class="col-8@md">
+            <input class="form-control width-100%" type="text" name="link" id="link" required>
+          </div>
         </div>
+
 <div class="margin-bottom-xs">
         <label class="form-label margin-y-xs" for="group_menu_id">Группа</label>
         <div class="select">
@@ -27,7 +27,7 @@
               <option value="{{ $k }}">{{ $v }}</option>
             @endforeach
           </select>
-          
+
           <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
         </div>
 </div>
@@ -37,28 +37,16 @@
           <div class="col-4@md">
             <label class="form-label" for="name">Название пункта</label>
           </div>
-          
+
           <div class="col-8@md">
             <input class="form-control width-100%" type="text" name="name" id="name" required>
           </div>
         </div>
       </div>
-  
-      
+
+
     </fieldset>
 
-
-    <label class="form-label margin-y-xs" for="place">Расположение</label>
-        <div class="select">
-          <select class="select__input form-control" name="place">
-              <option value="header">В шапке</option>
-              <option value="footer">В футере</option>
-
-          </select>
-          
-          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-        </div>
-  
     <div class="text-right">
       <button type="submit" class="btn btn--primary">Отправить</button>
     </div>
@@ -79,5 +67,5 @@
         mode: 'text/html',
         autoCloseTags: true
       });
-    </script>    
+    </script>
 @endsection

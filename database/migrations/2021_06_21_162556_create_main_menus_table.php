@@ -15,12 +15,13 @@ class CreateMainMenusTable extends Migration
     {
         Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('post_id')->unsigned();
-            $table->integer('group_menu_id')->unsigned();
+            $table->unsignedBigInteger('group_menu_id')->nullable();
             $table->string('name')->unique();
-            $table->string('place')->nullable();
-            $table->integer('position')->unsinged()->nullable();
+            $table->string('link')->unique();
+            $table->integer('position')->unsigned()->nullable();
             $table->timestamps();
+
+            $table->foreign('group_menu_id')->references('id')->on('group_menus')->onDelete('set null')->onUpdate('cascade');
         });
     }
 

@@ -40,7 +40,7 @@ class GroupMenusController extends Controller
     public function store(Request $request)
     {
 
-        $groupmenu = GroupMenu::create([
+        GroupMenu::create([
             'name' => request('name'),
         ]);
 
@@ -56,7 +56,7 @@ class GroupMenusController extends Controller
     public function edit($id)
     {
         $groupmenu = GroupMenu::find($id);
-        
+
         return view('admin.groupmenus.edit', compact('groupmenu'));
     }
 
@@ -87,7 +87,7 @@ class GroupMenusController extends Controller
     public function destroy($id)
     {
         GroupMenu::destroy($id);
-        
+
         return redirect()->route('groupmenus.index');
     }
 }

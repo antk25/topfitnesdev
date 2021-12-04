@@ -7,7 +7,7 @@
       <div class="margin-bottom-lg">
         <h1 class="text-center">Лидеры рейтингов</h1>
       </div>
-  
+
       <div class="grid gap-sm">
   @foreach ($hits as $hit)
         <a class="card-v12 padding-top-sm radius-lg shadow-sm col-6@sm col-3@md" aria-controls="modal-name-{{ $loop->index }}" href="#0" aria-label="Link description">
@@ -15,7 +15,7 @@
             <figure class="card-v12__figure radius-sm" >
               <img class="block width-100%" src="{{ $hit->getFirstMediaUrl('bracelet', 'thumb') }}"  alt="Image description">
             </figure>
-  
+
             <svg class="icon card-v12__icon" viewBox="0 0 60 60">
               <g class="icon-group" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="30" x2="57" y2="30" />
@@ -24,12 +24,12 @@
               </g>
             </svg>
           </div>
-  
+
           <div class="text-center padding-md">
             <h3 class="text-base">{{ $hit->name }}</h3>
-  
+
             <div class="card-v12__separator border-top border-contrast-higher border-opacity-10% margin-x-auto margin-y-xs" role="presentation"></div>
-  
+
             <p class="text-xs color-contrast-higher color-opacity-50% text-uppercase letter-spacing-lg">Yoga</p>
           </div>
         </a>
@@ -125,7 +125,7 @@
         <div class="margin-bottom-lg">
           <h1 class="text-center">Новые отзывы</h1>
         </div>
-    
+
         <div class="grid gap-sm">
           @foreach ($reviews as $review)
             @include('main.review')
@@ -135,4 +135,5 @@
     </section>
 
 @endsection
+
 @section('footerScripts')

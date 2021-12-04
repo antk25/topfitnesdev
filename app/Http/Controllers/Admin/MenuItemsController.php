@@ -27,7 +27,7 @@ class MenuItemsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // Модифицировать через livewire: если выбираем посты, то подгружаются посты, если рейтинги, то рейтинг и т.д. 
+    // Модифицировать через livewire: если выбираем посты, то подгружаются посты, если рейтинги, то рейтинг и т.д.
     public function create()
     {
         $posts = Post::pluck('slug', 'id')->all();
@@ -46,12 +46,10 @@ class MenuItemsController extends Controller
     public function store(Request $request)
     {
 
-        $menuitem = MenuItem::create([
-            'post_id' => request('post_id'),
+        MenuItem::create([
             'group_menu_id' => request('group_menu_id'),
             'name' => request('name'),
-            'group' => request('group'),
-            'place' => request('place'),
+            'link' => request('link'),
             'position' => request('position'),
         ]);
 
@@ -75,7 +73,7 @@ class MenuItemsController extends Controller
         $groupmenusid = GroupMenu::where('id', $menuitem->group_menu_id)->first();
 
         $menupostslug = Post::where('id', $menuitem->post_id)->select('id')->first();
-        
+
         return view('admin.menuitems.edit', compact('menuitem', 'posts', 'menupostslug', 'groupmenus', 'groupmenusid'));
     }
 
@@ -91,11 +89,9 @@ class MenuItemsController extends Controller
         $menuitem = MenuItem::find($id);
 
         $menuitem->update([
-            'post_id' => request('post_id'),
             'group_menu_id' => request('group_menu_id'),
             'name' => request('name'),
-            'group' => request('group'),
-            'place' => request('place'),
+            'link' => request('link'),
             'position' => request('position'),
         ]);
 
@@ -111,7 +107,7 @@ class MenuItemsController extends Controller
     public function destroy($id)
     {
         MenuItem::destroy($id);
-        
+
         return redirect()->route('menuitems.index');
     }
 

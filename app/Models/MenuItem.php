@@ -35,9 +35,8 @@ class MenuItem extends Model
 {
     protected $fillable = [
         'name',
-        'post_id',
-        'group',
-        'place',
+        'link',
+        'position',
         'group_menu_id'
     ];
 
