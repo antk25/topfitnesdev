@@ -55,6 +55,7 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::resource('/sellers', 'SellersController');
     Route::resource('/reviews', 'ReviewsController');
     Route::resource('/posts', 'PostsController');
+    Route::resource('/htmlcomponents', 'HtmlComponentsController');
     Route::post('/posts/delimg', 'PostsController@imgdelete')->name('posts.delimg');
     Route::post('/posts/updimg', 'PostsController@imgupdate')->name('posts.updimg');
     Route::resource('/comparisons', 'ComparisonsController');

@@ -2,12 +2,14 @@
 
 @section('content')
 
+<div class="margin-bottom-md">
+  <h1 class="text-lg">Создать статью для блога</h1>
+</div>
+
 <form class="form-template-v3" method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
     @csrf
-    <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Создать статью для блога</h2>
-      </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+
 
       <div class="margin-bottom-xs">
         <label class="form-label margin-y-xs" for="user_id">Автор</label>
@@ -57,6 +59,12 @@
         </div>
       </div>
 
+    </div>
+
+
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      @include('admin.layouts.parts.htmlcomponents')
+
 
       <section class="margin-y-sm">
         <div class="text-component padding-y-sm">
@@ -69,8 +77,9 @@
       </div>
     </section>
 
-    </fieldset>
+    </div>
 
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
     {{-- Add images --}}
     <section class="margin-bottom-md">
       <div class="text-component margin-y-sm">
@@ -91,6 +100,7 @@
       </div>
     </section>
 {{-- End add images --}}
+    </div>
 
             <div class="margin-y-md">
               <button type="submit" class="btn btn--success">Обновить статью</button>
@@ -100,7 +110,7 @@
 
 @section('scripts')
 @parent
-<script src="{{ asset("js/admin/alpine.min.js") }}"></script>
+<script src="{{ asset("js/admin/prism.min.js") }}"></script>
     <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
     <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
     <script src="{{ asset("js/admin/closetag.js") }}"></script>

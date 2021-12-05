@@ -58,6 +58,55 @@
       </div>
 
 
+      <section class="margin-y-sm">
+        <ul class="grid gap-xs">
+          <li class="col-12 col-4@sm">
+            <!-- aria-controls = used to trigger the modal window -->
+            <!-- data-morph-img = used to select the dynamic image info - see component info page -->
+            <figure class="cursor-pointer" aria-controls="morph-modal-id" data-morph-img="1">
+              <!-- data-modal-src = higher resolution img visible in the modal window -->
+              <img src="../../../app/assets/img/morph-img-modal-img-1.jpg" data-modal-src="../../../app/assets/img/morph-img-modal-img-1.jpg" alt="Image Description">
+            </figure>
+          </li>
+
+          <li class="col-12 col-4@sm">
+            <figure class="cursor-pointer" aria-controls="morph-modal-id" data-morph-img="2">
+              <img src="../../../app/assets/img/morph-img-modal-img-2.jpg" data-modal-src="../../../app/assets/img/morph-img-modal-img-2.jpg" alt="Image Description">
+            </figure>
+          </li>
+
+          <li class="col-12 col-4@sm">
+            <figure class="cursor-pointer" aria-controls="morph-modal-id" data-morph-img="3">
+              <img src="../../../app/assets/img/morph-img-modal-img-3.jpg" data-modal-src="../../../app/assets/img/morph-img-modal-img-3.jpg" alt="Image Description">
+            </figure>
+          </li>
+        </ul>
+
+        <div class="morph-img-modal modal modal--animate-fade flex flex-center bg-black bg-opacity-90% js-morph-img-modal js-modal" id="morph-modal-id">
+          <div class="morph-img-modal__content modal__content max-width-lg bg inner-glow shadow-md opacity-0 js-morph-img-modal__content" role="alertdialog" aria-label="Image modal window">
+            <figure>
+              <img class="morph-img-modal__img js-morph-img-modal__img" src="" alt="Image Preview">
+            </figure>
+
+            <div class="morph-img-modal__info opacity-0 js-morph-img-modal__info"></div>
+          </div>
+        </div>
+
+        <div class="morph-img-bg bg is-hidden js-morph-img-bg" aria-hidden="true"></div>
+        <div class="morph-img-clone is-hidden js-morph-img-clone" aria-hidden="true"></div>
+
+        <button class="reset morph-img-close-btn js-tab-focus js-morph-img-close-btn">
+          <svg class="icon icon--sm" viewBox="0 0 24 24">
+            <title>Close modal window</title>
+            <g fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="3" x2="21" y2="21" />
+              <line x1="21" y1="3" x2="3" y2="21" />
+            </g>
+          </svg>
+        </button>
+      </section>
+
+
     <section class="margin-y-sm">
         <div class="text-component padding-y-sm">
           <h4>Основной контент</h4>
