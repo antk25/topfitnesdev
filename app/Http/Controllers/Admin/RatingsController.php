@@ -123,7 +123,9 @@ class RatingsController extends Controller
 
         $bracelets = Bracelet::pluck('name', 'id')->all();
 
-        return view('admin.ratings.edit', compact('rating', 'bracelets'));
+        $media = $rating->getMedia('rating');
+
+        return view('admin.ratings.edit', compact('rating', 'bracelets', 'media'));
     }
 
 
@@ -166,26 +168,31 @@ class RatingsController extends Controller
 
         $allbracelets = $request->input('allbracelets');
 
-        if ($allbracelets != '') {
+        if (count($allbracelets)) {
             $bracelets = array_column($allbracelets, 'bracelets');
             $position_rating = array_column($allbracelets, 'position_rating');
             $text_rating = array_column($allbracelets, 'text_rating');
             $head_rating = array_column($allbracelets, 'head_rating');
 
-            /**
-            * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
-            *
-            * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
-            *
-            */
+            if(!is_null($bracelets[0]))
+            {
+                /**
+                * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
+                *
+                * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
+                *
+                */
 
-            $extra = array_map(function($p, $t, $h){
-                return ['position' => $p, 'text_rating' => $t, 'head_rating' => $h];
-            }, $position_rating, $text_rating, $head_rating);
+                $extra = array_map(function($p, $t, $h){
+                    return ['position' => $p, 'text_rating' => $t, 'head_rating' => $h];
+                }, $position_rating, $text_rating, $head_rating);
 
-            $data = array_combine($bracelets, $extra);
+                $data = array_combine($bracelets, $extra);
 
-            $rating->bracelets()->sync($data);
+                $rating->bracelets()->sync($data);
+            }
+
+
         }
         // Для того, чтобы при удалении всех браслетов - были удалены все связи, обязательно нужен след код:
         else {

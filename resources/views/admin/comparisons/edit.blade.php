@@ -241,7 +241,7 @@
 {{-- End add images --}}
 
     <div class="margin-y-md">
-      <button type="submit" class="btn btn--success">Обновить статью</button>
+      <button type="submit" class="btn btn--success">Сохранить</button>
     </div>
   </form>
 

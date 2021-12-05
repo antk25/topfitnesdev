@@ -2,12 +2,55 @@
 
 @section('content')
 
-<div class="container max-width-md">
 
+
+<div class="container">
+  <div class="tabs js-tabs">
+    <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
+      <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Рейтинг</a></li>
+      <li><a href="#tab1Panel2" class="tabs__control">Комментарии</a></li>
+      <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
+    </ul>
+
+    <div class="js-tabs__panels">
+      <section id="tab1Panel1" class="is-visible js-tabs__panel">
 
     <form class="form-template-v3" method="POST" action="{{ route('ratings.update', ['rating' => $rating->id]) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
+
+
+    {{-- Сообщение об успешности сохранения --}}
+    @if(session('success'))
+
+    <div class="alert alert--success alert--is-visible padding-sm radius-md js-alert" role="alert">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <svg class="icon icon--sm alert__icon margin-right-xxs" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12,0A12,12,0,1,0,24,12,12.035,12.035,0,0,0,12,0ZM10,17.414,4.586,12,6,10.586l4,4,8-8L19.414,8Z"></path>
+          </svg>
+
+          <p class="text-sm"><strong>Успешно:</strong> {{ session('success') }}.</p>
+        </div>
+
+        <button class="reset alert__close-btn margin-left-sm js-alert__close-btn js-tab-focus">
+          <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <title>Close alert</title>
+            <line x1="3" y1="3" x2="17" y2="17" />
+            <line x1="17" y1="3" x2="3" y2="17" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  @endif
+{{-- Конец сообщения об успешности сохранения --}}
+
+    <div class="margin-bottom-md">
+      <h1 class="text-lg">Редактирование рейтинга id({{ $rating->id }})</h1>
+    </div>
+
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+
         <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название рейтинга</label>
@@ -45,15 +88,24 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="margin-bottom-sm">
-        <label class="form-label margin-bottom-xxs" for="text">Основной контент (в начале статьи)</label>
-            <textarea rows="20" class="form-control width-100% text-sm" spellcheck="false" name="text" id="text">{{ $rating->text }}</textarea>
-      </div>
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      <section>
+        <div class="text-component padding-y-sm">
+          <h4>Основной контент (в начале статьи)</h4>
+          <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
+        </div>
+        <div class="border radius-md padding-sm bg-gradient-3">
+          <label class="form-label margin-bottom-xxs sr-only" for="text">Основной контент</label>
+          <textarea class="form-control width-100% text-sm text" spellcheck="false" name="text" id="text">{{ $rating->text }}</textarea>
+        </div>
+      </section>
+    </div>
 
 
+     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
     {{-- Add bracelets --}}
-    <section class="margin-bottom-md">
       <div class="text-component">
         <h4>Добавить браслеты для рейтинга</h4>
       </div>
@@ -148,12 +200,13 @@
         </div>
         <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить браслет</button>
       </div>
-    </section>
     {{-- End add bracelets --}}
+     </div>
 
+
+  <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
     {{-- Add images --}}
-    <section class="margin-bottom-md">
       <div class="text-component margin-y-sm">
         <h4>Добавить изображения браслета</h4>
         <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После публикации рейтинга можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
@@ -170,21 +223,112 @@
 
         <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
       </div>
-    </section>
 {{-- End add images --}}
+  </div>
 
       <button class="btn btn--primary" type="submit">Сохранить</button>
 
     </form>
 
-</div>
+    </section>
+
+    <section id="tab1Panel2" class="js-tabs__panel">
+
+      <h2>Комментарии к рейтингу</h2>
+
+    </section>
+
+    <section id="tab1Panel2" class="js-tabs__panel">
+
+
+  <div class="tbl">
+    <table class="tbl__table text-unit-em text-sm border-bottom border-2" aria-label="Картинки">
+      <thead class="tbl__header border-bottom border-2">
+        <tr class="tbl__row">
+          <th class="tbl__cell text-left" scope="col">
+            <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Картинка</span>
+          </th>
+
+          <th class="tbl__cell text-left" scope="col">
+            <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Код и Alt</span>
+          </th>
+
+          <th class="tbl__cell text-left" scope="col">
+            <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="tbl__body">
+        @foreach ($media as $image)
+        <tr class="tbl__row">
+          <td class="tbl__cell" role="cell">
+            <div class="items-center">
+              <figure class="width-lg height-lg overflow-hidden margin-right-xs">
+                <img class="block width-100% height-100% object-cover" src="{{ $image->getFullUrl('thumb') }}">
+              </figure>
+
+              <div class="line-height-xs">
+                <p class="color-contrast-medium">{{ $image->human_readable_size }}</p>
+              </div>
+            </div>
+          </td>
+
+          <td class="tbl__cell" role="cell">
+            <pre><code class="language-html">
+              &lt;img src="{{ $image->getFullUrl() }}"
+              srcset="{{ $image->getFullUrl('320') }} 320w,
+              {{ $image->getFullUrl('640') }} 640w"
+              alt="{{ $image->name }}"&gt;
+              </code>
+            </pre>
+
+
+            <form method="POST" action="{{ route('bracelets.updimg') }}">
+              @csrf
+              <input type="text" hidden value="{{ $image->id }}" name="imgid">
+              <div class="input-group">
+                <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
+                <button class="btn btn--success" type="submit">
+                  <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
+                      <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
+                    </g>
+                  </svg>
+                </button>
+              </div>
+          </form>
+          </td>
+
+          <td class="tbl__cell" role="cell">
+
+          </td>
+
+          <td class="tbl__cell" role="cell">
+            <form method="POST" action="{{ route('bracelets.delimg') }}">
+              @csrf
+              <input type="text" hidden value="{{ $image->id }}" name="imgid">
+              <button type="submit" class="btn btn--accent text-sm">&times;</button>
+            </form>
+          </td>
+        </tr>
+        @endforeach
+
+      </tbody>
+    </table>
+  </div>
+    </section>
+
+    </div>
+
+  </div>
 
 @endsection
 
 @section('scripts')
 @parent
-<script src="{{ asset("js/admin/alpine.min.js") }}"></script>
-
+<script src="{{ asset("js/admin/prism.min.js") }}"></script>
 <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
     <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
     <script src="{{ asset("js/admin/closetag.js") }}"></script>
