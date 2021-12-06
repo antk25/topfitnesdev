@@ -2,25 +2,70 @@
 
 @section('content')
 
+
+
+<div class="container">
+  <div class="tabs js-tabs">
+    <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
+      <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Статья</a></li>
+      <li><a href="#tab1Panel2" class="tabs__control">Комментарии</a></li>
+      <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
+    </ul>
+
+    <div class="js-tabs__panels">
+      <section id="tab1Panel1" class="is-visible js-tabs__panel">
+
 <form class="form-template-v3" method="POST" action="{{ route('posts.update', ['post' => $post->id]) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-    <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Изменить статью "{{ $post->name }}"</h2>
-      </div>
+
+{{-- Сообщение об успешности сохранения --}}
+@if(session('success'))
+
+<div class="alert alert--success alert--is-visible padding-sm radius-md js-alert" role="alert">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center">
+      <svg class="icon icon--sm alert__icon margin-right-xxs" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12,0A12,12,0,1,0,24,12,12.035,12.035,0,0,0,12,0ZM10,17.414,4.586,12,6,10.586l4,4,8-8L19.414,8Z"></path>
+      </svg>
+
+      <p class="text-sm"><strong>Успешно:</strong> {{ session('success') }}.</p>
+    </div>
+
+    <button class="reset alert__close-btn margin-left-sm js-alert__close-btn js-tab-focus">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <title>Close alert</title>
+        <line x1="3" y1="3" x2="17" y2="17" />
+        <line x1="17" y1="3" x2="3" y2="17" />
+      </svg>
+    </button>
+  </div>
+</div>
+@endif
+{{-- Конец сообщения об успешности сохранения --}}
+
+
+<div class="margin-bottom-md">
+  <h2>Изменить статью с id {{ $post->id }}</h2>
+</div>
+
+
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+
+
       <div class="margin-bottom-xs">
-          <label class="form-label margin-y-xs" for="user_id">Автор</label>
+        <label class="form-label margin-y-xs" for="user_id">Автор</label>
         <div class="select">
           <select class="select__input form-control" name="user_id">
             @foreach ($users as $k => $v)
-              <option value="{{ $k }}">{{ $v }}</option>
+              <option value="{{ $k }}" @if ($k == $post->user->id) selected @endif>{{ $v }}</option>
             @endforeach
           </select>
 
           <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
         </div>
       </div>
+
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название</label>
@@ -31,7 +76,6 @@
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
         <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $post->slug }}">
-        <p class="text-xs color-contrast-medium margin-top-xxs">При редактировании статьи отключен</p>
         </div>
       </div>
 
@@ -57,57 +101,14 @@
         </div>
       </div>
 
+    </div>
+
+
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      @include('admin.layouts.parts.htmlcomponents')
+
 
       <section class="margin-y-sm">
-        <ul class="grid gap-xs">
-          <li class="col-12 col-4@sm">
-            <!-- aria-controls = used to trigger the modal window -->
-            <!-- data-morph-img = used to select the dynamic image info - see component info page -->
-            <figure class="cursor-pointer" aria-controls="morph-modal-id" data-morph-img="1">
-              <!-- data-modal-src = higher resolution img visible in the modal window -->
-              <img src="../../../app/assets/img/morph-img-modal-img-1.jpg" data-modal-src="../../../app/assets/img/morph-img-modal-img-1.jpg" alt="Image Description">
-            </figure>
-          </li>
-
-          <li class="col-12 col-4@sm">
-            <figure class="cursor-pointer" aria-controls="morph-modal-id" data-morph-img="2">
-              <img src="../../../app/assets/img/morph-img-modal-img-2.jpg" data-modal-src="../../../app/assets/img/morph-img-modal-img-2.jpg" alt="Image Description">
-            </figure>
-          </li>
-
-          <li class="col-12 col-4@sm">
-            <figure class="cursor-pointer" aria-controls="morph-modal-id" data-morph-img="3">
-              <img src="../../../app/assets/img/morph-img-modal-img-3.jpg" data-modal-src="../../../app/assets/img/morph-img-modal-img-3.jpg" alt="Image Description">
-            </figure>
-          </li>
-        </ul>
-
-        <div class="morph-img-modal modal modal--animate-fade flex flex-center bg-black bg-opacity-90% js-morph-img-modal js-modal" id="morph-modal-id">
-          <div class="morph-img-modal__content modal__content max-width-lg bg inner-glow shadow-md opacity-0 js-morph-img-modal__content" role="alertdialog" aria-label="Image modal window">
-            <figure>
-              <img class="morph-img-modal__img js-morph-img-modal__img" src="" alt="Image Preview">
-            </figure>
-
-            <div class="morph-img-modal__info opacity-0 js-morph-img-modal__info"></div>
-          </div>
-        </div>
-
-        <div class="morph-img-bg bg is-hidden js-morph-img-bg" aria-hidden="true"></div>
-        <div class="morph-img-clone is-hidden js-morph-img-clone" aria-hidden="true"></div>
-
-        <button class="reset morph-img-close-btn js-tab-focus js-morph-img-close-btn">
-          <svg class="icon icon--sm" viewBox="0 0 24 24">
-            <title>Close modal window</title>
-            <g fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="3" y1="3" x2="21" y2="21" />
-              <line x1="21" y1="3" x2="3" y2="21" />
-            </g>
-          </svg>
-        </button>
-      </section>
-
-
-    <section class="margin-y-sm">
         <div class="text-component padding-y-sm">
           <h4>Основной контент</h4>
           <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
@@ -118,8 +119,10 @@
       </div>
     </section>
 
-    </fieldset>
-{{-- Add images --}}
+    </div>
+
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+    {{-- Add images --}}
     <section class="margin-bottom-md">
       <div class="text-component margin-y-sm">
         <h4>Добавить изображения для обзора</h4>
@@ -139,78 +142,114 @@
       </div>
     </section>
 {{-- End add images --}}
-    <div class="margin-y-md">
-      <button type="submit" class="btn btn--success">Обновить статью</button>
     </div>
+
+            <div class="margin-y-md">
+              <button type="submit" class="btn btn--success">Сохранить</button>
+            </div>
   </form>
 
-  <p class="color-contrast-medium margin-bottom-sm">Все картинки статьи</p>
+</section>
 
-  <table class="tbl__table border-bottom border-2" aria-label="Table Example">
-    <thead class="tbl__header border-bottom border-2">
-      <tr class="tbl__row">
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">#</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Файл</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Alt</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Код для вставки</span></th>
-        <th class="tbl__cell text-left" scope="col"><span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span></th>
-      </tr>
-    </thead>
-    <tbody class="tbl__body">
-      @foreach ($media as $image)
-      <tr class="tbl__row">
-        <td>{{ $image->id }}</td>
-        <td class="tbl__cell" role="cell">
-          <img width="200px" src="{{ $image->getFullUrl('320') }}" alt=""><br>
-          <strong>{{ $image->human_readable_size }}</strong>
-         </td>
-        <td class="tbl__cell  text-left" role="cell">
-          <form method="POST" action="{{ route('posts.updimg') }}">
-            @csrf
-          <div class="margin-bottom-md">
-            <input type="text" hidden value="{{ $image->id }}" name="imgid">
-            <div class="input-group">
-              <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
-              <button class="btn btn--success" type="submit">
-                <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
-                  <g>
-                    <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
-                    <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
-                  </g>
-                </svg>
-              </button>
-            </div>
+<section id="tab1Panel2" class="js-tabs__panel">
+
+  <h2>Комментарии к статье</h2>
+
+</section>
+
+<section id="tab1Panel2" class="js-tabs__panel">
+
+
+<div class="tbl">
+<table class="tbl__table text-unit-em text-sm border-bottom border-2" aria-label="Картинки">
+  <thead class="tbl__header border-bottom border-2">
+    <tr class="tbl__row">
+      <th class="tbl__cell text-left" scope="col">
+        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Картинка</span>
+      </th>
+
+      <th class="tbl__cell text-left" scope="col">
+        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Код и Alt</span>
+      </th>
+
+      <th class="tbl__cell text-left" scope="col">
+        <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody class="tbl__body">
+    @foreach ($media as $image)
+    <tr class="tbl__row">
+      <td class="tbl__cell" role="cell">
+        <div class="items-center">
+          <figure class="width-lg height-lg overflow-hidden margin-right-xs">
+            <img class="block width-100% height-100% object-cover" src="{{ $image->getFullUrl('thumb') }}">
+          </figure>
+
+          <div class="line-height-xs">
+            <p class="color-contrast-medium">{{ $image->human_readable_size }}</p>
           </div>
+        </div>
+      </td>
+
+      <td class="tbl__cell" role="cell">
+        <pre><code class="language-html">
+          &lt;img src="{{ $image->getFullUrl() }}"
+          srcset="{{ $image->getFullUrl('320') }} 320w,
+          {{ $image->getFullUrl('640') }} 640w"
+          alt="{{ $image->name }}"&gt;
+          </code>
+        </pre>
+
+
+        <form method="POST" action="{{ route('bracelets.updimg') }}">
+          @csrf
+          <input type="text" hidden value="{{ $image->id }}" name="imgid">
+          <div class="input-group">
+            <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
+            <button class="btn btn--success" type="submit">
+              <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
+                <g>
+                  <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
+                  <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
+                </g>
+              </svg>
+            </button>
+          </div>
+      </form>
+      </td>
+
+      <td class="tbl__cell" role="cell">
+
+      </td>
+
+      <td class="tbl__cell" role="cell">
+        <form method="POST" action="{{ route('bracelets.delimg') }}">
+          @csrf
+          <input type="text" hidden value="{{ $image->id }}" name="imgid">
+          <button type="submit" class="btn btn--accent text-sm">&times;</button>
         </form>
-        </td>
-        <td class="tbl__cell" role="cell">
-          <pre class="code-snippet margin-y-sm">
-            <code>&lt;img src="{{ $image->getFullUrl() }}"<br> srcset="{{ $image->getFullUrl('320') }} 320w,<br> {{ $image->getFullUrl('640') }} 640w"<br> alt="{{ $image->name }}"&gt;</code>
-          </pre>
-        </td>
-         <td class="tbl__cell" role="cell">
-          <form method="POST" action="{{ route('posts.delimg') }}">
-            @csrf
-            <input type="text" hidden value="{{ $image->id }}" name="imgid">
-            <button type="submit" class="btn btn--accent text-sm">&times;</button>
-          </form>
-          </td>
-      </tr>
-      @endforeach
-    </tbody>
-  </table>
+      </td>
+    </tr>
+    @endforeach
+
+  </tbody>
+</table>
+</div>
+</section>
+
+    </div>
+
+  </div>
+
+
 @endsection
 
 @section('scripts')
 @parent
-<script src="{{ asset("js/admin/alpine.min.js") }}"></script>
-<script src="{{ asset("js/admin/ace.js") }}"></script>
-    <script
-			  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-			  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
-			  crossorigin="anonymous"></script>
-
-     <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
+<script src="{{ asset("js/admin/prism.min.js") }}"></script>
+    <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
     <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
     <script src="{{ asset("js/admin/closetag.js") }}"></script>
     <script src="{{ asset("js/admin/matchtags.js") }}"></script>
@@ -236,24 +275,6 @@
         }
       }
       });
-
-
-  function handler() {
-    return {
-      fields: [],
-      addNewField() {
-          this.fields.push({
-              files: '',
-              nameimg: '',
-              sizeimg: '',
-           });
-        },
-        removeField(index) {
-           this.fields.splice(index, 1);
-         }
-
-      }
-  }
 
     </script>
 @endsection

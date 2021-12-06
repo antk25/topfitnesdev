@@ -59,7 +59,7 @@ class PostsController extends Controller
         $files = request('files');
 
         $nameimg = request('nameimg');
-        
+
         if ($files != '') {
             $lastpost = Post::find($post->id);
             $i = 0;
@@ -85,8 +85,8 @@ class PostsController extends Controller
 
         $users = User::pluck('name', 'id')->all();
 
-        $media = $post->getMedia('images');
-        
+        $media = $post->getMedia('posts');
+
         return view('admin.posts.edit', compact('post', 'media', 'users'));
     }
 
@@ -114,23 +114,17 @@ class PostsController extends Controller
             'content' => request('content')
         ]);
 
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
+
         $files = request('files');
-        $nameimg = request('nameimg');
-        
-        if ($files != '' && $nameimg[0] != '') {
-            $lastpost = Post::find($post->id);
+
+        if ($files != '') {
             $i = 0;
             foreach ($files as $file) {
-                $lastpost->addMedia($file)
-                    ->usingName($nameimg[$i++])
-                    ->toMediaCollection('images');
-            }
-        }
-        elseif ($files != '') {
-            $lastpost = Post::find($post->id);
-            foreach ($files as $file) {
-                $lastpost->addMedia($file)
-                    ->toMediaCollection('images');
+                $post->addMedia($file)
+                    ->toMediaCollection('posts');
             }
         }
 
@@ -146,12 +140,12 @@ class PostsController extends Controller
     public function destroy($id)
     {
         Post::destroy($id);
-        
+
         return redirect()->route('posts.index');
     }
 
     public function imgdelete(Request $request) {
-        
+
         $imgid = $request->imgid;
 
         $mediaItems = Media::find($imgid);
@@ -159,7 +153,7 @@ class PostsController extends Controller
         $mediaItems->delete();
 
         return back();
-    
+
     }
 
     public function imgupdate(Request $request) {
@@ -170,8 +164,8 @@ class PostsController extends Controller
             'name' => request('nameimg')
         ]);
 
-        
+
         return back();
-    
+
     }
 }
