@@ -56,17 +56,17 @@ class PostsController extends Controller
             'content' => request('content')
         ]);
 
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
+
         $files = request('files');
 
-        $nameimg = request('nameimg');
-
         if ($files != '') {
-            $lastpost = Post::find($post->id);
             $i = 0;
             foreach ($files as $file) {
-                $lastpost->addMedia($file)
-                    ->usingName($nameimg[$i++])
-                    ->toMediaCollection('images');
+                $post->addMedia($file)
+                    ->toMediaCollection('posts');
             }
         }
 

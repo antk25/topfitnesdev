@@ -61,16 +61,16 @@ class OverviewsController extends Controller
             'content' => request('content')
         ]);
 
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
+
         $files = request('files');
 
-        $nameimg = request('nameimg');
-        
         if ($files != '') {
-            $lastpost = Overview::find($overview->id);
             $i = 0;
             foreach ($files as $file) {
-                $lastpost->addMedia($file)
-                    ->usingName($nameimg[$i++])
+                $overview->addMedia($file)
                     ->toMediaCollection('overviews');
             }
         }
@@ -89,11 +89,11 @@ class OverviewsController extends Controller
         $overview = Overview::find($id);
 
         $users = User::pluck('name', 'id')->all();
-        
+
         $bracelets = Bracelet::pluck('name', 'id')->all();
 
-        $media = $overview->getMedia('images');
-        
+        $media = $overview->getMedia('overviews');
+
         return view('admin.overviews.edit', compact('overview', 'media', 'users', 'bracelets'));
     }
 
@@ -122,22 +122,16 @@ class OverviewsController extends Controller
             'content' => request('content')
         ]);
 
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
+
         $files = request('files');
-        $nameimg = request('nameimg');
-        
-        if ($files != '' && $nameimg[0] != '') {
-            $lastpost = Overview::find($overview->id);
+
+        if ($files != '') {
             $i = 0;
             foreach ($files as $file) {
-                $lastpost->addMedia($file)
-                    ->usingName($nameimg[$i++])
-                    ->toMediaCollection('overviews');
-            }
-        }
-        elseif ($files != '') {
-            $lastpost = Overview::find($overview->id);
-            foreach ($files as $file) {
-                $lastpost->addMedia($file)
+                $overview->addMedia($file)
                     ->toMediaCollection('overviews');
             }
         }
@@ -154,12 +148,12 @@ class OverviewsController extends Controller
     public function destroy($id)
     {
         Overview::destroy($id);
-        
+
         return redirect()->route('overviews.index');
     }
 
     public function imgdelete(Request $request) {
-        
+
         $imgid = $request->imgid;
 
         $mediaItems = Media::find($imgid);
@@ -167,7 +161,7 @@ class OverviewsController extends Controller
         $mediaItems->delete();
 
         return back();
-    
+
     }
 
     public function imgupdate(Request $request) {
@@ -178,8 +172,8 @@ class OverviewsController extends Controller
             'name' => request('nameimg')
         ]);
 
-        
+
         return back();
-    
+
     }
 }
