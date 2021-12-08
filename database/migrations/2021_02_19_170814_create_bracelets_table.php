@@ -61,7 +61,7 @@ class CreateBraceletsTable extends Migration
             $table->boolean('nfc')->default(0)->nullable();
             $table->string('nfc_inf')->nullable();
             $table->json('other_interfaces')->nullable();
-            $table->json('phone_calls')->nullable();
+            $table->string('phone_calls')->nullable();
             $table->json('notification')->nullable();
             $table->boolean('send_messages')->default(0);
             $table->json('monitoring')->nullable();

@@ -634,15 +634,18 @@ class BraceletsController extends Controller
 
        $file = $request->file('importFile')->store('import');
 
-       $import = new BraceletsImport();
+    //    $import = new BraceletsImport();
 
-       $import->import($file);
+    //    $import->import($file);
+
+       Excel::import(new BraceletsImport, $file);
 
 
-       if ($import->failures()->isNotEmpty())
-       {
-           return back()->withFailures($import->failures());
-       }
+
+    //    if ($import->failures()->isNotEmpty())
+    //    {
+    //        return back()->withFailures($import->failures());
+    //    }
 
 
        return back()->with('success', 'Завершено!');

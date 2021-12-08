@@ -17,7 +17,7 @@ class CreateBraceletGradeTable extends Migration
             $table->foreignId('bracelet_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('grade_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->float('value', 3, 2);
-            $table->index(["bracelet_id", "grade_id"]);
+            $table->unique(["bracelet_id", "grade_id"]);
         });
     }
 

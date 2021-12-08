@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Bracelet;
 use App\Models\Brand;
+use App\Models\Grade;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Validators\Failure;
@@ -24,12 +25,12 @@ use Maatwebsite\Excel\Row;
 use Throwable;
 
 class BraceletsImport implements
-    ToModel,
-    WithHeadingRow,
-    SkipsOnError,
+    ToCollection,
+    WithHeadingRow
+    // SkipsOnError,
     // WithValidation,
-    SkipsOnFailure,
-    WithUpserts
+    // SkipsOnFailure
+    // WithUpserts
     // WithUpsertColumns
 
 {
@@ -43,14 +44,6 @@ class BraceletsImport implements
      * https://www.youtube.com/watch?v=n2WOag1G7Zg
      */
 
-    private $brands;
-
-    public function __construct()
-    {
-
-        $this->brands = Brand::select('id', 'name')->get();
-
-    }
 
     /**
      * @param array $row
@@ -60,23 +53,27 @@ class BraceletsImport implements
      * @return \Illuminate\Database\Eloquent\Model|null
      */
 
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
         /**
          * Записываем в переменную $brand найденный объект класса Brand по полю name
          * https://www.youtube.com/watch?v=n2WOag1G7Zg
          */
 
-        $brand = $this->brands->where('name', $row['brand'])->first();
 
-        $bracelet = new Bracelet([
+        foreach ($rows as $row) {
+
+        $bracelet = Bracelet::updateOrCreate(
+            [
             'name' => $row['name'],
+            ],
+            [
             'slug' => $row['slug'],
             'title' => $row['title'],
             'subtitle' => $row['subtitle'],
             'description' => $row['description'],
             'about' => $row['about'],
-            'brand_id' => $brand->id ?? NULL,
+            'brand_id' => Brand::where('name', $row['brand'])->pluck('id')->first(),
             'position' => $row['position'],
             'plus' => $row['plus'] ? explode("|", $row['plus']) : [],
             'minus' => $row['minus'] ? explode("|", $row['minus']) : [],
@@ -140,6 +137,91 @@ class BraceletsImport implements
         ]);
 
 
+         /**
+         * Импорт оценок. При повторном импорте данные обновляются/удаляются.
+         * Пустые строки не добавляются.
+         * Ключи 1,2,3,4 соответствуют id оценок в MYSQL таблице grades
+         *
+         */
+
+        $grades = [
+            1 => $row['func'],
+            2 => $row['disp_eval'],
+            3 => $row['autonom'],
+            4 => $row['design'],
+        ];
+
+        $grades = array_filter($grades, function($element) {
+            return ! empty($element);
+        });
+
+        $keys = array_keys($grades);
+
+        $merged = array_map(function($v){
+            return ['value' => $v];
+        }, $grades);
+
+        $result_g = array_combine($keys, $merged);
+
+        $bracelet->grades()->sync($result_g);
+
+        //Конец импорта оценок
+
+        /**
+         * Импорт цен. При повторном импорте данные обновляются/удаляются.
+         * Пустые строки не добавляются.
+         * Ключи 1,2,3,4 соответствуют id продавцов в MYSQL таблице sellers
+         *
+         */
+
+        $prices = [
+            1 => $row['prod1'],
+            2 => $row['prod2'],
+            3 => $row['market1'],
+            4 => $row['market2'],
+        ];
+
+        $prices = array_filter($prices, function($element) {
+            return ! empty($element);
+        });
+
+        $old_prices = [
+            1 => $row['prod1_old'],
+            2 => $row['prod2_old'],
+            3 => $row['market1_old'],
+            4 => $row['market2_old'],
+        ];
+
+        $old_prices = array_filter($old_prices, function($element) {
+            return ! empty($element);
+        });
+
+        $links = [
+            1 => $row['prod1_link'],
+            2 => $row['prod2_link'],
+            3 => $row['market1_link'],
+            4 => $row['market2_link'],
+            ];
+
+        $links = array_filter($links, function($element) {
+            return ! empty($element);
+        });
+
+        $keys = array_keys($prices);
+
+        $merged = array_map(function($p, $o, $l){
+            return ['price' => $p, 'old_price' => $o, 'link' => $l];
+        }, $prices, $old_prices, $links);
+
+        $result_s = array_combine($keys, $merged);
+
+
+        $bracelet->sellers()->sync($result_s);
+
+        // Конец импорта цен
+
+        // Импорт картинок
+
         // $files = $row['files'];
         //     if ($files != '') {
         //         if (Str::contains($files, '|')) {
@@ -158,16 +240,17 @@ class BraceletsImport implements
         //     }
         // }
 
-        return $bracelet;
+        }
+
     }
 
     /**
      * @return string|array
      */
-    public function uniqueBy()
-    {
-        return 'name';
-    }
+    // public function uniqueBy()
+    // {
+    //     return 'name';
+    // }
 
     /**
      * @return array
