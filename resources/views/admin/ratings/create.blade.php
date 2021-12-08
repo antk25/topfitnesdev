@@ -9,6 +9,7 @@
 <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
   <form action="{{ route('ratings.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
     <div class="grid gap-xxs margin-bottom-xs">
     <div class="col-6@md">

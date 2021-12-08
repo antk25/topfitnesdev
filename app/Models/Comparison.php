@@ -67,6 +67,12 @@ class Comparison extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    // Включаем комментарии
+
+    public function comments() {
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
+    }
+
     // Связываем с несколькими CompareItems
 
     public function compareitems()

@@ -15589,6 +15589,51 @@ html:not(.js) .select .icon {
 
 /* --------------------------------
 
+File#: _1_details
+Title: Details
+Descr: A button that toggles the visibility of additional information
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.details__summary {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.details__summary:hover {
+  color: var(--color-primary);
+}
+.details__summary:focus {
+  outline: 2px solid hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2);
+  outline-offset: 4px;
+}
+.details__summary .icon {
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.js .details__summary {
+  list-style: none;
+}
+.js .details__summary::-webkit-details-marker {
+  display: none;
+}
+.js .details__summary[aria-expanded=true] .icon {
+  transform: rotate(90deg);
+}
+.js .details__content[aria-hidden=true] {
+  display: none;
+}
+
+html:not(.js) .details__summary .icon {
+  display: none;
+}
+
+/* --------------------------------
+
 File#: _1_diagonal-movement
 Title: Diagonal Movement
 Descr: A JavaScript plugin that detects the direction of the mouse movement (diagonal vs vertical)
@@ -17132,6 +17177,36 @@ Usage: codyhouse.co/license
   opacity: 0.85;
 }
 
+/* --------------------------------
+
+File#: _1_read-more
+Title: Read More
+Descr: A truncated paragraph with the option of reading more content
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.js .read-more {
+  opacity: 0;
+}
+.js .read-more--loaded {
+  opacity: 1;
+}
+
+.read-more__btn {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  line-height: inherit;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  cursor: pointer;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
 /* -------------------------------- 
 
 File#: _1_responsive-sidebar
@@ -17816,6 +17891,54 @@ Usage: codyhouse.co/license
   text-decoration: underline;
 }
 
+/* --------------------------------
+
+File#: _1_text-background-effects
+Title: Text Background Effects
+Descr: A collection of text backgrounds animated on hover
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.text-bg-fx {
+  background-repeat: no-repeat;
+  will-change: background-size;
+  transition: background-size 0.3s var(--ease-in-out);
+}
+.text-bg-fx:hover {
+  background-size: 100% 100%;
+}
+
+.text-bg-fx--scale-x {
+  padding: var(--space-xxxxs) 0;
+  background-image: linear-gradient(hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2), hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2));
+  background-size: 0% 100%;
+}
+
+.text-bg-fx--scale-y {
+  text-decoration: none;
+  background-image: linear-gradient(hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2), hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2));
+  background-size: 100% 2px;
+  background-position: center bottom;
+}
+
+.text-bg-fx--underline,
+.text-bg-fx--underline-bold {
+  text-decoration: none;
+  background-size: 0% 100%;
+}
+
+.text-bg-fx--underline {
+  background-image: linear-gradient(transparent calc(100% - 3px), currentColor calc(100% - 3px), currentColor calc(100% - 2px), transparent 2px);
+}
+
+.text-bg-fx--underline-bold {
+  background-image: linear-gradient(transparent 50%, hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2) 50%);
+}
+
+.text-bg-fx--text-shadow {
+  text-shadow: 1.5px 1px var(--color-bg), -1.5px 1px var(--color-bg), 0px 1px var(--color-bg);
+}
+
 /* -------------------------------- 
 
 File#: _2_accordion-v2
@@ -18018,6 +18141,221 @@ Usage: codyhouse.co/license
   height: 1px;
   background-color: hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.15);
   margin: var(--space-lg) 0;
+}
+
+/* --------------------------------
+
+File#: _2_comments
+Title: Comments
+Descr: Threaded comments template
+Usage: codyhouse.co/license
+
+-------------------------------- */
+:root {
+  --comments-author-img-size: 2.6em;
+  --comments-author-content-gap: var(--space-xs);
+  --comments-gap: var(--space-md);
+}
+
+.comments__sorting-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  pointer-events: none;
+}
+.comments__sorting-label + label {
+  color: var(--color-contrast-medium);
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.comments__sorting-label + label:hover {
+  color: var(--color-contrast-high);
+}
+.comments__sorting-label:checked + label {
+  color: var(--color-contrast-higher);
+  text-decoration: underline;
+}
+.comments__sorting-label:focus + label {
+  outline: 2px solid hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2);
+  outline-offset: 2px;
+}
+
+.comments__comment:not(:last-child) {
+  margin-bottom: var(--comments-gap);
+}
+
+.comments__author-img {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: var(--comments-author-content-gap);
+  transition: opacity 0.2s;
+}
+.comments__author-img img {
+  display: block;
+  width: var(--comments-author-img-size);
+  height: var(--comments-author-img-size);
+}
+.comments__author-img:hover {
+  opacity: 0.75;
+}
+
+.comments__author-name {
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--color-contrast-higher);
+}
+.comments__author-name:hover {
+  text-decoration: underline;
+}
+
+.comments__readmore-btn {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  line-height: inherit;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  color: var(--color-contrast-medium);
+}
+.comments__readmore-btn:hover {
+  cursor: pointer;
+  color: var(--color-contrast-higher);
+  text-decoration: underline;
+}
+
+.comments__vote-btn {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-contrast-medium);
+}
+.comments__vote-btn:hover {
+  color: var(--color-contrast-higher);
+  cursor: pointer;
+}
+
+.comments__vote-btn--pressed {
+  color: var(--color-accent);
+}
+.comments__vote-btn--pressed:hover {
+  color: var(--color-accent);
+}
+.comments__vote-btn--pressed .comments__vote-icon-wrapper .icon {
+  -webkit-animation: comments-vote-icon 0.3s;
+          animation: comments-vote-icon 0.3s;
+}
+.comments__vote-btn--pressed .comments__vote-icon-wrapper::before {
+  -webkit-animation: comments-vote-icon-circle 0.6s;
+          animation: comments-vote-icon-circle 0.6s;
+}
+
+.comments__vote-icon-wrapper {
+  position: relative;
+}
+.comments__vote-icon-wrapper .icon {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s;
+}
+.comments__vote-icon-wrapper::before {
+  content: "";
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+  top: calc(50% - 1em);
+  left: calc(50% - 1em);
+  background-color: currentColor;
+  opacity: 1;
+  transform: scale(0);
+  pointer-events: none;
+}
+
+@-webkit-keyframes comments-vote-icon {
+  0%, 100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.8);
+  }
+}
+
+@keyframes comments-vote-icon {
+  0%, 100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.8);
+  }
+}
+@-webkit-keyframes comments-vote-icon-circle {
+  from {
+    opacity: 1;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+@keyframes comments-vote-icon-circle {
+  from {
+    opacity: 1;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+.comments__label-btn {
+  color: var(--color-contrast-medium);
+}
+.comments__label-btn:hover {
+  color: var(--color-contrast-higher);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.comments__time {
+  color: var(--color-contrast-medium);
+}
+
+.comments__inline-divider {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-contrast-low);
+}
+
+.comments__details {
+  margin-top: var(--space-sm);
+  margin-left: calc(var(--comments-author-img-size) + var(--comments-author-content-gap));
+  padding-left: var(--comments-author-content-gap);
+  border-left: 3px solid var(--color-contrast-lower);
+}
+.comments__details .details__content > ul {
+  margin-top: var(--space-sm);
+}
+
+.comments--no-profile-img {
+  --comments-author-img-size: 0;
+}
+.comments--no-profile-img .comments__author-img {
+  display: none;
 }
 
 /* -------------------------------- 

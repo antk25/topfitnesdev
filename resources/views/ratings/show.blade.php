@@ -434,57 +434,16 @@
     </div>
     @if (Auth::check())
         @can('view-admin-panel')
-            <div class="fab fab--bottom-right js-fab">
-                <div class="position-relative container max-width-sm height-100%">
-                    <button class="reset fab__btn js-tab-focus js-fab__btn" aria-label="Toggle new message popover">
-                        <span class="fab__icon-wrapper">
-                            <svg class="icon fab__icon" viewBox="0 0 24 24">
-                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2">
-                                    <line x1="12" y1="3" x2="12" y2="21" />
-                                    <line x1="21" y1="12" x2="3" y2="12" />
-                                </g>
-                            </svg>
-                        </span>
+            <div class="notice bottom-0 js-notice">
+                <div class="notice__banner bg-light padding-y-sm inner-glow shadow-md">
+                    <div class="container max-width-xl">
+                    <div class="flex justify-between items-center@sm">
+                        <p class="text-sm">Редактирование страницы по ссылке <a class="btn btn--primary col-content" href="{{ route('ratings.edit', ['rating' => $rating->id]) }}">Редактировать</a></p>
 
-                        <span class="fab__icon-wrapper">
-                            <svg class="icon fab__icon" viewBox="0 0 24 24">
-                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2">
-                                    <line x1="19" y1="5" x2="5" y2="19" />
-                                    <line x1="19" y1="19" x2="5" y2="5" />
-                                </g>
-                            </svg>
-                        </span>
-                    </button>
-
-                    <div class="fab__popover js-fab__popover" role="dialog">
-                        <div class="fab__popover-inner js-fab__popover-inner">
-                            <div class="fab__content">
-                                <menu class="fab__menu">
-
-                                    <li>
-                                        <a class="fab__menu-item fab__menu-item--cta text-sm@md js-tab-focus"
-                                            href="/admin/ratings/{{ $rating->id }}/edit">
-                                            <figure class="fab__menu-img">
-                                                <svg class="icon" viewBox="0 0 16 16">
-                                                    <g>
-                                                        <path
-                                                            d="M15.207,8.793l-5.5-5.5c-0.391-0.391-1.023-0.391-1.414,0l-7,7c-0.128,0.128-0.219,0.289-0.263,0.464l-1,4 c-0.085,0.341,0.015,0.701,0.263,0.95C0.483,15.897,0.738,16,1,16c0.081,0,0.162-0.01,0.243-0.03l4-1 c0.176-0.044,0.336-0.135,0.464-0.263L12,8.414L13.086,9.5l-3.293,3.293c-0.391,0.391-0.391,1.023,0,1.414 c0.391,0.391,1.023,0.391,1.414,0l4-4C15.598,9.816,15.598,9.184,15.207,8.793z">
-                                                        </path>
-                                                        <path
-                                                            d="M11.121,1.879l3,3l1.258-1.258c0.828-0.828,0.828-2.172,0-3v0c-0.828-0.828-2.172-0.828-3,0 L11.121,1.879L11.121,1.879z">
-                                                        </path>
-                                                    </g>
-                                                </svg>
-                                            </figure>
-
-                                            <span class="fab__menu-label">Редактировать</span>
-                                        </a>
-                                    </li>
-                                </menu>
-                            </div>
-                        </div>
+                        <button class="reset notice__close-btn margin-left-sm js-notice__hide-control">
+                        <svg class="icon" viewBox="0 0 16 16"><title>Close panel</title><g stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><line x1="13.5" y1="2.5" x2="2.5" y2="13.5"></line><line x1="2.5" y1="2.5" x2="13.5" y2="13.5"></line></g></svg>
+                        </button>
+                    </div>
                     </div>
                 </div>
             </div>
