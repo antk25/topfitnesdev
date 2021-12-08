@@ -260,6 +260,12 @@
                     </a>
                   </li>
 
+                  <li class="sidenav__item">
+                    <a href="{{ route('manuals.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'manuals') ? 'page' : '' }}">
+                      <span class="sidenav__text text-sm@md">Мануалы</span>
+                    </a>
+                  </li>
+
                 </ul>
               </li>
 

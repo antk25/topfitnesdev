@@ -61,6 +61,9 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::resource('/comparisons', 'ComparisonsController');
     Route::post('/comparisons/delimg', 'ComparisonsController@imgdelete')->name('comparisons.delimg');
     Route::post('/comparisons/updimg', 'ComparisonsController@imgupdate')->name('comparisons.updimg');
+    Route::resource('/manuals', 'ManualsController');
+    Route::post('/manuals/delimg', 'ManualsController@imgdelete')->name('manuals.delimg');
+    Route::post('/manuals/updimg', 'ManualsController@imgupdate')->name('manuals.updimg');
     Route::resource('/compareitems', 'CompareItemsController');
     Route::post('/compareitems/delimg', 'CompareItemsController@imgdelete')->name('compareitems.delimg');
     Route::post('/compareitems/updimg', 'CompareItemsController@imgupdate')->name('compareitems.updimg');
