@@ -24,6 +24,24 @@ class ComparisonsController extends Controller
         return view('admin.comparisons.index', compact('comparisons'));
     }
 
+    public function publish($id)
+    {
+        $comparison = Comparison::find($id);
+
+        if ($comparison->published)
+        {
+            $comparison->published = false;
+        }
+        else
+        {
+            $comparison->published = true;
+        }
+
+        $comparison->save();
+
+        return back();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -160,9 +178,37 @@ class ComparisonsController extends Controller
      */
     public function destroy($id)
     {
-        Comparison::destroy($id);
+        $comparison = Comparison::withTrashed()->find($id);
 
-        return redirect()->route('comparisons.index');
+        if ($comparison->trashed())
+            {
+                $comparison->forceDelete();
+            }
+        else
+            {
+                if ($comparison->published == true)
+
+                {
+                    $comparison->published = false;
+                    $comparison->save();
+                }
+
+                $comparison->delete();
+            }
+
+
+        return back();
+    }
+
+    public function restore($id)
+    {
+
+        $comparison = Comparison::onlyTrashed()->find($id);
+
+        $comparison->restore();
+
+        return back();
+
     }
 
     public function imgdelete(Request $request) {

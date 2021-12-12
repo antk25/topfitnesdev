@@ -192,7 +192,7 @@
                 </thead>
 
             <tbody class="tbl__body">
-            @forelse ($overview->comments as $comment)
+            @forelse ($post->comments as $comment)
             <tr class="tbl__row">
                 <td class="tbl__cell" role="cell">
                     {{ $comment->id }}

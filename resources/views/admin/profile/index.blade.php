@@ -23,7 +23,7 @@
         @if ($user->about)
               <p class="color-contrast-medium">{{ $user->about }}</p>
         @endif
-        <p class="text-sm"><a href="{{ route('admin.profile.edit') }}">Редактировать профиль</a> <a href="{{ route('admin.profile.password') }}">Изменить пароль</a></p>
+        <p class="text-sm"><a href="{{ route('admin.profile.edit') }}">Редактировать профиль</a> </p>
         <a class="btns__btn btn--sm" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           {{ __('Logout') }}
         </a>

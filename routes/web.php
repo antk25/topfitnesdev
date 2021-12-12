@@ -79,31 +79,46 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
     Route::post('/import', 'BraceletsController@import')->name('bracelets.import');
     Route::post('importExcel', 'BraceletsController@importExcel');
-    Route::resource('/ratings', 'RatingsController');
     Route::resource('/menuitems', 'MenuItemsController');
     Route::resource('/groupmenus', 'GroupMenusController');
     Route::resource('/grades', 'GradesController');
     Route::resource('/sellers', 'SellersController');
     Route::resource('/reviews', 'ReviewsController');
+
+    Route::resource('/ratings', 'RatingsController');
+    Route::get('/rating/restore/{rating}', 'RatingsController@restore')->name('ratings.restore');
+    Route::get('/rating/publish/{rating}', 'RatingsController@publish')->name('ratings.publish');
+    Route::post('/ratings/delimg', 'RatingsController@imgdelete')->name('ratings.delimg');
+    Route::post('/ratings/updimg', 'RatingsController@imgupdate')->name('ratings.updimg');
+
     Route::resource('/posts', 'PostsController');
-    Route::resource('/htmlcomponents', 'HtmlComponentsController');
+    Route::get('/post/restore/{post}', 'PostsController@restore')->name('posts.restore');
+    Route::get('/post/publish/{post}', 'PostsController@publish')->name('posts.publish');
     Route::post('/posts/delimg', 'PostsController@imgdelete')->name('posts.delimg');
     Route::post('/posts/updimg', 'PostsController@imgupdate')->name('posts.updimg');
+
     Route::resource('/comparisons', 'ComparisonsController');
+    Route::get('/comparison/restore/{comparison}', 'ComparisonsController@restore')->name('comparisons.restore');
+    Route::get('/comparison/publish/{comparison}', 'ComparisonsController@publish')->name('comparisons.publish');
     Route::post('/comparisons/delimg', 'ComparisonsController@imgdelete')->name('comparisons.delimg');
     Route::post('/comparisons/updimg', 'ComparisonsController@imgupdate')->name('comparisons.updimg');
+
     Route::resource('/manuals', 'ManualsController');
+    Route::get('/manual/restore/{manual}', 'ManualsController@restore')->name('manuals.restore');
+    Route::get('/manual/publish/{manual}', 'ManualsController@publish')->name('manuals.publish');
     Route::post('/manuals/delimg', 'ManualsController@imgdelete')->name('manuals.delimg');
     Route::post('/manuals/updimg', 'ManualsController@imgupdate')->name('manuals.updimg');
-    Route::resource('/compareitems', 'CompareItemsController');
-    Route::post('/compareitems/delimg', 'CompareItemsController@imgdelete')->name('compareitems.delimg');
-    Route::post('/compareitems/updimg', 'CompareItemsController@imgupdate')->name('compareitems.updimg');
+
     Route::resource('/overviews', 'OverviewsController');
+    Route::get('/overview/restore/{overview}', 'OverviewsController@restore')->name('overviews.restore');
+    Route::get('/overview/publish/{overview}', 'OverviewsController@publish')->name('overviews.publish');
     Route::post('/overviews/delimg', 'OverviewsController@imgdelete')->name('overviews.delimg');
     Route::post('/overviews/updimg', 'OverviewsController@imgupdate')->name('overviews.updimg');
+
     Route::post('/bracelets/delimg', 'BraceletsController@imgdelete')->name('bracelets.delimg');
     Route::post('/bracelets/updimg', 'BraceletsController@imgupdate')->name('bracelets.updimg');
     Route::resource('/comments', 'CommentsController');
     Route::post('/comments/reply', 'CommentsController@replyStore')->name('comments.reply');
+    Route::resource('/htmlcomponents', 'HtmlComponentsController');
 });
 

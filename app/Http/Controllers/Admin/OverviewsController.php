@@ -24,6 +24,24 @@ class OverviewsController extends Controller
         return view('admin.overviews.index', compact('overviews'));
     }
 
+    public function publish($id)
+    {
+        $overview = Overview::find($id);
+
+        if ($overview->published)
+        {
+            $overview->published = false;
+        }
+        else
+        {
+            $overview->published = true;
+        }
+
+        $overview->save();
+
+        return back();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -147,9 +165,37 @@ class OverviewsController extends Controller
      */
     public function destroy($id)
     {
-        Overview::destroy($id);
+        $overview = Overview::withTrashed()->find($id);
 
-        return redirect()->route('overviews.index');
+        if ($overview->trashed())
+            {
+                $overview->forceDelete();
+            }
+        else
+            {
+                if ($overview->published == true)
+
+                {
+                    $overview->published = false;
+                    $overview->save();
+                }
+
+                $overview->delete();
+            }
+
+
+        return back();
+    }
+
+    public function restore($id)
+    {
+
+        $overview = Overview::onlyTrashed()->find($id);
+
+        $overview->restore();
+
+        return back();
+
     }
 
     public function imgdelete(Request $request) {

@@ -7,6 +7,7 @@ use App\Models\Rating;
 use App\Models\Bracelet;
 use App\Http\Requests\Admin\RatingRequest;
 use Illuminate\Support\Str;
+use Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class RatingsController extends Controller
@@ -22,6 +23,25 @@ class RatingsController extends Controller
         $ratings = Rating::paginate(20);
 
         return view('admin.ratings.index', compact('ratings'));
+    }
+
+
+    public function publish($id)
+    {
+        $rating = Rating::find($id);
+
+        if ($rating->published)
+        {
+            $rating->published = false;
+        }
+        else
+        {
+            $rating->published = true;
+        }
+
+        $rating->save();
+
+        return back();
     }
 
     /**
@@ -229,9 +249,62 @@ class RatingsController extends Controller
 
     public function destroy($id)
     {
-        Rating::destroy($id);
+        $rating = Rating::withTrashed()->find($id);
+
+        if ($rating->trashed())
+            {
+                $rating->forceDelete();
+            }
+        else
+            {
+                if ($rating->published == true)
+
+                {
+                    $rating->published = false;
+                    $rating->save();
+                }
+
+                $rating->delete();
+            }
+
 
         return back();
+    }
+
+    public function restore($id)
+    {
+
+        $rating = Rating::onlyTrashed()->find($id);
+
+        $rating->restore();
+
+        return back();
+
+    }
+
+    public function imgdelete(Request $request) {
+
+        $imgid = $request->imgid;
+
+        $mediaItems = Media::find($imgid);
+
+        $mediaItems->delete();
+
+        return back();
+
+    }
+
+    public function imgupdate(Request $request) {
+        $id = $request->imgid;
+        $image = Media::find($id);
+
+        $image->update([
+            'name' => request('nameimg')
+        ]);
+
+
+        return back();
+
     }
 
 }

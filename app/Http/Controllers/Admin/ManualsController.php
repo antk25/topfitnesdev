@@ -24,6 +24,24 @@ class ManualsController extends Controller
         return view('admin.manuals.index', compact('manuals'));
     }
 
+    public function publish($id)
+    {
+        $manual = Manual::find($id);
+
+        if ($manual->published)
+        {
+            $manual->published = false;
+        }
+        else
+        {
+            $manual->published = true;
+        }
+
+        $manual->save();
+
+        return back();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -170,9 +188,37 @@ class ManualsController extends Controller
      */
     public function destroy($id)
     {
-        Manual::destroy($id);
+        $manual = Manual::withTrashed()->find($id);
 
-        return redirect()->route('manuals.index');
+        if ($manual->trashed())
+            {
+                $manual->forceDelete();
+            }
+        else
+            {
+                if ($manual->published == true)
+
+                {
+                    $manual->published = false;
+                    $manual->save();
+                }
+
+                $manual->delete();
+            }
+
+
+        return back();
+    }
+
+    public function restore($id)
+    {
+
+        $manual = Manual::onlyTrashed()->find($id);
+
+        $manual->restore();
+
+        return back();
+
     }
 
     public function imgdelete(Request $request) {

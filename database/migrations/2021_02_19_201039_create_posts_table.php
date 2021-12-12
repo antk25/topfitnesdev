@@ -24,6 +24,7 @@ class CreatePostsTable extends Migration
             $table->text('content')->nullable();
             $table->boolean('published')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

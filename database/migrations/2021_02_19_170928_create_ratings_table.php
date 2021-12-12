@@ -23,6 +23,7 @@ class CreateRatingsTable extends Migration
             $table->text('text')->nullable();
             $table->boolean('published')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

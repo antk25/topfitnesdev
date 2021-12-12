@@ -106,9 +106,9 @@
                   <a class="dropdown__item" href="{{ route('profile.index') }}">Профиль</a>
                 </li>
 
-                <li>
+                {{-- <li>
                   <a class="dropdown__item" href="{{ route('admin.profile.password') }}">Смена пароля</a>
-                </li>
+                </li> --}}
 
                 <li>
                   <a class="dropdown__item" href="{{ route('notifications') }}">Уведомления</a>
