@@ -13,11 +13,13 @@
         <div class="container max-width-adaptive-md">
 
             <article class="t-article-v4 bg padding-md padding-x-lg@md padding-y-xl@md">
+                {{ Breadcrumbs::render('rating', $rating) }}
 
                 <div class="text-component text-center line-height-lg v-space-xxl max-width-xs margin-x-auto">
                     <p class="text-xs text-uppercase letter-spacing-lg color-contrast-medium">
                         {{ $rating->created_at->diffForHumans() }}</p>
                     <h1>{{ $rating->subtitle }}</h1>
+
                 </div>
 
                 <div class="t-article-v4__divider margin-y-lg" aria-hidden="true"><span></span></div>

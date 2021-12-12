@@ -11,14 +11,16 @@ class ForgotPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $password;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($password)
     {
-        //
+       $this->password = $password;
     }
 
     /**
@@ -28,6 +30,8 @@ class ForgotPassword extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('emails.forgot-password')->with([
+            'password' => $this->password
+        ]);
     }
 }

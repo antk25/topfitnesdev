@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -79,10 +77,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'about',
-        'whatsapp',
-        'telegram',
-        'facebook',
-        'vk'
+        'contacts'
     ];
 
     /**
@@ -102,32 +97,33 @@ class User extends Authenticatable implements HasMedia
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'contacts' => 'array'
     ];
 
     // Связываем с постами в блоге
 
-    public function posts()
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class);
     }
 
     // Связываем с обзорами
 
-    public function overviews()
+    public function overviews(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Overview::class);
     }
 
     // Связываем с рейтингами
 
-    public function ratings()
+    public function ratings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Rating::class);
     }
 
     // Связываем с комментариями
 
-    public function comments()
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class);
     }
@@ -137,6 +133,9 @@ class User extends Authenticatable implements HasMedia
     $this->addMediaCollection('avatars')->singleFile();
     }
 
+    /**
+     * @throws \Spatie\Image\Exceptions\InvalidManipulation
+     */
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')

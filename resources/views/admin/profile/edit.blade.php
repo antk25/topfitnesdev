@@ -8,14 +8,14 @@
         <div class="margin-bottom-md">
           <nav class="s-tabs">
             <ul class="s-tabs__list">
-              <li><a class="{{ (request()->segment(3) == 'edit') ? 's-tabs__link s-tabs__link--current' : 's-tabs__link' }}" href="{{ route('admin.profile.edit') }}">Профиль</a></li>
-              <li><a class="{{ (request()->segment(3) == 'password') ? 's-tabs__link s-tabs__link--current' : 's-tabs__link' }}" href="{{ route('admin.profile.password') }}">Пароль</a></li>
+              {{-- <li><a class="{{ (request()->segment(3) == 'edit') ? 's-tabs__link s-tabs__link--current' : 's-tabs__link' }}" href="{{ route('admin.profile.edit') }}">Профиль</a></li>
+              <li><a class="{{ (request()->segment(3) == 'password') ? 's-tabs__link s-tabs__link--current' : 's-tabs__link' }}" href="{{ route('admin.profile.password') }}">Пароль</a></li> --}}
             </ul>
           </nav>
         </div>
 
         <div class="bg radius-md shadow-xs">
-            <form method="POST" action="{{ route('user-profile-information.update') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('update-user-profile', ['user' => auth()->user()]) }}" enctype="multipart/form-data">
                 @csrf
             @method('PUT')
             <div class="padding-md">
@@ -94,74 +94,93 @@
 
               </fieldset>
 
-              <!-- choice tags -->
-              <fieldset class="margin-bottom-md">
-                <!-- input text -->
-                <div class="margin-bottom-sm">
-                    <div class="grid gap-xxs">
-                      <div class="col-3@lg">
-                        <label class="inline-block text-sm padding-top-xs@lg" for="whatsapp">WhatsApp</label>
-                      </div>
+             {{-- Добавление контактов --}}
+            <section class="margin-bottom-md">
+              <div class="text-component">
+                <h4>Добавить контакты</h4>
+              </div>
+              <div class="js-repeater" data-repeater-input-name="allcontacts[n]">
+                <div class="js-repeater__list">
+                  @forelse ($user->contacts as $k => $v)
+                  <div class="grid grid-col-6 gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+                    <div class="col-3@md">
+                      <div class="select margin-bottom-xxs">
+                        <select class="select__input form-control" name="allcontacts[{{ $loop->index }}][contacts]" id="allcontacts[0{{ $loop->index }}][contacts]"
+                                class="form-control">
+                            <option value="">-- Выбрать контакт --</option>
+                                <option value="whatsapp" @if($k == 'whatsapp')selected @endif>WhatsApp</option>
+                                <option value="telegram" @if($k == 'telegram')selected @endif>Telegram</option>
+                                <option value="facebook" @if($k == 'facebook')selected @endif>Facebook</option>
+                                <option value="twitter" @if($k == 'twitter')selected @endif>Twitter</option>
+                                <option value="vk" @if($k == 'vk')selected @endif>Vkontakte</option>
+                        </select>
 
-                      <div class="col-6@lg">
-                        <input class="form-control width-100%" type="text" name="whatsapp" id="whatsapp" value="{{ old('whatsapp') ?? auth()->user()->whatsapp }}">
-                      </div>
+                          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                        </div>
                     </div>
-                    @error('whatsapp')
-                      <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                    @enderror
-                </div>
-
-
-                <!-- input text -->
-                <div class="margin-bottom-sm">
-                    <div class="grid gap-xxs">
-                      <div class="col-3@lg">
-                        <label class="inline-block text-sm padding-top-xs@lg" for="telegram">Telegram</label>
-                      </div>
-
-                      <div class="col-6@lg">
-                        <input class="form-control width-100%" type="text" name="telegram" id="telegram" value="{{ old('telegram') ?? auth()->user()->telegram }}">
-                      </div>
+                    <div class="col-2@md">
+                      <input class="form-control width-100%" type="text" name="allcontacts[{{ $loop->index }}][value]" id="allcontacts[{{ $loop->index }}][value]" placeholder="Введите аккаунт" value="{{ $v }}">
                     </div>
-                    @error('telegram')
-                      <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                    @enderror
-                </div>
 
-                <!-- input text -->
-                <div class="margin-bottom-sm">
-                    <div class="grid gap-xxs">
-                      <div class="col-3@lg">
-                        <label class="inline-block text-sm padding-top-xs@lg" for="vk">Vkontakte</label>
-                      </div>
 
-                      <div class="col-6@lg">
-                        <input class="form-control width-100%" type="text" name="vk" id="vk" value="{{ old('vk') ?? auth()->user()->vk }}">
-                      </div>
+                    <div class="col-1@md">
+                      <button class="btn width-100% margin-y-sm btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                        <svg class="icon" viewBox="0 0 20 20">
+                          <title>Remove item</title>
+
+                          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <line x1="1" y1="5" x2="19" y2="5"/>
+                            <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                            <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                          </g>
+                        </svg>
+                      </button>
                     </div>
-                    @error('vk')
-                      <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                    @enderror
-                </div>
 
-                <!-- input text -->
-                <div class="margin-bottom-sm">
-                    <div class="grid gap-xxs">
-                      <div class="col-3@lg">
-                        <label class="inline-block text-sm padding-top-xs@lg" for="facebook">Facebook</label>
-                      </div>
+                  </div>
+                  @empty
+                  <div class="grid grid-col-6 gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
+                    <div class="col-3@md">
+                      <div class="select margin-bottom-xxs">
+                        <select class="select__input form-control" name="allcontacts[0][contacts]" id="allcontacts[0][contacts]"
+                                class="form-control">
+                            <option value="">-- Выбрать контакт --</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="telegram">Telegram</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="twitter">Twitter</option>
+                                <option value="vk">Vkontakte</option>
+                        </select>
 
-                      <div class="col-6@lg">
-                        <input class="form-control width-100%" type="text" name="facebook" id="facebook" value="{{ old('facebook') ?? auth()->user()->facebook }}">
-                      </div>
+                          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+                        </div>
                     </div>
-                    @error('facebook')
-                      <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                    @enderror
+                    <div class="col-2@md">
+                      <input class="form-control width-100%" type="text" name="allcontacts[0][value]" id="allcontacts[0][value]" placeholder="Введите аккаунт">
+                    </div>
+
+
+                    <div class="col-1@md">
+                      <button class="btn width-100% margin-y-sm btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
+                        <svg class="icon" viewBox="0 0 20 20">
+                          <title>Remove item</title>
+
+                          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <line x1="1" y1="5" x2="19" y2="5"/>
+                            <path d="M7,5V2A1,1,0,0,1,8,1h4a1,1,0,0,1,1,1V5"/>
+                            <path d="M16,8l-.835,9.181A2,2,0,0,1,13.174,19H6.826a2,2,0,0,1-1.991-1.819L4,8"/>
+                          </g>
+                        </svg>
+                      </button>
+                    </div>
+
+                  </div>
+                  @endforelse
                 </div>
-              </fieldset>
-            </div>
+                <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить контакт</button>
+              </div>
+            </section>
+            {{-- Конец добавления контактов --}}
 
             <div class="border-top border-contrast-lower padding-md text-right">
               <button type="submit" class="btn btn--primary btn--md">Сохранить</button>

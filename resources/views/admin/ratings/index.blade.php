@@ -1,8 +1,8 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Рейтинги</h1>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+{{ Breadcrumbs::render('ratings') }}
 </div>
 
 <div class="grid gap-sm">

@@ -2,8 +2,6 @@
 
 @section('content')
 
-
-
 <div id="float-sidenav-id" class="float-sidenav js-float-sidenav">
   <nav class="float-sidenav__nav">
     <button class="reset float-sidenav__close-btn js-float-sidenav__close-btn js-tab-focus" aria-label="Close navigation">
@@ -112,11 +110,14 @@
   </nav>
 </div>
 
-  <button class="btn btn--subtle margin-bottom-md hide@md" aria-controls="float-sidenav-id">Показать навигацию</button>
-
 <div class="container">
+
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('bracelet', $bracelet) }}
+</div>
+
   <div class="tabs js-tabs">
-    <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
+    <ul class="flex flex-wrap gap-sm js-tabs__controls margin-bottom-sm" aria-label="Tabs Interface">
       <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Браслет</a></li>
       <li><a href="#tab1Panel2" class="tabs__control">Отзывы</a></li>
       <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
@@ -125,15 +126,13 @@
     <button class="btn btn--subtle margin-bottom-md hide@md" aria-controls="float-sidenav-id">Показать навигацию</button>
 
     <div class="js-tabs__panels">
+
       <section id="tab1Panel1" class="is-visible js-tabs__panel">
-        <div class="margin-bottom-md">
-          <h1 class="text-lg">Редактирование браслета id({{ $bracelet->id }})</h1>
-        </div>
+
         <form id="main" class="form-template-v3 js-float-sidenav-target" method="POST" action="{{ route('bracelets.update', ['bracelet' => $bracelet->id]) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-          <fieldset>
 
           <legend class="form-legend margin-bottom-md">SEO</legend>
 
@@ -198,7 +197,6 @@
                 </div>
               </div>
             </div>
-            </fieldset>
           </div>
 
 
@@ -1386,8 +1384,6 @@
 
       <section id="tab1Panel2" class="js-tabs__panel">
         <div class="text-component">
-          <h1 class="text-lg">Отзывы</h1>
-          <p>Список отзывов для браслета</p>
 
           <div class="bg radius-md padding-md shadow-xs">
             <p class="color-contrast-medium margin-bottom-sm">Таблица отзывов</p>
@@ -1636,8 +1632,6 @@
       </section>
 
       <section id="tab1Panel3" class="js-tabs__panel">
-
-        <p class="color-contrast-medium margin-bottom-sm">Все картинки статьи</p>
 
         <div class="tbl">
           <table class="tbl__table text-unit-em text-sm border-bottom border-2" aria-label="Table Example">

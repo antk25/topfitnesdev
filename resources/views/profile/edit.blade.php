@@ -1,27 +1,40 @@
+@extends('layouts.auth-base')
+@section('title')
+   Обновить профиль пользователя {{ $user->name }} | {{ env('APP_NAME') }}
+@endsection
 
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script>document.getElementsByTagName("html")[0].className += " js";</script>
-    <script>
-      if ('CSS' in window && CSS.supports('color', 'var(--color-var)')) {
-        document.write('<link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">');
-      } else {
-        document.write('<link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">');
-      }
-    </script>
-    <noscript>
-      <link rel="stylesheet" href="{{ asset('css/admin/style-fallback.css') }}">
-    </noscript>
-    <title>Document</title>
-</head>
-<body>
-    <div class="container max-width-xxs padding-y-lg">
-        <form class="login-form" method="POST" action="{{ route('user-profile-information.update') }}" enctype="multipart/form-data">
+    <div class="bg container max-width-xxs padding-lg radius-md shadow-sm">
+
+       {{-- Ошибки обновления --}}
+@if ($errors->any())
+
+<div class="alert alert--error alert--is-visible padding-sm radius-md js-alert" role="alert">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center">
+      <svg class="icon icon--sm alert__icon margin-right-xxs" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12,0C5.383,0,0,5.383,0,12s5.383,12,12,12s12-5.383,12-12S18.617,0,12,0z M13.645,5L13,14h-2l-0.608-9 H13.645z M12,20c-1.105,0-2-0.895-2-2c0-1.105,0.895-2,2-2c1.105,0,2,0.895,2,2C14,19.105,13.105,20,12,20z"></path>
+      </svg>
+          <ul>
+      @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+
+    <button class="reset alert__close-btn margin-left-sm js-alert__close-btn js-tab-focus">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <title>Close alert</title>
+        <line x1="3" y1="3" x2="17" y2="17" />
+        <line x1="17" y1="3" x2="3" y2="17" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+@endif
+{{-- Конец ошибок обновления --}}
+
+        <form class="login-form" method="POST" action="{{ route('update-user-profile') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="text-component text-center margin-bottom-sm">
@@ -31,7 +44,7 @@
 
             <div class="margin-bottom-sm">
                 <label class="form-label margin-bottom-xxxs" for="name">{{ __('Name') }}</label>
-                <input class="form-control width-100%" type="name" name="name" id="name" value="{{ old('name') ?? auth()->user()->name }}">
+                <input class="form-control width-100%" type="name" name="name" id="name" value="{{ old('name') ?? $user->name }}">
                 @error('name')
                 <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
                 @enderror
@@ -39,7 +52,7 @@
 
             <div class="margin-bottom-sm">
               <label class="form-label margin-bottom-xxxs" for="email">{{ __('Email') }}</label>
-              <input class="form-control width-100%" type="email" name="email" id="email" value="{{ old('email') ?? auth()->user()->email }}">
+              <input class="form-control width-100%" type="email" name="email" id="email" value="{{ old('email') ?? $user->email }}">
               @error('email')
               <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
               @enderror
@@ -55,39 +68,12 @@
 
             <div class="margin-bottom-sm">
                 <label class="form-label margin-bottom-xxxs" for="about">О себе</label>
-                <textarea class="form-control width-100%" name="about" id="about">{{ old('about') ?? auth()->user()->about }}</textarea>
+                <textarea class="form-control width-100%" name="about" id="about">{{ old('about') ?? $user->about }}</textarea>
                 @error('about')
                 <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
                 @enderror
-              </div>
-              <div class="margin-bottom-sm">
-                <label class="form-label margin-bottom-xxxs" for="whatsapp">WhatsApp</label>
-                <input class="form-control width-100%" type="whatsapp" name="whatsapp" id="whatsapp" value="{{ old('whatsapp') ?? auth()->user()->whatsapp }}">
-                @error('whatsapp')
-                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                @enderror
-              </div>
-              <div class="margin-bottom-sm">
-                <label class="form-label margin-bottom-xxxs" for="telegram">Telegram</label>
-                <input class="form-control width-100%" type="telegram" name="telegram" id="telegram" value="{{ old('telegram') ?? auth()->user()->telegram }}">
-                @error('telegram')
-                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                @enderror
-              </div>
-              <div class="margin-bottom-sm">
-                <label class="form-label margin-bottom-xxxs" for="vk">Вконтакте</label>
-                <input class="form-control width-100%" type="vk" name="vk" id="vk" value="{{ old('vk') ?? auth()->user()->vk }}">
-                @error('vk')
-                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                @enderror
-              </div>
-              <div class="margin-bottom-sm">
-                <label class="form-label margin-bottom-xxxs" for="facebook">Facebook</label>
-                <input class="form-control width-100%" type="facebook" name="facebook" id="facebook" value="{{ old('facebook') ?? auth()->user()->facebook }}">
-                @error('facebook')
-                <div role="alert" class="bg-error bg-opacity-20% padding-xs radius-md text-sm color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
-                @enderror
-              </div>
+            </div>
+
 
             <div class="margin-bottom-sm">
               <button class="btn btn--primary btn--md width-100%">Обновить профиль</button>

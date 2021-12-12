@@ -2,11 +2,14 @@
 
 @section('content')
 
-
-
 <div class="container">
+
+  <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_rating', $rating) }}
+  </div>
+
   <div class="tabs js-tabs">
-    <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
+    <ul class="flex flex-wrap gap-sm js-tabs__controls margin-bottom-sm" aria-label="Tabs Interface">
       <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Рейтинг</a></li>
       <li><a href="#tab1Panel2" class="tabs__control">Комментарии</a></li>
       <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
@@ -44,10 +47,6 @@
     </div>
   @endif
 {{-- Конец сообщения об успешности сохранения --}}
-
-    <div class="margin-bottom-md">
-      <h1 class="text-lg">Редактирование рейтинга id({{ $rating->id }})</h1>
-    </div>
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 

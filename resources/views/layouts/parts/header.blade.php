@@ -356,7 +356,9 @@
                       <ul class="dropdown__menu js-dropdown__menu" aria-label="submenu">
                         <li><a href="{{ route('profile.index') }}" class="dropdown__item">Профиль</a></li>
                         <li class="dropdown__separator" role="separator"></li>
+
                         <li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown__item">Выйти</a></li>
+
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                           @csrf
                       </form>

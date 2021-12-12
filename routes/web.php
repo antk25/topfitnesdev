@@ -13,13 +13,42 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// обновление и просмотр профиля пользователя
+// Авторизация, регистрация, ЛК
 
-Route::view('/profile/edit', 'profile.edit')->name('profile.edit')->middleware('auth');
-Route::view('admin/profile/edit', 'admin.profile.edit')->name('admin.profile.edit')->middleware('auth');
-Route::view('/profile/password', 'profile.password')->name('profile.password')->middleware('auth');
-Route::view('admin/profile/password', 'admin.profile.password')->name('admin.profile.password')->middleware('auth');
-Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile.index')->middleware('auth');
+// форма входа
+Route::get('/login', 'App\Http\Controllers\Auth\LoginController@login')->name('login');
+// аутентификация
+Route::post('/login', 'App\Http\Controllers\Auth\LoginController@authenticate')->name('auth');
+
+// выход
+Route::post('/logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
+
+// форма регистрации
+Route::get('/register', 'App\Http\Controllers\Auth\RegisterController@register')->name('register');
+// создание пользователя
+Route::post('/register', 'App\Http\Controllers\Auth\RegisterController@create')->name('create');
+
+// форма ввода адреса почты
+Route::get('/forgot-password', 'App\Http\Controllers\Auth\ForgotPasswordController@form')->name('forgot-form');
+// письмо на почту
+Route::post('/forgot-password', 'App\Http\Controllers\Auth\ForgotPasswordController@mail')->name('forgot-mail');
+
+// форма восстановления пароля
+Route::get('/reset-password/token/{token}/email/{email}', 'App\Http\Controllers\Auth\ResetPasswordController@form')->name('reset-form');
+
+// восстановление пароля
+Route::post('/reset-password', 'App\Http\Controllers\Auth\ResetPasswordController@reset')->name('reset-password');
+
+// Просмотр профиля
+Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile.index');
+
+// Редактирование профиля - пользователь
+Route::get('/profile/edit', 'App\Http\Controllers\Auth\UpdateUserPorfileInformation@edit')->name('profile-edit');
+
+Route::put('/profile/update', 'App\Http\Controllers\Auth\UpdateUserPorfileInformation@update')->name('update-user-profile');
+
+// Редактирование профиля - админ
+Route::get('admin/profile/edit', 'App\Http\Controllers\Auth\UpdateUserPorfileInformation@edit')->name('admin.profile.edit');
 
 // шаблоны страниц
 Route::get('/', 'App\Http\Controllers\IndexController@index')->name('index');
@@ -36,7 +65,9 @@ Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore'
 // Админка
 
 Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
+    // Редактирование профиля - админ
     Route::get('/dashboard', 'MainController')->name('dashboard');
+    Route::get('/pages', 'TypePagesController@index')->name('pages');
     Route::get('/notifications', 'NotificationsController@index')->name('notifications');
     Route::post('/notifications/mark', 'NotificationsController@markNotification')->name('notifications.markNotification');
     Route::resource('/brands', 'BrandsController');

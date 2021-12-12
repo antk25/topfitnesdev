@@ -1,8 +1,9 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Браслеты</h1>
+
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+{{ Breadcrumbs::render('bracelets') }}
 </div>
 
 <div class="grid gap-sm">
