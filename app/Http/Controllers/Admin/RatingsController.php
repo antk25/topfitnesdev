@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rating;
 use App\Models\Bracelet;
 use App\Http\Requests\Admin\RatingRequest;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -54,7 +55,9 @@ class RatingsController extends Controller
 
         $bracelets = Bracelet::pluck('name', 'id')->all();
 
-        return view('admin.ratings.create', compact('bracelets'));
+        $users = User::pluck('name', 'id')->all();
+
+        return view('admin.ratings.create', compact('bracelets', 'users'));
     }
 
     /**
@@ -66,11 +69,17 @@ class RatingsController extends Controller
     public function store(RatingRequest $request)
     {
 
-        $slug = $request->slug;
-
-        $slug = Str::slug($slug, '-');
+        if ($request->slug)
+        {
+            $slug = Str::slug($request->slug, '-');
+        }
+        else
+        {
+            $slug = Str::slug($request->name, '-');
+        }
 
         $rating = Rating::create([
+                    'user_id' => request('user_id'),
                     'subtitle' => request('subtitle'),
                     'name' => request('name'),
                     'slug' => $slug,
@@ -145,7 +154,9 @@ class RatingsController extends Controller
 
         $media = $rating->getMedia('rating');
 
-        return view('admin.ratings.edit', compact('rating', 'bracelets', 'media'));
+        $users = User::pluck('name', 'id')->all();
+
+        return view('admin.ratings.edit', compact('rating', 'bracelets', 'media', 'users'));
     }
 
 
@@ -160,6 +171,7 @@ class RatingsController extends Controller
     public function update(RatingRequest $request, $id)
     {
         $rating = Rating::find($id);
+
 
 
         // $bracelets = $request->bracelets;
@@ -178,6 +190,7 @@ class RatingsController extends Controller
         $slug = Str::slug($slug, '-');
 
         $rating->update([
+            'user_id' => request('user_id'),
             'subtitle' => request('subtitle'),
             'slug' => $slug,
             'title' => request('title'),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ComparisonRequest;
 use App\Models\Comparison;
 use App\Models\Bracelet;
 use App\Models\User;
@@ -62,7 +63,7 @@ class ComparisonsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ComparisonRequest $request)
     {
         if ($request->slug)
         {
@@ -133,18 +134,12 @@ class ComparisonsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ComparisonRequest $request, $id)
     {
         $comparison = Comparison::find($id);
 
-        if ($request->slug)
-        {
-            $slug = Str::slug($request->slug, '-');
-        }
-        else
-        {
-            $slug = Str::slug($request->name, '-');
-        }
+        $slug = $request->slug;
+        $slug = Str::slug($slug, '-');
 
         $comparison->update([
             'user_id' => request('user_id'),

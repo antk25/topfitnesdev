@@ -67,18 +67,25 @@ Route::post('/reply/store', 'App\Http\Controllers\CommentsController@replyStore'
 Route::middleware('can:view-admin-panel')->prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     // Редактирование профиля - админ
     Route::get('/dashboard', 'MainController')->name('dashboard');
+
     Route::get('/pages', 'TypePagesController@index')->name('pages');
+
     Route::get('/notifications', 'NotificationsController@index')->name('notifications');
     Route::post('/notifications/mark', 'NotificationsController@markNotification')->name('notifications.markNotification');
+
     Route::resource('/brands', 'BrandsController');
     Route::post('/brands/import', 'BrandsController@import')->name('brands.import');
+
     Route::resource('/specs', 'SpecsController');
     Route::post('/specs/import', 'SpecsController@import')->name('specs.import');
+
     Route::resource('/bracelets', 'BraceletsController');
     Route::get('/bracelet/restore/{bracelet}', 'BraceletsController@restore')->name('bracelets.restore');
+
     Route::get('/gradeupdate', 'BraceletsController@gradeUpdate')->name('bracelets.updategrades');
     Route::post('/import', 'BraceletsController@import')->name('bracelets.import');
     Route::post('importExcel', 'BraceletsController@importExcel');
+
     Route::resource('/menuitems', 'MenuItemsController');
     Route::resource('/groupmenus', 'GroupMenusController');
     Route::resource('/grades', 'GradesController');

@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class BrandRequest extends FormRequest
+class HtmcomponentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,23 +28,25 @@ class BrandRequest extends FormRequest
             'name' => [
                 'required',
                 'min:5',
-                Rule::unique('brands', 'name')->ignore($this->brand),
+                Rule::unique('html_components', 'name')->ignore($this->htmlcomponent),
+            ],
+            'code' => [
+                'required',
+                'min:20'
+            ],
+            'file' => [
+                'required',
+                'mimes:jpg,png'
             ]
         ];
     }
 
-    public function messages()
+    public function attributes(): array
     {
         return [
-            'name.required' => 'Поле ":attribute" обязательно для заполнения',
-            'name.min' => '":attribute" должно быть не менее 3-х символов',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'name' => 'Название бренда',
+            'name' => 'Название',
+            'code' => 'Код компонента',
+            'file' => 'Изображение/скриншот компонента',
         ];
     }
 }

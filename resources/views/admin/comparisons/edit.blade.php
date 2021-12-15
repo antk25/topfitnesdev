@@ -51,7 +51,7 @@
       <div class="margin-bottom-xs">
           <label class="form-label margin-y-xs" for="user_id">Автор</label>
         <div class="select">
-          <select class="select__input form-control" name="user_id">
+          <select class="select__input form-control @error('user_id') form-control--error @enderror" name="user_id">
             <option value="">Выбрать автора</option>
             @foreach ($users as $k => $v)
               <option value="{{ $k }}" @if ($comparison->user->id == $k) selected @endif>{{ $v }}</option>
@@ -67,7 +67,10 @@
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название</label>
-          <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $comparison->name }}">
+          <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ $comparison->name }}">
+            @error('name')
+            <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+            @enderror
           <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
         </div>
 
@@ -80,7 +83,10 @@
 
       <div class="margin-bottom-xs">
         <label class="form-label margin-bottom-xxs" for="title">Title</label>
-        <input class="form-control width-100%" type="text" name="title" id="title" value="{{ $comparison->title }}">
+        <input class="form-control width-100% @error('title') form-control--error @enderror" type="text" name="title" id="title" value="{{ $comparison->title }}">
+          @error('title')
+          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+          @enderror
       </div>
 
       <div class="grid gap-xxs margin-bottom-xs">

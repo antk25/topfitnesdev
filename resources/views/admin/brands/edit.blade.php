@@ -31,19 +31,6 @@
 @endif
 {{-- Конец сообщения об успешности сохранения --}}
 
-
-{{-- Сообщения об ошибках --}}
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-{{-- Конец сообщения об ошибках --}}
-
 <form class="form-template-v3" method="POST" action="{{ route('brands.update', ['brand' => $brand->id]) }}">
     @csrf
     @method('PUT')
@@ -57,7 +44,10 @@
           </div>
 
           <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="name" id="name" value="{{ $brand->name }}">
+            <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ $brand->name }}">
+              @error('name')
+                <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+              @enderror
           </div>
         </div>
       </div>
@@ -69,7 +59,10 @@
           </div>
 
           <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ $brand->slug }}">
+            <input class="form-control width-100% @error('slug') form-control--error @enderror" type="text" readonly name="slug" id="slug" value="{{ $brand->slug }}">
+              @error('slug')
+              <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+              @enderror
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ManualRequest;
 use App\Models\Bracelet;
 use App\Models\Manual;
 use App\Models\User;
@@ -62,7 +63,7 @@ class ManualsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ManualRequest $request)
     {
         if ($request->slug)
         {
@@ -143,7 +144,7 @@ class ManualsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ManualRequest $request, $id)
     {
         $manual = Manual::find($id);
 

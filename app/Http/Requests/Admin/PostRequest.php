@@ -5,14 +5,14 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RatingRequest extends FormRequest
+class PostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,7 +22,7 @@ class RatingRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'user_id' => 'required|exists:users,id',
@@ -30,27 +30,27 @@ class RatingRequest extends FormRequest
             'name' => [
                 'required',
                 'min:5',
-                Rule::unique('ratings', 'name')->ignore($this->rating),
+                Rule::unique('posts', 'name')->ignore($this->post),
             ]
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'title.required' => 'Поле ":attribute" обязательно для заполнения',
-            'title.min' => '":attribute" должно быть не менее 5 символов',
             'name.required' => 'Поле ":attribute" обязательно для заполнения',
             'name.min' => '":attribute" должно быть не менее 5 символов',
+            'title.required' => 'Поле ":attribute" обязательно для заполнения',
+            'titile.min' => '":attribute" должно быть не менее 5 символов',
         ];
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         return [
-            'name' => 'Название рейтинга',
-            'title' => 'title рейтинга',
-            'user_id' => 'Автор'
+            'name' => 'Название статьи',
+            'title' => 'Title',
+            'user_id' => 'Автор',
         ];
     }
 }

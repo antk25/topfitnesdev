@@ -47,19 +47,6 @@
 @endif
 {{-- Конец сообщения об успешности сохранения --}}
 
-
-{{-- Сообщения об ошибках --}}
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-{{-- Конец сообщения об ошибках --}}
-
 <form class="form-template-v3" method="POST" action="{{ route('brands.store') }}">
     @csrf
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
@@ -72,7 +59,10 @@
           </div>
 
           <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="name" id="name" value="{{ old('name') }}">
+            <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ old('name') }}">
+              @error('name')
+              <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+              @enderror
           </div>
         </div>
       </div>
@@ -84,7 +74,10 @@
           </div>
 
           <div class="col-8@md">
-            <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ old('slug') }}">
+            <input class="form-control width-100% @error('slug') form-control--error @enderror" type="text"  name="slug" id="slug" value="{{ old('slug') }}">
+              @error('slug')
+              <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+              @enderror
           </div>
         </div>
       </div>
@@ -93,6 +86,7 @@
         <div class="grid gap-xxs items-center@md">
           <div class="col-4@md">
             <label class="form-label" for="title">Title</label>
+              <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
           </div>
 
           <div class="col-8@md">

@@ -44,9 +44,14 @@ class BrandsController extends Controller
      */
     public function store(BrandRequest $request)
     {
-        $slug = $request->slug;
-
-        $slug = Str::slug($slug, '-');
+        if ($request->slug)
+        {
+            $slug = Str::slug($request->slug, '-');
+        }
+        else
+        {
+            $slug = Str::slug($request->name, '-');
+        }
 
         Brand::create([
             'name' => request('name'),

@@ -1,21 +1,5 @@
 @extends('admin.layouts.base')
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-@if (session()->has('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 @section('content')
 
 <div class="margin-bottom-md">
@@ -47,19 +31,6 @@
 @endif
 {{-- Конец сообщения об успешности сохранения --}}
 
-
-{{-- Сообщения об ошибках --}}
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-{{-- Конец сообщения об ошибках --}}
-
 <form class="form-template-v3" method="POST" action="{{ route('htmlcomponents.store') }}">
     @csrf
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
@@ -68,7 +39,10 @@
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название</label>
-          <input class="form-control width-100%" type="text" name="name" id="name" value="{{ old('name') }}">
+          <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ old('name') }}">
+            @error('name')
+            <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+            @enderror
           <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
         </div>
 
@@ -87,7 +61,11 @@
         <div class="border radius-md padding-sm bg-gradient-3">
           <label class="form-label margin-bottom-xxs sr-only" for="text">Код элемента</label>
           <textarea class="form-control width-100% text-sm text" spellcheck="false" name="code" id="code"></textarea>
+
         </div>
+          @error('code')
+          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+          @enderror
       </section>
 
 
@@ -111,6 +89,10 @@
         </label>
 
         <input type="file" class="file-upload__input" name="file" id="file">
+          @error('file')
+          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+          @enderror
+
       </div>
     </div>
 {{-- End add images --}}

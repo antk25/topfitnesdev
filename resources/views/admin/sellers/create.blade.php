@@ -44,7 +44,10 @@
 
           <div class="col-8@md">
 
-          <input class="form-control width-100%" type="text" name="name" id="name">
+          <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name">
+              @error('name')
+              <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+              @enderror
 
           </div>
         </div>

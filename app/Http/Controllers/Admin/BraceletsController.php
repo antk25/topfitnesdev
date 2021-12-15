@@ -71,10 +71,18 @@ class BraceletsController extends Controller
      */
     public function store(BraceletRequest $request)
     {
+        if ($request->slug)
+        {
+            $slug = Str::slug($request->slug, '-');
+        }
+        else
+        {
+            $slug = Str::slug($request->name, '-');
+        }
 
         $bracelet = Bracelet::create([
            'name' => request('name'),
-           'slug' => request('slug'),
+           'slug' => $slug,
            'title' => request('title'),
            'subtitle' => request('subtitle'),
            'description' => request('description'),
@@ -256,7 +264,7 @@ class BraceletsController extends Controller
                  ->with(['success' => 'Новый браслет успешно добавлен. Отредактируйте данные, если нужно']);
            } else {
             return back()
-                    ->withErrors(['msg' => 'Ошибка сохранения'])
+                    ->withErrors(['msg' => 'Ошибка сохранения, проверьте все поля, где подсвечена ошибка'])
                     ->withInput();
            }
 
@@ -457,10 +465,14 @@ class BraceletsController extends Controller
             }
         }
 
+        $slug = $request->slug;
+
+        $slug = Str::slug($slug, '-');
+
 
         $result = $bracelet->update([
            'name' => request('name'),
-           'slug' => request('slug'),
+           'slug' => $slug,
            'title' => request('title'),
            'subtitle' => request('subtitle'),
            'description' => request('description'),

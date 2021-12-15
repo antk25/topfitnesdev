@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -58,11 +59,16 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $slug = $request->slug;
-
-        $slug = Str::slug($slug, '-');
+        if ($request->slug)
+        {
+            $slug = Str::slug($request->slug, '-');
+        }
+        else
+        {
+            $slug = Str::slug($request->name, '-');
+        }
 
         $post = Post::create([
             'user_id' => request('user_id'),
@@ -115,7 +121,7 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
         $post = Post::find($id);
 

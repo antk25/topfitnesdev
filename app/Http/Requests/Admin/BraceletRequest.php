@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BraceletRequest extends FormRequest
@@ -24,26 +25,30 @@ class BraceletRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3',
-            'slug' => 'required|min:3'
+            'title' => 'required|min:5',
+            'name' => [
+                'required',
+                'min:5',
+                Rule::unique('bracelets', 'name')->ignore($this->bracelet),
+            ]
         ];
     }
 
-    public function messages() 
+    public function messages()
     {
         return [
             'name.required' => 'Поле ":attribute" обязательно для заполнения',
-            'slug.required' => 'Поле ":attribute" обязательно для заполнения',
-            'name.min' => '":attribute" должно быть не менее 3-х символов',
-            'slug.min' => '":attribute" должно быть не менее 3-х символов'
+            'name.min' => '":attribute" должно быть не менее 5 символов',
+            'title.required' => 'Поле ":attribute" обязательно для заполнения',
+            'titile.min' => '":attribute" должно быть не менее 5 символов',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Название бренда',
-            'slug' => 'Slug'
+            'name' => 'Название модели',
+            'title' => 'Title'
         ];
     }
 }

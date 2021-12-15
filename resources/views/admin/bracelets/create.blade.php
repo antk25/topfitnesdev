@@ -115,6 +115,7 @@
   <div class="margin-bottom-md">
     <h1 class="text-lg">Новый браслет</h1>
   </div>
+
   <form id="main" class="form-template-v3 js-float-sidenav-target" method="POST" action="{{ route('bracelets.store') }}"  enctype="multipart/form-data">
     @csrf
   <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
@@ -124,7 +125,10 @@
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
           <label class="form-label margin-bottom-xxs" for="name">Название модели</label>
-          <input class="form-control width-100%" type="text" name="name" id="name" value="{{ old('name') }}">
+          <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ old('name') }}">
+          @error('name')
+          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+          @enderror
           <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
         </div>
 
@@ -136,7 +140,10 @@
 
       <div class="margin-bottom-xs">
         <label class="form-label margin-bottom-xxs" for="title">Title</label>
-        <input class="form-control width-100%" type="text" name="title" id="title" value="{{ old('title') }}">
+        <input class="form-control width-100% @error('title') form-control--error @enderror" type="text" name="title" id="title" value="{{ old('title') }}">
+        @error('title')
+          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
+          @enderror
       </div>
 
       <div class="grid gap-xxs margin-bottom-xs">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\HtmcomponentRequest;
 use App\Models\HtmlComponent;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,7 @@ class HtmlComponentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HtmcomponentRequest $request)
     {
        $component = HtmlComponent::create([
             'name' => $request->name,
@@ -86,7 +87,7 @@ class HtmlComponentsController extends Controller
      * @param  \App\Models\HtmlComponent  $htmlComponent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, HtmlComponent $htmlcomponent)
+    public function update(HtmcomponentRequest $request, HtmlComponent $htmlcomponent)
     {
         $htmlcomponent->update([
             'name' => $request->name,

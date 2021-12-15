@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RatingRequest extends FormRequest
+class ComparisonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,7 +30,7 @@ class RatingRequest extends FormRequest
             'name' => [
                 'required',
                 'min:5',
-                Rule::unique('ratings', 'name')->ignore($this->rating),
+                Rule::unique('comparisons', 'name')->ignore($this->comparison),
             ]
         ];
     }
@@ -38,18 +38,18 @@ class RatingRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => 'Поле ":attribute" обязательно для заполнения',
-            'title.min' => '":attribute" должно быть не менее 5 символов',
             'name.required' => 'Поле ":attribute" обязательно для заполнения',
             'name.min' => '":attribute" должно быть не менее 5 символов',
+            'title.required' => 'Поле ":attribute" обязательно для заполнения',
+            'titile.min' => '":attribute" должно быть не менее 5 символов',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Название рейтинга',
-            'title' => 'title рейтинга',
+            'name' => 'Название статьи',
+            'title' => 'Title',
             'user_id' => 'Автор'
         ];
     }

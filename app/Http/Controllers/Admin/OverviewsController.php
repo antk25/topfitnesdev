@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\OverviewRequest;
 use App\Models\Overview;
 use App\Models\Bracelet;
 use App\Models\User;
@@ -59,14 +60,21 @@ class OverviewsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\Admin\OverviewRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
      */
-    public function store(Request $request)
+    public function store(OverviewRequest $request)
     {
-        $slug = $request->slug;
-
-        $slug = Str::slug($slug, '-');
+        if ($request->slug)
+        {
+            $slug = Str::slug($request->slug, '-');
+        }
+        else
+        {
+            $slug = Str::slug($request->name, '-');
+        }
 
         $overview = Overview::create([
             'user_id' => request('user_id'),
@@ -118,11 +126,13 @@ class OverviewsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \App\Http\Requests\Admin\OverviewRequest $request
+     * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
      */
-    public function update(Request $request, $id)
+    public function update(OverviewRequest $request, int $id): \Illuminate\Http\Response
     {
         $overview = Overview::find($id);
 
