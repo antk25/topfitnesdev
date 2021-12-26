@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\HtmcomponentRequest;
 use App\Models\HtmlComponent;
 use Illuminate\Http\Request;
 
-class HtmlComponentController extends Controller
+class AdminHtmlComponentController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Mews\Purifier\Casts\CleanHtmlInput;
 
 /**
  * App\Models\Review
@@ -41,7 +42,8 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     protected $fillable = [
-        'bracelet_id',
+        'reviewable_id',
+        'reviewable_type',
         'name',
         'email',
         'period_use',
@@ -51,7 +53,21 @@ class Review extends Model
         'what_nolike'
     ];
 
-    public function bracelet() {
-        return $this->belongsTo(Bracelet::class);
+    public function reviewable()
+    {
+       return $this->morphTo();
     }
+
+    protected $casts = [
+     'review_text' => CleanHtmlInput::class,
+    ];
+
+//    public function setReviewTextAttribute($value)
+//    {
+//       $this->attributes['review_text'] = strip_tags($value, ['a', 'p']);
+//    }
+
+//    public function bracelet() {
+//        return $this->belongsTo(Bracelet::class);
+//    }
 }

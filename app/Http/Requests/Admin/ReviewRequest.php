@@ -11,7 +11,7 @@ class ReviewRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,14 +21,17 @@ class ReviewRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|min:3',
+            'email' => 'required|email',
+            'item_id' => 'required',
+            'review_text' => 'required|min:50'
         ];
     }
 
-    public function messages() 
+    public function messages(): array
     {
         return [
             'name.required' => 'Поле ":attribute" обязательно для заполнения',
@@ -36,10 +39,13 @@ class ReviewRequest extends FormRequest
         ];
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'name' => 'Имя',
+            'email' => 'Email',
+            'item_id' => 'Товар',
+            'review_text' => 'Текст отзыва'
         ];
     }
 }

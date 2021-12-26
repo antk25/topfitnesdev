@@ -1,5 +1,9 @@
 @extends('admin.layouts.base')
 
+@section('styles')
+    @parent
+    @livewireStyles
+@endsection
 @section('content')
 
 <div class="container">
@@ -47,23 +51,40 @@
   @endif
 {{-- Конец сообщения об успешности сохранения --}}
 
+{{--    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">--}}
+{{--      <div class="margin-bottom-xs">--}}
+{{--          <label class="form-label margin-y-xs" for="user_id">Автор</label>--}}
+{{--        <div class="select">--}}
+{{--          <select class="select__input form-control @error('user_id') form-control--error @enderror" name="user_id">--}}
+{{--            <option value="">Выбрать автора</option>--}}
+{{--            @foreach ($users as $k => $v)--}}
+{{--              <option value="{{ $k }}" @if ($rating->user->id == $k) selected @endif>{{ $v }}</option>--}}
+{{--            @endforeach--}}
+{{--          </select>--}}
+
+{{--          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>--}}
+{{--        </div>--}}
+{{--      </div>--}}
+{{--      </div>--}}
+
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+
       <div class="margin-bottom-xs">
-          <label class="form-label margin-y-xs" for="user_id">Автор</label>
+        <label class="form-label margin-y-xs" for="user_id">Автор</label>
         <div class="select">
           <select class="select__input form-control @error('user_id') form-control--error @enderror" name="user_id">
-            <option value="">Выбрать автора</option>
+              <option value="">Выбрать автора</option>
             @foreach ($users as $k => $v)
-              <option value="{{ $k }}" @if ($rating->user->id == $k) selected @endif>{{ $v }}</option>
+              <option value="{{ $k }}" @if ($k == $rating->user->id) selected @endif>{{ $v }}</option>
             @endforeach
           </select>
 
           <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
         </div>
+          @error('user_id')
+          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+          @enderror
       </div>
-      </div>
-
-    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
         <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
@@ -491,4 +512,4 @@
 
     </script>
 
-@endsection
+  @endsection

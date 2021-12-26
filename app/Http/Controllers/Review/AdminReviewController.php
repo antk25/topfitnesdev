@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Review;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bracelet;
 use App\Models\Review;
 use App\Http\Requests\Admin\ReviewRequest;
 
-class ReviewController extends Controller
+class AdminReviewController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -105,7 +105,7 @@
                     @foreach ($rating->bracelets as $bracelet)
                         <h2>{{ $bracelet->name }}</h2>
 
-                        <div class="grid grid-gap-md items-center">
+                        <div class="grid gap-md items-center">
                             <div class="col-4@sm">
                                 <img loading="lazy" data-src="{{ $bracelet->getFirstMediaUrl('bracelet') }}"
                                     src="/assets/theme/back-image/lazy-load-placeholder.svg"
@@ -427,8 +427,7 @@
 
 
     <div class="bg padding-md padding-x-lg@md margin-y-sm@md">
-        @livewire('comments', ['rating' => $rating->id, 'user' => $user, 'post_id' => $rating->id, 'commentable_type' =>
-        get_class($rating)])
+        @livewire('comment.comments', ['model' => $rating, 'user' => $user])
 
         {{-- <livewire:comments :comments="$rating->comments", :user="$user", :post_id='$rating->id'> --}}
     </div>

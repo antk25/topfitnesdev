@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Bracelet;
+namespace App\Http\Controllers\Products;
 
 use App\Filters\CheckedAdminFilter;
 use App\Filters\NameFilter;

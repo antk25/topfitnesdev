@@ -1,23 +1,63 @@
-<a name="review-{{ $review->id }}"></a>
-<div class="bg-contrast-lower radius-md padding-md flex@md flex-column@md margin-y-md">
-<div class="text-center">
-    <div class="rating rating--read-only js-rating js-rating--read-only margin-bottom-sm">
-      <p class="sr-only">Оценка <span class="rating__value js-rating__value">{{ $review->rating_user }}</span> из 5</p>
+<li class="comments__comment hash-link hash-link--visible" id="review-{{ $review->id }}">
+    <div class="items-start border border-contrast-lower padding-sm radius-lg">
+        <div class="comments__content margin-top-xxxs">
+            <div class="text-sm v-space-xs line-height-sm">
+                <div class="grid justify-between gap-xs flex-row-reverse@md comment-head">
+                    <div class="col-content@md">
+                        <div class="margin-bottom-xxxs">
+                        <span class="color-contrast-medium margin-left-xs"><time class="comments__time" aria-label="{{ $review->created_at->diffForHumans() }}">{{ $review->created_at->diffForHumans() }}</time></span>
+                        <span><a title="Постоянная ссылка на отзыв" class="hash-link__anchor text-bold text-decoration-none padding-x-xxs js-smooth-scroll" href="#review-{{ $review->id }}" aria-hidden="true">#</a></span>
+                        </div>
 
-      <div class="rating__control rating__control--is-hidden js-rating__control">
-        <svg width="24" height="24" viewBox="0 0 24 24"><polygon points="12 1.489 15.09 7.751 22 8.755 17 13.629 18.18 20.511 12 17.261 5.82 20.511 7 13.629 2 8.755 8.91 7.751 12 1.489" fill="currentColor"/></svg>
-      </div>
+                        @switch($review->rating_user)
+                            @case(1)
+                                    <div class="text-right">
+                                        <span class="badge badge--error-light text-sm">Плохо 👍</span>
+                                    </div>
+                                @break
+
+                            @case(2)
+                                    <div class="text-right">
+                                        <span class="badge badge--warning-light text-sm">Средне 👍</span>
+                                    </div>
+                                @break
+
+                            @case(3)
+                                    <div class="text-right">
+                                        <span class="badge badge--success-light text-sm">Отлично 👍</span>
+                                    </div>
+                                @break
+
+                            @default
+                                    <div class="text-right">
+                                        <span class="badge badge--outline text-sm">Нет оценки</span>
+                                    </div>
+                        @endswitch
+
+                    </div>
+
+
+                    <div class="col-content@md">
+                    <div class="flex items-center">
+                      <div class="comments__author-img">
+                            <img alt="User Avatar" class="user-cell__img" src="{{ asset('img/theme/comments-placeholder.svg') }}">
+                      </div>
+                    <div>
+                    <span class="color-contrast-high"><strong>{{ $review->name }}</strong></span>
+                    @if($review->period_use)
+                    <span class="text-sm block"><span class="color-contrast-low">Период использования:</span> {{ $review->period_use }}</span>
+                    @endif
+                        </div>
+                    </div>
+                    </div>
+
+
+                </div>
+
+                <div class="margin-y-sm text-component">
+                {!! $review->review_text !!}
+               </div>
+            </div>
+        </div>
     </div>
-  </div>
-
-    <blockquote class="line-height-md margin-bottom-md">{{ $review->review_text }}</blockquote>
-
-    <footer class="flex flex-column items-center margin-top-auto@md">
-        <cite class="text-sm">
-          <strong>{{ $review->name }}</strong> (<time class="color-contrast-medium" aria-label="{{ $review->created_at->diffForHumans() }}">{{ $review->created_at->diffForHumans() }}</time>)
-          @if ($review->period_use != '')
-          <span class="block color-contrast-medium margin-top-xxxxs">Период владения: {{ $review->period_use }}</span>
-          @endif
-        </cite>
-      </footer>
-  </div>
+</li>

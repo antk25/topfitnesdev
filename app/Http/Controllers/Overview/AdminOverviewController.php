@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Overview;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\OverviewRequest;
@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class OverviewController extends Controller
+class AdminOverviewController extends Controller
 {
     /**
      * Display a listing of the resource.

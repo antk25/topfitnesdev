@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Import;
 
 use App\Jobs\ImportJob;
 use Illuminate\Support\Facades\Bus;

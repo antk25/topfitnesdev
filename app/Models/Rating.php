@@ -58,6 +58,11 @@ class Rating extends Model implements HasMedia
         'slug'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function bracelets() {
         return $this->belongsToMany(Bracelet::class)->withPivot('position', 'text_rating', 'head_rating')->orderBy('pivot_position');
     }

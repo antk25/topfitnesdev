@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Filter;
 
 use Livewire\Component;
 use App\Models\Bracelet;

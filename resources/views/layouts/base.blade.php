@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+@section('style')
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <livewire:styles />
+    @show
     <title>@yield('title')</title>
     <meta name="description" content="@yield('description')" />
 
@@ -142,14 +143,17 @@
   </div>
 </footer>
 @section('footerScripts')
-
 <livewire:scripts />
     <script src="{{ asset("js/scripts.js") }}"></script>
-    <script src="{{ asset("js/alpine.min.js") }}"></script>
+    <script src="{{ asset('js/admin/alpine.min.js') }}"></script>
+
        {{-- window.livewire.on('loadData', () => { --}}
          {{-- document.getElementsByTagName("html")[0].className += " js"; --}}
            {{-- }); --}}
     {{-- <script src="{{ asset("js/axios.min.js") }}"></script> --}}
+@show
+@section('scripts')
+
 @show
       </body>
       </html>

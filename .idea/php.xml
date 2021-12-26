@@ -154,6 +154,7 @@
       <path value="$PROJECT_DIR$/vendor/pricecurrent/laravel-eloquent-filters" />
       <path value="$PROJECT_DIR$/vendor/diglactic/laravel-breadcrumbs" />
       <path value="$PROJECT_DIR$/vendor/php-cs-fixer/diff" />
+      <path value="$PROJECT_DIR$/vendor/mews/purifier" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

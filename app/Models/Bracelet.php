@@ -109,53 +109,63 @@ class Bracelet extends Model implements HasMedia
         'deleted_at'
     ];
 
-    // Связываем с Рейтингами
-
-    public function ratings() {
+    public function ratings(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Rating::class)->withPivot('position', 'text_rating', 'head_rating');
     }
 
-    // Связываем с отзывами
+//    public function reviews()
+//    {
+//        return $this->hasMany(Review::class);
+//    }
 
-    public function reviews()
+    /**
+     * Связываем с отзывами
+     */
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
-        return $this->hasMany(Review::class);
+        return $this->morphMany(Review::class, 'reviewable');
     }
 
     // Связываем с брендами
 
-    public function brands() {
+    public function brands(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(Brand::class);
     }
 
     // Связываем с обзором
 
-    public function overview()
+    public function overview(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Overview::class);
     }
 
     // Связываем с оценками
 
-    public function grades() {
+    public function grades(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Grade::class)->withPivot('value');
     }
 
     // Связываем с продавцами
 
-    public function sellers() {
+    public function sellers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Seller::class)->withPivot('link', 'price', 'old_price');
     }
 
     // Связь с статьями-сравнениями
 
-    public function comparison() {
+    public function comparison(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Comparison::class);
     }
 
     // Связь с таблицей CompareItems
 
-    public function compareitem() {
+    public function compareitem(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(CompareItem::class);
     }
 

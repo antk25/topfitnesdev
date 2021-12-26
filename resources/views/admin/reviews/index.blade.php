@@ -5,12 +5,10 @@
   <h1 class="text-lg">Отзывы</h1>
 </div>
 
-
 <div class="grid gap-sm">
   <!-- basic table -->
   <div class="bg radius-md padding-md shadow-xs col-12">
     <a class="btn btn--success text-sm margin-bottom-md" href="{{ route('reviews.create') }}">Создать</a>
-
 
     @if (count($reviews))
 
@@ -28,6 +26,10 @@
 
             <th class="tbl__cell text-left" scope="col">
               <span class="font-semibold">Текст</span>
+            </th>
+
+            <th class="tbl__cell text-left" scope="col">
+              <span class="font-semibold">Товар</span>
             </th>
 
             <th class="tbl__cell text-left" scope="col">
@@ -52,6 +54,13 @@
         </td>
 
         <td class="tbl__cell" role="cell">{{ Str::limit($review->review_text, 100) }}</td>
+
+        <td class="tbl__cell" role="cell">
+            {{ $review->reviewable->name }}
+           @if($review->reviewable instanceof \App\Models\Bracelet)
+               <span class="color-contrast-low">Браслет</span>
+           @endif
+        </td>
 
         <td class="tbl__cell" role="cell">{{ $review->created_at->diffForHumans() }}</td>
 

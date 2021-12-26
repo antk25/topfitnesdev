@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bracelet;
@@ -11,7 +11,7 @@ use App\Models\Post;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 
-class TypePageController extends Controller
+class AdminTypePageController extends Controller
 {
    protected $bracelets;
    protected $ratings;

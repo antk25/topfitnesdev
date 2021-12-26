@@ -1,11 +1,23 @@
 <div>
-  @if ($comments->count())
+
+    @section('style')
+        @parent
+        <link rel="stylesheet" href="{{ asset('css/admin/trix.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/trix/custom-trix.min.css') }}">
+    @endsection
+
+    @section('footerScripts')
+        @parent
+        <script src="{{ asset('js/admin/trix.js') }}"></script>
+    @endsection
+
+  @if ($model->comments->count())
 <section class="comments">
   <div class="margin-bottom-sm">
     <h2 class="text-md">Комментарии</h2>
   </div>
   <ul class="margin-bottom-lg">
-    @foreach ($comments as $comment)
+    @foreach ($model->comments as $comment)
     @include('livewire.comments.show', ['comment' => $comment])
     @if($comment->replies->count() > 0)
     <div class="border-left border-3 border-opacity-20%">
@@ -55,15 +67,56 @@
 <form wire:submit.prevent="store()">
     <fieldset>
       @if($user == '')
-    <div class="input-merger form-control width-100% grid">
-      <input type="text" class="reset input-merger__input min-width-0 col" name="username" wire:model="username" id="username" placeholder="Ваше имя">
-      <input type="email" class="reset input-merger__input min-width-0 col" name="useremail" wire:model="useremail" id="useremail" placeholder="Email">
-    </div> 
+    <div class="grid gap-xxs">
+        <div class="col-6@md">
+            <input class="form-control width-100%" wire:model.debounce.999999ms="username"
+                   @error('username') form-control--error @enderror" type="text" name="username" id="username"
+            placeholder="Имя" value="{{ old('username') }}">
+            @error('username')
+            <div role="alert"
+                 class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs">
+                <p><strong>ошибка:</strong> {{ $message }}</p></div>
+            @enderror
+        </div>
+
+        <div class="col-6@md">
+            <input class="form-control width-100%" wire:model.debounce.999999ms="useremail"
+                   @error('useremail') form-control--error @enderror" type="email" name="useremail" id="useremail"
+            placeholder="email@myemail.com">
+            @error('useremail')
+            <div role="alert"
+                 class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs">
+                <p><strong>ошибка:</strong> {{ $message }}</p></div>
+            @enderror
+        </div>
+    </div>
     <p class="text-xs color-contrast-medium margin-y-xxs">Укажите <span class="text-bold">имя</span> и <span class="text-bold">email</span>, либо <a href="{{ route('login') }}" aria-controls="modal-form">войдите</a>, <a href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p> 
     @endif
       <div class="margin-y-xs">
         <label class="sr-only" for="commentNewContent">Ваш комментарий</label>
-        <textarea class="form-control width-100%" wire:model.lazy="comment"></textarea>
+        <div class="margin-y-md">
+                    <div x-data="{textEditor: $wire.entangle('comment').defer}"
+                         x-init="()=>{var element = document.querySelector('trix-editor');
+                                   element.editor.insertHTML(textEditor);}"
+                         wire:ignore>
+
+                        <input x-ref="editor"
+                               id="editor-x"
+                               type="hidden"
+                               name="comment">
+
+                        <trix-editor class="trix-editor border-gray-300 trix-content" input="editor-x"
+                                     x-on:trix-change="textEditor=$refs.editor.value;"
+                                     wire:model.debounce.999999ms="comment"
+                        ></trix-editor>
+                    </div>
+
+                </div>
+                @error('comment')
+                <div role="alert"
+                     class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs">
+                    <p><strong>ошибка:</strong> {{ $message }}</p></div>
+                @enderror
       </div>
     </fieldset>
     

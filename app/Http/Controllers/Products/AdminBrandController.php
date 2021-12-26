@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class BrandController extends Controller
+class AdminBrandController extends Controller
 {
     /**
      * Display a listing of the resource.

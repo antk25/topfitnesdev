@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Bracelet;
+namespace App\Http\Livewire\Product;
 
 use App\Filters\BraceletBrandFilter;
 use App\Filters\BraceletCheckedFilter;

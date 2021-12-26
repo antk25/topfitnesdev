@@ -55,7 +55,8 @@
 
 
     <div class="bg padding-md padding-x-lg@md margin-y-sm@md">
-    @livewire('comments', ['rating' => $post->id, 'user' => $user, 'post_id' => $post->id, 'commentable_type' => get_class($post)])
+
+    @livewire('comment.comments', ['model' => $post, 'user' => $user])
 
       {{-- <livewire:comments :comments="$rating->comments", :user="$user", :post_id='$rating->id'> --}}
       </div>

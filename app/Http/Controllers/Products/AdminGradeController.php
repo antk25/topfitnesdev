@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
@@ -8,7 +8,7 @@ use App\Http\Requests\Admin\GradeRequest;
 use Illuminate\Support\Str;
 
 
-class GradeController extends Controller
+class AdminGradeController extends Controller
 {
     /**
      * Display a listing of the resource.

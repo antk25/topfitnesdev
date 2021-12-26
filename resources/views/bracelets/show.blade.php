@@ -12,7 +12,7 @@
         <i class="js-toc__control-label">Навигация по странице <span class="sr-only">- нажмите для выбора раздела.</span></i>
         <i aria-hidden="true">Выбрать</i>
       </span>
-  
+
       <svg class="icon toc__icon-arrow margin-left-xxxs no-js:is-hidden" viewBox="0 0 16 16" aria-hidden="true">
         <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10">
           <path d="M2 2l12 12" />
@@ -56,12 +56,12 @@
         <a href="/" class="color-inherit"><svg class="icon margin-right-xxxs" viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke-width="1" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points=" 15.5,7.5 8,0.5 0.5,7.5 "></polyline><polyline points="2.5,8.5 2.5,15.5 6.5,15.5 6.5,11.5 9.5,11.5 9.5,15.5 13.5,15.5 13.5,8.5 "></polyline></g></svg></a>
         <svg class="icon margin-left-xxxs color-contrast-medium" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline></g></svg>
       </li>
-  
+
       <li class="breadcrumbs__item">
         <a href="{{ route('pub.bracelets.index') }}" class="color-inherit">Каталог</a>
         <svg class="icon margin-left-xxxs color-contrast-medium" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline></g></svg>
       </li>
-  
+
       <li class="breadcrumbs__item" aria-current="page">{{ $bracelet->name }}</li>
     </ol>
   </nav>
@@ -148,7 +148,7 @@
                   </td>
                 </tr>
               @endforeach
-            </tbody> 
+            </tbody>
           </table>
         </div>
       </div>
@@ -162,11 +162,11 @@
 <div class="table-card bg radius-md padding-sm shadow-sm">
 
         @foreach ($bracelet->grades as $grade)
-        <div class="progress-bar progress-bar--color-update js-progress-bar flex flex-column items-center margin-y-xxs">              
+        <div class="progress-bar progress-bar--color-update js-progress-bar flex flex-column items-center margin-y-xxs">
           <p class="sr-only" aria-live="polite" aria-atomic="true">Оценка составляет <span class="js-progress-bar__aria-value">{{ $grade->pivot->value * 10 }}%</span></p>
-        
+
           <div class="margin-y-xxs width-100%">{{ $grade->name }} <span class="text-bold float-right">{{ number_format($grade->pivot->value, 1) }}</span></div>
-          
+
           <div class="progress-bar__bg width-100%" aria-hidden="true">
             <div class="progress-bar__fill" style="width: {{ $grade->pivot->value * 10 }}%;"></div>
           </div>
@@ -181,7 +181,7 @@
 <div class="text-divider"><span>Участвует в рейтингах</span></div>
 <ul class="list list--ol">
   @foreach ($bracelet->ratings as $rating)
-    
+
     <li class="list-item arrow-list4">
       <a href="/{{ $rating->slug }}">{{ $rating->name }}</a> <span class="text-sm">на {{ $rating->pivot->position }} месте</span>
     </li>
@@ -190,7 +190,7 @@
 </ul>
     </div>
   </div>
-  
+
 
   <div id="expLightbox" class="modal exp-lightbox bg js-modal js-exp-lightbox" data-animation="on" data-modal-first-focus=".js-exp-lightbox__body">
    <div class="exp-lightbox__content pointer-events-none">
@@ -236,13 +236,13 @@
   <div class="container grid">
     <div class="col-6@sm">
       <h3 class="margin-y-sm text-center">Плюсы</h3>
-      
+
       <ul class="list list--icons">
         @foreach ($bracelet->plus as $plus)
         <li>
           <div class="flex items-start">
             <svg class="list__icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/><polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/></svg>
-            
+
             <div>{{ $plus }}</div>
           </div>
         </li>
@@ -256,7 +256,7 @@
         <li>
           <div class="flex items-start">
             <svg class="list__icon icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
-            
+
             <div>{{ $minus }}</div>
           </div>
         </li>
@@ -290,7 +290,11 @@
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Совместимость</th>
-       <td class="prop-table__cell">{{ $bracelet->compatibility }}</td>
+       <td class="prop-table__cell">
+           @foreach($bracelet->compatibility as $item)
+               {{ $item }}
+           @endforeach
+       </td>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Приложение-ассистент</th>
@@ -308,7 +312,7 @@
           @if ($loop->last)
               {{ $material }}
           @else
-          {{ $material }}, 
+          {{ $material }},
           @endif
          @endforeach
        </td>
@@ -375,7 +379,7 @@
          @if ($loop->last)
              {{ $protect_stand }}
          @else
-         {{ $protect_stand }}, 
+         {{ $protect_stand }},
          @endif
         @endforeach
       </td>
@@ -387,7 +391,7 @@
          @if ($loop->last)
              {{ $terms_of_use }}
          @else
-         {{ $terms_of_use }}, 
+         {{ $terms_of_use }},
          @endif
         @endforeach
       </td>
@@ -395,13 +399,13 @@
     <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Габариты</th>
       <td class="prop-table__cell">
-       {{ $bracelet->dimensions }} 
+       {{ $bracelet->dimensions }}
       </td>
     </tr>
     <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Вес</th>
       <td class="prop-table__cell">
-       {{ $bracelet->weight }} г. 
+       {{ $bracelet->weight }} г.
       </td>
     </tr>
      <tr class="text-md text-bold">
@@ -419,7 +423,7 @@
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Разрешение</th>
        <td class="prop-table__cell">
-        {{ $bracelet->disp_resolution }} 
+        {{ $bracelet->disp_resolution }}
       </td>
      </tr>
      <tr class="prop-table__row">
@@ -434,7 +438,7 @@
        <th class="prop-table__cell prop-table__cell--th">Глубина цвета</th>
        <td class="prop-table__cell">{{ $bracelet->disp_col_depth }} бит.</td>
      </tr>
-     
+
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Сенсорный</th>
        <td class="prop-table__cell">
@@ -454,7 +458,7 @@
          <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
-     
+
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Always on Display (AoD)</th>
        <td class="prop-table__cell">
@@ -474,7 +478,7 @@
          @if ($loop->last)
              {{ $sensors }}
          @else
-         {{ $sensors }}, 
+         {{ $sensors }},
          @endif
         @endforeach
       </td>
@@ -513,7 +517,7 @@
          @if ($loop->last)
              {{ $other_interfaces }}
          @else
-         {{ $other_interfaces }}, 
+         {{ $other_interfaces }},
          @endif
         @endforeach
       </td>
@@ -527,7 +531,11 @@
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Уведомления</th>
-       <td class="prop-table__cell">{{ $bracelet->notification }}</td>
+       <td class="prop-table__cell">
+           @foreach($bracelet->notification as $item)
+               {{ $item }}
+           @endforeach
+       </td>
      </tr>
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Отправка сообщений с браслета</th>
@@ -543,7 +551,7 @@
          @if ($loop->last)
              {{ $monitoring }}
          @else
-         {{ $monitoring }}, 
+         {{ $monitoring }},
          @endif
         @endforeach
       </td>
@@ -585,7 +593,7 @@
          <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
-     
+
      <tr class="prop-table__row">
       <th class="prop-table__cell prop-table__cell--th">Тренировочные режимы</th>
       <td class="prop-table__cell">
@@ -593,7 +601,7 @@
          @if ($loop->last)
              {{ $training_modes }}
          @else
-         {{ $training_modes }}, 
+         {{ $training_modes }},
          @endif
         @endforeach
       </td>
@@ -688,7 +696,7 @@
          <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option not included</title><circle cx="12" cy="12" r="12" fill="#e25656" opacity="0.2"/><g fill="none" stroke="#d13b3b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><line x1="17" y1="17" x2="7" y2="7"/></g></svg>
           @endif
      </tr>
-     
+
      <tr class="prop-table__row">
        <th class="prop-table__cell prop-table__cell--th">Дополнительная информация</th>
        <td class="prop-table__cell">{{ $bracelet->additional_info }}</td>
@@ -726,18 +734,13 @@
 </section>
  <section class="margin-y-md container max-width-adaptive-sm toc-content__target" id="toc4">
 
-@livewire('reviews', ['bracelet' => $bracelet])
+@livewire('review.reviews', ['model' => $bracelet])
+
  </section>
 
 </div>
-  
-
-
-  
 
 </div>
 @endsection
-
-@section('footerScripts')
 
 

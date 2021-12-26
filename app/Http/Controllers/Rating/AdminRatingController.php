@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Rating;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rating;
 use App\Models\Bracelet;
 use App\Http\Requests\Admin\RatingRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
-use Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class RatingController extends Controller
+class AdminRatingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -172,8 +172,6 @@ class RatingController extends Controller
     {
         $rating = Rating::find($id);
 
-
-
         // $bracelets = $request->bracelets;
 
         // $position_rating = $request->position_rating;
@@ -189,7 +187,7 @@ class RatingController extends Controller
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
 
-        $rating->update([
+        $result = $rating->update([
             'user_id' => request('user_id'),
             'subtitle' => request('subtitle'),
             'slug' => $slug,
@@ -248,6 +246,16 @@ class RatingController extends Controller
                     ->toMediaCollection('rating');
             }
         }
+
+        if ($result) {
+          return redirect()
+                 ->route('ratings.edit', $rating->id)
+                 ->with(['success' => 'Внесенные изменения были сохранены']);
+           } else {
+            return back()
+                    ->withErrors(['msg' => 'Ошибка сохранения'])
+                    ->withInput();
+           }
 
 
         return redirect()->route('ratings.index');

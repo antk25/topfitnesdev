@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Review;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Bracelet;
 use App\Models\Review;

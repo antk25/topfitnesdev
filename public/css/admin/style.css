@@ -14236,6 +14236,10 @@ mark {
   box-shadow: inset 0px 0px 0px 1px hsla(var(--color-contrast-lower-h), var(--color-contrast-lower-s), var(--color-contrast-lower-l), 0), 0px 0px 0px 2px var(--color-error), var(--shadow-sm);
 }
 
+b {
+  font-weight: bold;
+}
+
 /* -------------------------------- 
 
 File#: _1_3d-drawer
@@ -15333,6 +15337,126 @@ Usage: codyhouse.co/license
   display: inline-block;
   display: inline-flex;
   align-items: center;
+}
+
+/* --------------------------------
+
+File#: _1_btns
+Title: Buttons (Group)
+Descr: Group of connected buttons
+Usage: codyhouse.co/license
+
+-------------------------------- */
+:root {
+  --btns-button-radius: 0.25em;
+  --btns-button-padding-x: var(--space-sm);
+  --btns-button-padding-y: var(--space-sm);
+}
+
+.btns {
+  /* button group */
+}
+.btns > *:first-child, .btns *:first-child .btns__btn {
+  border-radius: var(--btns-button-radius) 0 0 var(--btns-button-radius);
+}
+.btns > *:last-child, .btns *:last-child .btns__btn {
+  border-radius: 0 var(--btns-button-radius) var(--btns-button-radius) 0;
+}
+
+.btns[class*=gap-xxxxs] .btns__btn, .btns[class*=gap-xxxs] .btns__btn, .btns[class*=gap-xxs] .btns__btn, .btns[class*=gap-xs] .btns__btn, .btns[class*=gap-sm] .btns__btn, .btns[class*=gap-md] .btns__btn, .btns[class*=gap-lg] .btns__btn, .btns[class*=gap-xl] .btns__btn, .btns[class*=gap-xxl] .btns__btn, .btns[class*=gap-xxxl] .btns__btn, .btns[class*=gap-xxxxl] .btns__btn {
+  border-radius: var(--btns-button-radius) !important;
+}
+
+/* single button */
+.btns__btn {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  line-height: inherit;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: var(--space-xs) var(--space-sm);
+  background-color: hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.1);
+  transition: 0.2s;
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.btns__btn:hover:not(.btns__btn--selected) {
+  background-color: hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.075);
+}
+.btns__btn:focus {
+  z-index: 1;
+  outline: none;
+  box-shadow: 0 0 0 2px hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.2);
+}
+
+.btns__btn--selected, .btns--radio input[type=radio]:checked + label,
+.btns--radio input[type=checkbox]:checked + label, .btns--checkbox input[type=radio]:checked + label,
+.btns--checkbox input[type=checkbox]:checked + label {
+  /* selected style */
+  background-color: var(--color-contrast-higher);
+  color: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.btns__btn--disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* --radio, --checkbox */
+.btns--radio > *, .btns--checkbox > * {
+  position: relative;
+}
+.btns--radio input[type=radio],
+.btns--radio input[type=checkbox], .btns--checkbox input[type=radio],
+.btns--checkbox input[type=checkbox] {
+  /* hide native buttons */
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  pointer-events: none;
+}
+.btns--radio input[type=radio] + label,
+.btns--radio input[type=checkbox] + label, .btns--checkbox input[type=radio] + label,
+.btns--checkbox input[type=checkbox] + label {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.btns--radio input[type=radio]:focus + label,
+.btns--radio input[type=checkbox]:focus + label, .btns--checkbox input[type=radio]:focus + label,
+.btns--checkbox input[type=checkbox]:focus + label {
+  z-index: 1;
+  box-shadow: 0 0 0 2px hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.2);
+}
+.btns--radio input[type=radio]:checked + label,
+.btns--radio input[type=checkbox]:checked + label, .btns--checkbox input[type=radio]:checked + label,
+.btns--checkbox input[type=checkbox]:checked + label {
+  /* checked state */
+}
+
+.btns__btn--icon {
+  padding: var(--btns-button-padding-x);
+}
+.btns__btn--icon .icon {
+  display: block;
+  color: inherit;
 }
 
 /* -------------------------------- 
@@ -17195,6 +17319,337 @@ Usage: codyhouse.co/license
   max-width: var(--drawer-width);
 }
 
+/* --------------------------------
+
+File#: _1_emoji-feedback
+Title: Emoji Feedback
+Descr: A feedback collection system based on emoticons
+Usage: codyhouse.co/license
+
+-------------------------------- */
+:root {
+  --emoji-rate-size: 40px;
+}
+
+.emoji-rate__list > * {
+  position: relative;
+}
+
+.emoji-rate__custom-input {
+  position: relative;
+  display: block;
+  font-size: var(--emoji-rate-size);
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-out-back);
+}
+
+.emoji-rate__icon {
+  display: block;
+  width: inherit;
+  height: inherit;
+  transition: color 0.3s;
+}
+.emoji-rate__icon * {
+  transition: fill, stroke;
+  transition-duration: 0.3s;
+}
+
+.emoji-rate__hand-icon {
+  display: block;
+  font-size: var(--emoji-rate-size);
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  transition: transform 0.3s;
+}
+
+#emoji-rate-partially-hand {
+  opacity: 0;
+}
+
+.emoji-rate__native-input + .emoji-rate__custom-input--no .emoji-rate__icon #emoji-rate-no-eyes {
+  transform: translateY(0) translateX(0);
+}
+.emoji-rate__native-input + .emoji-rate__custom-input--no .emoji-rate__icon #emoji-rate-no-mouth {
+  transform: translateY(0) translateX(0);
+}
+.emoji-rate__native-input + .emoji-rate__custom-input--yes .emoji-rate__icon #emoji-rate-yes-eyes {
+  transform: translateY(0) scale(1);
+}
+.emoji-rate__native-input + .emoji-rate__custom-input--yes .emoji-rate__icon #emoji-rate-yes-mouth {
+  transform-origin: 50% 70%;
+  transform: translateY(0) scale(1);
+}
+.emoji-rate__native-input + .emoji-rate__custom-input--partially .emoji-rate__icon #emoji-rate-partially-eyes {
+  transform-origin: 20px 19.5px;
+  transform: translateY(0) scaleY(1);
+}
+.emoji-rate__native-input + .emoji-rate__custom-input--partially .emoji-rate__icon #emoji-rate-partially-mouth {
+  transform-origin: 20px 28px;
+  transform: translateY(0) scaleX(1);
+}
+.emoji-rate__native-input ~ .emoji-rate__hand-icon #emoji-rate-partially-hand {
+  transform-origin: 7px 35px;
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.emoji-rate__native-input:checked + .emoji-rate__custom-input,
+.emoji-rate__native-input:checked ~ .emoji-rate__hand-icon {
+  transform: scale(1.1);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--no .emoji-rate__icon {
+  color: var(--color-black);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--no .emoji-rate__icon #emoji-rate-no-bg {
+  fill: var(--color-error-light);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--no .emoji-rate__icon #emoji-rate-no-eyes {
+  -webkit-animation: emoji-rate-no-eyes-anim 1.6s;
+          animation: emoji-rate-no-eyes-anim 1.6s;
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--no .emoji-rate__icon #emoji-rate-no-mouth {
+  -webkit-animation: emoji-rate-no-mouth-anim 1.6s;
+          animation: emoji-rate-no-mouth-anim 1.6s;
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--yes .emoji-rate__icon {
+  color: var(--color-black);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--yes .emoji-rate__icon #emoji-rate-yes-bg {
+  fill: var(--color-warning);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--yes .emoji-rate__icon #emoji-rate-yes-eyes {
+  -webkit-animation: emoji-rate-yes-eyes-anim 1.6s;
+          animation: emoji-rate-yes-eyes-anim 1.6s;
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--yes .emoji-rate__icon #emoji-rate-yes-mouth {
+  transform-origin: 50% 70%;
+  -webkit-animation: emoji-rate-yes-mouth-anim 1.6s;
+          animation: emoji-rate-yes-mouth-anim 1.6s;
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--yes .emoji-rate__icon #emoji-rate-yes-tongue {
+  fill: var(--color-error);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--partially .emoji-rate__icon {
+  color: var(--color-black);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--partially .emoji-rate__icon #emoji-rate-partially-bg {
+  fill: var(--color-warning);
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--partially .emoji-rate__icon #emoji-rate-partially-eyes {
+  -webkit-animation: emoji-rate-partially-eyes-anim 1.6s;
+          animation: emoji-rate-partially-eyes-anim 1.6s;
+}
+.emoji-rate__native-input:checked + .emoji-rate__custom-input--partially .emoji-rate__icon #emoji-rate-partially-mouth {
+  -webkit-animation: emoji-rate-partially-mouth-anim 1.6s;
+          animation: emoji-rate-partially-mouth-anim 1.6s;
+}
+.emoji-rate__native-input:checked ~ .emoji-rate__hand-icon #emoji-rate-partially-hand {
+  -webkit-animation: emoji-rate-partially-hand-anim 1.6s;
+          animation: emoji-rate-partially-hand-anim 1.6s;
+}
+
+.emoji-rate__native-input:focus + .emoji-rate__custom-input {
+  box-shadow: 0 0 0 3px hsla(var(--color-warning-h), var(--color-warning-s), var(--color-warning-l), 0.3);
+}
+.emoji-rate__native-input:focus + .emoji-rate__custom-input--no {
+  box-shadow: 0 0 0 3px hsla(var(--color-error-h), var(--color-error-s), var(--color-error-l), 0.25);
+}
+
+.emoji-rate__native-input:focus:not(:focus-visible) + .emoji-rate__custom-input {
+  box-shadow: none !important;
+}
+
+@-webkit-keyframes emoji-rate-no-eyes-anim {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  30%, 40% {
+    transform: translateY(4px) translateX(0);
+  }
+  50% {
+    transform: translateY(4px) translateX(-4px);
+  }
+  60% {
+    transform: translateY(4px) translateX(4px);
+  }
+  70% {
+    transform: translateY(4px) translateX(0px);
+  }
+}
+
+@keyframes emoji-rate-no-eyes-anim {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  30%, 40% {
+    transform: translateY(4px) translateX(0);
+  }
+  50% {
+    transform: translateY(4px) translateX(-4px);
+  }
+  60% {
+    transform: translateY(4px) translateX(4px);
+  }
+  70% {
+    transform: translateY(4px) translateX(0px);
+  }
+}
+@-webkit-keyframes emoji-rate-no-mouth-anim {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  30%, 40% {
+    transform: translateY(2.5px) translateX(0);
+  }
+  50% {
+    transform: translateY(2.5px) translateX(-2.5px);
+  }
+  60% {
+    transform: translateY(2.5px) translateX(2.5px);
+  }
+  70% {
+    transform: translateY(2.5px) translateX(0px);
+  }
+}
+@keyframes emoji-rate-no-mouth-anim {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  30%, 40% {
+    transform: translateY(2.5px) translateX(0);
+  }
+  50% {
+    transform: translateY(2.5px) translateX(-2.5px);
+  }
+  60% {
+    transform: translateY(2.5px) translateX(2.5px);
+  }
+  70% {
+    transform: translateY(2.5px) translateX(0px);
+  }
+}
+@-webkit-keyframes emoji-rate-yes-mouth-anim {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  30%, 40% {
+    transform: translateY(-2.5px) scale(1.2);
+  }
+  55% {
+    transform: translateY(0) scale(1.2);
+  }
+  70% {
+    transform: translateY(-2.5px) scale(1.2);
+  }
+}
+@keyframes emoji-rate-yes-mouth-anim {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  30%, 40% {
+    transform: translateY(-2.5px) scale(1.2);
+  }
+  55% {
+    transform: translateY(0) scale(1.2);
+  }
+  70% {
+    transform: translateY(-2.5px) scale(1.2);
+  }
+}
+@-webkit-keyframes emoji-rate-yes-eyes-anim {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  30%, 40% {
+    transform: translateY(-2.5px);
+  }
+  55% {
+    transform: translateY(0);
+  }
+  70% {
+    transform: translateY(-2.5px);
+  }
+}
+@keyframes emoji-rate-yes-eyes-anim {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  30%, 40% {
+    transform: translateY(-2.5px);
+  }
+  55% {
+    transform: translateY(0);
+  }
+  70% {
+    transform: translateY(-2.5px);
+  }
+}
+@-webkit-keyframes emoji-rate-partially-eyes-anim {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+  }
+  30%, 40%, 60%, 70% {
+    transform: translateY(-2px) scaleY(1);
+  }
+  50% {
+    transform: translateY(-2px) scaleY(0.1);
+  }
+}
+@keyframes emoji-rate-partially-eyes-anim {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+  }
+  30%, 40%, 60%, 70% {
+    transform: translateY(-2px) scaleY(1);
+  }
+  50% {
+    transform: translateY(-2px) scaleY(0.1);
+  }
+}
+@-webkit-keyframes emoji-rate-partially-mouth-anim {
+  0%, 100% {
+    transform: translateY(0) scaleX(1);
+  }
+  30%, 70% {
+    transform: translateY(-4px) scaleX(0.6);
+  }
+}
+@keyframes emoji-rate-partially-mouth-anim {
+  0%, 100% {
+    transform: translateY(0) scaleX(1);
+  }
+  30%, 70% {
+    transform: translateY(-4px) scaleX(0.6);
+  }
+}
+@-webkit-keyframes emoji-rate-partially-hand-anim {
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  30%, 70% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+}
+@keyframes emoji-rate-partially-hand-anim {
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  30%, 70% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+}
 /* -------------------------------- 
 
 File#: _1_expandable-search
