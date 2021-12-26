@@ -2,12 +2,16 @@
 
 @section('content')
 
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_spec', $spec) }}
+</div>
+
 <form class="form-template-v3" method="POST" action="{{ route('specs.update', ['spec' => $spec->id]) }}">
     @csrf
     @method('PUT')
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Изменить характеристику</h2>
+      <div class="text-component margin-bottom-md text-center text-sm">
             <p>Внимание! Изменени характеристики затронет только товары, созданные после этого изменения. Товары, у которых характеристики уже указаны - затронуты не будут. Во избежании ошибок редактируйте только те характеристики, которые еще не использовались в товарах, либо после изменения пройдтиесь по всем товарам и вновь измените выбранную характеристику.</p>
       </div>
 
@@ -70,7 +74,7 @@
             <div class="col-6@md">
                 <input class="form-control" type="text" name="allvalues[{{ $loop->index }}][slug]" id="allvalues[{{ $loop->index }}][slug]" placeholder="slug" value="{{ $value }}">
             </div>
-           
+
             <div class="col-1@md">
               <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
                 <svg class="icon" viewBox="0 0 20 20">
@@ -86,7 +90,7 @@
 
             </div>
           </div>
-        
+
           {{-- Пустая форма при отсутствии связей --}}
           @empty
           <div class="grid gap-x-sm margin-y-md border radius-md padding-sm js-repeater__item">
@@ -97,7 +101,7 @@
             <div class="col-6@md">
                 <input class="form-control" type="text" name="allvalues[0][slug]" id="allvalues[0][slug]" placeholder="slug">
             </div>
-           
+
             <div class="col-1@md">
               <button class="btn btn--subtle padding-x-xs col-content js-repeater__remove btn--accent" type="button">
                 <svg class="icon" viewBox="0 0 20 20">
@@ -118,11 +122,11 @@
         <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить значение</button>
       </div>
     </section>
-      
+
     {{-- End add specs --}}
 
 
-         
+
         </div>
 
           <div class="col-6@md">
@@ -133,6 +137,7 @@
 
     <div class="text-right">
       <button type="submit" class="btn btn--primary">Отправить</button>
+    </div>
     </div>
   </form>
 @endsection

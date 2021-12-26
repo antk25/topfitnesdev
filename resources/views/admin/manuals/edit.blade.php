@@ -3,8 +3,11 @@
 @section('content')
 
 <div class="container">
+  <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_manual', $manual) }}
+  </div>
   <div class="tabs js-tabs">
-    <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
+    <ul class="flex flex-wrap gap-sm js-tabs__controls margin-bottom-sm" aria-label="Tabs Interface">
       <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Мануал</a></li>
       <li><a href="#tab1Panel2" class="tabs__control">Комментарии</a></li>
       <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
@@ -43,28 +46,26 @@
           @endif
     {{-- Конец сообщения об успешности сохранения --}}
 
-    <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Изменить статью "{{ $manual->name }}"</h2>
-      </div>
       <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-      <div class="margin-bottom-xs">
-          <label class="form-label margin-y-xs" for="user_id">Автор</label>
-        <div class="select">
-          <select class="select__input form-controll @error('user_id') form-control--error @enderror" name="user_id">
-            <option value="">Выбрать автора</option>
-            @foreach ($users as $k => $v)
-              <option value="{{ $k }}" @if ($manual->user->id == $k) selected @endif>{{ $v }}</option>
-            @endforeach
-          </select>
 
-          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+        <div class="margin-bottom-xs">
+          <label class="form-label margin-y-xs" for="user_id">Автор</label>
+          <div class="select">
+            <select class="select__input form-control @error('user_id') form-control--error @enderror" name="user_id">
+                <option value="">Выбрать автора</option>
+              @foreach ($users as $k => $v)
+                <option value="{{ $k }}" @if ($manual->user->id == $k) selected @endif>{{ $v }}</option>
+              @endforeach
+            </select>
+
+            <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
+          </div>
         </div>
-      </div>
-      @error('user_id')
-        <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
-      @enderror
-      </div>
+            @error('user_id')
+            <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+            @enderror
+        </div>
+
 
       <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
       <div class="grid gap-xxs margin-bottom-xs">
@@ -174,9 +175,6 @@
       </section>
     </div>
 
-
-
-    </fieldset>
 
 
     {{-- Add images --}}

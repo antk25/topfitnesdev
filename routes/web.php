@@ -70,6 +70,10 @@ Route::middleware('can:view-admin-panel')->prefix('admin')->group(function () {
 
     Route::get('/pages', [\App\Http\Controllers\Core\AdminTypePageController::class, 'index'])->name('pages');
 
+    Route::get('/components', [\App\Http\Controllers\Core\AdminComponentsPageController::class, 'index'])->name('components');
+
+    Route::get('/settings', [\App\Http\Controllers\Core\AdminSettingsPageController::class, 'index'])->name('settings');
+
     Route::get('/notifications', [\App\Http\Controllers\Core\AdminNotificationController::class, 'index'])->name('notifications');
     Route::post('/notifications/mark', [\App\Http\Controllers\Core\AdminNotificationController::class, 'markNotification'])->name('notifications.markNotification');
 

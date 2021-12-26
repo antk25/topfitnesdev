@@ -16,13 +16,13 @@ class HtmlComponent extends Model implements HasMedia
     protected $fillable = [
         'name',
         'code',
-        'about',
+        'about'
     ];
 
     public function registerMediaCollections(): void
-{
-    $this
-        ->addMediaCollection('htmlcomponents')
-        ->singleFile();
-}
+    {
+        $this
+            ->addMediaCollection('htmlcomponents')
+            ->singleFile();
+    }
 }

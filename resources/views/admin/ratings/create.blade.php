@@ -2,8 +2,8 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Создать новый рейтинг браслетов</h1>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_rating_create') }}
 </div>
 
   <form action="{{ route('ratings.store') }}" method="POST" enctype="multipart/form-data">

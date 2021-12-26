@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Статьи</h1>
-</div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('posts') }}
+  </div>
 
 <div class="grid gap-sm">
   <!-- basic table -->

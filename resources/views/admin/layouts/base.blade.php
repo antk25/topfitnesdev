@@ -171,7 +171,7 @@
               </li>
 
               <li class="sidenav__item sidenav__item--expanded">
-                <a href="#0" class="sidenav__link">
+                <a href="{{ route('components') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'components') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><circle cx="13" cy="5" r="3"></circle><rect x="3" y="8" width="7" height="7" rx="1" ry="1"></rect><polygon points="4 0 0 6 8 6 4 0"></polygon></g></svg>
                   <span class="sidenav__text text-sm@md">Компоненты</span>
                 </a>
@@ -220,7 +220,7 @@
               </li>
 
               <li class="sidenav__item sidenav__item--expanded">
-                <a href="#0" class="sidenav__link">
+                <a href="{{ route('pages') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'pages') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><path d="M14,0H2C1.4,0,1,0.4,1,1v14c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V1C15,0.4,14.6,0,14,0z M13,14H3V2h10V14z"></path><rect x="4" y="3" width="4" height="4"></rect><rect x="9" y="4" width="3" height="1"></rect><rect x="9" y="6" width="3" height="1"></rect><rect x="4" y="8" width="8" height="1"></rect> <rect x="4" y="10" width="8" height="1"></rect><rect x="4" y="12" width="5" height="1"></rect></g></svg>
 
                   <span class="sidenav__text text-sm@md">Страницы</span>
@@ -293,7 +293,7 @@
               </li>
 
 
-              <li class="sidenav__item sidenav__item--expanded">
+              {{-- <li class="sidenav__item sidenav__item--expanded">
                 <a href="#0" class="sidenav__link">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><path d="M14,0H2C1.4,0,1,0.4,1,1v14c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V1C15,0.4,14.6,0,14,0z M13,14H3V2h10V14z"></path><rect x="4" y="3" width="4" height="4"></rect><rect x="9" y="4" width="3" height="1"></rect><rect x="9" y="6" width="3" height="1"></rect><rect x="4" y="8" width="8" height="1"></rect> <rect x="4" y="10" width="8" height="1"></rect><rect x="4" y="12" width="5" height="1"></rect></g></svg>
 
@@ -319,7 +319,7 @@
 
 
                 </ul>
-              </li>
+              </li> --}}
             </ul>
 
             <div class="sidenav__divider margin-y-xs" role="presentation"></div>

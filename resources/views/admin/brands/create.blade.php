@@ -1,25 +1,9 @@
 @extends('admin.layouts.base')
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-@if (session()->has('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Новый бренд</h1>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_brand_create') }}
 </div>
 
 {{-- Сообщение об успешности сохранения --}}

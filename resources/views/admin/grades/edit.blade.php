@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Редактирование оценки id({{ $grade->id }})</h1>
-</div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_grade', $grade) }}
+  </div>
 
 {{-- Сообщение об успешности сохранения --}}
 @if(session('success'))
@@ -44,7 +44,7 @@
           </div>
 
           <div class="col-8@md">
-            <input class="form-control width-100 %@error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ $grade->name }}">
+            <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ $grade->name }}">
               @error('name')
               <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>Ошибка:</strong> {{ $message }}</p></div>
               @enderror

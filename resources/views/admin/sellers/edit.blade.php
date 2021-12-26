@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Изменить продавца c id {{ $seller->id }}</h1>
-</div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_seller', $seller) }}
+  </div>
 
 <form class="form-template-v3" method="POST" action="{{ route('sellers.update', ['seller' => $seller->id]) }}">
     @csrf

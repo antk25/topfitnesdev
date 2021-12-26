@@ -3,11 +3,9 @@
 
 @section('content')
 
-<!-- main content -->
-<main class="app-ui__body padding-md js-app-ui__body">
-  <div class="margin-bottom-md">
-    <h1 class="text-lg">Создать новый комментарий</h1>
-  </div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_comment_create') }}
+</div>
 
   @if(session('success'))
 
@@ -202,8 +200,6 @@
     </div>
   </form>
 </div>
-
-</main>
 
 
 

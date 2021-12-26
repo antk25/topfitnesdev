@@ -41,7 +41,7 @@ class AdminHtmlComponentController extends Controller
      */
     public function store(HtmcomponentRequest $request)
     {
-       $component = HtmlComponent::create([
+       $htmlcomponent = HtmlComponent::create([
             'name' => $request->name,
             'code' => $request->code,
             'about' => $request->about,
@@ -51,11 +51,19 @@ class AdminHtmlComponentController extends Controller
 
        if ($file != '') {
 
-        $component->addMedia('file')->toMediaCollection('htmlcomponents');
+        $htmlcomponent->addMedia($file)->toMediaCollection('htmlcomponents');
 
        }
 
-       return redirect()->route('admin.htmlcomponents.index');
+       if ($htmlcomponent) {
+          return redirect()
+                 ->route('htmlcomponents.edit', $htmlcomponent->id)
+                 ->with(['success' => 'Внесенные изменения были сохранены']);
+           } else {
+            return back()
+                    ->withErrors(['msg' => 'Ошибка сохранения'])
+                    ->withInput();
+           }
     }
 
     /**

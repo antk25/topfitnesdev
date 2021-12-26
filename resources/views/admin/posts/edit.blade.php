@@ -5,6 +5,11 @@
 
 
 <div class="container">
+
+  <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_post', $post) }}
+  </div>
+
   <div class="tabs js-tabs">
     <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
       <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Статья</a></li>

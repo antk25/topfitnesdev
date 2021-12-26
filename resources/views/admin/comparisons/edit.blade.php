@@ -3,8 +3,11 @@
 @section('content')
 
 <div class="container">
+  <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_comparison', $comparison) }}
+  </div>
   <div class="tabs js-tabs">
-    <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
+    <ul class="flex flex-wrap gap-sm js-tabs__controls margin-bottom-sm" aria-label="Tabs Interface">
       <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Статья</a></li>
       <li><a href="#tab1Panel2" class="tabs__control">Комментарии</a></li>
       <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
@@ -43,10 +46,7 @@
           @endif
     {{-- Конец сообщения об успешности сохранения --}}
 
-    <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Изменить статью "{{ $comparison->name }}"</h2>
-      </div>
+
       <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
       <div class="margin-bottom-xs">
           <label class="form-label margin-y-xs" for="user_id">Автор</label>
@@ -219,10 +219,6 @@
         </div>
       </section>
     </div>
-
-
-
-    </fieldset>
 
 
     {{-- Add images --}}

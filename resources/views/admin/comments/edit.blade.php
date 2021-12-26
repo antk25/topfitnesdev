@@ -3,11 +3,9 @@
 
 @section('content')
 
-<!-- main content -->
-    <main class="app-ui__body padding-md js-app-ui__body">
-      <div class="margin-bottom-md">
-        <h1 class="text-lg">Редактировать комментарий с id {{ $comment->id }}</h1>
-      </div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_comment', $comment) }}
+  </div>
 
       @if(session('success'))
 
@@ -370,7 +368,6 @@
           </div>
         </form>
       </div>
-    </main>
 @endsection
 
 @section('scripts')

@@ -2,8 +2,8 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Создать статью для блога</h1>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_post_create') }}
 </div>
 
 <form class="form-template-v3" method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">

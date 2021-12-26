@@ -2,8 +2,8 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="margin-bottom-md">
-    <h1 class="text-lg">Уведомления</h1>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('notifications') }}
   </div>
 
   <div class="bg radius-md shadow-xs">

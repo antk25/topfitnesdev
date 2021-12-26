@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Редактирование бренда id({{ $brand->id }})</h1>
-</div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_brand', $brand) }}
+  </div>
 
 {{-- Сообщение об успешности сохранения --}}
 @if(session('success'))

@@ -8,6 +8,10 @@
 
 @section('content')
 
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_review', $review) }}
+  </div>
+
 <form class="form-template-v3" method="POST" action="{{ route('reviews.update', ['review' => $review->id]) }}">
     @csrf
     @method('PUT')

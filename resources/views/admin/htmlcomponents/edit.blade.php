@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Редактирование компнонента id({{ $htmlcomponent->id }})</h1>
-</div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_htmlcomponent', $htmlcomponent) }}
+  </div>
 
 {{-- Сообщение об успешности сохранения --}}
 @if(session('success'))
@@ -30,19 +30,6 @@
 </div>
 @endif
 {{-- Конец сообщения об успешности сохранения --}}
-
-
-{{-- Сообщения об ошибках --}}
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-{{-- Конец сообщения об ошибках --}}
 
 <form class="form-template-v3" method="POST" action="{{ route('htmlcomponents.update', ['htmlcomponent' => $htmlcomponent->id]) }}" enctype="multipart/form-data">
     @csrf

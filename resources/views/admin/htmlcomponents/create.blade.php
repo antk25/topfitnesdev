@@ -2,8 +2,8 @@
 
 @section('content')
 
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Новый Html компонент</h1>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_htmlcomponent_create') }}
 </div>
 
 {{-- Сообщение об успешности сохранения --}}
@@ -31,7 +31,7 @@
 @endif
 {{-- Конец сообщения об успешности сохранения --}}
 
-<form class="form-template-v3" method="POST" action="{{ route('htmlcomponents.store') }}">
+<form class="form-template-v3" method="POST" action="{{ route('htmlcomponents.store') }}" enctype="multipart/form-data">
     @csrf
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
@@ -60,7 +60,7 @@
         </div>
         <div class="border radius-md padding-sm bg-gradient-3">
           <label class="form-label margin-bottom-xxs sr-only" for="text">Код элемента</label>
-          <textarea class="form-control width-100% text-sm text" spellcheck="false" name="code" id="code"></textarea>
+          <textarea class="form-control width-100% text-sm text" spellcheck="false" name="code" id="code">{{ old('code') }}</textarea>
 
         </div>
           @error('code')

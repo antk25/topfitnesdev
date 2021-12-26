@@ -110,11 +110,12 @@
   </nav>
 </div>
 
-  <button class="btn btn--subtle margin-bottom-md hide@md" aria-controls="float-sidenav-id">Показать навигацию</button>
 
-  <div class="margin-bottom-md">
-    <h1 class="text-lg">Новый браслет</h1>
-  </div>
+  <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_bracelet_create') }}
+</div>
+
+<button class="btn btn--subtle margin-bottom-md hide@md" aria-controls="float-sidenav-id">Показать навигацию</button>
 
   <form id="main" class="form-template-v3 js-float-sidenav-target" method="POST" action="{{ route('bracelets.store') }}"  enctype="multipart/form-data">
     @csrf

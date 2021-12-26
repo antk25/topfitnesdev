@@ -1,9 +1,11 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Статьи-сравнения</h1>
-</div>
+
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('comparisons') }}
+  </div>
+
 <div class="bg radius-md padding-md shadow-xs col-12">
   <a class="btn btn--success text-sm" href="{{ route('comparisons.create') }}">Добавить статью</a>
 @if (count($comparisons))
@@ -34,7 +36,7 @@
     <tbody class="tbl__body">
 @foreach ($comparisons as $item)
     <tr class="tbl__row">
-        <td class="tbl__cell @if (! $comparison->published) font-italic @endif {{ $comparison->trashed() ? 'color-contrast-lower' : '' }}" role="cell">
+        <td class="tbl__cell @if (! $item->published) font-italic @endif {{ $item->trashed() ? 'color-contrast-lower' : '' }}" role="cell">
             {{ $item->id }}
         </td>
 
@@ -57,12 +59,12 @@
         <td class="tbl__cell text-right" role="cell">
 
           <div class="flex flex-wrap gap-xs">
-            @if (! $comparison->trashed())
-              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.edit', ['comparison' => $comparison->id]) }}">
+            @if (! $item->trashed())
+              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.edit', ['comparison' => $item->id]) }}">
                 Изменить
               </a>
 
-              <form method="POST" action="{{ route('comparisons.destroy', ['comparison' => $comparison->id]) }}">
+              <form method="POST" action="{{ route('comparisons.destroy', ['comparison' => $item->id]) }}">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn--accent"><svg class="icon" viewBox="0 0 20 20">
@@ -76,7 +78,7 @@
                 </svg></button>
               </form>
               @else
-              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.restore', ['comparison' => $comparison->id]) }}">
+              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.restore', ['comparison' => $item->id]) }}">
                 Восстановить
               </a>
 
@@ -87,15 +89,15 @@
 
               @endif
 
-              @if ($comparison->published)
+              @if ($item->published)
 
-              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.publish', ['comparison' => $comparison->id]) }}">
+              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.publish', ['comparison' => $item->id]) }}">
                Черновик
               </a>
 
               @else
 
-              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.publish', ['comparison' => $comparison->id]) }}">
+              <a class="btn btn--primary btn--sm" href="{{ route('comparisons.publish', ['comparison' => $item->id]) }}">
                 Опубликовать
               </a>
 
@@ -108,14 +110,14 @@
     <div id="dialog-{{ $loop->index }}" class="dialog js-dialog" data-animation="on">
       <div class="dialog__content max-width-xxs" role="alertdialog" aria-labelledby="dialog-title-{{ $loop->index }}" aria-describedby="dialog-description-{{ $loop->index }}">
         <div class="text-component">
-          <h4 id="dialog-title-{{ $loop->index }}">Вы уверены, что хотите удалить статью {{ $comparison->name }}?</h4>
+          <h4 id="dialog-title-{{ $loop->index }}">Вы уверены, что хотите удалить статью {{ $item->name }}?</h4>
           <p id="dialog-description-{{ $loop->index }}">После подтверждения статья будет удалена <mark>безвозвратно</mark>!!!.</p>
         </div>
 
         <footer class="margin-top-md">
           <div class="flex justify-end gap-xs flex-wrap">
             <button class="btn btn--subtle js-dialog__close">Отмена</button>
-            <form method="comparison" action="{{ route('comparisons.destroy', ['comparison' => $comparison->id]) }}">
+            <form method="comparison" action="{{ route('comparisons.destroy', ['comparison' => $item->id]) }}">
               @csrf
               @method('DELETE')
               <button type="submit" class="btn btn--accent">Удалить</button>

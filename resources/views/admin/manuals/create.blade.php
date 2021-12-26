@@ -2,12 +2,13 @@
 
 @section('content')
 
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('admin_manual_create') }}
+</div>
+
 <form class="form-template-v3" method="POST" action="{{ route('manuals.store') }}" enctype="multipart/form-data">
     @csrf
     <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
-      <div class="text-component margin-bottom-md text-center">
-        <h2>Добавить мануал</h2>
-      </div>
       <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
       <div class="margin-bottom-xs">
           <label class="form-label margin-y-xs" for="user_id">Автор</label>

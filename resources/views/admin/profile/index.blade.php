@@ -2,12 +2,12 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Настройки профиля</h1>
-</div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('profile') }}
+  </div>
 
 
-<div class="bg radius-md shadow-xs">
+    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
   <div class="padding-md">
     <div class="author ">
       <a href="#0" class="author__img-wrapper">
@@ -24,7 +24,7 @@
               <p class="color-contrast-medium">{{ $user->about }}</p>
         @endif
         <p class="text-sm"><a href="{{ route('admin.profile.edit') }}">Редактировать профиль</a> </p>
-        <a class="btns__btn btn--sm" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           {{ __('Logout') }}
         </a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

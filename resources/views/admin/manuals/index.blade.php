@@ -1,9 +1,9 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="margin-bottom-md">
-  <h1 class="text-lg">Мануалы</h1>
-</div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+  {{ Breadcrumbs::render('manuals') }}
+  </div>
 <div class="bg radius-md padding-md shadow-xs col-12">
   <a class="btn btn--success text-sm" href="{{ route('manuals.create') }}">Добавить</a>
 @if (count($manuals))
@@ -33,7 +33,7 @@
 
     <tbody class="tbl__body">
 @foreach ($manuals as $item)
-    <tr class="tbl__row @if (! $manual->published) font-italic @endif {{ $manual->trashed() ? 'color-contrast-lower' : '' }}">
+    <tr class="tbl__row @if (! $item->published) font-italic @endif {{ $item->trashed() ? 'color-contrast-lower' : '' }}">
         <td class="tbl__cell" role="cell">
             {{ $item->id }}
         </td>
@@ -57,12 +57,12 @@
         <td class="tbl__cell text-right" role="cell">
 
           <div class="flex flex-wrap gap-xs">
-            @if (! $manual->trashed())
-              <a class="btn btn--primary btn--sm" href="{{ route('manuals.edit', ['manual' => $manual->id]) }}">
+            @if (! $item->trashed())
+              <a class="btn btn--primary btn--sm" href="{{ route('manuals.edit', ['manual' => $item->id]) }}">
                 Изменить
               </a>
 
-              <form method="POST" action="{{ route('manuals.destroy', ['manual' => $manual->id]) }}">
+              <form method="POST" action="{{ route('manuals.destroy', ['manual' => $item->id]) }}">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn--accent"><svg class="icon" viewBox="0 0 20 20">
@@ -76,7 +76,7 @@
                 </svg></button>
               </form>
               @else
-              <a class="btn btn--primary btn--sm" href="{{ route('manuals.restore', ['manual' => $manual->id]) }}">
+              <a class="btn btn--primary btn--sm" href="{{ route('manuals.restore', ['manual' => $item->id]) }}">
                 Восстановить
               </a>
 
@@ -87,15 +87,15 @@
 
               @endif
 
-              @if ($manual->published)
+              @if ($item->published)
 
-              <a class="btn btn--primary btn--sm" href="{{ route('manuals.publish', ['manual' => $manual->id]) }}">
+              <a class="btn btn--primary btn--sm" href="{{ route('manuals.publish', ['manual' => $item->id]) }}">
                Черновик
               </a>
 
               @else
 
-              <a class="btn btn--primary btn--sm" href="{{ route('manuals.publish', ['manual' => $manual->id]) }}">
+              <a class="btn btn--primary btn--sm" href="{{ route('manuals.publish', ['manual' => $item->id]) }}">
                 Опубликовать
               </a>
 
@@ -108,14 +108,14 @@
     <div id="dialog-{{ $loop->index }}" class="dialog js-dialog" data-animation="on">
       <div class="dialog__content max-width-xxs" role="alertdialog" aria-labelledby="dialog-title-{{ $loop->index }}" aria-describedby="dialog-description-{{ $loop->index }}">
         <div class="text-component">
-          <h4 id="dialog-title-{{ $loop->index }}">Вы уверены, что хотите удалить статью {{ $manual->name }}?</h4>
+          <h4 id="dialog-title-{{ $loop->index }}">Вы уверены, что хотите удалить статью {{ $item->name }}?</h4>
           <p id="dialog-description-{{ $loop->index }}">После подтверждения статья будет удалена <mark>безвозвратно</mark>!!!.</p>
         </div>
 
         <footer class="margin-top-md">
           <div class="flex justify-end gap-xs flex-wrap">
             <button class="btn btn--subtle js-dialog__close">Отмена</button>
-            <form method="manual" action="{{ route('manuals.destroy', ['manual' => $manual->id]) }}">
+            <form method="manual" action="{{ route('manuals.destroy', ['manual' => $item->id]) }}">
               @csrf
               @method('DELETE')
               <button type="submit" class="btn btn--accent">Удалить</button>

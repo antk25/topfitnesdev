@@ -1,9 +1,9 @@
 @extends('admin.layouts.base')
 
 @section('content')
-<div class="margin-bottom-md">
-          <h1 class="text-lg">Настройки профиля</h1>
-        </div>
+<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+    {{ Breadcrumbs::render('admin_profile_edit', auth()->user()) }}
+  </div>
 
         <div class="margin-bottom-md">
           <nav class="s-tabs">
