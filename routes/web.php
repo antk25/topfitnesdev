@@ -51,7 +51,7 @@ Route::put('/profile/update', [\App\Http\Controllers\Auth\UpdateUserPorfileInfor
 Route::get('admin/profile/edit', [\App\Http\Controllers\Auth\UpdateUserPorfileInformation::class, 'edit'])->name('admin.profile.edit');
 
 // шаблоны страниц
-Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->name('index');
+Route::get('/', [\App\Http\Controllers\Core\IndexController::class, 'index'])->name('index');
 Route::get('/katalog', [\App\Http\Controllers\Products\BraceletController::class, 'index'])->name('pub.bracelets.index');
 Route::get('/podbor', [\App\Http\Controllers\Products\BraceletController::class, 'selection'])->name('pub.bracelets.selection');
 Route::get('/katalog/{slug}', [\App\Http\Controllers\Products\BraceletController::class, 'show'])->name('bracelets.show');

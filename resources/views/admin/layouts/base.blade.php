@@ -22,18 +22,10 @@
     <!-- header -->
     <header class="app-ui__header shadow-xs padding-x-md padding-x-0@md">
       <div class="app-ui__logo-wrapper padding-x-sm@md">
-        <a href="{{ route('dashboard') }}" class="app-ui__logo">
-          <svg width="104" height="30" viewBox="0 0 104 30" fill="var(--color-contrast-higher)">
-            <title>Go to homepage</title>
-            <circle cx="15" cy="15" r="15" fill="var(--color-contrast-lower)" />
-            <path d="M36.184,6.145h4.551l4.807,11.727h.2L50.553,6.145H55.1V23.6H51.525V12.239h-.146L46.862,23.514H44.425L39.908,12.2h-.145V23.6H36.184Z" />
-            <path d="M61.8,23.846c-3.556,0-4.347-2.234-4.347-3.9a3.405,3.405,0,0,1,2.5-3.524c1.371-.521,3.771-.56,4.854-.866.485-.136.732-.377.732-.869,0-.555-.191-1.695-1.942-1.695A2.187,2.187,0,0,0,61.274,14.5l-3.357-.273c.249-1.193,1.349-3.886,5.7-3.886,2.913,0,4.257,1.246,4.778,1.9a3.944,3.944,0,0,1,.779,2.536V23.6H65.731V21.784h-.1A3.986,3.986,0,0,1,61.8,23.846Zm1.04-2.5a2.543,2.543,0,0,0,2.727-2.42v-1.39a8.013,8.013,0,0,1-2.523.589c-.637.079-2.122.351-2.122,1.7C60.925,21.035,62.059,21.341,62.843,21.341Z" />
-            <path d="M72,23.6V10.509h3.52v2.284h.136a3.513,3.513,0,0,1,1.2-1.845,3.867,3.867,0,0,1,3.084-.5v3.222c-.169-.057-2.266-.7-3.523.558a2.657,2.657,0,0,0-.789,1.964V23.6Z" />
-            <path d="M89.425,10.509v2.726H86.962v6.342a1.307,1.307,0,0,0,.341,1.014,2.092,2.092,0,0,0,1.789.145l.571,2.7c-.182.057-3.132,1-5.143-.515a3.348,3.348,0,0,1-1.189-2.869V13.235h-1.79V10.509h1.79V7.372h3.631v3.137Z" />
-            <path d="M97.615,23.855A6,6,0,0,1,91.9,20.7a7.7,7.7,0,0,1-.783-3.583c0-2.22,1-6.776,6.349-6.776,5.7,0,6.153,5.165,6.153,6.647v1H94.709v.008a2.864,2.864,0,0,0,2.966,3.154,2.41,2.41,0,0,0,2.513-1.517l3.359.221C103.291,21.065,102.094,23.855,97.615,23.855Zm-2.906-8.122h5.5a2.576,2.576,0,0,0-2.677-2.685A2.772,2.772,0,0,0,94.709,15.733Z" />
-            <path d="M25.607,4.393,4.393,25.607A15,15,0,0,0,25.607,4.393Z" />
-          </svg>
+        <a href="{{ route('dashboard') }}" class="app-ui__user-btn">
+          <img src="/img/theme/fitness-tracker.png" alt="">
         </a>
+        &nbsp; TopFitnesBraslet
       </div>
 
       <!-- (mobile-only) menu button -->
@@ -51,7 +43,7 @@
       <div class="display@md flex flex-grow height-100% items-center justify-between padding-x-sm">
         <form class="expandable-search text-sm@md js-expandable-search">
           <label class="sr-only" for="expandable-search">Search</label>
-          <input class="reset expandable-search__input js-expandable-search__input" type="search" name="expandable-search" id="expandable-search" placeholder="Search...">
+          <input class="reset expandable-search__input js-expandable-search__input" type="search" name="expandable-search" id="expandable-search" placeholder="Поиск пока не работает">
           <button class="reset expandable-search__btn">
             <svg class="icon" viewBox="0 0 20 20">
               <title>Search</title>
@@ -75,7 +67,7 @@
             @endif
           </button>
 
-          <a class="app-ui__header-btn js-tab-focus" href="settings.html">
+          <a class="app-ui__header-btn js-tab-focus" href="{{ route('settings') }}">
             <svg class="icon" viewBox="0 0 20 20">
               <title>Settings</title>
               <g fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
@@ -166,11 +158,24 @@
                   </svg>
                   <span class="sidenav__text text-sm@md">Главная</span>
 
-                  <span class="sidenav__counter">12 <i class="sr-only">Уведомления</i></span>
                 </a>
               </li>
 
-              <li class="sidenav__item sidenav__item--expanded">
+              <li class="
+              @switch(request()->segment(2))
+                @case('components')
+                @case('grades')
+                @case('sellers')
+                @case('reviews')
+                @case('comments')
+                @case('brands')
+                @case('specs')
+                  sidenav__item sidenav__item--expanded
+                  @break
+                @default
+              sidenav__item sidenav__item
+              @endswitch
+              ">
                 <a href="{{ route('components') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'components') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><circle cx="13" cy="5" r="3"></circle><rect x="3" y="8" width="7" height="7" rx="1" ry="1"></rect><polygon points="4 0 0 6 8 6 4 0"></polygon></g></svg>
                   <span class="sidenav__text text-sm@md">Компоненты</span>
@@ -219,7 +224,21 @@
                 </ul>
               </li>
 
-              <li class="sidenav__item sidenav__item--expanded">
+              <li class="
+              @switch(request()->segment(2))
+                @case('pages')
+                @case('bracelets')
+                @case('ratings')
+                @case('posts')
+                @case('overviews')
+                @case('comparisons')
+                @case('manuals')
+                  sidenav__item sidenav__item--expanded
+                  @break
+                @default
+              sidenav__item sidenav__item
+              @endswitch
+              ">
                 <a href="{{ route('pages') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'pages') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><path d="M14,0H2C1.4,0,1,0.4,1,1v14c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V1C15,0.4,14.6,0,14,0z M13,14H3V2h10V14z"></path><rect x="4" y="3" width="4" height="4"></rect><rect x="9" y="4" width="3" height="1"></rect><rect x="9" y="6" width="3" height="1"></rect><rect x="4" y="8" width="8" height="1"></rect> <rect x="4" y="10" width="8" height="1"></rect><rect x="4" y="12" width="5" height="1"></rect></g></svg>
 
@@ -271,26 +290,7 @@
               </li>
 
 
-              <li class="sidenav__item sidenav__item--expanded">
-                <a href="#0" class="sidenav__link">
-                  <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><path d="M14,0H2C1.4,0,1,0.4,1,1v14c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V1C15,0.4,14.6,0,14,0z M13,14H3V2h10V14z"></path><rect x="4" y="3" width="4" height="4"></rect><rect x="9" y="4" width="3" height="1"></rect><rect x="9" y="6" width="3" height="1"></rect><rect x="4" y="8" width="8" height="1"></rect> <rect x="4" y="10" width="8" height="1"></rect><rect x="4" y="12" width="5" height="1"></rect></g></svg>
 
-                  <span class="sidenav__text text-sm@md">Настройка админки</span>
-                </a>
-
-                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
-                  <svg class="icon" viewBox="0 0 12 12"><polygon points="4 3 8 6 4 9 4 3" /></svg>
-                </button>
-
-                <ul class="sidenav__list">
-                  <li class="sidenav__item">
-                    <a href="{{ route('htmlcomponents.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'htmlcomponents') ? 'page' : '' }}">
-                      <span class="sidenav__text text-sm@md">HTML компоненты</span>
-                    </a>
-                  </li>
-
-                </ul>
-              </li>
 
 
               {{-- <li class="sidenav__item sidenav__item--expanded">
@@ -329,6 +329,44 @@
             </div>
 
             <ul class="sidenav__list">
+
+              <li class="
+              @switch(request()->segment(2))
+                @case('htmlcomponents')
+                @case('settings')
+                  sidenav__item sidenav__item--expanded
+                  @break
+                @default
+              sidenav__item sidenav__item
+              @endswitch
+              ">
+                <a href="{{ route('settings') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'settings') ? 'page' : '' }}">
+                  <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
+                    <g>
+                      <path d="M6,0H1C0.4,0,0,0.4,0,1v5c0,0.6,0.4,1,1,1h5c0.6,0,1-0.4,1-1V1C7,0.4,6.6,0,6,0z M5,5H2V2h3V5z"></path>
+                      <path d="M15,0h-5C9.4,0,9,0.4,9,1v5c0,0.6,0.4,1,1,1h5c0.6,0,1-0.4,1-1V1C16,0.4,15.6,0,15,0z M14,5h-3V2h3V5z"></path>
+                      <path d="M6,9H1c-0.6,0-1,0.4-1,1v5c0,0.6,0.4,1,1,1h5c0.6,0,1-0.4,1-1v-5C7,9.4,6.6,9,6,9z M5,14H2v-3h3V14z"></path>
+                      <path d="M15,9h-5c-0.6,0-1,0.4-1,1v5c0,0.6,0.4,1,1,1h5c0.6,0,1-0.4,1-1v-5C16,9.4,15.6,9,15,9z M14,14h-3v-3h3V14z"></path>
+                    </g>
+                  </svg>
+
+                  <span class="sidenav__text text-sm@md">Настройка админки</span>
+                </a>
+
+                <button class="reset sidenav__sublist-control js-sidenav__sublist-control js-tab-focus" aria-label="Toggle sub navigation">
+                  <svg class="icon" viewBox="0 0 12 12"><polygon points="4 3 8 6 4 9 4 3" /></svg>
+                </button>
+
+                <ul class="sidenav__list">
+                  <li class="sidenav__item">
+                    <a href="{{ route('htmlcomponents.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'htmlcomponents') ? 'page' : '' }}">
+                      <span class="sidenav__text text-sm@md">HTML компоненты</span>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+
               <li class="sidenav__item">
                 <a href="{{ route('profile.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'profile') ? 'page' : '' }}">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
