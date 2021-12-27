@@ -119,6 +119,7 @@
 
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+      @include('admin.layouts.parts.htmlcomponents')
       <section>
         <div class="text-component padding-y-sm">
           <h4>Основной контент (в начале статьи)</h4>

@@ -44,16 +44,9 @@ class AdminHtmlComponentController extends Controller
        $htmlcomponent = HtmlComponent::create([
             'name' => $request->name,
             'code' => $request->code,
+            'link' => $request->link,
             'about' => $request->about,
        ]);
-
-       $file = request('file');
-
-       if ($file != '') {
-
-        $htmlcomponent->addMedia($file)->toMediaCollection('htmlcomponents');
-
-       }
 
        if ($htmlcomponent) {
           return redirect()
@@ -99,18 +92,10 @@ class AdminHtmlComponentController extends Controller
     {
         $htmlcomponent->update([
             'name' => $request->name,
+            'link' => $request->link,
             'code' => $request->code,
             'about' => $request->about,
        ]);
-
-
-       $file = request('file');
-
-       if ($file != '') {
-
-        $htmlcomponent->addMedia($file)->toMediaCollection('htmlcomponents');
-
-       }
 
        return back();
     }
@@ -121,8 +106,10 @@ class AdminHtmlComponentController extends Controller
      * @param  \App\Models\HtmlComponent  $htmlComponent
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HtmlComponent $htmlComponent)
+    public function destroy($id)
     {
-        //
+        HtmlComponent::destroy($id);
+
+        return back();
     }
 }

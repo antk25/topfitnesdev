@@ -163,6 +163,7 @@
       </div>
 
       <div class="bg radius-md shadow-xs padding-md margin-y-md">
+        @include('admin.layouts.parts.htmlcomponents')
       <section>
         <div class="text-component padding-y-sm">
           <h4>Текст</h4>

@@ -34,9 +34,9 @@ class HtmcomponentRequest extends FormRequest
                 'required',
                 'min:20'
             ],
-            'file' => [
+            'link' => [
                 'required',
-                'mimes:jpg,png'
+                'url'
             ]
         ];
     }
@@ -46,7 +46,7 @@ class HtmcomponentRequest extends FormRequest
         return [
             'name' => 'Название',
             'code' => 'Код компонента',
-            'file' => 'Изображение/скриншот компонента',
+            'link' => 'Ссылка на источник',
         ];
     }
 }

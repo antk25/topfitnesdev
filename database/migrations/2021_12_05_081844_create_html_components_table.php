@@ -16,6 +16,7 @@ class CreateHtmlComponentsTable extends Migration
         Schema::create('html_components', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('link');
             $table->text('code');
             $table->string('about', 1000)->nullable();
             $table->timestamps();

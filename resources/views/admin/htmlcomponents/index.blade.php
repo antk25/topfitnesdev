@@ -24,6 +24,10 @@
             <span class="font-semibold">Название</span>
           </th>
 
+          <th class="tbl__cell text-left" scope="col">
+            <span class="font-semibold">Ссылка</span>
+          </th>
+
           <th class="tbl__cell text-right" scope="col">
             <span class="font-semibold">Действия</span>
           </th>
@@ -44,6 +48,10 @@
                 <p class="margin-bottom-xxxxs">{{ $htmlcomponent->name }}</p>
                 </div>
             </div>
+        </td>
+
+        <td class="tbl__cell" role="cell">
+          <a target="_blank" href="{{ $htmlcomponent->link }}">Открыть</a>
         </td>
 
         <td class="tbl__cell text-right" role="cell">

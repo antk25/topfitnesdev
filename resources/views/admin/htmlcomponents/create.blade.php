@@ -34,7 +34,6 @@
 <form class="form-template-v3" method="POST" action="{{ route('htmlcomponents.store') }}" enctype="multipart/form-data">
     @csrf
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-    <fieldset class="margin-bottom-md padding-bottom-md border-bottom">
 
       <div class="grid gap-xxs margin-bottom-xs">
         <div class="col-6@md">
@@ -47,11 +46,18 @@
         </div>
 
         <div class="col-6@md">
-          <label class="form-label margin-bottom-xxs" for="about">Описание</label>
-          <textarea class="form-control width-100%" name="about" id="about">{{ old('about') }}</textarea>
-          <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
+          <label class="form-label margin-bottom-xxs" for="link">Ссылка</label>
+          <input class="form-control width-100% @error('link') form-control--error @enderror" type="url" name="link" id="link" value="{{ old('link') }}">
+            @error('link')
+            <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
+            @enderror
+          <p class="text-xs color-contrast-medium margin-top-xxs">Ссылка на источник</p>
         </div>
       </div>
+
+      <label class="form-label margin-bottom-xxs" for="about">Описание</label>
+      <textarea class="form-control width-100%" name="about" id="about">{{ old('about') }}</textarea>
+      <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
 
       <section>
         <div class="text-component padding-y-sm">
@@ -69,33 +75,7 @@
       </section>
 
 
-    </fieldset>
 
-
-    {{-- Add images --}}
-    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-      <div class="text-component margin-y-sm">
-        <h4 id="section-13">Добавить изображение</h4>
-        <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После публикации браслета можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
-      </div>
-
-      <div class="file-upload inline-block">
-        <label for="file" class="file-upload__label btn btn--primary">
-          <span class="flex items-center">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
-
-            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
-          </span>
-        </label>
-
-        <input type="file" class="file-upload__input" name="file" id="file">
-          @error('file')
-          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
-          @enderror
-
-      </div>
-    </div>
-{{-- End add images --}}
     </div>
 
     <div class="text-right">

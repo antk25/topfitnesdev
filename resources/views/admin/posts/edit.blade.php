@@ -49,12 +49,6 @@
 @endif
 {{-- Конец сообщения об успешности сохранения --}}
 
-
-<div class="margin-bottom-md">
-  <h2>Изменить статью с id {{ $post->id }}</h2>
-</div>
-
-
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
 
