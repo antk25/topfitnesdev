@@ -92,7 +92,7 @@
           </div>
         </a>
 
-        <a class="link-card flex flex-column bg radius-md col-6@sm col-4@lg" href="{{ route('grades.index') }}" aria-label="Link label">
+        <a class="link-card flex flex-column bg radius-md col-6@sm col-4@lg" href="{{ route('comments.index') }}" aria-label="Link label">
           <div class="padding-md">
             <div class="flex flex-wrap gap-xs items-center">
               <figure>

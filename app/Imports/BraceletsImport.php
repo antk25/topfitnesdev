@@ -174,49 +174,49 @@ class BraceletsImport implements
          *
          */
 
-        // $prices = [
-        //     1 => $row['prod1'],
-        //     2 => $row['prod2'],
-        //     3 => $row['market1'],
-        //     4 => $row['market2'],
-        // ];
+        $prices = [
+            1 => $row['prod1'],
+            2 => $row['prod2'],
+            3 => $row['market1'],
+            4 => $row['market2'],
+        ];
 
-        // $prices = array_filter($prices, function($element) {
-        //     return ! empty($element);
-        // });
+        $prices = array_filter($prices, function($element) {
+            return ! empty($element);
+        });
 
-        // $old_prices = [
-        //     1 => $row['prod1_old'],
-        //     2 => $row['prod2_old'],
-        //     3 => $row['market1_old'],
-        //     4 => $row['market2_old'],
-        // ];
+        $old_prices = [
+            1 => $row['prod1_old'],
+            2 => $row['prod2_old'],
+            3 => $row['market1_old'],
+            4 => $row['market2_old'],
+        ];
 
-        // $old_prices = array_filter($old_prices, function($element) {
-        //     return ! empty($element);
-        // });
+        $old_prices = array_filter($old_prices, function($element) {
+            return ! empty($element);
+        });
 
-        // $links = [
-        //     1 => $row['prod1_link'],
-        //     2 => $row['prod2_link'],
-        //     3 => $row['market1_link'],
-        //     4 => $row['market2_link'],
-        //     ];
+        $links = [
+            1 => $row['prod1_link'],
+            2 => $row['prod2_link'],
+            3 => $row['market1_link'],
+            4 => $row['market2_link'],
+            ];
 
-        // $links = array_filter($links, function($element) {
-        //     return ! empty($element);
-        // });
+        $links = array_filter($links, function($element) {
+            return ! empty($element);
+        });
 
-        // $keys = array_keys($prices);
+        $keys = array_keys($prices);
 
-        // $merged = array_map(function($p, $o, $l){
-        //     return ['price' => $p, 'old_price' => $o, 'link' => $l];
-        // }, $prices, $old_prices, $links);
+        $merged = array_map(function($p, $o, $l){
+            return ['price' => $p, 'old_price' => $o, 'link' => $l];
+        }, $prices, $old_prices, $links);
 
-        // $result_s = array_combine($keys, $merged);
+        $result_s = array_combine($keys, $merged);
 
 
-        // $bracelet->sellers()->sync($result_s);
+        $bracelet->sellers()->sync($result_s);
 
         // Конец импорта цен
 

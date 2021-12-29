@@ -8,6 +8,7 @@
 
 <form class="form-template-v3" method="POST" action="{{ route('sellers.update', ['seller' => $seller->id]) }}">
     @csrf
+    @method('PUT')
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
     <fieldset>
 

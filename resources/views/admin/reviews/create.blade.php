@@ -131,7 +131,7 @@
 
                 <label class="inline-block text-sm color-contrast-medium margin-bottom-xs" for="emoji-rate-msg">Напишите свои впечателения о товаре</label>
 
-                <textarea class="form-control width-100% hide" rows="4" name="review_text" id="review_text">{{ old('review_text') }}</textarea>
+                <textarea class="form-control width-100% hide" rows="4" name="review_text" id="review_text"></textarea>
 
                 @include('admin.layouts.parts.trixeditor')
 
@@ -144,13 +144,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
 
 {{--      <div class="margin-bottom-xs">--}}
 {{--        <div class="select">--}}
