@@ -54,7 +54,7 @@ Route::get('admin/profile/edit', [\App\Http\Controllers\Auth\UpdateUserPorfileIn
 Route::get('/', [\App\Http\Controllers\Core\IndexController::class, 'index'])->name('index');
 Route::get('/katalog', [\App\Http\Controllers\Products\BraceletController::class, 'index'])->name('pub.bracelets.index');
 Route::get('/podbor', [\App\Http\Controllers\Products\BraceletController::class, 'selection'])->name('pub.bracelets.selection');
-Route::get('/katalog/{slug}', [\App\Http\Controllers\Products\BraceletController::class, 'show'])->name('bracelets.show');
+Route::get('/katalog/{slug}', [\App\Http\Controllers\Products\BraceletController::class, 'show'])->name('pub.bracelets.show');
 Route::get('/ratings', [\App\Http\Controllers\Rating\RatingController::class, 'index'])->name('pub.ratings.index');
 Route::get('/{slug}', [\App\Http\Controllers\Rating\RatingController::class, 'show'])->name('pub.ratings.show');
 Route::get('/blog/{slug}', [\App\Http\Controllers\Blog\PostController::class, 'show'])->name('pub.posts.show');
