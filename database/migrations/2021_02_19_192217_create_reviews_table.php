@@ -15,7 +15,8 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->integer('bracelet_id')->unsinged();
+            $table->bigInteger('reviewable_id');
+            $table->string('reviewable_type');
             $table->string('name', 100);
             $table->string('email', 100)->nullable();
             $table->string('period_use')->nullable();

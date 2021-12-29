@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -176,21 +175,26 @@ class Bracelet extends Model implements HasMedia
     //         return ['id' => $item];
     //     })->all();
     // }
+    //
+    // protected function asJson($value)
+    // {
+    //     return json_encode($value, JSON_UNESCAPED_UNICODE);
+    // }
 
-    public function setPlusAttribute($value)
-    {
-        $this->attributes['plus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
-    }
-
-    public function setMinusAttribute($value)
-    {
-        $this->attributes['minus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
-    }
-
-    public function setBuyersLikeAttribute($value)
-    {
-        $this->attributes['buyers_like'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
-    }
+    // public function setPlusAttribute($value)
+    // {
+    //     $this->attributes['plus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    // }
+    //
+    // public function setMinusAttribute($value)
+    // {
+    //     $this->attributes['minus'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    // }
+    //
+    // public function setBuyersLikeAttribute($value)
+    // {
+    //     $this->attributes['buyers_like'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
+    // }
 
 
     public function registerMediaConversions(Media $media = null): void

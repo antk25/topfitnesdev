@@ -21,6 +21,17 @@ class DatabaseSeeder extends Seeder
             'email' => 'kunaevanton25@gmail.com',
             'password' => Hash::make('kantbor0895'),
             'is_admin' => true,
-        ]);
+        ]
+        );
+
+        DB::table('users')->insert([
+
+            'name' => 'Егор',
+            'contacts' => '{}',
+            'email' => 'egorkunaev@gmail.com',
+            'password' => Hash::make('egor12345'),
+            'is_admin' => true,
+        ]
+        );
     }
 }

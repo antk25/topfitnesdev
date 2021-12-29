@@ -11,22 +11,22 @@
 @section('content')
 <div class="position-relative z-index-1 bg-contrast-lower padding-y-lg">
   <div class="container max-width-adaptive-md">
-    
+
     <article class="t-article-v4 bg padding-md padding-x-lg@md padding-y-xl@md">
-      
+
       <div class="text-component text-center line-height-lg v-space-xxl max-width-xs margin-x-auto">
         <p class="text-xs text-uppercase letter-spacing-lg color-contrast-medium">{{ $post->created_at->diffForHumans() }}</p>
         <h1>{{ $post->subtitle }}</h1>
       </div>
-  
+
       <div class="t-article-v4__divider margin-y-lg" aria-hidden="true"><span></span></div>
-  
+
       <div class="text-component line-height-lg v-space-md">
 
         {!! $post->content !!}
-       
+
       </div>
-      
+
 
 <div class="author ">
   <a href="#0" class="author__img-wrapper">
@@ -48,9 +48,9 @@
       <h2>Наши рекомендации</h2>
       </div>
      <ol class="margin-bottom-md margin-top-md" aria-label="Наши рекомендации">
-     
+
 </ol>
-     
+
     </div>
 
 
@@ -69,6 +69,3 @@
 @parent
 
 @endsection
-
-
-
