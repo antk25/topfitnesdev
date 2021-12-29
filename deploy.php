@@ -10,13 +10,13 @@ set('application', 'topfitnesdev');
 set('repository', 'git@github.com:antk25/topfitnesdev.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true); 
+set('git_tty', true);
 
-// Shared files/dirs between deploys 
+// Shared files/dirs between deploys
 add('shared_files', []);
 add('shared_dirs', []);
 
-// Writable dirs by web server 
+// Writable dirs by web server
 add('writable_dirs', []);
 set('allow_anonymous_stats', false);
 
@@ -24,8 +24,8 @@ set('allow_anonymous_stats', false);
 
 host('46.101.120.173')
     ->user('topfitnesbraslet')
-    ->set('deploy_path', '~/public_html');    
-    
+    ->set('deploy_path', '~/public_html');
+
 // Tasks
 
 task('build', function () {
@@ -37,5 +37,5 @@ after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.
 
-before('deploy:symlink', 'artisan:migrate');
+before('deploy:symlink', 'artisan:migrate', 'artisan:db:seed​');
 
