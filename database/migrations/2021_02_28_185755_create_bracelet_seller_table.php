@@ -14,12 +14,15 @@ class CreateBraceletSellerTable extends Migration
     public function up()
     {
         Schema::create('bracelet_seller', function (Blueprint $table) {
-            $table->foreignId('bracelet_id')->constrained();
-            $table->foreignId('seller_id')->constrained();
+            $table->unsignedBigInteger('bracelet_id');
+            $table->unsignedBigInteger('seller_id');
             $table->string('link')->nullable();
             $table->decimal('price', $precision = 18, $scale = 2)->nullable();
-            $table->decimal('old_price', $precision = 18, $scale = 2)->nullable(); 
+            $table->decimal('old_price', $precision = 18, $scale = 2)->nullable();
             $table->index(["bracelet_id", "seller_id"]);
+
+            $table->foreign('bracelet_id')->references('id')->on('bracelets')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('seller_id')->references('id')->on('sellers')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
