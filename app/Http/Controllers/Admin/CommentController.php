@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Comment;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use App\Notifications\NewCommentNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 
-class AdminCommentController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Rating;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rating;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class AdminRatingController extends Controller
+class RatingController extends Controller
 {
     /**
      * Display a listing of the resource.

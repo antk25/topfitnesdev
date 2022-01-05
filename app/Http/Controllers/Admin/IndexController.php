@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Core;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Brand;
 
 
-class AdminIndexController extends Controller
+class IndexController extends Controller
 {
     public function __invoke() {
 

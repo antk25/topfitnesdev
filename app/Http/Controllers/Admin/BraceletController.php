@@ -1,14 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Products;
+namespace App\Http\Controllers\Admin;
 
 use App\Filters\CheckedAdminFilter;
 use App\Filters\NameFilter;
 use App\Filters\PublishedFilter;
 use App\Imports\BraceletsImport;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
-use App\Models\{Brand, Bracelet, Rating, Review, Grade, Seller, Spec};
+use App\Models\Brand;
+use App\Models\Bracelet;
+use App\Models\Rating;
+use App\Models\Review;
+use App\Models\Grade;
+use App\Models\Seller;
+use App\Models\Spec;
 use Illuminate\Support\Str;
 use App\Http\Requests\Admin\BraceletRequest;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -20,12 +29,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Pricecurrent\LaravelEloquentFilters\EloquentFilters;
 
-class AdminBraceletController extends Controller
+
+class BraceletController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index(Request $request)
     {
@@ -46,7 +56,8 @@ class AdminBraceletController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
+     *
      */
     public function create()
     {
@@ -66,9 +77,10 @@ class AdminBraceletController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param BraceletRequest $request
+     * @return RedirectResponse
      */
+
     public function store(BraceletRequest $request)
     {
         if ($request->slug)
@@ -92,17 +104,17 @@ class AdminBraceletController extends Controller
            'plus' => request('plus') ?? [],
            'minus' => request('minus') ?? [],
            'buyers_like' => request('buyers_like') ?? [],
-           'popular' => $request->has('popular') ? true : false,
-           'hit' => $request->has('hit') ? true : false,
-           'selection' => $request->has('selection') ? true : false,
-           'published' => $request->has('published') ? true : false,
+           'popular' => $request->boolean('popular'),
+           'hit' => $request->boolean('hit'),
+           'selection' => $request->boolean('selection'),
+           'published' => $request->boolean('published'),
            'year' => request('year'),
            'country' => request('country'),
            'compatibility' => request('compatibility') ?? [],
            'assistant_app' => request('assistant_app'),
            'material' => request('material') ?? [],
-           'replaceable_strap' => $request->has('replaceable_strap') ? true : false,
-           'lenght_adj' => $request->has('lenght_adj') ? true : false,
+           'replaceable_strap' => $request->boolean('replaceable_strap'),
+           'lenght_adj' => $request->boolean('lenght_adj'),
            'colors' => request('colors') ?? [],
            'protect_stand' => request('protect_stand') ?? [],
            'terms_of_use' => request('terms_of_use') ?? [],
@@ -111,37 +123,37 @@ class AdminBraceletController extends Controller
            'disp_tech' => request('disp_tech'),
            'disp_resolution' => request('disp_resolution'),
            'disp_ppi' => request('disp_ppi'),
-           'disp_sens' => $request->has('disp_sens') ? true : false,
-           'disp_color' => $request->has('disp_color') ? true : false,
+           'disp_sens' => $request->boolean('disp_sens'),
+           'disp_color' => $request->boolean('disp_color'),
            'disp_brightness' => request('disp_brightness'),
            'disp_col_depth' => request('disp_col_depth'),
-           'disp_aod' => $request->has('disp_aod') ? true : false,
+           'disp_aod' => $request->boolean('disp_aod'),
            'sensors' => request('sensors') ?? [],
-           'gps' => $request->has('gps') ? true : false,
-           'vibration' => $request->has('vibration') ? true : false,
+           'gps' => $request->boolean('gps'),
+           'vibration' => $request->boolean('vibration'),
            'blue_ver' => request('blue_ver'),
-           'nfc' => $request->has('nfc') ? true : false,
+           'nfc' => $request->boolean('nfc'),
            'nfc_inf' => request('nfc_inf'),
            'other_interfaces' => request('other_interfaces') ?? [],
            'phone_calls' => request('phone_calls'),
            'notification' => request('notification') ?? [],
-           'send_messages' => $request->has('send_messages') ? true : false,
+           'send_messages' => $request->boolean('send_messages'),
            'monitoring' => request('monitoring') ?? [],
-           'heart_rate' => $request->has('heart_rate') ? true : false,
-           'blood_oxy' => $request->has('blood_oxy') ? true : false,
-           'blood_pressure' => $request->has('blood_pressure') ? true : false,
-           'stress' => $request->has('stress') ? true : false,
+           'heart_rate' => $request->boolean('heart_rate'),
+           'blood_oxy' => $request->boolean('blood_oxy'),
+           'blood_pressure' => $request->boolean('blood_pressure'),
+           'stress' => $request->boolean('stress'),
            'training_modes' => request('training_modes') ?? [],
-           'workout_recognition' => $request->has('workout_recognition') ? true : false,
-           'inactivity_reminder' => $request->has('inactivity_reminder') ? true : false,
-           'search_smartphone' => $request->has('search_smartphone') ? true : false,
-           'smart_alarm' => $request->has('smart_alarm') ? true : false,
-           'camera_control' => $request->has('camera_control') ? true : false,
-           'player_control' => $request->has('player_control') ? true : false,
-           'timer' => $request->has('timer') ? true : false,
-           'stopwatch' => $request->has('stopwatch') ? true : false,
-           'women_calendar' => $request->has('women_calendar') ? true : false,
-           'weather_forecast' => $request->has('weather_forecast') ? true : false,
+           'workout_recognition' => $request->boolean('workout_recognition'),
+           'inactivity_reminder' => $request->boolean('inactivity_reminder'),
+           'search_smartphone' => $request->boolean('search_smartphone'),
+           'smart_alarm' => $request->boolean('smart_alarm'),
+           'camera_control' => $request->boolean('camera_control'),
+           'player_control' => $request->boolean('player_control'),
+           'timer' => $request->boolean('timer'),
+           'stopwatch' => $request->boolean('stopwatch'),
+           'women_calendar' => $request->boolean('women_calendar'),
+           'weather_forecast' => $request->boolean('weather_forecast'),
            'additional_info' => request('additional_info'),
            'type_battery' => request('type_battery'),
            'capacity_battery' => request('capacity_battery'),
@@ -158,7 +170,6 @@ class AdminBraceletController extends Controller
 
         if ($files != '') {
             $lastbracelet = Bracelet::find($bracelet->id);
-            $i = 0;
             foreach ($files as $file) {
                 $lastbracelet->addMedia($file)
                     ->toMediaCollection('bracelet');
@@ -175,7 +186,8 @@ class AdminBraceletController extends Controller
 
         $allratings = $request->input('allratings');
 
-        if ($allratings != '') {
+        if ($allratings != '')
+        {
             $ratings = array_column($allratings, 'ratings');
             $position_rating = array_column($allratings, 'position_rating');
             $text_rating = array_column($allratings, 'text_rating');
@@ -258,7 +270,8 @@ class AdminBraceletController extends Controller
         }
 
 
-        if ($bracelet) {
+        if ($bracelet != null)
+        {
           return redirect()
                  ->route('bracelets.edit', $bracelet->id)
                  ->with(['success' => 'Новый браслет успешно добавлен. Отредактируйте данные, если нужно']);
@@ -302,9 +315,8 @@ class AdminBraceletController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function update(BraceletRequest $request, $id)
     {
@@ -482,17 +494,17 @@ class AdminBraceletController extends Controller
            'plus' => request('plus') ?? [],
            'minus' => request('minus') ?? [],
            'buyers_like' => request('buyers_like') ?? [],
-           'popular' => $request->has('popular') ? true : false,
-           'hit' => $request->has('hit') ? true : false,
-           'selection' => $request->has('selection') ? true : false,
-           'published' => $request->has('published') ? true : false,
+           'popular' => $request->boolean('popular'),
+           'hit' => $request->boolean('hit'),
+           'selection' => $request->boolean('selection'),
+           'published' => $request->boolean('published'),
            'year' => request('year'),
            'country' => request('country'),
            'compatibility' => request('compatibility') ?? [],
            'assistant_app' => request('assistant_app'),
            'material' => request('material') ?? [],
-           'replaceable_strap' => $request->has('replaceable_strap') ? true : false,
-           'lenght_adj' => $request->has('lenght_adj') ? true : false,
+           'replaceable_strap' => $request->boolean('replaceable_strap'),
+           'lenght_adj' => $request->boolean('lenght_adj'),
            'colors' => request('colors') ?? [],
            'protect_stand' => request('protect_stand') ?? [],
            'terms_of_use' => request('terms_of_use') ?? [],
@@ -501,37 +513,37 @@ class AdminBraceletController extends Controller
            'disp_tech' => request('disp_tech'),
            'disp_resolution' => request('disp_resolution'),
            'disp_ppi' => request('disp_ppi'),
-           'disp_sens' => $request->has('disp_sens') ? true : false,
-           'disp_color' => $request->has('disp_color') ? true : false,
+           'disp_sens' => $request->boolean('disp_sens'),
+           'disp_color' => $request->boolean('disp_color'),
            'disp_brightness' => request('disp_brightness'),
            'disp_col_depth' => request('disp_col_depth'),
-           'disp_aod' => $request->has('disp_aod') ? true : false,
+           'disp_aod' => $request->boolean('disp_aod'),
            'sensors' => request('sensors') ?? [],
-           'gps' => $request->has('gps') ? true : false,
-           'vibration' => $request->has('vibration') ? true : false,
+           'gps' => $request->boolean('gps'),
+           'vibration' => $request->boolean('vibration'),
            'blue_ver' => request('blue_ver'),
-           'nfc' => $request->has('nfc') ? true : false,
+           'nfc' => $request->boolean('nfc'),
            'nfc_inf' => request('nfc_inf'),
            'other_interfaces' => request('other_interfaces') ?? [],
            'phone_calls' => request('phone_calls'),
            'notification' => request('notification') ?? [],
-           'send_messages' => $request->has('send_messages') ? true : false,
+           'send_messages' => $request->boolean('send_messages'),
            'monitoring' => request('monitoring') ?? [],
-           'heart_rate' => $request->has('heart_rate') ? true : false,
-           'blood_oxy' => $request->has('blood_oxy') ? true : false,
-           'blood_pressure' => $request->has('blood_pressure') ? true : false,
-           'stress' => $request->has('stress') ? true : false,
+           'heart_rate' => $request->boolean('heart_rate'),
+           'blood_oxy' => $request->boolean('blood_oxy'),
+           'blood_pressure' => $request->boolean('blood_pressure'),
+           'stress' => $request->boolean('stress'),
            'training_modes' => request('training_modes') ?? [],
-           'workout_recognition' => $request->has('workout_recognition') ? true : false,
-           'inactivity_reminder' => $request->has('inactivity_reminder') ? true : false,
-           'search_smartphone' => $request->has('search_smartphone') ? true : false,
-           'smart_alarm' => $request->has('smart_alarm') ? true : false,
-           'camera_control' => $request->has('camera_control') ? true : false,
-           'player_control' => $request->has('player_control') ? true : false,
-           'timer' => $request->has('timer') ? true : false,
-           'stopwatch' => $request->has('stopwatch') ? true : false,
-           'women_calendar' => $request->has('women_calendar') ? true : false,
-           'weather_forecast' => $request->has('weather_forecast') ? true : false,
+           'workout_recognition' => $request->boolean('workout_recognition'),
+           'inactivity_reminder' => $request->boolean('inactivity_reminder'),
+           'search_smartphone' => $request->boolean('search_smartphone'),
+           'smart_alarm' => $request->boolean('smart_alarm'),
+           'camera_control' => $request->boolean('camera_control'),
+           'player_control' => $request->boolean('player_control'),
+           'timer' => $request->boolean('timer'),
+           'stopwatch' => $request->boolean('stopwatch'),
+           'women_calendar' => $request->boolean('women_calendar'),
+           'weather_forecast' => $request->boolean('weather_forecast'),
            'additional_info' => request('additional_info'),
            'type_battery' => request('type_battery'),
            'capacity_battery' => request('capacity_battery'),
@@ -628,9 +640,10 @@ class AdminBraceletController extends Controller
 
            $brgrade = $brgrade->avg();
 
-           $bracelet->update([
-               'grade_bracelet' => $brgrade
-           ]);
+           $bracelet->grade_bracelet = $brgrade;
+
+           $bracelet->save();
+
         }
 
         return back();

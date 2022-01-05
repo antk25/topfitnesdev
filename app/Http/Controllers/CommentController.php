@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Comment;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Post;
 use App\Models\Comment;
-use App\Models\Rating;
 
 class CommentController extends Controller
 {
@@ -20,7 +17,7 @@ class CommentController extends Controller
         // return back();
     // }
 
-    public function replyStore(Request $request)
+    public function replyStore(Request $request): \Illuminate\Http\RedirectResponse
     {
        $reply = new Comment([
             'comment' => request('comment'),

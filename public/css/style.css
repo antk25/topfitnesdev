@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .container {
-  width: calc(100% - 2*var(--component-padding));
+  width: calc(100% - 2 * var(--component-padding));
   margin-left: auto;
   margin-right: auto;
 }
@@ -37,7 +37,7 @@
       margin-left: calc(-1 * var(--gap-x));
     }
     .grid > *, .flex[class*=gap-] > *, .inline-flex[class*=gap-] > * {
-      margin-bottom: var(--gap-y);
+      margin-bottom: var(--sub-gap-y);
     }
 
     .grid {
@@ -50,7 +50,7 @@
     }
 
     .flex[class*=gap-] > *, .inline-flex[class*=gap-] > * {
-      margin-left: var(--gap-x);
+      margin-left: var(--sub-gap-x);
     }
   }
 }
@@ -428,8 +428,8 @@
 }
 
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
-  flex-basis: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
-  max-width: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
+  flex-basis: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
+  max-width: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
 }
 
 .col {
@@ -489,7 +489,7 @@
 }
 
 .offset-1, .offset-2, .offset-3, .offset-4, .offset-5, .offset-6, .offset-7, .offset-8, .offset-9, .offset-10, .offset-11 {
-  margin-left: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns)) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
+  margin-left: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
 }
 
 @media (min-width: 32rem) {
@@ -866,8 +866,8 @@
   }
 
   .col-1\@xs, .col-2\@xs, .col-3\@xs, .col-4\@xs, .col-5\@xs, .col-6\@xs, .col-7\@xs, .col-8\@xs, .col-9\@xs, .col-10\@xs, .col-11\@xs, .col-12\@xs {
-    flex-basis: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
-    max-width: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
+    flex-basis: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
+    max-width: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
   }
 
   .col\@xs {
@@ -927,7 +927,7 @@
   }
 
   .offset-1\@xs, .offset-2\@xs, .offset-3\@xs, .offset-4\@xs, .offset-5\@xs, .offset-6\@xs, .offset-7\@xs, .offset-8\@xs, .offset-9\@xs, .offset-10\@xs, .offset-11\@xs {
-    margin-left: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns)) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
+    margin-left: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
   }
 
   .offset-0\@xs {
@@ -1316,8 +1316,8 @@
   }
 
   .col-1\@sm, .col-2\@sm, .col-3\@sm, .col-4\@sm, .col-5\@sm, .col-6\@sm, .col-7\@sm, .col-8\@sm, .col-9\@sm, .col-10\@sm, .col-11\@sm, .col-12\@sm {
-    flex-basis: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
-    max-width: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
+    flex-basis: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
+    max-width: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
   }
 
   .col\@sm {
@@ -1377,7 +1377,7 @@
   }
 
   .offset-1\@sm, .offset-2\@sm, .offset-3\@sm, .offset-4\@sm, .offset-5\@sm, .offset-6\@sm, .offset-7\@sm, .offset-8\@sm, .offset-9\@sm, .offset-10\@sm, .offset-11\@sm {
-    margin-left: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns)) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
+    margin-left: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
   }
 
   .offset-0\@sm {
@@ -1766,8 +1766,8 @@
   }
 
   .col-1\@md, .col-2\@md, .col-3\@md, .col-4\@md, .col-5\@md, .col-6\@md, .col-7\@md, .col-8\@md, .col-9\@md, .col-10\@md, .col-11\@md, .col-12\@md {
-    flex-basis: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
-    max-width: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
+    flex-basis: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
+    max-width: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
   }
 
   .col\@md {
@@ -1827,7 +1827,7 @@
   }
 
   .offset-1\@md, .offset-2\@md, .offset-3\@md, .offset-4\@md, .offset-5\@md, .offset-6\@md, .offset-7\@md, .offset-8\@md, .offset-9\@md, .offset-10\@md, .offset-11\@md {
-    margin-left: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns)) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
+    margin-left: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
   }
 
   .offset-0\@md {
@@ -2216,8 +2216,8 @@
   }
 
   .col-1\@lg, .col-2\@lg, .col-3\@lg, .col-4\@lg, .col-5\@lg, .col-6\@lg, .col-7\@lg, .col-8\@lg, .col-9\@lg, .col-10\@lg, .col-11\@lg, .col-12\@lg {
-    flex-basis: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
-    max-width: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
+    flex-basis: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
+    max-width: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
   }
 
   .col\@lg {
@@ -2277,7 +2277,7 @@
   }
 
   .offset-1\@lg, .offset-2\@lg, .offset-3\@lg, .offset-4\@lg, .offset-5\@lg, .offset-6\@lg, .offset-7\@lg, .offset-8\@lg, .offset-9\@lg, .offset-10\@lg, .offset-11\@lg {
-    margin-left: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns)) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
+    margin-left: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
   }
 
   .offset-0\@lg {
@@ -2666,8 +2666,8 @@
   }
 
   .col-1\@xl, .col-2\@xl, .col-3\@xl, .col-4\@xl, .col-5\@xl, .col-6\@xl, .col-7\@xl, .col-8\@xl, .col-9\@xl, .col-10\@xl, .col-11\@xl, .col-12\@xl {
-    flex-basis: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
-    max-width: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns)) + (var(--span) - 1) * var(--sub-gap-x));
+    flex-basis: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
+    max-width: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--span) / var(--grid-columns) + (var(--span) - 1) * var(--sub-gap-x));
   }
 
   .col\@xl {
@@ -2727,7 +2727,7 @@
   }
 
   .offset-1\@xl, .offset-2\@xl, .offset-3\@xl, .offset-4\@xl, .offset-5\@xl, .offset-6\@xl, .offset-7\@xl, .offset-8\@xl, .offset-9\@xl, .offset-10\@xl, .offset-11\@xl {
-    margin-left: calc(((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns)) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
+    margin-left: calc((100% - (var(--grid-columns) - var(--gap-modifier, 1)) * var(--sub-gap-x)) * var(--offset) / var(--grid-columns) + (var(--offset) + var(--offset-modifier, 0)) * var(--sub-gap-x));
   }
 
   .offset-0\@xl {
@@ -2781,7 +2781,7 @@ footer, header, hgroup, menu, nav, section, main, form legend {
   display: block;
 }
 
-ol, ul {
+ol, ul, menu {
   list-style: none;
 }
 
@@ -3314,7 +3314,7 @@ html:not(.js) .no-js\:is-hidden {
   --aspect-ratio: calc(16/9);
   position: relative;
   height: 0;
-  padding-bottom: calc(100%/(var(--aspect-ratio)));
+  padding-bottom: calc(100% / (var(--aspect-ratio)));
 }
 [class^=aspect-ratio] > *, [class*=" aspect-ratio"] > * {
   position: absolute;
@@ -4760,7 +4760,7 @@ html:not(.js) .no-js\:is-hidden {
 }
 
 .width-33\% {
-  width: calc(100% / 3);
+  width: 33.3333333333%;
 }
 
 .width-40\% {
@@ -4776,7 +4776,7 @@ html:not(.js) .no-js\:is-hidden {
 }
 
 .width-66\% {
-  width: calc(100% / 1.5);
+  width: 66.6666666667%;
 }
 
 .width-70\% {
@@ -4872,7 +4872,7 @@ html:not(.js) .no-js\:is-hidden {
 }
 
 .height-33\% {
-  height: calc(100% / 3);
+  height: 33.3333333333%;
 }
 
 .height-40\% {
@@ -4888,7 +4888,7 @@ html:not(.js) .no-js\:is-hidden {
 }
 
 .height-66\% {
-  height: calc(100% / 1.5);
+  height: 66.6666666667%;
 }
 
 .height-70\% {
@@ -4928,7 +4928,7 @@ html:not(.js) .no-js\:is-hidden {
 }
 
 .min-width-33\% {
-  min-width: calc(100% / 3);
+  min-width: 33.3333333333%;
 }
 
 .min-width-50\% {
@@ -4936,7 +4936,7 @@ html:not(.js) .no-js\:is-hidden {
 }
 
 .min-width-66\% {
-  min-width: calc(100% / 1.5);
+  min-width: 66.6666666667%;
 }
 
 .min-width-75\% {
@@ -7214,7 +7214,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-33\%\@xs {
-    width: calc(100% / 3);
+    width: 33.3333333333%;
   }
 
   .width-40\%\@xs {
@@ -7230,7 +7230,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-66\%\@xs {
-    width: calc(100% / 1.5);
+    width: 66.6666666667%;
   }
 
   .width-70\%\@xs {
@@ -7326,7 +7326,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-33\%\@xs {
-    height: calc(100% / 3);
+    height: 33.3333333333%;
   }
 
   .height-40\%\@xs {
@@ -7342,7 +7342,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-66\%\@xs {
-    height: calc(100% / 1.5);
+    height: 66.6666666667%;
   }
 
   .height-70\%\@xs {
@@ -8710,7 +8710,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-33\%\@sm {
-    width: calc(100% / 3);
+    width: 33.3333333333%;
   }
 
   .width-40\%\@sm {
@@ -8726,7 +8726,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-66\%\@sm {
-    width: calc(100% / 1.5);
+    width: 66.6666666667%;
   }
 
   .width-70\%\@sm {
@@ -8822,7 +8822,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-33\%\@sm {
-    height: calc(100% / 3);
+    height: 33.3333333333%;
   }
 
   .height-40\%\@sm {
@@ -8838,7 +8838,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-66\%\@sm {
-    height: calc(100% / 1.5);
+    height: 66.6666666667%;
   }
 
   .height-70\%\@sm {
@@ -10206,7 +10206,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-33\%\@md {
-    width: calc(100% / 3);
+    width: 33.3333333333%;
   }
 
   .width-40\%\@md {
@@ -10222,7 +10222,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-66\%\@md {
-    width: calc(100% / 1.5);
+    width: 66.6666666667%;
   }
 
   .width-70\%\@md {
@@ -10318,7 +10318,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-33\%\@md {
-    height: calc(100% / 3);
+    height: 33.3333333333%;
   }
 
   .height-40\%\@md {
@@ -10334,7 +10334,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-66\%\@md {
-    height: calc(100% / 1.5);
+    height: 66.6666666667%;
   }
 
   .height-70\%\@md {
@@ -11702,7 +11702,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-33\%\@lg {
-    width: calc(100% / 3);
+    width: 33.3333333333%;
   }
 
   .width-40\%\@lg {
@@ -11718,7 +11718,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-66\%\@lg {
-    width: calc(100% / 1.5);
+    width: 66.6666666667%;
   }
 
   .width-70\%\@lg {
@@ -11814,7 +11814,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-33\%\@lg {
-    height: calc(100% / 3);
+    height: 33.3333333333%;
   }
 
   .height-40\%\@lg {
@@ -11830,7 +11830,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-66\%\@lg {
-    height: calc(100% / 1.5);
+    height: 66.6666666667%;
   }
 
   .height-70\%\@lg {
@@ -13198,7 +13198,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-33\%\@xl {
-    width: calc(100% / 3);
+    width: 33.3333333333%;
   }
 
   .width-40\%\@xl {
@@ -13214,7 +13214,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .width-66\%\@xl {
-    width: calc(100% / 1.5);
+    width: 66.6666666667%;
   }
 
   .width-70\%\@xl {
@@ -13310,7 +13310,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-33\%\@xl {
-    height: calc(100% / 3);
+    height: 33.3333333333%;
   }
 
   .height-40\%\@xl {
@@ -13326,7 +13326,7 @@ html:not(.js) .no-js\:is-hidden {
   }
 
   .height-66\%\@xl {
-    height: calc(100% / 1.5);
+    height: 66.6666666667%;
   }
 
   .height-70\%\@xl {
@@ -14682,7 +14682,7 @@ Usage: codyhouse.co/license
   position: absolute;
   z-index: 1;
   right: var(--space-sm);
-  top: calc(50% - var(--size)/2);
+  top: calc(50% - var(--size) / 2);
   height: var(--size);
   width: var(--size);
   opacity: 0;
@@ -15074,8 +15074,8 @@ Usage: codyhouse.co/license
     border-radius: inherit;
   }
   .circle-loader--v4 .circle-loader__mask {
-    -webkit-clip-path: circle(calc(0.5* var(--circle-loader-v4-size)));
-            clip-path: circle(calc(0.5* var(--circle-loader-v4-size)));
+    -webkit-clip-path: circle(calc(0.5 * var(--circle-loader-v4-size)));
+            clip-path: circle(calc(0.5 * var(--circle-loader-v4-size)));
   }
   .circle-loader--v4 .circle-loader__circle--1st {
     background-color: var(--color-contrast-low);
@@ -15247,13 +15247,13 @@ Usage: codyhouse.co/license
     width: var(--size);
     height: var(--size);
     position: absolute;
-    top: calc(var(--conf-btn-click-y, 50%) - var(--size)/2);
-    left: calc(var(--conf-btn-click-x, 50%) - var(--size)/2);
+    top: calc(var(--conf-btn-click-y, 50%) - var(--size) / 2);
+    left: calc(var(--conf-btn-click-x, 50%) - var(--size) / 2);
     pointer-events: none;
     overflow: visible;
   }
   .confetti-btn__icon * {
-    transform-origin: calc(var(--size)/2);
+    transform-origin: calc(var(--size) / 2);
     opacity: 0;
   }
 }
@@ -16420,13 +16420,13 @@ Usage: codyhouse.co/license
 .list ul, .list ol, .text-component .list ul, .text-component .list ol {
   list-style: none;
   margin: 0;
-  margin-top: calc((var(--list-space-y) / 2) * var(--text-space-y-multiplier, 1));
-  padding-top: calc((var(--list-space-y) / 2) * var(--text-space-y-multiplier, 1));
+  margin-top: calc(var(--list-space-y) / 2 * var(--text-space-y-multiplier, 1));
+  padding-top: calc(var(--list-space-y) / 2 * var(--text-space-y-multiplier, 1));
   padding-left: var(--list-offset);
 }
 .list li, .text-component .list li {
-  padding-bottom: calc((var(--list-space-y) / 2) * var(--text-space-y-multiplier, 1));
-  margin-bottom: calc((var(--list-space-y) / 2) * var(--text-space-y-multiplier, 1));
+  padding-bottom: calc(var(--list-space-y) / 2 * var(--text-space-y-multiplier, 1));
+  margin-bottom: calc(var(--list-space-y) / 2 * var(--text-space-y-multiplier, 1));
   line-height: calc(var(--body-line-height) * var(--list-line-height-multiplier));
 }
 .list > li:last-child, .list ul > li:last-child, .list ol > li:last-child, .text-component .list > li:last-child, .text-component .list ul > li:last-child, .text-component .list ol > li:last-child {
@@ -16976,6 +16976,67 @@ Usage: codyhouse.co/license
 }
 /* --------------------------------
 
+File#: _1_progress-bar
+Title: Progress Bar
+Descr: Display the current progress of a task
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.progress-bar {
+  width: 100%;
+}
+
+.progress-bar__bg {
+  position: relative;
+  height: 8px;
+  border-radius: 50em;
+  background-color: var(--color-contrast-low);
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background-color: var(--color-primary);
+}
+
+.progress-bar__value {
+  flex-shrink: 0;
+}
+
+.js .progress-bar[data-animation=on]:not(.progress-bar--init) .progress-bar__fill, .js .progress-bar[data-animation=on]:not(.progress-bar--init) .progress-bar__value,
+.js .progress-bar--color-update:not(.progress-bar--init) .progress-bar__fill,
+.js .progress-bar--color-update:not(.progress-bar--init) .progress-bar__value {
+  opacity: 0;
+}
+
+.progress-bar--color-update {
+  --progress-bar-color-1: 59;
+  --progress-bar-color-2: 74;
+  --progress-bar-color-3: 100;
+}
+.progress-bar--color-update.progress-bar--init .progress-bar__fill {
+  transition: background-color 0.3s;
+}
+
+.progress-bar--fill-color-1 .progress-bar__fill {
+  background-color: var(--color-error);
+}
+
+.progress-bar--fill-color-2 .progress-bar__fill {
+  background-color: var(--color-warning);
+}
+
+.progress-bar--fill-color-3 .progress-bar__fill {
+  background-color: var(--color-success);
+}
+
+/* --------------------------------
+
 File#: _1_prop-table
 Title: Property Table
 Descr: A table used to display a list of properties and their values
@@ -17033,8 +17094,8 @@ Usage: codyhouse.co/license
 .radio-switch__item {
   position: relative;
   display: inline-block;
-  height: calc(var(--radio-switch-height) - 2*var(--radio-switch-padding));
-  width: calc(var(--radio-switch-width)*0.5 - var(--radio-switch-padding));
+  height: calc(var(--radio-switch-height) - 2 * var(--radio-switch-padding));
+  width: calc(var(--radio-switch-width) * 0.5 - var(--radio-switch-padding));
 }
 
 .radio-switch__label {
@@ -17070,8 +17131,8 @@ Usage: codyhouse.co/license
   left: -100%;
   border-radius: var(--radio-switch-radius);
   background-color: var(--color-primary);
-  height: calc(var(--radio-switch-height) - 2*var(--radio-switch-padding));
-  width: calc(var(--radio-switch-width)*0.5 - var(--radio-switch-padding));
+  height: calc(var(--radio-switch-height) - 2 * var(--radio-switch-padding));
+  width: calc(var(--radio-switch-width) * 0.5 - var(--radio-switch-padding));
   box-shadow: var(--shadow-md);
   transition: transform var(--radio-switch-animation-duration);
 }
@@ -17632,7 +17693,7 @@ Usage: codyhouse.co/license
   position: absolute;
   right: var(--search-input-shortcut-margin);
   top: var(--search-input-shortcut-margin);
-  height: calc(100% - var(--search-input-shortcut-margin)*2);
+  height: calc(100% - var(--search-input-shortcut-margin) * 2);
   display: flex;
   align-items: center;
   background-color: var(--color-bg-dark);
@@ -17694,7 +17755,7 @@ Usage: codyhouse.co/license
   box-shadow: var(--shadow-xs), var(--shadow-sm);
   cursor: -webkit-grab;
   cursor: grab;
-  margin-top: calc((var(--slider-track-height) - var(--slide-thumb-size))*0.5);
+  margin-top: calc((var(--slider-track-height) - var(--slide-thumb-size)) * 0.5);
 }
 
 .slider__input:active::-webkit-slider-thumb {
@@ -17732,7 +17793,7 @@ Usage: codyhouse.co/license
   height: var(--slider-track-height);
   border-radius: 50em;
   background-image: linear-gradient(to right, var(--color-primary) var(--slider-fill-value), var(--color-contrast-lower) var(--slider-fill-value), var(--color-contrast-lower) var(--slider-empty-value));
-  margin-top: calc((var(--slide-thumb-size) - var(--slider-track-height))*0.5);
+  margin-top: calc((var(--slide-thumb-size) - var(--slider-track-height)) * 0.5);
 }
 
 .slider__input::-moz-range-track {
@@ -17871,7 +17932,7 @@ Usage: codyhouse.co/license
 @media (min-width: 64rem) {
   .steps {
     background-color: transparent;
-    padding: calc(var(--step-circle-size)/2) 0 0;
+    padding: calc(var(--step-circle-size) / 2) 0 0;
     border-radius: 0px;
   }
 
@@ -17904,15 +17965,15 @@ Usage: codyhouse.co/license
 
   .step__label {
     display: inline-block;
-    margin-top: calc(var(--space-xxs) + var(--step-circle-size)/2);
+    margin-top: calc(var(--space-xxs) + var(--step-circle-size) / 2);
   }
 
   .step__separator {
     position: absolute;
-    top: calc(var(--step-separator-line-stroke) * -1/2);
-    left: calc(50% + var(--step-circle-size)/2 + var(--step-separator-line-gap));
+    top: calc(var(--step-separator-line-stroke) * -1 / 2);
+    left: calc(50% + var(--step-circle-size) / 2 + var(--step-separator-line-gap));
     height: var(--step-separator-line-stroke);
-    width: calc(100% - var(--step-circle-size) - var(--step-separator-line-gap)*2);
+    width: calc(100% - var(--step-circle-size) - var(--step-separator-line-gap) * 2);
     margin: 0;
     background-color: var(--color-contrast-lower);
     color: transparent;
@@ -17935,8 +17996,8 @@ Usage: codyhouse.co/license
     height: var(--step-circle-size);
     border-radius: 50%;
     position: absolute;
-    left: calc(50% - var(--step-circle-size)/2);
-    top: calc(var(--step-circle-size) * -1/2);
+    left: calc(50% - var(--step-circle-size) / 2);
+    top: calc(var(--step-circle-size) * -1 / 2);
     font-size: var(--step-circle-font-size);
   }
   .step__circle .icon {
@@ -18086,6 +18147,41 @@ Usage: codyhouse.co/license
 
 .text-bg-fx--text-shadow {
   text-shadow: 1.5px 1px var(--color-bg), -1.5px 1px var(--color-bg), 0px 1px var(--color-bg);
+}
+
+/* --------------------------------
+
+File#: _1_text-divider
+Title: Text divider
+Descr: Labelled horizontal divider for text components
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.text-divider {
+  margin: var(--space-lg) auto;
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+.text-divider span {
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 0 var(--space-sm);
+}
+.text-divider::before, .text-divider::after {
+  content: "";
+  display: inline-block;
+  height: 1px;
+  width: 20px;
+  flex-grow: 1;
+  background: var(--color-contrast-lower);
+  vertical-align: middle;
+}
+
+.text-component .text-divider {
+  margin: calc(var(--space-md) * var(--text-space-y-multiplier)) auto;
 }
 
 /* -------------------------------- 
@@ -19191,7 +19287,7 @@ Usage: codyhouse.co/license
 }
 
 .mega-nav__container {
-  width: calc(100% - 2*var(--component-padding));
+  width: calc(100% - 2 * var(--component-padding));
   height: 100%;
   max-width: var(--mega-nav-content-max-width);
   margin-left: auto;
@@ -19393,7 +19489,7 @@ Usage: codyhouse.co/license
 }
 .mega-nav--mobile .mega-nav__nav-inner, .mega-nav--mobile .mega-nav__search-inner {
   padding: var(--space-md) 0;
-  width: calc(100% - 2*var(--component-padding));
+  width: calc(100% - 2 * var(--component-padding));
   max-width: var(--mega-nav-content-max-width);
   margin-left: auto;
   margin-right: auto;
@@ -19576,7 +19672,7 @@ Usage: codyhouse.co/license
   overflow: auto;
 }
 .mega-nav--desktop .mega-nav__sub-nav, .mega-nav--desktop .mega-nav__search-inner {
-  width: calc(100% - 2*var(--component-padding));
+  width: calc(100% - 2 * var(--component-padding));
   margin: 0 auto;
   padding: var(--space-xl) 0;
 }

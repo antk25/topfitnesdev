@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Core;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HtmlComponent;
 use Illuminate\Http\Request;
 
-class AdminSettingsPageController extends Controller
+class SettingsPageController extends Controller
 {
    protected $htmlcomponents;
 

@@ -15,6 +15,7 @@ class CreateRatingsTable extends Migration
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->constrained();
             $table->string('name', 200);
             $table->string('slug')->unique();
             $table->string('title', 200);

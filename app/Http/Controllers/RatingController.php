@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Rating;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Rating;
 use App\Models\Bracelet;
 use Auth;

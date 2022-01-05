@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Comparison;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ComparisonRequest;
@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class AdminComparisonController extends Controller
+class ComparisonController extends Controller
 {
     /**
      * Display a listing of the resource.

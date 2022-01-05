@@ -325,11 +325,11 @@
 
         {!! $bracelet->pivot->text_rating !!}
 
-        <section class="margin-y-lg">
+        <section class="margin-y-md">
             <div class="text-divider"><span>Плюсы и минусы {{ $bracelet->name }}</span></div>
-            <div class="container grid">
+            <div class="grid">
                 <div class="col-6@sm">
-                    <h3 class="margin-y-sm text-center">Плюсы</h3>
+                    <h3 class="text-center">Плюсы</h3>
 
                     <ul class="list list--icons">
                         @foreach ($bracelet->plus as $plus)
@@ -348,7 +348,7 @@
                     </ul>
                 </div>
                 <div class="col-6@sm">
-                    <h3 class="margin-y-sm text-center">Минусы</h3>
+                    <h3 class="text-center">Минусы</h3>
                     <ul class="list list--icons">
                         @foreach ($bracelet->minus as $minus)
                             <li>

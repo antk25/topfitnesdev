@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Manual;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ManualRequest;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Str;
 
-class AdminManualController extends Controller
+class ManualController extends Controller
 {
     /**
      * Display a listing of the resource.

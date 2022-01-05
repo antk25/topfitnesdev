@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Products;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Seller;
@@ -8,7 +8,7 @@ use App\Http\Requests\Admin\SellerRequest;
 use Illuminate\Support\Str;
 
 
-class AdminSellerController extends Controller
+class SellerController extends Controller
 {
     /**
      * Display a listing of the resource.

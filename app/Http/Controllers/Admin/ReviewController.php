@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Review;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bracelet;
 use App\Models\Review;
 use App\Http\Requests\Admin\ReviewRequest;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
-class AdminReviewController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index()
     {
@@ -24,7 +27,7 @@ class AdminReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create()
     {

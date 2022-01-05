@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Core;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AdminNotificationController extends Controller
+class NotificationController extends Controller
 {
    public function index() {
 

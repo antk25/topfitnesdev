@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Products;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Imports\SpecsImport;
@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\Spec;
 use Illuminate\Support\Facades\Storage;
 
-class AdminSpecController extends Controller
+class SpecController extends Controller
 {
 
      /**

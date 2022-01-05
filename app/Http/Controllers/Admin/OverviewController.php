@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\PostRequest;
-use App\Models\Post;
+use App\Http\Requests\Admin\OverviewRequest;
+use App\Models\Overview;
+use App\Models\Bracelet;
 use App\Models\User;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use PhpParser\Node\Expr\Ternary;
 
-class AdminPostController extends Controller
+class OverviewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,25 +20,25 @@ class AdminPostController extends Controller
      */
     public function index()
     {
-        $posts = Post::withTrashed()->paginate(20);
+        $overviews = Overview::paginate(20);
 
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.overviews.index', compact('overviews'));
     }
 
     public function publish($id)
     {
-        $post = Post::find($id);
+        $overview = Overview::find($id);
 
-        if ($post->published)
+        if ($overview->published)
         {
-            $post->published = false;
+            $overview->published = false;
         }
         else
         {
-            $post->published = true;
+            $overview->published = true;
         }
 
-        $post->save();
+        $overview->save();
 
         return back();
     }
@@ -50,16 +51,21 @@ class AdminPostController extends Controller
     public function create()
     {
         $users = User::pluck('name', 'id')->all();
-        return view('admin.posts.create', compact('users'));
+
+        $bracelets = Bracelet::pluck('name', 'id')->all();
+
+        return view('admin.overviews.create', compact('users', 'bracelets'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\Admin\OverviewRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
      */
-    public function store(PostRequest $request)
+    public function store(OverviewRequest $request)
     {
         if ($request->slug)
         {
@@ -70,8 +76,9 @@ class AdminPostController extends Controller
             $slug = Str::slug($request->name, '-');
         }
 
-        $post = Post::create([
+        $overview = Overview::create([
             'user_id' => request('user_id'),
+            'bracelet_id' => request('bracelet_id'),
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
@@ -89,12 +96,12 @@ class AdminPostController extends Controller
         if ($files != '') {
             $i = 0;
             foreach ($files as $file) {
-                $post->addMedia($file)
-                    ->toMediaCollection('posts');
+                $overview->addMedia($file)
+                    ->toMediaCollection('overviews');
             }
         }
 
-        return redirect()->route('posts.index');
+        return redirect()->route('overviews.index');
     }
 
     /**
@@ -105,31 +112,36 @@ class AdminPostController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::find($id);
+        $overview = Overview::find($id);
 
         $users = User::pluck('name', 'id')->all();
 
-        $media = $post->getMedia('posts');
+        $bracelets = Bracelet::pluck('name', 'id')->all();
 
-        return view('admin.posts.edit', compact('post', 'media', 'users'));
+        $media = $overview->getMedia('overviews');
+
+        return view('admin.overviews.edit', compact('overview', 'media', 'users', 'bracelets'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \App\Http\Requests\Admin\OverviewRequest $request
+     * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
      */
-    public function update(PostRequest $request, $id)
+    public function update(OverviewRequest $request, int $id): \Illuminate\Http\Response
     {
-        $post = Post::find($id);
+        $overview = Overview::find($id);
 
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
 
-        $post->update([
+        $overview->update([
             'user_id' => request('user_id'),
+            'bracelet_id' => request('bracelet_id'),
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
@@ -147,12 +159,12 @@ class AdminPostController extends Controller
         if ($files != '') {
             $i = 0;
             foreach ($files as $file) {
-                $post->addMedia($file)
-                    ->toMediaCollection('posts');
+                $overview->addMedia($file)
+                    ->toMediaCollection('overviews');
             }
         }
 
-        return redirect()->route('posts.index');
+        return redirect()->route('overviews.index');
     }
 
     /**
@@ -163,22 +175,22 @@ class AdminPostController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::withTrashed()->find($id);
+        $overview = Overview::withTrashed()->find($id);
 
-        if ($post->trashed())
+        if ($overview->trashed())
             {
-                $post->forceDelete();
+                $overview->forceDelete();
             }
         else
             {
-                if ($post->published == true)
+                if ($overview->published == true)
 
                 {
-                    $post->published = false;
-                    $post->save();
+                    $overview->published = false;
+                    $overview->save();
                 }
 
-                $post->delete();
+                $overview->delete();
             }
 
 
@@ -188,9 +200,9 @@ class AdminPostController extends Controller
     public function restore($id)
     {
 
-        $post = Post::onlyTrashed()->find($id);
+        $overview = Overview::onlyTrashed()->find($id);
 
-        $post->restore();
+        $overview->restore();
 
         return back();
 

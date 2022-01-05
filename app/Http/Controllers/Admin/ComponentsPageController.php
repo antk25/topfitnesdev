@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Core;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
@@ -11,7 +11,7 @@ use App\Models\Seller;
 use App\Models\Spec;
 use Illuminate\Http\Request;
 
-class AdminComponentsPageController extends Controller
+class ComponentsPageController extends Controller
 {
    protected $grades;
    protected $sellers;
