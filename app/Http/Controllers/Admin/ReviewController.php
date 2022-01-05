@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\BraceletsImport;
+use App\Imports\ReviewsImport;
 use App\Models\Bracelet;
 use App\Models\Review;
 use App\Http\Requests\Admin\ReviewRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReviewController extends Controller
 {
@@ -165,5 +169,32 @@ class ReviewController extends Controller
 
         return redirect()->route('reviews.index');
     }
+
+    public function import(Request $request)
+    {
+
+        $request->validate([
+            'importFile' => 'required',
+        ]);
+
+        $file = $request->file('importFile')->store('import');
+
+        //    $import = new BraceletsImport();
+
+        //    $import->import($file);
+
+        Excel::import(new ReviewsImport(), $file);
+
+
+
+        //    if ($import->failures()->isNotEmpty())
+        //    {
+        //        return back()->withFailures($import->failures());
+        //    }
+
+
+        return back()->with('success', 'Завершено!');
+    }
+
 
 }
