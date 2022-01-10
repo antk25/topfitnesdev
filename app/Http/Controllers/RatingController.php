@@ -10,7 +10,10 @@ class RatingController extends Controller
 {
     public function show($slug) {
 
-        $rating = Rating::where('slug', $slug)->first();
+        $rating = Rating::where('slug', $slug)->with('bracelets')->first();
+
+        $bracelets = $rating->bracelets;
+
         $topbracelets = Bracelet::where('hit', 1)->limit(3)->get();
         if (Auth::check()) {
             $user = \Auth::user()->id;
@@ -20,6 +23,6 @@ class RatingController extends Controller
             $user = null;
         }
         // $media = $rating->getMedia('rating');
-        return view('ratings.show', compact('rating', 'user', 'topbracelets'));
+        return view('ratings.show', compact('rating', 'user', 'topbracelets', 'bracelets'));
     }
 }

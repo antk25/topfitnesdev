@@ -301,7 +301,8 @@
 
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-      <section>
+        @include('admin.layouts.parts.htmlcomponents')
+        <section>
         <div class="text-component padding-y-sm">
           <h4>Описание браслета</h4>
           <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>

@@ -58,7 +58,13 @@ class Rating extends Model implements HasMedia
         'name',
         'subtitle',
         'text',
-        'slug'
+        'slug',
+        'list_specs',
+        'type_table',
+    ];
+
+    protected $casts = [
+     'list_specs' => 'array',
     ];
 
     public function user()

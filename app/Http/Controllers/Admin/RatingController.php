@@ -184,8 +184,12 @@ class RatingController extends Controller
 
         // $data = array_combine($bracelets, $extra);
 
+//        $keys = array_column($listspecs, 'specs');
+//        $values = array_column($listspecs, 'value');
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
+
+//        $listspecs = array_combine($request->input('listspecskey'), $request->input('listspecsvalue'));
 
         $result = $rating->update([
             'user_id' => request('user_id'),
@@ -193,7 +197,9 @@ class RatingController extends Controller
             'slug' => $slug,
             'title' => request('title'),
             'description' => request('description'),
-            'text' => request('text')
+            'text' => request('text'),
+            'list_specs' => $request->input('listspecs'),
+            'type_table' => $request->input('type_table'),
         ]);
 
 
