@@ -12,8 +12,6 @@
                         <span class="text-xs text-uppercase letter-spacing-lg font-semibold">{{ $spec['value'] }}</span>
                     </th>
             @endforeach
-
-
             </tr>
             </thead>
 

@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="col-8@sm">
-                    <table class="prop-table width-100%" aria-label="Property Table Example">
+                    <table class="prop-table width-100% margin-bottom-sm" aria-label="Property Table Example">
                         <tbody class="prop-table__body">
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Страна-производитель</th>
@@ -74,6 +74,20 @@
 
                         </tbody>
                     </table>
+                    <div class="text-right">
+                    <a class="btn-fx-1" href="{{ route('pub.bracelets.show', ['slug' => $bracelet->slug]) }}">
+                        <div class="btn-fx-1__inner padding-y-xs padding-x-sm">
+                            <span>Подробнее</span>
+
+                            <div class="btn-fx-1__icon-wrapper" aria-hidden="true">
+                                <svg class="icon margin-left-xxs" viewBox="0 0 20 20"><polyline points="8 5 13 10 8 15" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+
+                                <svg class="icon margin-left-xxs" viewBox="0 0 20 20"><polyline points="8 5 13 10 8 15" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -82,8 +96,11 @@
 
        <x-cards.bracelet-sellers-article :bracelet="$bracelet"/>
 
-
-        {!! $bracelet->about !!}
+       @if($bracelet->pivot->text_rating)
+         {!! $bracelet->pivot->text_rating !!}
+        @else
+         {!! $bracelet->about !!}
+       @endif
 
        <x-cards.bracelet-plusminus-article :bracelet="$bracelet"/>
 

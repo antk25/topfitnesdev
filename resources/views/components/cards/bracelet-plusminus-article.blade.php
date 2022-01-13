@@ -3,7 +3,7 @@
         <div class="text-divider"><span>Плюсы и минусы {{ $bracelet->name }}</span></div>
         <div class="grid">
             <div class="col-6@sm">
-                <h3 class="text-center">Плюсы</h3>
+                <p class="text-center text-md">Плюсы</p>
 
                 <ul class="list list--icons">
                     @foreach ($bracelet->plus as $plus)
@@ -22,7 +22,7 @@
                 </ul>
             </div>
             <div class="col-6@sm">
-                <h3 class="text-center">Минусы</h3>
+                <p class="text-center text-md">Минусы</p>
                 <ul class="list list--icons">
                     @foreach ($bracelet->minus as $minus)
                         <li>

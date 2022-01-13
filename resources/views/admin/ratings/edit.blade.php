@@ -156,19 +156,16 @@
 
                         <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
                             @include('admin.layouts.parts.htmlcomponents')
-                            <section>
-                                <div class="text-component padding-y-sm">
-                                    <h4>Основной контент (в начале статьи)</h4>
-                                    <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
-                                        полный экран, ESC для выхода.</p>
-                                </div>
-                                <div class="border radius-md padding-sm bg-gradient-3">
-                                    <label class="form-label margin-bottom-xxs sr-only" for="text">Основной
-                                        контент</label>
-                                    <textarea class="form-control width-100% text-sm text" spellcheck="false"
-                                              name="text" id="text">{{ $rating->text }}</textarea>
-                                </div>
-                            </section>
+                            <x-admin.codemirror-editor :content="$rating->intro" name="intro" id="intro">
+                                <h4>Основной контент (в начале статьи)</h4>
+                                <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
+                                    полный экран, ESC для выхода.</p>
+                            </x-admin.codemirror-editor>
+
+                            <x-admin.codemirror-editor :content="$rating->conclusion" name="conclusion" id="conclusion">
+                                <h4>Выводы (в конце статьи)</h4>
+                                    полный экран, ESC для выхода.</p>
+                            </x-admin.codemirror-editor>
                         </div>
 
 
@@ -327,10 +324,9 @@
                                     </button>
                                 </div>
                             {{-- End add specs --}}
+                            <div class="margin-y-md"></div>
                             {{-- Add bracelets --}}
-                            <div class="text-component">
-                                <h4>Добавить браслеты для рейтинга</h4>
-                            </div>
+                            <h4>Добавить браслеты для рейтинга</h4>
                             <div class="js-repeater" data-repeater-input-name="allbracelets[n]">
                                 <div class="js-repeater__list">
                                     {{-- Используем функцию forelse, чтобы при отсутствии связей вывести пустую форму --}}
@@ -366,7 +362,7 @@
                                             <div class="col-3@md">
                                                 <input class="form-control width-100%" type="text"
                                                        name="allbracelets[{{ $loop->index }}][head_rating]"
-                                                       id="allbracelets[][head_rating]"
+                                                       id="allbracelets[{{ $loop->index }}][head_rating]"
                                                        value="{{ $item->pivot->head_rating }}"
                                                        placeholder="Заголовок H2 для рейтинга">
                                             </div>
@@ -376,15 +372,16 @@
                                                        for="allbracelets[{{ $loop->index }}][position_rating]">Позиция:</label>
                                                 <input class="form-control" type="number"
                                                        name="allbracelets[{{ $loop->index }}][position_rating]"
-                                                       id="allbracelets[0][position_rating]" min="0" max="20" step="1"
+                                                       id="allbracelets[{{ $loop->index }}][position_rating]" min="0" max="20" step="1"
                                                        value="{{ $item->pivot->position }}">
                                             </div>
 
                                             <div class="col-8@md">
-                                                <textarea class="form-control width-100%" rows="10"
-                                                          name="allbracelets[{{ $loop->index }}][text_rating]"
-                                                          id="allbracelets[][text_rating]"
-                                                          placeholder="Описание браслета для рейтинга (только если нужно уникальное)">{!! $item->pivot->text_rating !!}</textarea>
+                                                <x-admin.codemirror-editor :content="$item->pivot->text_rating"
+                                                                           name="allbracelets[{{ $loop->index }}][text_rating]"
+                                                                           id="allbracelets[{{ $loop->index }}][text_rating]"
+                                                                           placeholder="Описание браслета для рейтинга (только если нужно уникальное)">
+                                                </x-admin.codemirror-editor>
 
                                                 <button
                                                     class="btn width-100% btn--subtle margin-y-sm col-content js-repeater__remove btn--accent"
@@ -737,36 +734,7 @@
 
         @endsection
 
-        @section('scripts')
-            @parent
+        @push('js')
             <script src="{{ asset("js/admin/prism.min.js") }}"></script>
-            <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
-            <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
-            <script src="{{ asset("js/admin/closetag.js") }}"></script>
-            <script src="{{ asset("js/admin/matchtags.js") }}"></script>
-            <script src="{{ asset("js/admin/trailingspace.js") }}"></script>
-            <script src="{{ asset("js/admin/xml.js") }}"></script>
-            <script src="{{ asset("js/admin/fullscreen.js") }}"></script>
-            <script>
-                var myCodeMirror = CodeMirror.fromTextArea((text), {
-                    lineNumbers: true,
-                    tabSize: 2,
-                    mode: "text/html",
-                    autoCloseTags: true,
-                    lineWrapping: true,
-                    matchTags: {bothTags: true},
-                    extraKeys: {"Ctrl-J": "toMatchingTag"},
-                    showTrailingSpace: true,
-                    extraKeys: {
-                        "F11": function (cm) {
-                            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
-                        },
-                        "Esc": function (cm) {
-                            if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-                        }
-                    }
-                });
+        @endpush
 
-            </script>
-
-@endsection

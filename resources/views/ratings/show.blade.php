@@ -26,14 +26,25 @@
                 <div class="text-component__block--outset">
                     <x-dynamic-component :component="$rating->type_table" :bracelets="$bracelets" :specs="$rating->list_specs" />
                 </div>
-                <button class="btn btn--primary margin-y-sm" aria-controls="collapse-content">Table of Contents</button>
-                <div id="collapse-content" class="is-hidden js-collapse" data-collapse-animate="on">
-                    <div class="toc non-jquery">
+
+                <details class="details js-details margin-y-sm">
+                    <summary class="details__summary js-details__summary" role="button">
+                        <span class="flex items-center color-primary font-bold">
+                        <svg class="icon icon--xxs margin-right-xxxs" aria-hidden="true" viewBox="0 0 12 12"><path d="M2.783.088A.5.5,0,0,0,2,.5v11a.5.5,0,0,0,.268.442A.49.49,0,0,0,2.5,12a.5.5,0,0,0,.283-.088l8-5.5a.5.5,0,0,0,0-.824Z"></path></svg>
+                      <span>Содержание статьи</span>
+
+                    </span>
+                    </summary>
+
+                    <div class="details__content text-component margin-top-xs js-details__content">
+                        <div class="toc non-jquery">
+
+                        </div>
 
                     </div>
-                </div>
+                </details>
 
-                {!! $rating->text !!}
+                {!! $rating->intro !!}
 
                 <x-cards.bracelet-article :bracelets="$rating->bracelets" />
 
@@ -44,9 +55,9 @@
 
 <div class="container max-width-md">
 
-    <div class="bg padding-md padding-x-lg@md margin-y-sm@md">
+    <div class="bg padding-x-lg@md margin-y-sm@md">
         <div class="text-component">
-            <h2>Наши рекомендации</h2>
+            <p class="text-lg">Наши рекомендации</p>
         </div>
         <ol class="margin-bottom-md margin-top-md" aria-label="Наши рекомендации">
             @foreach ($topbracelets as $topbracelet)

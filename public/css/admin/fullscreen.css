@@ -2,10 +2,11 @@
   font-size: 18px;
   }
 .CodeMirror-fullscreen {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  height: auto;
-  z-index: 9;
+  position: relative;
+  /*top: 0; left: 0; right: 0; bottom: 0;*/
+  width: 100%;
+    height: auto;
+  /*z-index: 9;*/
 }
 .cm-trailingspace {
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QUXCToH00Y1UgAAACFJREFUCNdjPMDBUc/AwNDAAAFMTAwMDA0OP34wQgX/AQBYgwYEx4f9lQAAAABJRU5ErkJggg==);

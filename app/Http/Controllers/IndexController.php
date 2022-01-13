@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bracelet;
+use App\Models\Rating;
 use App\Models\Review;
 
 class IndexController extends Controller
@@ -13,6 +14,8 @@ class IndexController extends Controller
 
         $reviews = Review::with('reviewable')->orderBy('id', 'desc')->limit(3)->get();
 
-        return view('index', compact('hits', 'reviews'));
+        $lastratings = Rating::orderByDesc('updated_at')->limit(3)->get();
+
+        return view('index', compact('hits', 'reviews', 'lastratings'));
     }
 }

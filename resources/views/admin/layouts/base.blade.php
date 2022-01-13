@@ -440,11 +440,10 @@
 
   </ul>
 </div>
-@section('scripts')
 
 <livewire:scripts />
-
 <script src="{{ asset("js/admin/scripts.js") }}"></script>
-@show
+@stack('js')
+
   </body>
 </html>

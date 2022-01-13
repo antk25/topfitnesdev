@@ -134,6 +134,17 @@
       </div>
     </section>
 
+    <section class="margin-y-lg">
+        <div class="container max-width-adaptive-lg">
+            <div class="margin-bottom-lg">
+                <h1 class="text-center">Новые рейтинги</h1>
+            </div>
+            @foreach($lastratings as $item)
+                <a href="{{ route('pub.ratings.show', ['slug' => $item->slug]) }}">{{ $item->name }}</a>
+            @endforeach
+        </div>
+    </section>
+
 @endsection
 
 @section('footerScripts')

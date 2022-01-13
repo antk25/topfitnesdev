@@ -17149,6 +17149,51 @@ Usage: codyhouse.co/license
   border: none;
 }
 
+/* --------------------------------
+
+File#: _1_details
+Title: Details
+Descr: A button that toggles the visibility of additional information
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.details__summary {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.details__summary:hover {
+  color: var(--color-primary);
+}
+.details__summary:focus {
+  outline: 2px solid hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2);
+  outline-offset: 4px;
+}
+.details__summary .icon {
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.js .details__summary {
+  list-style: none;
+}
+.js .details__summary::-webkit-details-marker {
+  display: none;
+}
+.js .details__summary[aria-expanded=true] .icon {
+  transform: rotate(90deg);
+}
+.js .details__content[aria-hidden=true] {
+  display: none;
+}
+
+html:not(.js) .details__summary .icon {
+  display: none;
+}
+
 /* -------------------------------- 
 
 File#: _1_dialog
