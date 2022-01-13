@@ -1,6 +1,6 @@
 <div>
     @foreach ($bracelets as $bracelet)
-        <div class="text-component__block--outset">
+        <div class="text-component__block">
 
             <h2>{{ $bracelet->name }}</h2>
             <div class="grid gap-md items-center">

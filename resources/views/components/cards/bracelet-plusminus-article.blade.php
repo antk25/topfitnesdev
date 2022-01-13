@@ -1,5 +1,5 @@
 <div>
-    <div class="text-component__block--outset">
+    <div class="text-component__block">
         <div class="text-divider"><span>Плюсы и минусы {{ $bracelet->name }}</span></div>
         <div class="grid">
             <div class="col-6@sm">

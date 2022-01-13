@@ -9,21 +9,21 @@
 @endsection
 
 @section('content')
-    <div class="container max-width-sm padding-top-md">
+    <div class="container max-width-md padding-top-md">
         {{ Breadcrumbs::render('rating', $rating) }}
     </div>
 
     <article class="padding-y-md">
-        <header class="container max-width-sm margin-bottom-lg">
+        <header class="container max-width-md margin-bottom-lg">
             <div class="text-component line-height-lg text-space-y-md margin-bottom-md">
                 <h1>{{ $rating->subtitle }}</h1>
                 <p class="color-contrast-medium text-sm">{{ $rating->created_at->diffForHumans() }}</p>
             </div>
         </header>
 <section class="main">
-        <div class="container max-width-adaptive-sm">
+        <div class="container max-width-adaptive-md">
             <div class="text-component line-height-lg text-space-y-md">
-                <div class="text-component__block--outset">
+                <div class="text-component__block">
                     <x-dynamic-component :component="$rating->type_table" :bracelets="$bracelets" :specs="$rating->list_specs" />
                 </div>
 
