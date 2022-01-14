@@ -113,7 +113,7 @@
 <div class="container">
 
 <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
-  {{ Breadcrumbs::render('bracelet', $bracelet) }}
+  {{ Breadcrumbs::render('admin_bracelet', $bracelet) }}
 </div>
 
   <div class="tabs js-tabs">
@@ -302,21 +302,16 @@
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
         @include('admin.layouts.parts.htmlcomponents')
-        <section>
-        <div class="text-component padding-y-sm">
-          <h4>Описание браслета</h4>
-          <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
-        </div>
-        <div class="border radius-md padding-sm bg-gradient-3">
-          <label class="form-label margin-bottom-xxs sr-only" for="text">Описание браслета</label>
-          <textarea class="form-control width-100% text-sm text" spellcheck="false" name="about" id="about">{{ $bracelet->about }}</textarea>
-        </div>
-      </section>
+        <x-admin.codemirror-editor :content="$bracelet->about" name="about" id="about">
+            <h4>Описание браслета</h4>
+            <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
+                полный экран, ESC для выхода.</p>
+        </x-admin.codemirror-editor>
     </div>
 
 
-    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-        <fieldset id="section-1">
+            <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+                <fieldset id="section-1">
         <legend class="form-legend margin-bottom-md">Плюсы и минусы</legend>
              <div class="grid gap-xs margin-y-xs">
               <div class="col-6@md">
@@ -1604,36 +1599,6 @@
 </div>
 @endsection
 
-@section('scripts')
-@parent
-{{-- <script src="{{ asset("js/admin/alpine.min.js") }}"></script> --}}
-<script src="{{ asset("js/admin/prism.min.js") }}"></script>
-<script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
-    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
-    <script src="{{ asset("js/admin/closetag.js") }}"></script>
-    <script src="{{ asset("js/admin/matchtags.js") }}"></script>
-    <script src="{{ asset("js/admin/trailingspace.js") }}"></script>
-    <script src="{{ asset("js/admin/xml.js") }}"></script>
-    <script src="{{ asset("js/admin/fullscreen.js") }}"></script>
-    <script>
-      var myCodeMirror = CodeMirror.fromTextArea((about), {
-        lineNumbers: true,
-        tabSize: 2,
-        mode: "text/html",
-        autoCloseTags: true,
-        lineWrapping: true,
-        matchTags: {bothTags: true},
-        extraKeys: {"Ctrl-J": "toMatchingTag"},
-        showTrailingSpace: true,
-        extraKeys: {
-        "F11": function(cm) {
-          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
-        },
-        "Esc": function(cm) {
-          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-        }
-      }
-      });
-
-    </script>
-@endsection
+@push('js')
+    <script src="{{ asset("js/admin/prism.min.js") }}"></script>
+@endpush

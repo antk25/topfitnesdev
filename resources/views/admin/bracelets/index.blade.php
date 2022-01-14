@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
-{{ Breadcrumbs::render('bracelets') }}
+{{ Breadcrumbs::render('admin_bracelets') }}
 </div>
 
 <div class="grid gap-sm">

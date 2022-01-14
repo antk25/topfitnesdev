@@ -25,18 +25,19 @@ class Manual extends Model implements HasMedia
         'user_id'
     ];
 
-    public function bracelets()
+    public function bracelets(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Bracelet::class);
     }
 
     // Включаем комментарии
 
-    public function comments() {
+    public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }

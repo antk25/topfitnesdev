@@ -18,6 +18,19 @@ Breadcrumbs::for('rating', function (BreadcrumbTrail $trail, $rating) {
     $trail->push($rating->name, route('pub.ratings.show', ['slug' => $rating->slug]));
 });
 
+// Home > Catalog
+Breadcrumbs::for('katalog', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Каталог', route('pub.bracelets.index'));
+});
+
+// Home > Catalog > Bracelet
+Breadcrumbs::for('bracelet', function (BreadcrumbTrail $trail, $bracelet) {
+    $trail->parent('katalog');
+    $trail->push($bracelet->name, route('pub.bracelets.show', ['slug' => $bracelet->slug]));
+});
+
+
 
 /**
  * Admin Panel
@@ -90,14 +103,14 @@ Breadcrumbs::for('pages', function (BreadcrumbTrail $trail) {
 
 
 // Admin > Pages > Bracelets
-Breadcrumbs::for('bracelets', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('admin_bracelets', function (BreadcrumbTrail $trail) {
     $trail->parent('pages');
     $trail->push('Браслеты', route('bracelets.index'));
 });
 
 // Admin > Pages > Bracelets > Bracelet
-Breadcrumbs::for('bracelet', function (BreadcrumbTrail $trail, $bracelet) {
-    $trail->parent('bracelets');
+Breadcrumbs::for('admin_bracelet', function (BreadcrumbTrail $trail, $bracelet) {
+    $trail->parent('admin_bracelets');
     $trail->push($bracelet->name . " (id =  $bracelet->id)", route('bracelets.edit', ['bracelet' => $bracelet->id]));
 });
 

@@ -140,6 +140,20 @@ class Bracelet extends Model implements HasMedia
         return $this->hasOne(Overview::class);
     }
 
+    // Связываем с мануалами
+
+    public function manuals(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Manual::class);
+    }
+
+    // Связываем с сравнениями
+
+    public function comparisons(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Comparison::class);
+    }
+
     // Связываем с оценками
 
     public function grades(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
