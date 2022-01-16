@@ -55,9 +55,10 @@ class Post extends Model implements HasMedia
         'title',
         'subtitle',
         'description',
-        'content',
+        'content_raw',
         'published',
-        'user_id'
+        'user_id',
+        'sources'
     ];
 
     public function user()
@@ -82,6 +83,11 @@ class Post extends Model implements HasMedia
         return route('pub.posts.show', ['slug' => $link]);
 
      }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('cover')->singleFile();
+    }
 
     public function registerMediaConversions(Media $media = null): void
     {

@@ -18,6 +18,19 @@ Breadcrumbs::for('rating', function (BreadcrumbTrail $trail, $rating) {
     $trail->push($rating->name, route('pub.ratings.show', ['slug' => $rating->slug]));
 });
 
+// Home > Blog
+Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Блог', route('pub.posts.index'));
+});
+
+// Home > Blog > Post
+Breadcrumbs::for('post', function (BreadcrumbTrail $trail, $post) {
+    $trail->parent('blog');
+    $trail->push($post->name, route('pub.posts.show', ['slug' => $post->slug]));
+});
+
+
 // Home > Catalog
 Breadcrumbs::for('katalog', function (BreadcrumbTrail $trail) {
     $trail->parent('home');

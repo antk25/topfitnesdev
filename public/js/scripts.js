@@ -644,53 +644,6 @@ function resetFocusTabsStyle() {
         }
     }
 }());
-// File#: _1_confetti-button
-// Usage: codyhouse.co/license
-(function() {
-  var ConfettiBtn = function(element) {
-    this.element = element;
-    this.btn = this.element.getElementsByClassName('js-confetti-btn__btn');
-    this.icon = this.element.getElementsByClassName('js-confetti-btn__icon');
-    this.animating = false;
-    this.animationClass = 'confetti-btn--animate';
-    this.positionVariables = '--conf-btn-click-';
-    initConfettiBtn(this);
-	};
-
-  function initConfettiBtn(element) {
-    if(element.btn.length < 1 || element.icon.length < 1) return;
-    element.btn[0].addEventListener('click', function(event){
-      if(element.animating) return;
-      element.animating = true;
-      setAnimationPosition(element, event);
-      Util.addClass(element.element, element.animationClass);
-      resetAnimation(element);
-    });
-  };
-
-  function setAnimationPosition(element, event) { // change icon position based on click position
-    
-    var btnBoundingRect = element.btn[0].getBoundingClientRect();
-    document.documentElement.style.setProperty(element.positionVariables+'x', (event.clientX - btnBoundingRect.left)+'px');
-    document.documentElement.style.setProperty(element.positionVariables+'y', (event.clientY - btnBoundingRect.top)+'px');
-  };
-
-  function resetAnimation(element) { // reset the button at the end of the icon animation
-    
-    element.icon[0].addEventListener('animationend', function cb(){
-      element.icon[0].removeEventListener('animationend', cb);
-      Util.removeClass(element.element, element.animationClass);
-      element.animating = false;
-    });
-  };
-
-  var confettiBtn = document.getElementsByClassName('js-confetti-btn');
-  if(confettiBtn.length > 0) {
-    for(var i = 0; i < confettiBtn.length; i++) {
-      (function(i){new ConfettiBtn(confettiBtn[i]);})(i);
-    }
-  }
-}());
 // File#: _1_custom-select
 // Usage: codyhouse.co/license
 (function() {
@@ -1395,291 +1348,6 @@ function resetFocusTabsStyle() {
 		}
 	}
 }());
-// File#: _1_lazy-load
-// Usage: codyhouse.co/license
-(function() {
-  var LazyLoad = function(elements) {
-    this.elements = elements;
-    initLazyLoad(this);
-  };
-
-  function initLazyLoad(asset) {
-    if(lazySupported) setAssetsSrc(asset);
-    else if(intersectionObsSupported) observeAssets(asset);
-    else scrollAsset(asset);
-  };
-
-  function setAssetsSrc(asset) {
-    for(var i = 0; i < asset.elements.length; i++) {
-      if(asset.elements[i].getAttribute('data-bg') || asset.elements[i].tagName.toLowerCase() == 'picture') { // this could be an element with a bg image or a <source> element inside a <picture>
-        observeSingleAsset(asset.elements[i]);
-      } else {
-        setSingleAssetSrc(asset.elements[i]);
-      }
-    }
-  };
-
-  function setSingleAssetSrc(img) {
-    if(img.tagName.toLowerCase() == 'picture') {
-      setPictureSrc(img);
-    } else {
-      setSrcSrcset(img);
-      var bg = img.getAttribute('data-bg');
-      if(bg) img.style.backgroundImage = bg;
-      if(!lazySupported || bg) img.removeAttribute("loading");
-    }
-  };
-
-  function setPictureSrc(picture) {
-    var pictureChildren = picture.children;
-    for(var i = 0; i < pictureChildren.length; i++) setSrcSrcset(pictureChildren[i]);
-    picture.removeAttribute("loading");
-  };
-
-  function setSrcSrcset(img) {
-    var src = img.getAttribute('data-src');
-    if(src) img.src = src;
-    var srcset = img.getAttribute('data-srcset');
-    if(srcset) img.srcset = srcset;
-  };
-
-  function observeAssets(asset) {
-    for(var i = 0; i < asset.elements.length; i++) {
-      observeSingleAsset(asset.elements[i]);
-    }
-  };
-
-  function observeSingleAsset(img) {
-    if( !img.getAttribute('data-src') && !img.getAttribute('data-srcset') && !img.getAttribute('data-bg') && img.tagName.toLowerCase() != 'picture') return; // using the native lazyload with no need js lazy-loading
-
-    var threshold = img.getAttribute('data-threshold') || '200px';
-    var config = {rootMargin: threshold};
-    var observer = new IntersectionObserver(observerLoadContent.bind(img), config);
-    observer.observe(img);
-  };
-
-  function observerLoadContent(entries, observer) {
-    if(entries[0].isIntersecting) {
-      setSingleAssetSrc(this);
-      observer.unobserve(this);
-    }
-  };
-
-  function scrollAsset(asset) {
-    asset.elements = Array.prototype.slice.call(asset.elements);
-    asset.listening = false;
-    asset.scrollListener = eventLazyLoad.bind(asset);
-    document.addEventListener("scroll", asset.scrollListener);
-    asset.resizeListener = eventLazyLoad.bind(asset);
-    document.addEventListener("resize", asset.resizeListener);
-    eventLazyLoad.bind(asset)(); // trigger before starting scrolling/resizing
-  };
-
-  function eventLazyLoad() {
-    var self = this;
-    if(self.listening) return;
-    self.listening = true;
-    setTimeout(function() {
-      for(var i = 0; i < self.elements.length; i++) {
-        if ((self.elements[i].getBoundingClientRect().top <= window.innerHeight && self.elements[i].getBoundingClientRect().bottom >= 0) && getComputedStyle(self.elements[i]).display !== "none") {
-          setSingleAssetSrc(self.elements[i]);
-
-          self.elements = self.elements.filter(function(image) {
-            return image.hasAttribute("loading");
-          });
-
-          if (self.elements.length === 0) {
-            if(self.scrollListener) document.removeEventListener("scroll", self.scrollListener);
-            if(self.resizeListener) window.removeEventListener("resize", self.resizeListener);
-          }
-        }
-      }
-      self.listening = false;
-    }, 200);
-  };
-
-  window.LazyLoad = LazyLoad;
-
-  var lazyLoads = document.querySelectorAll('[loading="lazy"]'),
-    lazySupported = 'loading' in HTMLImageElement.prototype,
-    intersectionObsSupported = ('IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype);
-
-  if( lazyLoads.length > 0 ) {
-    new LazyLoad(lazyLoads);
-  };
-
-}());
-// File#: _1_menu
-// Usage: codyhouse.co/license
-(function() {
-    var Menu = function(element) {
-        this.element = element;
-        this.elementId = this.element.getAttribute('id');
-        this.menuItems = this.element.getElementsByClassName('js-menu__content');
-        this.trigger = document.querySelectorAll('[aria-controls="'+this.elementId+'"]');
-        this.selectedTrigger = false;
-        this.menuIsOpen = false;
-        this.initMenu();
-        this.initMenuEvents();
-    };
-
-    Menu.prototype.initMenu = function() {
-        // init aria-labels
-        for(var i = 0; i < this.trigger.length; i++) {
-            Util.setAttributes(this.trigger[i], {'aria-expanded': 'false', 'aria-haspopup': 'true'});
-        }
-        // init tabindex
-        for(var i = 0; i < this.menuItems.length; i++) {
-            this.menuItems[i].setAttribute('tabindex', '0');
-        }
-    };
-
-    Menu.prototype.initMenuEvents = function() {
-        var self = this;
-        for(var i = 0; i < this.trigger.length; i++) {(function(i){
-            self.trigger[i].addEventListener('click', function(event){
-                event.preventDefault();
-                // if the menu had been previously opened by another trigger element -> close it first and reopen in the right position
-                if(Util.hasClass(self.element, 'menu--is-visible') && self.selectedTrigger !=  self.trigger[i]) {
-                    self.toggleMenu(false, false); // close menu
-                }
-                // toggle menu
-                self.selectedTrigger = self.trigger[i];
-                self.toggleMenu(!Util.hasClass(self.element, 'menu--is-visible'), true);
-            });
-        })(i);}
-
-        // keyboard events
-        this.element.addEventListener('keydown', function(event) {
-            // use up/down arrow to navigate list of menu items
-            if( !Util.hasClass(event.target, 'js-menu__content') ) return;
-            if( (event.keyCode && event.keyCode == 40) || (event.key && event.key.toLowerCase() == 'arrowdown') ) {
-                self.navigateItems(event, 'next');
-            } else if( (event.keyCode && event.keyCode == 38) || (event.key && event.key.toLowerCase() == 'arrowup') ) {
-                self.navigateItems(event, 'prev');
-            }
-        });
-    };
-
-    Menu.prototype.toggleMenu = function(bool, moveFocus) {
-        var self = this;
-        // toggle menu visibility
-        Util.toggleClass(this.element, 'menu--is-visible', bool);
-        this.menuIsOpen = bool;
-        if(bool) {
-            this.selectedTrigger.setAttribute('aria-expanded', 'true');
-            Util.moveFocus(this.menuItems[0]);
-            this.element.addEventListener("transitionend", function(event) {Util.moveFocus(self.menuItems[0]);}, {once: true});
-            // position the menu element
-            this.positionMenu();
-            // add class to menu trigger
-            Util.addClass(this.selectedTrigger, 'menu-control--active');
-        } else if(this.selectedTrigger) {
-            this.selectedTrigger.setAttribute('aria-expanded', 'false');
-            if(moveFocus) Util.moveFocus(this.selectedTrigger);
-            // remove class from menu trigger
-            Util.removeClass(this.selectedTrigger, 'menu-control--active');
-            this.selectedTrigger = false;
-        }
-    };
-
-    Menu.prototype.positionMenu = function(event, direction) {
-        var selectedTriggerPosition = this.selectedTrigger.getBoundingClientRect(),
-            menuOnTop = (window.innerHeight - selectedTriggerPosition.bottom) < selectedTriggerPosition.top;
-        // menuOnTop = window.innerHeight < selectedTriggerPosition.bottom + this.element.offsetHeight;
-
-        var left = selectedTriggerPosition.left,
-            right = (window.innerWidth - selectedTriggerPosition.right),
-            isRight = (window.innerWidth < selectedTriggerPosition.left + this.element.offsetWidth);
-
-        var horizontal = isRight ? 'right: '+right+'px;' : 'left: '+left+'px;',
-            vertical = menuOnTop
-                ? 'bottom: '+(window.innerHeight - selectedTriggerPosition.top)+'px;'
-                : 'top: '+selectedTriggerPosition.bottom+'px;';
-        // check right position is correct -> otherwise set left to 0
-        if( isRight && (right + this.element.offsetWidth) > window.innerWidth) horizontal = 'left: '+ parseInt((window.innerWidth - this.element.offsetWidth)/2)+'px;';
-        var maxHeight = menuOnTop ? selectedTriggerPosition.top - 20 : window.innerHeight - selectedTriggerPosition.bottom - 20;
-        this.element.setAttribute('style', horizontal + vertical +'max-height:'+Math.floor(maxHeight)+'px;');
-    };
-
-    Menu.prototype.navigateItems = function(event, direction) {
-        event.preventDefault();
-        var index = Util.getIndexInArray(this.menuItems, event.target),
-            nextIndex = direction == 'next' ? index + 1 : index - 1;
-        if(nextIndex < 0) nextIndex = this.menuItems.length - 1;
-        if(nextIndex > this.menuItems.length - 1) nextIndex = 0;
-        Util.moveFocus(this.menuItems[nextIndex]);
-    };
-
-    Menu.prototype.checkMenuFocus = function() {
-        var menuParent = document.activeElement.closest('.js-menu');
-        if (!menuParent || !this.element.contains(menuParent)) this.toggleMenu(false, false);
-    };
-
-    Menu.prototype.checkMenuClick = function(target) {
-        if( !this.element.contains(target) && !target.closest('[aria-controls="'+this.elementId+'"]')) this.toggleMenu(false);
-    };
-
-    window.Menu = Menu;
-
-    //initialize the Menu objects
-    var menus = document.getElementsByClassName('js-menu');
-    if( menus.length > 0 ) {
-        var menusArray = [];
-        var scrollingContainers = [];
-        for( var i = 0; i < menus.length; i++) {
-            (function(i){
-                menusArray.push(new Menu(menus[i]));
-                var scrollableElement = menus[i].getAttribute('data-scrollable-element');
-                if(scrollableElement && !scrollingContainers.includes(scrollableElement)) scrollingContainers.push(scrollableElement);
-            })(i);
-        }
-
-        // listen for key events
-        window.addEventListener('keyup', function(event){
-            if( event.keyCode && event.keyCode == 9 || event.key && event.key.toLowerCase() == 'tab' ) {
-                //close menu if focus is outside menu element
-                menusArray.forEach(function(element){
-                    element.checkMenuFocus();
-                });
-            } else if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
-                // close menu on 'Esc'
-                menusArray.forEach(function(element){
-                    element.toggleMenu(false, false);
-                });
-            }
-        });
-        // close menu when clicking outside it
-        window.addEventListener('click', function(event){
-            menusArray.forEach(function(element){
-                element.checkMenuClick(event.target);
-            });
-        });
-        // on resize -> close all menu elements
-        window.addEventListener('resize', function(event){
-            menusArray.forEach(function(element){
-                element.toggleMenu(false, false);
-            });
-        });
-        // on scroll -> close all menu elements
-        window.addEventListener('scroll', function(event){
-            menusArray.forEach(function(element){
-                if(element.menuIsOpen) element.toggleMenu(false, false);
-            });
-        });
-        // take into account additinal scrollable containers
-        for(var j = 0; j < scrollingContainers.length; j++) {
-            var scrollingContainer = document.querySelector(scrollingContainers[j]);
-            if(scrollingContainer) {
-                scrollingContainer.addEventListener('scroll', function(event){
-                    menusArray.forEach(function(element){
-                        if(element.menuIsOpen) element.toggleMenu(false, false);
-                    });
-                });
-            }
-        }
-    }
-}());
 // File#: _1_modal-window
 // Usage: codyhouse.co/license
 (function() {
@@ -2364,198 +2032,6 @@ function resetFocusTabsStyle() {
     }
   };
 }());
-// File#: _1_responsive-sidebar
-// Usage: codyhouse.co/license
-(function() {
-  var Sidebar = function(element) {
-		this.element = element;
-		this.triggers = document.querySelectorAll('[aria-controls="'+this.element.getAttribute('id')+'"]');
-		this.firstFocusable = null;
-		this.lastFocusable = null;
-		this.selectedTrigger = null;
-    this.showClass = "sidebar--is-visible";
-    this.staticClass = "sidebar--static";
-    this.customStaticClass = "";
-    this.readyClass = "sidebar--loaded";
-    this.contentReadyClass = "sidebar-loaded:show";
-    this.layout = false; // this will be static or mobile
-    getCustomStaticClass(this); // custom classes for static version
-    initSidebar(this);
-  };
-
-  function getCustomStaticClass(element) {
-    var customClasses = element.element.getAttribute('data-static-class');
-    if(customClasses) element.customStaticClass = ' '+customClasses;
-  };
-  
-  function initSidebar(sidebar) {
-    initSidebarResize(sidebar); // handle changes in layout -> mobile to static and viceversa
-    
-		if ( sidebar.triggers ) { // open sidebar when clicking on trigger buttons - mobile layout only
-			for(var i = 0; i < sidebar.triggers.length; i++) {
-				sidebar.triggers[i].addEventListener('click', function(event) {
-					event.preventDefault();
-					if(Util.hasClass(sidebar.element, sidebar.showClass)) {
-            sidebar.selectedTrigger = event.target;
-            closeSidebar(sidebar);
-            return;
-          }
-					sidebar.selectedTrigger = event.target;
-					showSidebar(sidebar);
-					initSidebarEvents(sidebar);
-				});
-			}
-		}
-  };
-
-  function showSidebar(sidebar) { // mobile layout only
-		Util.addClass(sidebar.element, sidebar.showClass);
-		getFocusableElements(sidebar);
-		Util.moveFocus(sidebar.element);
-  };
-
-  function closeSidebar(sidebar) { // mobile layout only
-		Util.removeClass(sidebar.element, sidebar.showClass);
-		sidebar.firstFocusable = null;
-		sidebar.lastFocusable = null;
-    if(sidebar.selectedTrigger) sidebar.selectedTrigger.focus();
-    sidebar.element.removeAttribute('tabindex');
-		//remove listeners
-		cancelSidebarEvents(sidebar);
-	};
-
-  function initSidebarEvents(sidebar) { // mobile layout only
-    //add event listeners
-		sidebar.element.addEventListener('keydown', handleEvent.bind(sidebar));
-		sidebar.element.addEventListener('click', handleEvent.bind(sidebar));
-  };
-
-  function cancelSidebarEvents(sidebar) { // mobile layout only
-    //remove event listeners
-		sidebar.element.removeEventListener('keydown', handleEvent.bind(sidebar));
-		sidebar.element.removeEventListener('click', handleEvent.bind(sidebar));
-  };
-
-  function handleEvent(event) { // mobile layout only
-    switch(event.type) {
-      case 'click': {
-        initClick(this, event);
-      }
-      case 'keydown': {
-        initKeyDown(this, event);
-      }
-    }
-  };
-
-  function initKeyDown(sidebar, event) { // mobile layout only
-    if( event.keyCode && event.keyCode == 27 || event.key && event.key == 'Escape' ) {
-      //close sidebar window on esc
-      closeSidebar(sidebar);
-    } else if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
-      //trap focus inside sidebar
-      trapFocus(sidebar, event);
-    }
-  };
-
-  function initClick(sidebar, event) { // mobile layout only
-    //close sidebar when clicking on close button or sidebar bg layer 
-		if( !event.target.closest('.js-sidebar__close-btn') && !Util.hasClass(event.target, 'js-sidebar') ) return;
-		event.preventDefault();
-		closeSidebar(sidebar);
-  };
-
-  function trapFocus(sidebar, event) { // mobile layout only
-    if( sidebar.firstFocusable == document.activeElement && event.shiftKey) {
-			//on Shift+Tab -> focus last focusable element when focus moves out of sidebar
-			event.preventDefault();
-			sidebar.lastFocusable.focus();
-		}
-		if( sidebar.lastFocusable == document.activeElement && !event.shiftKey) {
-			//on Tab -> focus first focusable element when focus moves out of sidebar
-			event.preventDefault();
-			sidebar.firstFocusable.focus();
-		}
-  };
-
-  function initSidebarResize(sidebar) {
-    // custom event emitted when window is resized - detect only if the sidebar--static@{breakpoint} class was added
-    var beforeContent = getComputedStyle(sidebar.element, ':before').getPropertyValue('content');
-    if(beforeContent && beforeContent !='' && beforeContent !='none') {
-      checkSidebarLayout(sidebar);
-
-      sidebar.element.addEventListener('update-sidebar', function(event){
-        checkSidebarLayout(sidebar);
-      });
-    } 
-    // check if there a main element to show
-    var mainContent = document.getElementsByClassName(sidebar.contentReadyClass);
-    if(mainContent.length > 0) Util.removeClass(mainContent[0], sidebar.contentReadyClass);
-    Util.addClass(sidebar.element, sidebar.readyClass);
-  };
-
-  function checkSidebarLayout(sidebar) {
-    var layout = getComputedStyle(sidebar.element, ':before').getPropertyValue('content').replace(/\'|"/g, '');
-    if(layout == sidebar.layout) return;
-    sidebar.layout = layout;
-    if(layout != 'static') Util.addClass(sidebar.element, 'is-hidden');
-    Util.toggleClass(sidebar.element, sidebar.staticClass + sidebar.customStaticClass, layout == 'static');
-    if(layout != 'static') setTimeout(function(){Util.removeClass(sidebar.element, 'is-hidden')});
-    // reset element role 
-    (layout == 'static') ? sidebar.element.removeAttribute('role', 'alertdialog') :  sidebar.element.setAttribute('role', 'alertdialog');
-    // reset mobile behaviour
-    if(layout == 'static' && Util.hasClass(sidebar.element, sidebar.showClass)) closeSidebar(sidebar);
-  };
-
-  function getFocusableElements(sidebar) {
-    //get all focusable elements inside the drawer
-		var allFocusable = sidebar.element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary');
-		getFirstVisible(sidebar, allFocusable);
-		getLastVisible(sidebar, allFocusable);
-  };
-
-  function getFirstVisible(sidebar, elements) {
-		//get first visible focusable element inside the sidebar
-		for(var i = 0; i < elements.length; i++) {
-			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
-				sidebar.firstFocusable = elements[i];
-				return true;
-			}
-		}
-	};
-
-	function getLastVisible(sidebar, elements) {
-		//get last visible focusable element inside the sidebar
-		for(var i = elements.length - 1; i >= 0; i--) {
-			if( elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length ) {
-				sidebar.lastFocusable = elements[i];
-				return true;
-			}
-		}
-  };
-
-  //initialize the Sidebar objects
-	var sidebar = document.getElementsByClassName('js-sidebar');
-	if( sidebar.length > 0 ) {
-		for( var i = 0; i < sidebar.length; i++) {
-			(function(i){new Sidebar(sidebar[i]);})(i);
-    }
-    // switch from mobile to static layout
-    var customEvent = new CustomEvent('update-sidebar');
-    window.addEventListener('resize', function(event){
-      (!window.requestAnimationFrame) ? setTimeout(function(){resetLayout();}, 250) : window.requestAnimationFrame(resetLayout);
-    });
-
-    (window.requestAnimationFrame) // init sidebar layout
-      ? window.requestAnimationFrame(resetLayout)
-      : resetLayout();
-
-    function resetLayout() {
-      for( var i = 0; i < sidebar.length; i++) {
-        (function(i){sidebar[i].dispatchEvent(customEvent)})(i);
-      };
-    };
-	}
-}());
 // File#: _1_row-table
 // Usage: codyhouse.co/license
 (function() {
@@ -2663,128 +2139,6 @@ function resetFocusTabsStyle() {
       searchInput.focus();
     }
   });
-}());
-// File#: _1_slider
-// Usage: codyhouse.co/license
-(function() {
-  var Slider = function(element) {
-    this.element = element;
-    this.rangeWrapper = this.element.getElementsByClassName('slider__range');
-    this.rangeInput = this.element.getElementsByClassName('slider__input');
-    this.value = this.element.getElementsByClassName('js-slider__value');
-    this.floatingValue = this.element.getElementsByClassName('js-slider__value--floating');
-    this.rangeMin = this.rangeInput[0].getAttribute('min');
-    this.rangeMax = this.rangeInput[0].getAttribute('max');
-    this.sliderWidth = window.getComputedStyle(this.element.getElementsByClassName('slider__range')[0]).getPropertyValue('width');
-    this.thumbWidth = getComputedStyle(this.element).getPropertyValue('--slide-thumb-size');
-    this.isInputVar = (this.value[0].tagName.toLowerCase() == 'input');
-    this.isFloatingVar = this.floatingValue.length > 0;
-    if(this.isFloatingVar) {
-      this.floatingValueLeft = window.getComputedStyle(this.floatingValue[0]).getPropertyValue('left');
-    }
-    initSlider(this);
-  };
-
-  function initSlider(slider) {
-    updateLabelValues(slider);// update label/input value so that it is the same as the input range
-    updateLabelPosition(slider, false); // update label position if floating variation
-    updateRangeColor(slider, false); // update range bg color
-    checkRangeSupported(slider); // hide label/input value if input range is not supported
-
-    // listen to change in the input range
-    for(var i = 0; i < slider.rangeInput.length; i++) {
-      (function(i){
-        slider.rangeInput[i].addEventListener('input', function(event){
-          updateSlider(slider, i);
-        });
-        slider.rangeInput[i].addEventListener('change', function(event){ // fix issue on IE where input event is not emitted
-          updateSlider(slider, i);
-        });
-      })(i);
-    }
-
-    // if there's an input text, listen for changes in value, validate it and then update slider
-    if(slider.isInputVar) {
-      for(var i = 0; i < slider.value.length; i++) {
-        (function(i){
-          slider.value[i].addEventListener('change', function(event){
-            updateRange(slider, i);
-          });
-        })(i);
-      }
-    }
-
-    // native <input> element has been updated (e.g., form reset) -> update custom appearance
-    slider.element.addEventListener('slider-updated', function(event){
-      for(var i = 0; i < slider.value.length; i++) {updateSlider(slider, i);}
-    });
-
-    // custom events - emitted if slider has allows for multi-values
-    slider.element.addEventListener('inputRangeLimit', function(event){
-      updateLabelValues(slider);
-      updateLabelPosition(slider, event.detail);
-    });
-  };
-
-  function updateSlider(slider, index) {
-    updateLabelValues(slider);
-    updateLabelPosition(slider, index);
-    updateRangeColor(slider, index);
-  };
-
-  function updateLabelValues(slider) {
-    for(var i = 0; i < slider.rangeInput.length; i++) {
-      slider.isInputVar ? slider.value[i].value = slider.rangeInput[i].value : slider.value[i].textContent = slider.rangeInput[i].value;
-    }
-  };
-
-  function updateLabelPosition(slider, index) {
-    if(!slider.isFloatingVar) return;
-    var i = index ? index : 0,
-      j = index ? index + 1: slider.rangeInput.length;
-    for(var k = i; k < j; k++) {
-      var percentage = (slider.rangeInput[k].value - slider.rangeMin)/(slider.rangeMax - slider.rangeMin);
-      slider.floatingValue[k].style.left = 'calc(0.5 * '+slider.floatingValueLeft+' + '+percentage+' * ( '+slider.sliderWidth+' - '+slider.floatingValueLeft+' ))';
-    }
-  };
-
-  function updateRangeColor(slider, index) {
-    if(slider.rangeInput.length > 1) {slider.element.dispatchEvent(new CustomEvent('updateRange', {detail: index}));return;}
-    var percentage = parseInt((slider.rangeInput[0].value - slider.rangeMin)/(slider.rangeMax - slider.rangeMin)*100),
-      fill = 'calc('+percentage+'*('+slider.sliderWidth+' - 0.5*'+slider.thumbWidth+')/100)',
-      empty = 'calc('+slider.sliderWidth+' - '+percentage+'*('+slider.sliderWidth+' - 0.5*'+slider.thumbWidth+')/100)';
-
-    slider.rangeWrapper[0].style.setProperty('--slider-fill-value', fill);
-    slider.rangeWrapper[0].style.setProperty('--slider-empty-value', empty);
-  };
-
-  function updateRange(slider, index) {
-    var newValue = parseFloat(slider.value[index].value);
-    if(isNaN(newValue)) {
-      slider.value[index].value = slider.rangeInput[index].value;
-      return;
-    } else {
-      if(newValue < slider.rangeMin) newValue = slider.rangeMin;
-      if(newValue > slider.rangeMax) newValue = slider.rangeMax;
-      slider.rangeInput[index].value = newValue;
-      var inputEvent = new Event('change');
-      slider.rangeInput[index].dispatchEvent(inputEvent);
-    }
-  };
-
-  function checkRangeSupported(slider) {
-    var input = document.createElement("input");
-    input.setAttribute("type", "range");
-    Util.toggleClass(slider.element, 'slider--range-not-supported', input.type !== "range");
-  };
-
-  //initialize the Slider objects
-  var sliders = document.getElementsByClassName('js-slider');
-  if( sliders.length > 0 ) {
-    for( var i = 0; i < sliders.length; i++) {
-      (function(i){new Slider(sliders[i]);})(i);
-    }
-  }
 }());
 // File#: _1_smooth-scrolling
 // Usage: codyhouse.co/license
@@ -3024,6 +2378,58 @@ function resetFocusTabsStyle() {
         }
     }
 }());
+// File#: _1_table
+// Usage: codyhouse.co/license
+(function() {
+    function initTable(table) {
+        checkTableLayour(table); // switch from a collapsed to an expanded layout
+        Util.addClass(table, 'table--loaded'); // show table
+
+        // custom event emitted when window is resized
+        table.addEventListener('update-table', function(event){
+            checkTableLayour(table);
+        });
+    };
+
+    function checkTableLayour(table) {
+        var layout = getComputedStyle(table, ':before').getPropertyValue('content').replace(/\'|"/g, '');
+        Util.toggleClass(table, tableExpandedLayoutClass, layout != 'collapsed');
+    };
+
+    var tables = document.getElementsByClassName('js-table'),
+        tableExpandedLayoutClass = 'table--expanded';
+    if( tables.length > 0 ) {
+        var j = 0;
+        for( var i = 0; i < tables.length; i++) {
+            var beforeContent = getComputedStyle(tables[i], ':before').getPropertyValue('content');
+            if(beforeContent && beforeContent !='' && beforeContent !='none') {
+                (function(i){initTable(tables[i]);})(i);
+                j = j + 1;
+            } else {
+                Util.addClass(tables[i], 'table--loaded');
+            }
+        }
+
+        if(j > 0) {
+            var resizingId = false,
+                customEvent = new CustomEvent('update-table');
+            window.addEventListener('resize', function(event){
+                clearTimeout(resizingId);
+                resizingId = setTimeout(doneResizing, 300);
+            });
+
+            function doneResizing() {
+                for( var i = 0; i < tables.length; i++) {
+                    (function(i){tables[i].dispatchEvent(customEvent)})(i);
+                };
+            };
+
+            (window.requestAnimationFrame) // init table layout
+                ? window.requestAnimationFrame(doneResizing)
+                : doneResizing();
+        }
+    }
+}());
 // File#: _1_tabs
 // Usage: codyhouse.co/license
 (function() {
@@ -3152,371 +2558,223 @@ function resetFocusTabsStyle() {
     }
   }
 }());
-(function() {
-  var themeSwitch = document.getElementById('switch-light-dark');
-  if(themeSwitch) {
-    var htmlElement = document.getElementsByTagName("html")[0],
-      darkInput = themeSwitch.querySelector('input[value="dark"]');
-    initTheme();
-    
-    themeSwitch.addEventListener('change', function(event){
-      resetTheme(event.target.value);
-    });
-
-    function initTheme() {
-      if(htmlElement.getAttribute('data-theme') == 'dark') {
-        darkInput.checked = true;
-      }
-    };
-
-    function resetTheme(theme) {
-      if(theme == 'dark') {
-        htmlElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('themeSwitch', 'dark');
-      } else {
-        htmlElement.removeAttribute('data-theme');
-        localStorage.setItem('themeSwitch', 'light');
-      }
-    };
-  }
-}());
-// File#: _2_autocomplete
+// File#: _1_tooltip
 // Usage: codyhouse.co/license
 (function() {
-  var Autocomplete = function(opts) {
-    if(!('CSS' in window) || !CSS.supports('color', 'var(--color-var)')) return;
-    this.options = Util.extend(Autocomplete.defaults, opts);
-    this.element = this.options.element;
-    this.input = this.element.getElementsByClassName('js-autocomplete__input')[0];
-    this.results = this.element.getElementsByClassName('js-autocomplete__results')[0];
-    this.resultsList = this.results.getElementsByClassName('js-autocomplete__list')[0];
-    this.ariaResult = this.element.getElementsByClassName('js-autocomplete__aria-results');
-    this.resultClassName = this.element.getElementsByClassName('js-autocomplete__item').length > 0 ? 'js-autocomplete__item' : 'js-autocomplete__result';
-    // store search info
-    this.inputVal = '';
-    this.typeId = false;
-    this.searching = false;
-    this.searchingClass = this.element.getAttribute('data-autocomplete-searching-class') || 'autocomplete--searching';
-    // dropdown reveal class
-    this.dropdownActiveClass =  this.element.getAttribute('data-autocomplete-dropdown-visible-class') || this.element.getAttribute('data-dropdown-active-class');
-    // truncate dropdown
-    this.truncateDropdown = this.element.getAttribute('data-autocomplete-dropdown-truncate') && this.element.getAttribute('data-autocomplete-dropdown-truncate') == 'on' ? true : false;
-    initAutocomplete(this);
-    this.autocompleteClosed = false; // fix issue when selecting an option from the list
-  };
+    var Tooltip = function(element) {
+        this.element = element;
+        this.tooltip = false;
+        this.tooltipIntervalId = false;
+        this.tooltipContent = this.element.getAttribute('title');
+        this.tooltipPosition = (this.element.getAttribute('data-tooltip-position')) ? this.element.getAttribute('data-tooltip-position') : 'top';
+        this.tooltipClasses = (this.element.getAttribute('data-tooltip-class')) ? this.element.getAttribute('data-tooltip-class') : false;
+        this.tooltipId = 'js-tooltip-element'; // id of the tooltip element -> trigger will have the same aria-describedby attr
+        // there are cases where you only need the aria-label -> SR do not need to read the tooltip content (e.g., footnotes)
+        this.tooltipDescription = (this.element.getAttribute('data-tooltip-describedby') && this.element.getAttribute('data-tooltip-describedby') == 'false') ? false : true;
 
-  function initAutocomplete(element) {
-    initAutocompleteAria(element); // set aria attributes for SR and keyboard users
-    initAutocompleteTemplates(element);
-    initAutocompleteEvents(element);
-  };
-
-  function initAutocompleteAria(element) {
-    // set aria attributes for input element
-    Util.setAttributes(element.input, {'role': 'combobox', 'aria-autocomplete': 'list'});
-    var listId = element.resultsList.getAttribute('id');
-    if(listId) element.input.setAttribute('aria-owns', listId);
-    // set aria attributes for autocomplete list
-    element.resultsList.setAttribute('role', 'list');
-  };
-
-  function initAutocompleteTemplates(element) {
-    element.templateItems = element.resultsList.querySelectorAll('.'+element.resultClassName+'[data-autocomplete-template]');
-    if(element.templateItems.length < 1) element.templateItems = element.resultsList.querySelectorAll('.'+element.resultClassName);
-    element.templates = [];
-    for(var i = 0; i < element.templateItems.length; i++) {
-      element.templates[i] = element.templateItems[i].getAttribute('data-autocomplete-template');
-    }
-  };
-
-  function initAutocompleteEvents(element) {
-    // input - keyboard navigation 
-    element.input.addEventListener('keyup', function(event){
-      handleInputTyped(element, event);
-    });
-
-    // if input type="search" -> detect when clicking on 'x' to clear input
-    element.input.addEventListener('search', function(event){
-      updateSearch(element);
-    });
-
-    // make sure dropdown is open on click
-    element.input.addEventListener('click', function(event){
-      updateSearch(element, true);
-    });
-
-    element.input.addEventListener('focus', function(event){
-      if(element.autocompleteClosed) {
-        element.autocompleteClosed = false;
-        return;
-      }
-      updateSearch(element, true);
-    });
-
-    // input loses focus -> close menu
-    element.input.addEventListener('blur', function(event){
-      checkFocusLost(element, event);
-    });
-
-    // results list - keyboard navigation 
-    element.resultsList.addEventListener('keydown', function(event){
-      navigateList(element, event);
-    });
-
-    // results list loses focus -> close menu
-    element.resultsList.addEventListener('focusout', function(event){
-      checkFocusLost(element, event);
-    });
-
-    // close on esc
-    window.addEventListener('keyup', function(event){
-      if( event.keyCode && event.keyCode == 27 || event.key && event.key.toLowerCase() == 'escape' ) {
-        toggleOptionsList(element, false);
-      } else if(event.keyCode && event.keyCode == 13 || event.key && event.key.toLowerCase() == 'enter') { // on Enter - select result if focus is within results list
-        selectResult(element, document.activeElement.closest('.'+element.resultClassName), event);
-      }
-    });
-
-    // select element from list
-    element.resultsList.addEventListener('click', function(event){
-      selectResult(element, event.target.closest('.'+element.resultClassName), event);
-    });
-  };
-
-  function checkFocusLost(element, event) {
-    if(element.element.contains(event.relatedTarget)) return;
-    toggleOptionsList(element, false);
-  };
-
-  function handleInputTyped(element, event) {
-    if(event.key.toLowerCase() == 'arrowdown' || event.keyCode == '40') {
-      moveFocusToList(element);
-    } else {
-      updateSearch(element);
-    }
-  };
-
-  function moveFocusToList(element) {
-    console.log('test');
-    if(!Util.hasClass(element.element, element.dropdownActiveClass)) return;
-    resetSearch(element); // clearTimeout
-    // make sure first element is focusable
-    var index = 0;
-    if(!elementListIsFocusable(element.resultsItems[index])) {
-      index = getElementFocusbleIndex(element, index, true);
-    }
-    getListFocusableEl(element.resultsItems[index]).focus();
-  };
-
-  function updateSearch(element, bool) {
-    var inputValue = element.input.value;
-    if(inputValue == element.inputVal && !bool) return; // input value did not change
-    element.inputVal = inputValue;
-    if(element.typeId) clearInterval(element.typeId); // clearTimeout
-    if(element.inputVal.length < element.options.characters) { // not enough characters to start searching
-      toggleOptionsList(element, false);
-      return;
-    }
-    if(bool) { // on focus -> update result list without waiting for the debounce
-      updateResultsList(element, 'focus');
-      return;
-    }
-    element.typeId = setTimeout(function(){
-      updateResultsList(element, 'type');
-    }, element.options.debounce);
-  };
-
-  function toggleOptionsList(element, bool) {
-    // toggle visibility of options list
-    if(bool) {
-      if(Util.hasClass(element.element, element.dropdownActiveClass)) return;
-      Util.addClass(element.element, element.dropdownActiveClass);
-      element.input.setAttribute('aria-expanded', true);
-      truncateAutocompleteList(element);
-    } else {
-      if(!Util.hasClass(element.element, element.dropdownActiveClass)) return;
-      if(element.resultsList.contains(document.activeElement)) {
-        element.autocompleteClosed = true;
-        element.input.focus();
-      }
-      Util.removeClass(element.element, element.dropdownActiveClass);
-      element.input.removeAttribute('aria-expanded');
-      resetSearch(element); // clearTimeout
-    }
-  };
-
-  function truncateAutocompleteList(element) {
-    if(!element.truncateDropdown) return;
-    // reset max height
-    element.resultsList.style.maxHeight = '';
-    // check available space 
-    var spaceBelow = (window.innerHeight - element.input.getBoundingClientRect().bottom - 10),
-      maxHeight = parseInt(getComputedStyle(element.resultsList).maxHeight);
-
-    (maxHeight > spaceBelow) 
-      ? element.resultsList.style.maxHeight = spaceBelow+'px' 
-      : element.resultsList.style.maxHeight = '';
-  };
-
-  function updateResultsList(element, eventType) {
-    if(element.searching) return;
-    element.searching = true;
-    Util.addClass(element.element, element.searchingClass); // show loader
-    element.options.searchData(element.inputVal, function(data){
-      // data = custom results
-      populateResults(element, data);
-      Util.removeClass(element.element, element.searchingClass);
-      toggleOptionsList(element, true);
-      updateAriaRegion(element);
-      element.searching = false;
-    }, eventType);
-  };
-
-  function updateAriaRegion(element) {
-    element.resultsItems = element.resultsList.querySelectorAll('.'+element.resultClassName+'[tabindex="-1"]');
-    if(element.ariaResult.length == 0) return;
-    element.ariaResult[0].textContent = element.resultsItems.length;
-  };
-
-  function resetSearch(element) {
-    if(element.typeId) clearInterval(element.typeId);
-    element.typeId = false;
-  };
-
-  function navigateList(element, event) {
-    var downArrow = (event.key.toLowerCase() == 'arrowdown' || event.keyCode == '40'),
-      upArrow = (event.key.toLowerCase() == 'arrowup' || event.keyCode == '38');
-    if(!downArrow && !upArrow) return;
-    event.preventDefault();
-    var selectedElement = document.activeElement.closest('.'+element.resultClassName) || document.activeElement;
-    var index = Util.getIndexInArray(element.resultsItems, selectedElement);
-    var newIndex = getElementFocusbleIndex(element, index, downArrow);
-    getListFocusableEl(element.resultsItems[newIndex]).focus();
-  };
-
-  function getElementFocusbleIndex(element, index, nextItem) {
-    var newIndex = nextItem ? index + 1 : index - 1;
-    if(newIndex < 0) newIndex = element.resultsItems.length - 1;
-    if(newIndex >= element.resultsItems.length) newIndex = 0;
-    // check if element can be focused
-    if(!elementListIsFocusable(element.resultsItems[newIndex])) {
-      // skip this element
-      return getElementFocusbleIndex(element, newIndex, nextItem);
-    }
-    return newIndex;
-  };
-
-  function elementListIsFocusable(item) {
-    var role = item.getAttribute('role');
-    if(role && role == 'presentation') {
-      // skip this element
-      return false;
-    }
-    return true;
-  };
-
-  function getListFocusableEl(item) {
-    var newFocus = item,
-      focusable = newFocus.querySelectorAll('button:not([disabled]), [href]');
-    if(focusable.length > 0 ) newFocus = focusable[0];
-    return newFocus;
-  };
-
-  function selectResult(element, result, event) {
-    if(!result) return;
-    if(element.options.onClick) {
-      element.options.onClick(result, element, event, function(){
-        toggleOptionsList(element, false);
-      });
-    } else {
-      element.input.value = getResultContent(result);
-      toggleOptionsList(element, false);
-    }
-    element.inputVal = element.input.value;
-  };
-
-  function getResultContent(result) { // get text content of selected item
-    var labelElement = result.querySelector('[data-autocomplete-label]');
-    return labelElement ? labelElement.textContent : result.textContent;
-  };
-
-  function populateResults(element, data) {
-    var innerHtml = '';
-
-    for(var i = 0; i < data.length; i++) {
-      innerHtml = innerHtml + getItemHtml(element, data[i]);
-    }
-    element.resultsList.innerHTML = innerHtml;
-  };
-
-  function getItemHtml(element, data) {
-    var clone = getClone(element, data);
-    Util.removeClass(clone, 'is-hidden');
-    clone.setAttribute('tabindex', '-1');
-    for(var key in data) {
-      if (data.hasOwnProperty(key)) {
-        if(key == 'label') setLabel(clone, data[key]);
-        else if(key == 'class') setClass(clone, data[key]);
-        else if(key == 'url') setUrl(clone, data[key]);
-        else if(key == 'src') setSrc(clone, data[key]);
-        else setKey(clone, key, data[key]);
-      }
-    }
-    return clone.outerHTML;
-  };
-
-  function getClone(element, data) {
-    var item = false;
-    if(element.templateItems.length == 1 || !data['template']) item = element.templateItems[0];
-    else {
-      for(var i = 0; i < element.templateItems.length; i++) {
-        if(data['template'] == element.templates[i]) {
-          item = element.templateItems[i];
+        this.tooltipDelay = 300; // show tooltip after a delay (in ms)
+        this.tooltipDelta = 10; // distance beetwen tooltip and trigger element (in px)
+        this.tooltipTriggerHover = false;
+        // tooltp sticky option
+        this.tooltipSticky = (this.tooltipClasses && this.tooltipClasses.indexOf('tooltip--sticky') > -1);
+        this.tooltipHover = false;
+        if(this.tooltipSticky) {
+            this.tooltipHoverInterval = false;
         }
-      }
-      if(!item) item = element.templateItems[0];
+        // tooltip triangle - css variable to control its position
+        this.tooltipTriangleVar = '--tooltip-triangle-translate';
+        resetTooltipContent(this);
+        initTooltip(this);
+    };
+
+    function resetTooltipContent(tooltip) {
+        var htmlContent = tooltip.element.getAttribute('data-tooltip-title');
+        if(htmlContent) {
+            tooltip.tooltipContent = htmlContent;
+        }
+    };
+
+    function initTooltip(tooltipObj) {
+        // reset trigger element
+        tooltipObj.element.removeAttribute('title');
+        tooltipObj.element.setAttribute('tabindex', '0');
+        // add event listeners
+        tooltipObj.element.addEventListener('mouseenter', handleEvent.bind(tooltipObj));
+        tooltipObj.element.addEventListener('focus', handleEvent.bind(tooltipObj));
+    };
+
+    function removeTooltipEvents(tooltipObj) {
+        // remove event listeners
+        tooltipObj.element.removeEventListener('mouseleave',  handleEvent.bind(tooltipObj));
+        tooltipObj.element.removeEventListener('blur',  handleEvent.bind(tooltipObj));
+    };
+
+    function handleEvent(event) {
+        // handle events
+        switch(event.type) {
+            case 'mouseenter':
+            case 'focus':
+                showTooltip(this, event);
+                break;
+            case 'mouseleave':
+            case 'blur':
+                checkTooltip(this);
+                break;
+            case 'newContent':
+                changeTooltipContent(this, event);
+                break;
+        }
+    };
+
+    function showTooltip(tooltipObj, event) {
+        // tooltip has already been triggered
+        if(tooltipObj.tooltipIntervalId) return;
+        tooltipObj.tooltipTriggerHover = true;
+        // listen to close events
+        tooltipObj.element.addEventListener('mouseleave', handleEvent.bind(tooltipObj));
+        tooltipObj.element.addEventListener('blur', handleEvent.bind(tooltipObj));
+        // custom event to reset tooltip content
+        tooltipObj.element.addEventListener('newContent', handleEvent.bind(tooltipObj));
+
+        // show tooltip with a delay
+        tooltipObj.tooltipIntervalId = setTimeout(function(){
+            createTooltip(tooltipObj);
+        }, tooltipObj.tooltipDelay);
+    };
+
+    function createTooltip(tooltipObj) {
+        tooltipObj.tooltip = document.getElementById(tooltipObj.tooltipId);
+
+        if( !tooltipObj.tooltip ) { // tooltip element does not yet exist
+            tooltipObj.tooltip = document.createElement('div');
+            document.body.appendChild(tooltipObj.tooltip);
+        }
+
+        // remove data-reset attribute that is used when updating tooltip content (newContent custom event)
+        tooltipObj.tooltip.removeAttribute('data-reset');
+
+        // reset tooltip content/position
+        Util.setAttributes(tooltipObj.tooltip, {'id': tooltipObj.tooltipId, 'class': 'tooltip tooltip--is-hidden js-tooltip', 'role': 'tooltip'});
+        tooltipObj.tooltip.innerHTML = tooltipObj.tooltipContent;
+        if(tooltipObj.tooltipDescription) tooltipObj.element.setAttribute('aria-describedby', tooltipObj.tooltipId);
+        if(tooltipObj.tooltipClasses) Util.addClass(tooltipObj.tooltip, tooltipObj.tooltipClasses);
+        if(tooltipObj.tooltipSticky) Util.addClass(tooltipObj.tooltip, 'tooltip--sticky');
+        placeTooltip(tooltipObj);
+        Util.removeClass(tooltipObj.tooltip, 'tooltip--is-hidden');
+
+        // if tooltip is sticky, listen to mouse events
+        if(!tooltipObj.tooltipSticky) return;
+        tooltipObj.tooltip.addEventListener('mouseenter', function cb(){
+            tooltipObj.tooltipHover = true;
+            if(tooltipObj.tooltipHoverInterval) {
+                clearInterval(tooltipObj.tooltipHoverInterval);
+                tooltipObj.tooltipHoverInterval = false;
+            }
+            tooltipObj.tooltip.removeEventListener('mouseenter', cb);
+            tooltipLeaveEvent(tooltipObj);
+        });
+    };
+
+    function tooltipLeaveEvent(tooltipObj) {
+        tooltipObj.tooltip.addEventListener('mouseleave', function cb(){
+            tooltipObj.tooltipHover = false;
+            tooltipObj.tooltip.removeEventListener('mouseleave', cb);
+            hideTooltip(tooltipObj);
+        });
+    };
+
+    function placeTooltip(tooltipObj) {
+        // set top and left position of the tooltip according to the data-tooltip-position attr of the trigger
+        var dimention = [tooltipObj.tooltip.offsetHeight, tooltipObj.tooltip.offsetWidth],
+            positionTrigger = tooltipObj.element.getBoundingClientRect(),
+            position = [],
+            scrollY = window.scrollY || window.pageYOffset;
+
+        position['top'] = [ (positionTrigger.top - dimention[0] - tooltipObj.tooltipDelta + scrollY), (positionTrigger.right/2 + positionTrigger.left/2 - dimention[1]/2)];
+        position['bottom'] = [ (positionTrigger.bottom + tooltipObj.tooltipDelta + scrollY), (positionTrigger.right/2 + positionTrigger.left/2 - dimention[1]/2)];
+        position['left'] = [(positionTrigger.top/2 + positionTrigger.bottom/2 - dimention[0]/2 + scrollY), positionTrigger.left - dimention[1] - tooltipObj.tooltipDelta];
+        position['right'] = [(positionTrigger.top/2 + positionTrigger.bottom/2 - dimention[0]/2 + scrollY), positionTrigger.right + tooltipObj.tooltipDelta];
+
+        var direction = tooltipObj.tooltipPosition;
+        if( direction == 'top' && position['top'][0] < scrollY) direction = 'bottom';
+        else if( direction == 'bottom' && position['bottom'][0] + tooltipObj.tooltipDelta + dimention[0] > scrollY + window.innerHeight) direction = 'top';
+        else if( direction == 'left' && position['left'][1] < 0 )  direction = 'right';
+        else if( direction == 'right' && position['right'][1] + dimention[1] > window.innerWidth ) direction = 'left';
+
+        // reset tooltip triangle translate value
+        tooltipObj.tooltip.style.setProperty(tooltipObj.tooltipTriangleVar, '0px');
+
+        if(direction == 'top' || direction == 'bottom') {
+            var deltaMarg = 5;
+            if(position[direction][1] < 0 ) {
+                position[direction][1] = deltaMarg;
+                // make sure triangle is at the center of the tooltip trigger
+                tooltipObj.tooltip.style.setProperty(tooltipObj.tooltipTriangleVar, (positionTrigger.left + 0.5*positionTrigger.width - 0.5*dimention[1] - deltaMarg)+'px');
+            }
+            if(position[direction][1] + dimention[1] > window.innerWidth ) {
+                position[direction][1] = window.innerWidth - dimention[1] - deltaMarg;
+                // make sure triangle is at the center of the tooltip trigger
+                tooltipObj.tooltip.style.setProperty(tooltipObj.tooltipTriangleVar, (0.5*dimention[1] - (window.innerWidth - positionTrigger.right) - 0.5*positionTrigger.width + deltaMarg)+'px');
+            }
+        }
+        tooltipObj.tooltip.style.top = position[direction][0]+'px';
+        tooltipObj.tooltip.style.left = position[direction][1]+'px';
+        Util.addClass(tooltipObj.tooltip, 'tooltip--'+direction);
+    };
+
+    function checkTooltip(tooltipObj) {
+        tooltipObj.tooltipTriggerHover = false;
+        if(!tooltipObj.tooltipSticky) hideTooltip(tooltipObj);
+        else {
+            if(tooltipObj.tooltipHover) return;
+            if(tooltipObj.tooltipHoverInterval) return;
+            tooltipObj.tooltipHoverInterval = setTimeout(function(){
+                hideTooltip(tooltipObj);
+                tooltipObj.tooltipHoverInterval = false;
+            }, 300);
+        }
+    };
+
+    function hideTooltip(tooltipObj) {
+        if(tooltipObj.tooltipHover || tooltipObj.tooltipTriggerHover) return;
+        clearInterval(tooltipObj.tooltipIntervalId);
+        if(tooltipObj.tooltipHoverInterval) {
+            clearInterval(tooltipObj.tooltipHoverInterval);
+            tooltipObj.tooltipHoverInterval = false;
+        }
+        tooltipObj.tooltipIntervalId = false;
+        if(!tooltipObj.tooltip) return;
+        // hide tooltip
+        removeTooltip(tooltipObj);
+        // remove events
+        removeTooltipEvents(tooltipObj);
+    };
+
+    function removeTooltip(tooltipObj) {
+        if(tooltipObj.tooltipContent == tooltipObj.tooltip.innerHTML || tooltipObj.tooltip.getAttribute('data-reset') == 'on') {
+            Util.addClass(tooltipObj.tooltip, 'tooltip--is-hidden');
+            tooltipObj.tooltip.removeAttribute('data-reset');
+        }
+        if(tooltipObj.tooltipDescription) tooltipObj.element.removeAttribute('aria-describedby');
+    };
+
+    function changeTooltipContent(tooltipObj, event) {
+        if(tooltipObj.tooltip && tooltipObj.tooltipTriggerHover && event.detail) {
+            tooltipObj.tooltip.innerHTML = event.detail;
+            tooltipObj.tooltip.setAttribute('data-reset', 'on');
+            placeTooltip(tooltipObj);
+        }
+    };
+
+    window.Tooltip = Tooltip;
+
+    //initialize the Tooltip objects
+    var tooltips = document.getElementsByClassName('js-tooltip-trigger');
+    if( tooltips.length > 0 ) {
+        for( var i = 0; i < tooltips.length; i++) {
+            (function(i){new Tooltip(tooltips[i]);})(i);
+        }
     }
-    return item.cloneNode(true);
-  };
-
-  function setLabel(clone, label) {
-    var labelElement = clone.querySelector('[data-autocomplete-label]');
-    labelElement 
-      ? labelElement.textContent = label
-      : clone.textContent = label;
-  };
-
-  function setClass(clone, classList) {
-    Util.addClass(clone, classList);
-  };
-
-  function setUrl(clone, url) {
-    var linkElement = clone.querySelector('[data-autocomplete-url]');
-    if(linkElement) linkElement.setAttribute('href', url);
-  };
-
-  function setSrc(clone, src) {
-    var imgElement = clone.querySelector('[data-autocomplete-src]');
-    if(imgElement) imgElement.setAttribute('src', src);
-  };
-
-  function setKey(clone, key, value) {
-    var subElement = clone.querySelector('[data-autocomplete-'+key+']');
-    if(subElement) {
-      if(subElement.hasAttribute('data-autocomplete-html')) subElement.innerHTML = value;
-      else subElement.textContent = value;
-    }
-  };
-
-  Autocomplete.defaults = {
-    element : '',
-    debounce: 200,
-    characters: 2,
-    searchData: false, // function used to return results
-    onClick: false // function executed when selecting an item in the list; arguments (result, obj) -> selected <li> item + Autocompletr obj reference
-  };
-
-  window.Autocomplete = Autocomplete;
 }());
 // File#: _2_comments
 // Usage: codyhouse.co/license
@@ -3550,43 +2808,6 @@ function resetFocusTabsStyle() {
       (function(i){initVote(voteCounting[i]);})(i);
     }
   }
-}());
-// File#: _2_content-rating
-// Usage: codyhouse.co/license
-(function() {
-  function initRateCont(element) {
-    var commentSection = element.getElementsByClassName('js-rate-cont__comment');
-    if(commentSection.length == 0) return;
-    element.addEventListener('change', function() {
-      // show comment input if user selects one of the radio btns
-      showComment(commentSection[0]);
-    });
-  };
-
-  function showComment(comment) {
-    if(!Util.hasClass(comment, 'is-hidden')) return;
-    // reveal comment section
-    Util.removeClass(comment, 'is-hidden');
-    var initHeight = 0,
-			finalHeight = comment.offsetHeight;
-    if(window.requestAnimationFrame && !reducedMotion) {
-      Util.setHeight(initHeight, finalHeight, comment, 200, function(){
-        // move focus to textarea
-        var textArea = comment.querySelector('textarea');
-        if(textArea) textArea.focus();
-        // remove inline style
-        comment.style.height = '';
-      }, 'easeInOutQuad');
-    }
-  };
-
-  var rateCont = document.getElementsByClassName('js-rate-cont'),
-    reducedMotion = Util.osHasReducedMotion();
-  if( rateCont.length > 0 ) {
-		for( var i = 0; i < rateCont.length; i++) {
-			(function(i){initRateCont(rateCont[i]);})(i);
-		}
-	}
 }());
 // File#: _2_dropdown
 // Usage: codyhouse.co/license
@@ -3796,563 +3017,37 @@ function resetFocusTabsStyle() {
     }
   }
 }());
-// File#: _2_menu-bar
+// File#: _2_footnotes
 // Usage: codyhouse.co/license
 (function() {
-    var MenuBar = function(element) {
+    var Footnote = function(element) {
         this.element = element;
-        this.items = Util.getChildrenByClassName(this.element, 'menu-bar__item');
-        this.mobHideItems = this.element.getElementsByClassName('menu-bar__item--hide');
-        this.moreItemsTrigger = this.element.getElementsByClassName('js-menu-bar__trigger');
-        initMenuBar(this);
+        this.link = this.element.getElementsByClassName('footnotes__back-link')[0];
+        this.contentLink = document.getElementById(this.link.getAttribute('href').replace('#', ''));
+        // this.initFootnote();
     };
 
-    function initMenuBar(menu) {
-        setMenuTabIndex(menu); // set correct tabindexes for menu item
-        initMenuBarMarkup(menu); // create additional markup
-        checkMenuLayout(menu); // set menu layout
-        Util.addClass(menu.element, 'menu-bar--loaded'); // reveal menu
-
-        // custom event emitted when window is resized
-        menu.element.addEventListener('update-menu-bar', function(event){
-            checkMenuLayout(menu);
-            if(menu.menuInstance) menu.menuInstance.toggleMenu(false, false); // close dropdown
+    Footnote.prototype.initFootnote = function() {
+        Util.setAttributes(this.contentLink, {
+            'aria-label': 'Footnote: '+this.element.getElementsByClassName('js-footnote__label')[0].textContent,
+            'data-tooltip-class': 'tooltip--lg tooltip--sticky',
+            'data-tooltip-describedby': 'false',
+            'title': this.getFootnoteContent(),
         });
-
-        // keyboard events
-        // open dropdown when pressing Enter on trigger element
-        if(menu.moreItemsTrigger.length > 0) {
-            menu.moreItemsTrigger[0].addEventListener('keydown', function(event) {
-                if( (event.keyCode && event.keyCode == 13) || (event.key && event.key.toLowerCase() == 'enter') ) {
-                    if(!menu.menuInstance) return;
-                    menu.menuInstance.selectedTrigger = menu.moreItemsTrigger[0];
-                    menu.menuInstance.toggleMenu(!Util.hasClass(menu.subMenu, 'menu--is-visible'), true);
-                }
-            });
-
-            // close dropdown on esc
-            menu.subMenu.addEventListener('keydown', function(event) {
-                if((event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape')) { // close submenu on esc
-                    if(menu.menuInstance) menu.menuInstance.toggleMenu(false, true);
-                }
-            });
-        }
-
-        // navigate menu items using left/right arrows
-        menu.element.addEventListener('keydown', function(event) {
-            if( (event.keyCode && event.keyCode == 39) || (event.key && event.key.toLowerCase() == 'arrowright') ) {
-                navigateItems(menu.items, event, 'next');
-            } else if( (event.keyCode && event.keyCode == 37) || (event.key && event.key.toLowerCase() == 'arrowleft') ) {
-                navigateItems(menu.items, event, 'prev');
-            }
-        });
+        new Tooltip(this.contentLink);
     };
 
-    function setMenuTabIndex(menu) { // set tabindexes for the menu items to allow keyboard navigation
-        var nextItem = false;
-        for(var i = 0; i < menu.items.length; i++ ) {
-            if(i == 0 || nextItem) menu.items[i].setAttribute('tabindex', '0');
-            else menu.items[i].setAttribute('tabindex', '-1');
-            if(i == 0 && menu.moreItemsTrigger.length > 0) nextItem = true;
-            else nextItem = false;
-        }
+    Footnote.prototype.getFootnoteContent = function() {
+        var clone = this.element.cloneNode(true);
+        clone.removeChild(clone.getElementsByClassName('footnotes__back-link')[0]);
+        return clone.innerHTML;
     };
 
-    function initMenuBarMarkup(menu) {
-        if(menu.mobHideItems.length == 0 ) { // no items to hide on mobile - remove trigger
-            if(menu.moreItemsTrigger.length > 0) menu.element.removeChild(menu.moreItemsTrigger[0]);
-            return;
-        }
-
-        if(menu.moreItemsTrigger.length == 0) return;
-
-        // create the markup for the Menu element
-        var content = '';
-        menu.menuControlId = 'submenu-bar-'+Date.now();
-        for(var i = 0; i < menu.mobHideItems.length; i++) {
-            var item = menu.mobHideItems[i].cloneNode(true),
-                svg = item.getElementsByTagName('svg')[0],
-                label = item.getElementsByClassName('menu-bar__label')[0];
-
-            svg.setAttribute('class', 'icon menu__icon');
-            content = content + '<li role="menuitem"><span class="menu__content js-menu__content">'+svg.outerHTML+'<span>'+label.innerHTML+'</span></span></li>';
-        }
-
-        Util.setAttributes(menu.moreItemsTrigger[0], {'role': 'button', 'aria-expanded': 'false', 'aria-controls': menu.menuControlId, 'aria-haspopup': 'true'});
-
-        var subMenu = document.createElement('menu'),
-            customClass = menu.element.getAttribute('data-menu-class');
-        Util.setAttributes(subMenu, {'id': menu.menuControlId, 'class': 'menu js-menu '+customClass});
-        subMenu.innerHTML = content;
-        document.body.appendChild(subMenu);
-
-        menu.subMenu = subMenu;
-        menu.subItems = subMenu.getElementsByTagName('li');
-
-        menu.menuInstance = new Menu(menu.subMenu); // this will handle the dropdown behaviour
-    };
-
-    function checkMenuLayout(menu) { // switch from compressed to expanded layout and viceversa
-        var layout = getComputedStyle(menu.element, ':before').getPropertyValue('content').replace(/\'|"/g, '');
-        Util.toggleClass(menu.element, 'menu-bar--collapsed', layout == 'collapsed');
-    };
-
-    function navigateItems(list, event, direction, prevIndex) { // keyboard navigation among menu items
-        event.preventDefault();
-        var index = (typeof prevIndex !== 'undefined') ? prevIndex : Util.getIndexInArray(list, event.target),
-            nextIndex = direction == 'next' ? index + 1 : index - 1;
-        if(nextIndex < 0) nextIndex = list.length - 1;
-        if(nextIndex > list.length - 1) nextIndex = 0;
-        // check if element is visible before moving focus
-        (list[nextIndex].offsetParent === null) ? navigateItems(list, event, direction, nextIndex) : Util.moveFocus(list[nextIndex]);
-    };
-
-    function checkMenuClick(menu, target) { // close dropdown when clicking outside the menu element
-        if(menu.menuInstance && !menu.moreItemsTrigger[0].contains(target) && !menu.subMenu.contains(target)) menu.menuInstance.toggleMenu(false, false);
-    };
-
-    // init MenuBars objects
-    var menuBars = document.getElementsByClassName('js-menu-bar');
-    if( menuBars.length > 0 ) {
-        var j = 0,
-            menuBarArray = [];
-        for( var i = 0; i < menuBars.length; i++) {
-            var beforeContent = getComputedStyle(menuBars[i], ':before').getPropertyValue('content');
-            if(beforeContent && beforeContent !='' && beforeContent !='none') {
-                (function(i){menuBarArray.push(new MenuBar(menuBars[i]));})(i);
-                j = j + 1;
-            }
-        }
-
-        if(j > 0) {
-            var resizingId = false,
-                customEvent = new CustomEvent('update-menu-bar');
-            // update Menu Bar layout on resize
-            window.addEventListener('resize', function(event){
-                clearTimeout(resizingId);
-                resizingId = setTimeout(doneResizing, 150);
-            });
-
-            // close menu when clicking outside it
-            window.addEventListener('click', function(event){
-                menuBarArray.forEach(function(element){
-                    checkMenuClick(element, event.target);
-                });
-            });
-
-            function doneResizing() {
-                for( var i = 0; i < menuBars.length; i++) {
-                    (function(i){menuBars[i].dispatchEvent(customEvent)})(i);
-                };
-            };
-        }
-    }
-}());
-// File#: _2_modal-video
-// Usage: codyhouse.co/license
-(function() {
-	var ModalVideo = function(element) {
-		this.element = element;
-		this.modalContent = this.element.getElementsByClassName('js-modal-video__content')[0];
-		this.media = this.element.getElementsByClassName('js-modal-video__media')[0];
-		this.contentIsIframe = this.media.tagName.toLowerCase() == 'iframe';
-		this.modalIsOpen = false;
-		this.initModalVideo();
-	};
-
-	ModalVideo.prototype.initModalVideo = function() {
-		var self = this;
-		// reveal modal content when iframe is ready
-		this.addLoadListener();
-		// listen for the modal element to be open -> set new iframe src attribute
-		this.element.addEventListener('modalIsOpen', function(event){
-			self.modalIsOpen = true;
-			self.media.setAttribute('src', event.detail.closest('[aria-controls]').getAttribute('data-url'));
-		});
-		// listen for the modal element to be close -> reset iframe and hide modal content
-		this.element.addEventListener('modalIsClose', function(event){
-			self.modalIsOpen = false;
-			Util.addClass(self.element, 'modal--is-loading');
-			self.media.setAttribute('src', '');
-		});
-	};
-
-	ModalVideo.prototype.addLoadListener = function() {
-		var self = this;
-		if(this.contentIsIframe) {
-			this.media.onload = function () {
-				self.revealContent();
-			};
-		} else {
-			this.media.addEventListener('loadedmetadata', function(){
-				self.revealContent();
-			});
-		}
-		
-	};
-
-	ModalVideo.prototype.revealContent = function() {
-		if( !this.modalIsOpen ) return;
-		Util.removeClass(this.element, 'modal--is-loading');
-		this.contentIsIframe ? this.media.contentWindow.focus() : this.media.focus();
-	};
-
-	//initialize the ModalVideo objects
-	var modalVideos = document.getElementsByClassName('js-modal-video__media');
-	if( modalVideos.length > 0 ) {
-		for( var i = 0; i < modalVideos.length; i++) {
-			(function(i){new ModalVideo(modalVideos[i].closest('.js-modal'));})(i);
-		}
-	}
-}());
-// File#: _2_slideshow
-// Usage: codyhouse.co/license
-(function() {
-    var Slideshow = function(opts) {
-        this.options = Util.extend(Slideshow.defaults , opts);
-        this.element = this.options.element;
-        this.items = this.element.getElementsByClassName('js-slideshow__item');
-        this.controls = this.element.getElementsByClassName('js-slideshow__control');
-        this.selectedSlide = 0;
-        this.autoplayId = false;
-        this.autoplayPaused = false;
-        this.navigation = false;
-        this.navCurrentLabel = false;
-        this.ariaLive = false;
-        this.moveFocus = false;
-        this.animating = false;
-        this.supportAnimation = Util.cssSupports('transition');
-        this.animationOff = (!Util.hasClass(this.element, 'slideshow--transition-fade') && !Util.hasClass(this.element, 'slideshow--transition-slide') && !Util.hasClass(this.element, 'slideshow--transition-prx'));
-        this.animationType = Util.hasClass(this.element, 'slideshow--transition-prx') ? 'prx' : 'slide';
-        this.animatingClass = 'slideshow--is-animating';
-        initSlideshow(this);
-        initSlideshowEvents(this);
-        initAnimationEndEvents(this);
-    };
-
-    Slideshow.prototype.showNext = function() {
-        showNewItem(this, this.selectedSlide + 1, 'next');
-    };
-
-    Slideshow.prototype.showPrev = function() {
-        showNewItem(this, this.selectedSlide - 1, 'prev');
-    };
-
-    Slideshow.prototype.showItem = function(index) {
-        showNewItem(this, index, false);
-    };
-
-    Slideshow.prototype.startAutoplay = function() {
-        var self = this;
-        if(this.options.autoplay && !this.autoplayId && !this.autoplayPaused) {
-            self.autoplayId = setInterval(function(){
-                self.showNext();
-            }, self.options.autoplayInterval);
-        }
-    };
-
-    Slideshow.prototype.pauseAutoplay = function() {
-        var self = this;
-        if(this.options.autoplay) {
-            clearInterval(self.autoplayId);
-            self.autoplayId = false;
-        }
-    };
-
-    function initSlideshow(slideshow) { // basic slideshow settings
-        // if no slide has been selected -> select the first one
-        if(slideshow.element.getElementsByClassName('slideshow__item--selected').length < 1) Util.addClass(slideshow.items[0], 'slideshow__item--selected');
-        slideshow.selectedSlide = Util.getIndexInArray(slideshow.items, slideshow.element.getElementsByClassName('slideshow__item--selected')[0]);
-        // create an element that will be used to announce the new visible slide to SR
-        var srLiveArea = document.createElement('div');
-        Util.setAttributes(srLiveArea, {'class': 'sr-only js-slideshow__aria-live', 'aria-live': 'polite', 'aria-atomic': 'true'});
-        slideshow.element.appendChild(srLiveArea);
-        slideshow.ariaLive = srLiveArea;
-    };
-
-    function initSlideshowEvents(slideshow) {
-        // if slideshow navigation is on -> create navigation HTML and add event listeners
-        if(slideshow.options.navigation) {
-            // check if navigation has already been included
-            if(slideshow.element.getElementsByClassName('js-slideshow__navigation').length == 0) {
-                var navigation = document.createElement('ol'),
-                    navChildren = '';
-
-                var navClasses = slideshow.options.navigationClass+' js-slideshow__navigation';
-                if(slideshow.items.length <= 1) {
-                    navClasses = navClasses + ' is-hidden';
-                }
-
-                navigation.setAttribute('class', navClasses);
-                for(var i = 0; i < slideshow.items.length; i++) {
-                    var className = (i == slideshow.selectedSlide) ? 'class="'+slideshow.options.navigationItemClass+' '+slideshow.options.navigationItemClass+'--selected js-slideshow__nav-item"' :  'class="'+slideshow.options.navigationItemClass+' js-slideshow__nav-item"',
-                        navCurrentLabel = (i == slideshow.selectedSlide) ? '<span class="sr-only js-slideshow__nav-current-label">Current Item</span>' : '';
-                    navChildren = navChildren + '<li '+className+'><button class="reset"><span class="sr-only">'+ (i+1) + '</span>'+navCurrentLabel+'</button></li>';
-                }
-                navigation.innerHTML = navChildren;
-                slideshow.element.appendChild(navigation);
-            }
-
-            slideshow.navCurrentLabel = slideshow.element.getElementsByClassName('js-slideshow__nav-current-label')[0];
-            slideshow.navigation = slideshow.element.getElementsByClassName('js-slideshow__nav-item');
-
-            var dotsNavigation = slideshow.element.getElementsByClassName('js-slideshow__navigation')[0];
-
-            dotsNavigation.addEventListener('click', function(event){
-                navigateSlide(slideshow, event, true);
-            });
-            dotsNavigation.addEventListener('keyup', function(event){
-                navigateSlide(slideshow, event, (event.key.toLowerCase() == 'enter'));
-            });
-        }
-        // slideshow arrow controls
-        if(slideshow.controls.length > 0) {
-            // hide controls if one item available
-            if(slideshow.items.length <= 1) {
-                Util.addClass(slideshow.controls[0], 'is-hidden');
-                Util.addClass(slideshow.controls[1], 'is-hidden');
-            }
-            slideshow.controls[0].addEventListener('click', function(event){
-                event.preventDefault();
-                slideshow.showPrev();
-                updateAriaLive(slideshow);
-            });
-            slideshow.controls[1].addEventListener('click', function(event){
-                event.preventDefault();
-                slideshow.showNext();
-                updateAriaLive(slideshow);
-            });
-        }
-        // swipe events
-        if(slideshow.options.swipe) {
-            //init swipe
-            new SwipeContent(slideshow.element);
-            slideshow.element.addEventListener('swipeLeft', function(event){
-                slideshow.showNext();
-            });
-            slideshow.element.addEventListener('swipeRight', function(event){
-                slideshow.showPrev();
-            });
-        }
-        // autoplay
-        if(slideshow.options.autoplay) {
-            slideshow.startAutoplay();
-            // pause autoplay if user is interacting with the slideshow
-            if(!slideshow.options.autoplayOnHover) {
-                slideshow.element.addEventListener('mouseenter', function(event){
-                    slideshow.pauseAutoplay();
-                    slideshow.autoplayPaused = true;
-                });
-                slideshow.element.addEventListener('mouseleave', function(event){
-                    slideshow.autoplayPaused = false;
-                    slideshow.startAutoplay();
-                });
-            }
-            if(!slideshow.options.autoplayOnFocus) {
-                slideshow.element.addEventListener('focusin', function(event){
-                    slideshow.pauseAutoplay();
-                    slideshow.autoplayPaused = true;
-                });
-                slideshow.element.addEventListener('focusout', function(event){
-                    slideshow.autoplayPaused = false;
-                    slideshow.startAutoplay();
-                });
-            }
-        }
-        // detect if external buttons control the slideshow
-        var slideshowId = slideshow.element.getAttribute('id');
-        if(slideshowId) {
-            var externalControls = document.querySelectorAll('[data-controls="'+slideshowId+'"]');
-            for(var i = 0; i < externalControls.length; i++) {
-                (function(i){externalControlSlide(slideshow, externalControls[i]);})(i);
-            }
-        }
-        // custom event to trigger selection of a new slide element
-        slideshow.element.addEventListener('selectNewItem', function(event){
-            // check if slide is already selected
-            if(event.detail) {
-                if(event.detail - 1 == slideshow.selectedSlide) return;
-                showNewItem(slideshow, event.detail - 1, false);
-            }
-        });
-
-        // keyboard navigation
-        slideshow.element.addEventListener('keydown', function(event){
-            if(event.keyCode && event.keyCode == 39 || event.key && event.key.toLowerCase() == 'arrowright') {
-                slideshow.showNext();
-            } else if(event.keyCode && event.keyCode == 37 || event.key && event.key.toLowerCase() == 'arrowleft') {
-                slideshow.showPrev();
-            }
-        });
-    };
-
-    function navigateSlide(slideshow, event, keyNav) {
-        // user has interacted with the slideshow navigation -> update visible slide
-        var target = ( Util.hasClass(event.target, 'js-slideshow__nav-item') ) ? event.target : event.target.closest('.js-slideshow__nav-item');
-        if(keyNav && target && !Util.hasClass(target, 'slideshow__nav-item--selected')) {
-            slideshow.showItem(Util.getIndexInArray(slideshow.navigation, target));
-            slideshow.moveFocus = true;
-            updateAriaLive(slideshow);
-        }
-    };
-
-    function initAnimationEndEvents(slideshow) {
-        // remove animation classes at the end of a slide transition
-        for( var i = 0; i < slideshow.items.length; i++) {
-            (function(i){
-                slideshow.items[i].addEventListener('animationend', function(){resetAnimationEnd(slideshow, slideshow.items[i]);});
-                slideshow.items[i].addEventListener('transitionend', function(){resetAnimationEnd(slideshow, slideshow.items[i]);});
-            })(i);
-        }
-    };
-
-    function resetAnimationEnd(slideshow, item) {
-        setTimeout(function(){ // add a delay between the end of animation and slideshow reset - improve animation performance
-            if(Util.hasClass(item,'slideshow__item--selected')) {
-                if(slideshow.moveFocus) Util.moveFocus(item);
-                emitSlideshowEvent(slideshow, 'newItemVisible', slideshow.selectedSlide);
-                slideshow.moveFocus = false;
-            }
-            Util.removeClass(item, 'slideshow__item--'+slideshow.animationType+'-out-left slideshow__item--'+slideshow.animationType+'-out-right slideshow__item--'+slideshow.animationType+'-in-left slideshow__item--'+slideshow.animationType+'-in-right');
-            item.removeAttribute('aria-hidden');
-            slideshow.animating = false;
-            Util.removeClass(slideshow.element, slideshow.animatingClass);
-        }, 100);
-    };
-
-    function showNewItem(slideshow, index, bool) {
-        if(slideshow.items.length <= 1) return;
-        if(slideshow.animating && slideshow.supportAnimation) return;
-        slideshow.animating = true;
-        Util.addClass(slideshow.element, slideshow.animatingClass);
-        if(index < 0) index = slideshow.items.length - 1;
-        else if(index >= slideshow.items.length) index = 0;
-        // skip slideshow item if it is hidden
-        if(bool && Util.hasClass(slideshow.items[index], 'is-hidden')) {
-            slideshow.animating = false;
-            index = bool == 'next' ? index + 1 : index - 1;
-            showNewItem(slideshow, index, bool);
-            return;
-        }
-        // index of new slide is equal to index of slide selected item
-        if(index == slideshow.selectedSlide) {
-            slideshow.animating = false;
-            return;
-        }
-        var exitItemClass = getExitItemClass(slideshow, bool, slideshow.selectedSlide, index);
-        var enterItemClass = getEnterItemClass(slideshow, bool, slideshow.selectedSlide, index);
-        // transition between slides
-        if(!slideshow.animationOff) Util.addClass(slideshow.items[slideshow.selectedSlide], exitItemClass);
-        Util.removeClass(slideshow.items[slideshow.selectedSlide], 'slideshow__item--selected');
-        slideshow.items[slideshow.selectedSlide].setAttribute('aria-hidden', 'true'); //hide to sr element that is exiting the viewport
-        if(slideshow.animationOff) {
-            Util.addClass(slideshow.items[index], 'slideshow__item--selected');
-        } else {
-            Util.addClass(slideshow.items[index], enterItemClass+' slideshow__item--selected');
-        }
-        // reset slider navigation appearance
-        resetSlideshowNav(slideshow, index, slideshow.selectedSlide);
-        slideshow.selectedSlide = index;
-        // reset autoplay
-        slideshow.pauseAutoplay();
-        slideshow.startAutoplay();
-        // reset controls/navigation color themes
-        resetSlideshowTheme(slideshow, index);
-        // emit event
-        emitSlideshowEvent(slideshow, 'newItemSelected', slideshow.selectedSlide);
-        if(slideshow.animationOff) {
-            slideshow.animating = false;
-            Util.removeClass(slideshow.element, slideshow.animatingClass);
-        }
-    };
-
-    function getExitItemClass(slideshow, bool, oldIndex, newIndex) {
-        var className = '';
-        if(bool) {
-            className = (bool == 'next') ? 'slideshow__item--'+slideshow.animationType+'-out-right' : 'slideshow__item--'+slideshow.animationType+'-out-left';
-        } else {
-            className = (newIndex < oldIndex) ? 'slideshow__item--'+slideshow.animationType+'-out-left' : 'slideshow__item--'+slideshow.animationType+'-out-right';
-        }
-        return className;
-    };
-
-    function getEnterItemClass(slideshow, bool, oldIndex, newIndex) {
-        var className = '';
-        if(bool) {
-            className = (bool == 'next') ? 'slideshow__item--'+slideshow.animationType+'-in-right' : 'slideshow__item--'+slideshow.animationType+'-in-left';
-        } else {
-            className = (newIndex < oldIndex) ? 'slideshow__item--'+slideshow.animationType+'-in-left' : 'slideshow__item--'+slideshow.animationType+'-in-right';
-        }
-        return className;
-    };
-
-    function resetSlideshowNav(slideshow, newIndex, oldIndex) {
-        if(slideshow.navigation) {
-            Util.removeClass(slideshow.navigation[oldIndex], 'slideshow__nav-item--selected');
-            Util.addClass(slideshow.navigation[newIndex], 'slideshow__nav-item--selected');
-            slideshow.navCurrentLabel.parentElement.removeChild(slideshow.navCurrentLabel);
-            slideshow.navigation[newIndex].getElementsByTagName('button')[0].appendChild(slideshow.navCurrentLabel);
-        }
-    };
-
-    function resetSlideshowTheme(slideshow, newIndex) {
-        var dataTheme = slideshow.items[newIndex].getAttribute('data-theme');
-        if(dataTheme) {
-            if(slideshow.navigation) slideshow.navigation[0].parentElement.setAttribute('data-theme', dataTheme);
-            if(slideshow.controls[0]) slideshow.controls[0].parentElement.setAttribute('data-theme', dataTheme);
-        } else {
-            if(slideshow.navigation) slideshow.navigation[0].parentElement.removeAttribute('data-theme');
-            if(slideshow.controls[0]) slideshow.controls[0].parentElement.removeAttribute('data-theme');
-        }
-    };
-
-    function emitSlideshowEvent(slideshow, eventName, detail) {
-        var event = new CustomEvent(eventName, {detail: detail});
-        slideshow.element.dispatchEvent(event);
-    };
-
-    function updateAriaLive(slideshow) {
-        slideshow.ariaLive.innerHTML = 'Item '+(slideshow.selectedSlide + 1)+' of '+slideshow.items.length;
-    };
-
-    function externalControlSlide(slideshow, button) { // control slideshow using external element
-        button.addEventListener('click', function(event){
-            var index = button.getAttribute('data-index');
-            if(!index || index == slideshow.selectedSlide + 1) return;
-            event.preventDefault();
-            showNewItem(slideshow, index - 1, false);
-        });
-    };
-
-    Slideshow.defaults = {
-        element : '',
-        navigation : true,
-        autoplay : false,
-        autoplayOnHover: false,
-        autoplayOnFocus: false,
-        autoplayInterval: 5000,
-        navigationItemClass: 'slideshow__nav-item',
-        navigationClass: 'slideshow__navigation',
-        swipe: false
-    };
-
-    window.Slideshow = Slideshow;
-
-    //initialize the Slideshow objects
-    var slideshows = document.getElementsByClassName('js-slideshow');
-    if( slideshows.length > 0 ) {
-        for( var i = 0; i < slideshows.length; i++) {
-            (function(i){
-                var navigation = (slideshows[i].getAttribute('data-navigation') && slideshows[i].getAttribute('data-navigation') == 'off') ? false : true,
-                    autoplay = (slideshows[i].getAttribute('data-autoplay') && slideshows[i].getAttribute('data-autoplay') == 'on') ? true : false,
-                    autoplayOnHover = (slideshows[i].getAttribute('data-autoplay-hover') && slideshows[i].getAttribute('data-autoplay-hover') == 'on') ? true : false,
-                    autoplayOnFocus = (slideshows[i].getAttribute('data-autoplay-focus') && slideshows[i].getAttribute('data-autoplay-focus') == 'on') ? true : false,
-                    autoplayInterval = (slideshows[i].getAttribute('data-autoplay-interval')) ? slideshows[i].getAttribute('data-autoplay-interval') : 5000,
-                    swipe = (slideshows[i].getAttribute('data-swipe') && slideshows[i].getAttribute('data-swipe') == 'on') ? true : false,
-                    navigationItemClass = slideshows[i].getAttribute('data-navigation-item-class') ? slideshows[i].getAttribute('data-navigation-item-class') : 'slideshow__nav-item',
-                    navigationClass = slideshows[i].getAttribute('data-navigation-class') ? slideshows[i].getAttribute('data-navigation-class') : 'slideshow__navigation';
-                new Slideshow({element: slideshows[i], navigation: navigation, autoplay : autoplay, autoplayOnHover: autoplayOnHover, autoplayOnFocus: autoplayOnFocus, autoplayInterval : autoplayInterval, swipe : swipe, navigationItemClass: navigationItemClass, navigationClass: navigationClass});
-            })(i);
+    //initialize the Footnote objects
+    var footnotes = document.getElementsByClassName('js-footnotes__item');
+    if( footnotes.length > 0 ) {
+        for( var i = 0; i < footnotes.length; i++) {
+            (function(i){new Footnote(footnotes[i]);})(i);
         }
     }
 }());
@@ -4539,472 +3234,6 @@ function resetFocusTabsStyle() {
       };
     };
   }
-}());
-// File#: _3_expandable-img-gallery
-// Usage: codyhouse.co/license
-
-(function() {
-    var ExpGallery = function(element) {
-        this.element = element;
-        this.slideshow = this.element.getElementsByClassName('js-exp-lightbox__body')[0];
-        this.slideshowList = this.element.getElementsByClassName('js-exp-lightbox__slideshow')[0];
-        this.slideshowId = this.element.getAttribute('id')
-        this.gallery = document.querySelector('[data-controls="'+this.slideshowId+'"]');
-        this.galleryItems = this.gallery.getElementsByClassName('js-exp-gallery__item');
-        this.lazyload = this.gallery.getAttribute('data-placeholder');
-        this.animationRunning = false;
-        // menu bar
-        this.menuBar = this.element.getElementsByClassName('js-menu-bar');
-        initNewContent(this);
-        initLightboxMarkup(this);
-        lazyLoadLightbox(this);
-        initSlideshow(this);
-        initModal(this);
-        initModalEvents(this);
-    };
-
-    function initNewContent(gallery) {
-        // if the gallery uses the infinite load - make sure to update the modal gallery when new content is loaded
-        gallery.infiniteScrollParent = gallery.gallery.closest('[data-container]');
-
-        if(!gallery.infiniteScrollParent && Util.hasClass(gallery.gallery, 'js-infinite-scroll')) {
-            gallery.infiniteScrollParent = gallery.gallery;
-        }
-
-        if(gallery.infiniteScrollParent) {
-            gallery.infiniteScrollParent.addEventListener('content-loaded', function(event){
-                initLightboxMarkup(gallery);
-                initSlideshow(gallery);
-            });
-        }
-    };
-
-    function initLightboxMarkup(gallery) {
-        // create items inside lightbox - modal slideshow
-        var slideshowContent = '';
-        for(var i = 0; i < gallery.galleryItems.length; i++) {
-            var caption = gallery.galleryItems[i].getElementsByClassName('js-exp-gallery__caption'),
-                image = gallery.galleryItems[i].getElementsByTagName('img')[0],
-                caption = gallery.galleryItems[i].getElementsByClassName('js-exp-gallery__caption');
-            // details
-            var src = image.getAttribute('data-modal-src');
-            if(!src) src = image.getAttribute('data-src');
-            if(!src) src = image.getAttribute('src');
-            var altAttr = image.getAttribute('alt')
-            altAttr = altAttr ? 'alt="'+altAttr+'"' : '';
-            var draggable = gallery.slideshow.getAttribute('data-swipe') == 'on' ? 'draggable="false" ondragstart="return false;"' : '';
-            var imgBlock = gallery.lazyload
-                ? '<img data-src="'+src+'" data-loading="lazy" src="'+gallery.lazyload+'" '+altAttr+' '+draggable+' class=" pointer-events-auto">'
-                : '<img src="'+src+'" data-loading="lazy" '+draggable+' class=" pointer-events-auto">';
-
-            var captionBlock = caption.length > 0
-                ? '<figcaption class="exp-lightbox__caption pointer-events-auto">'+caption[0].textContent+'</figcaption>'
-                : '';
-
-            slideshowContent = slideshowContent + '<li class="slideshow__item js-slideshow__item"><figure class="exp-lightbox__media"><div class="exp-lightbox__media-outer"><div class="exp-lightbox__media-inner">'+imgBlock+'</div></div>'+captionBlock+'</li>';
-        }
-        gallery.slideshowList.innerHTML = slideshowContent;
-        gallery.slides = gallery.slideshowList.getElementsByClassName('js-slideshow__item');
-
-        // append the morphing image - we will animate it from the selected slide to the final position (and viceversa)
-        var imgMorph = document.createElement("div");
-        Util.setAttributes(imgMorph, {'aria-hidden': 'true', 'class': 'exp-lightbox__clone-img-wrapper js-exp-lightbox__clone-img-wrapper', 'data-exp-morph': gallery.slideshowId});
-        imgMorph.innerHTML = '<svg><defs><clipPath id="'+gallery.slideshowId+'-clip"><rect/></clipPath></defs><image height="100%" width="100%" clip-path="url(#'+gallery.slideshowId+'-clip)"></image></svg>';
-        document.body.appendChild(imgMorph);
-        gallery.imgMorph = document.querySelector('.js-exp-lightbox__clone-img-wrapper[data-exp-morph="'+gallery.slideshowId+'"]');
-        gallery.imgMorphSVG = gallery.imgMorph.getElementsByTagName('svg')[0];
-        gallery.imgMorphRect = gallery.imgMorph.getElementsByTagName('rect')[0];
-        gallery.imgMorphImg = gallery.imgMorph.getElementsByTagName('image')[0];
-
-        // append image for zoom in effect
-        if(gallery.slideshow.getAttribute('data-zoom') == 'on') {
-            var zoomImg = document.createElement("div");
-            Util.setAttributes(zoomImg, {'aria-hidden': 'true', 'class': 'exp-lightbox__zoom exp-lightbox__zoom--no-transition js-exp-lightbox__zoom'});
-            zoomImg.innerHTML = '<img>';
-            gallery.element.appendChild(zoomImg);
-            gallery.zoomImg = gallery.element.getElementsByClassName('js-exp-lightbox__zoom')[0];
-        }
-    };
-
-    function lazyLoadLightbox(gallery) {
-        // lazyload media of selected slide/prev slide/next slide
-        gallery.slideshow.addEventListener('newItemSelected', function(event){
-            // 'newItemSelected' is emitted by the Slideshow object when a new slide is selected
-            gallery.selectedSlide = event.detail;
-            lazyLoadSlide(gallery);
-            // menu element - trigger new slide event
-            triggerMenuEvent(gallery);
-        });
-    };
-
-    function lazyLoadSlide(gallery) {
-        setSlideMedia(gallery, gallery.selectedSlide);
-        setSlideMedia(gallery, gallery.selectedSlide + 1);
-        setSlideMedia(gallery, gallery.selectedSlide - 1);
-    };
-
-    function setSlideMedia(gallery, index) {
-        if(index < 0) index = gallery.slides.length - 1;
-        if(index > gallery.slides.length - 1) index = 0;
-        var imgs = gallery.slides[index].querySelectorAll('img[data-src]');
-        for(var i = 0; i < imgs.length; i++) {
-            imgs[i].src = imgs[i].getAttribute('data-src');
-        }
-    };
-
-    function initSlideshow(gallery) {
-        // reset slideshow navigation
-        resetSlideshowControls(gallery);
-        gallery.slideshowNav = gallery.element.getElementsByClassName('js-slideshow__control');
-
-        if(gallery.slides.length <= 1) {
-            toggleSlideshowElements(gallery, true);
-            return;
-        }
-        var swipe = (gallery.slideshow.getAttribute('data-swipe') && gallery.slideshow.getAttribute('data-swipe') == 'on') ? true : false;
-        gallery.slideshowObj = new Slideshow({element: gallery.slideshow, navigation: false, autoplay : false, swipe : swipe});
-    };
-
-    function resetSlideshowControls(gallery) {
-        var arrowControl = gallery.element.getElementsByClassName('js-slideshow__control');
-        if(arrowControl.length == 0) return;
-        var controlsWrapper = arrowControl[0].parentElement;
-        if(!controlsWrapper) return;
-        controlsWrapper.innerHTML = controlsWrapper.innerHTML;
-    };
-
-    function toggleSlideshowElements(gallery, bool) { // hide slideshow controls if gallery is composed by one item only
-        if(gallery.slideshowNav.length > 0) {
-            for(var i = 0; i < gallery.slideshowNav.length; i++) {
-                bool ? Util.addClass(gallery.slideshowNav[i], 'is-hidden') : Util.removeClass(gallery.slideshowNav[i], 'is-hidden');
-            }
-        }
-    };
-
-    function initModal(gallery) {
-        Util.addClass(gallery.element, 'exp-lightbox--no-transition'); // add no-transition class to lightbox - used to select the first visible slide
-        gallery.element.addEventListener('modalIsClose', function(event){ // add no-transition class
-            Util.addClass(gallery.element, 'exp-lightbox--no-transition');
-            gallery.imgMorph.style = '';
-        });
-        // trigger modal lightbox
-        gallery.gallery.addEventListener('click', function(event){
-            openModalLightbox(gallery, event);
-        });
-    };
-
-    function initModalEvents(gallery) {
-        if(gallery.zoomImg) { // image zoom
-            gallery.slideshow.addEventListener('click', function(event){
-                if(event.target.tagName.toLowerCase() == 'img' && event.target.closest('.js-slideshow__item') && !gallery.modalSwiping) modalZoomImg(gallery, event.target);
-            });
-
-            gallery.zoomImg.addEventListener('click', function(event){
-                modalZoomImg(gallery, false);
-            });
-
-            gallery.element.addEventListener('modalIsClose', function(event){
-                modalZoomImg(gallery, false); // close zoom-in image if open
-                closeModalAnimation(gallery);
-            });
-        }
-
-        if(!gallery.slideshowObj) return;
-
-        if(gallery.slideshowObj.options.swipe) { // close gallery when you swipeUp/SwipeDown
-            gallery.slideshowObj.element.addEventListener('swipeUp', function(event){
-                closeModal(gallery);
-            });
-            gallery.slideshowObj.element.addEventListener('swipeDown', function(event){
-                closeModal(gallery);
-            });
-        }
-
-        if(gallery.zoomImg && gallery.slideshowObj.options.swipe) {
-            gallery.slideshowObj.element.addEventListener('swipeLeft', function(event){
-                gallery.modalSwiping = true;
-            });
-            gallery.slideshowObj.element.addEventListener('swipeRight', function(event){
-                gallery.modalSwiping = true;
-            });
-            gallery.slideshowObj.element.addEventListener('newItemVisible', function(event){
-                gallery.modalSwiping = false;
-            });
-        }
-    };
-
-    function openModalLightbox(gallery, event) {
-        var item = event.target.closest('.js-exp-gallery__item');
-        if(!item) return;
-        // reset slideshow items visibility
-        resetSlideshowItemsVisibility(gallery);
-        gallery.selectedSlide = Util.getIndexInArray(gallery.galleryItems, item);
-        setSelectedItem(gallery);
-        lazyLoadSlide(gallery);
-        if(animationSupported) { // start expanding animation
-            window.requestAnimationFrame(function(){
-                animateSelectedImage(gallery);
-                openModal(gallery, item);
-            });
-        } else { // no expanding animation -> show modal
-            openModal(gallery, item);
-            Util.removeClass(gallery.element, 'exp-lightbox--no-transition');
-        }
-        // menu element - trigger new slide event
-        triggerMenuEvent(gallery);
-    };
-
-    function resetSlideshowItemsVisibility(gallery) {
-        var index = 0;
-        for(var i = 0; i < gallery.galleryItems.length; i++) {
-            var itemVisible = isVisible(gallery.galleryItems[i]);
-            if(itemVisible) {
-                index = index + 1;
-                Util.removeClass(gallery.slides[i], 'is-hidden');
-            } else {
-                Util.addClass(gallery.slides[i], 'is-hidden');
-            }
-        }
-        toggleSlideshowElements(gallery, index < 2);
-    };
-
-    function setSelectedItem(gallery) {
-        // if a specific slide was selected -> make sure to show that item first
-        var lastSelected = gallery.slideshow.getElementsByClassName('slideshow__item--selected');
-        if(lastSelected.length > 0 ) Util.removeClass(lastSelected[0], 'slideshow__item--selected');
-        Util.addClass(gallery.slides[gallery.selectedSlide], 'slideshow__item--selected');
-        if(gallery.slideshowObj) gallery.slideshowObj.selectedSlide = gallery.selectedSlide;
-    };
-
-    function openModal(gallery, item) {
-        gallery.element.dispatchEvent(new CustomEvent('openModal', {detail: item}));
-        gallery.modalSwiping = false;
-    };
-
-    function closeModal(gallery) {
-        gallery.modalSwiping = true;
-        modalZoomImg(gallery, false);
-        gallery.element.dispatchEvent(new CustomEvent('closeModal'));
-    };
-
-    function closeModalAnimation(gallery) { // modal is already closing -> start image closing animation
-        gallery.selectedSlide = gallery.slideshowObj ? gallery.slideshowObj.selectedSlide : 0;
-        // on close - make sure last selected image (of the gallery) is in the viewport
-        var boundingRect = gallery.galleryItems[gallery.selectedSlide].getBoundingClientRect();
-        if(boundingRect.top < 0 || boundingRect.top > window.innerHeight) {
-            var windowScrollTop = window.scrollY || document.documentElement.scrollTop;
-            window.scrollTo(0, boundingRect.top + windowScrollTop);
-        }
-        // animate on close
-        animateSelectedImage(gallery, true);
-    };
-
-    function modalZoomImg(gallery, img) { // toggle zoom-in image
-        if(!gallery.zoomImg) return;
-        var bool = false;
-        if(img) { // open zoom-in image
-            gallery.originImg = img;
-            gallery.zoomImg.children[0].setAttribute('src', img.getAttribute('src'));
-            bool = true;
-        }
-        (animationSupported)
-            ? requestAnimationFrame(function(){animateZoomImg(gallery, bool)})
-            : Util.toggleClass(gallery.zoomImg, 'exp-lightbox__zoom--is-visible', bool);
-    };
-
-    function animateZoomImg(gallery, bool) {
-        if(!gallery.originImg) return;
-
-        var originImgPosition = gallery.originImg.getBoundingClientRect(),
-            originStyle = 'translateX('+originImgPosition.left+'px) translateY('+(originImgPosition.top + gallery.zoomImg.scrollTop)+'px) scale('+ originImgPosition.width/gallery.zoomImg.scrollWidth+')',
-            finalStyle = 'scale(1)';
-
-        if(bool) {
-            gallery.zoomImg.children[0].style.transform = originStyle;
-        } else {
-            gallery.zoomImg.addEventListener('transitionend', function cb(){
-                Util.addClass(gallery.zoomImg, 'exp-lightbox__zoom--no-transition');
-                gallery.zoomImg.scrollTop = 0;
-                gallery.zoomImg.removeEventListener('transitionend', cb);
-            });
-        }
-        setTimeout(function(){
-            Util.removeClass(gallery.zoomImg, 'exp-lightbox__zoom--no-transition');
-            Util.toggleClass(gallery.zoomImg, 'exp-lightbox__zoom--is-visible', bool);
-            gallery.zoomImg.children[0].style.transform = (bool) ? finalStyle : originStyle;
-        }, 50);
-    };
-
-    function animateSelectedImage(gallery, bool) { // create morphing image effect
-        var imgInit = gallery.galleryItems[gallery.selectedSlide].getElementsByTagName('img')[0],
-            imgInitPosition = imgInit.getBoundingClientRect(),
-            imgFinal = gallery.slides[gallery.selectedSlide].getElementsByTagName('img')[0],
-            imgFinalPosition = imgFinal.getBoundingClientRect();
-
-        if(bool) {
-            runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool);
-        } else {
-            imgFinal.style.visibility = 'hidden';
-            gallery.animationRunning = false;
-            var image = new Image();
-            image.onload = function () {
-                if(gallery.animationRunning) return;
-                imgFinalPosition = imgFinal.getBoundingClientRect();
-                runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool);
-            }
-            image.src = imgFinal.getAttribute('data-src') ? imgFinal.getAttribute('data-src') : imgFinal.getAttribute('src');
-            if(image.complete) {
-                gallery.animationRunning = true;
-                imgFinalPosition = imgFinal.getBoundingClientRect();
-                runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool);
-            }
-        }
-    };
-
-    function runAnimation(gallery, imgInit, imgInitPosition, imgFinal, imgFinalPosition, bool) {
-        // retrieve all animation params
-        var scale = imgFinalPosition.width > imgFinalPosition.height ? imgFinalPosition.height/imgInitPosition.height : imgFinalPosition.width/imgInitPosition.width;
-        var initHeight = imgFinalPosition.width > imgFinalPosition.height ? imgInitPosition.height : imgFinalPosition.height/scale,
-            initWidth = imgFinalPosition.width > imgFinalPosition.height ? imgFinalPosition.width/scale : imgInitPosition.width;
-
-        var initTranslateY = (imgInitPosition.height - initHeight)/2,
-            initTranslateX = (imgInitPosition.width - initWidth)/2,
-            initTop = imgInitPosition.top + initTranslateY,
-            initLeft = imgInitPosition.left + initTranslateX;
-
-        // get final states
-        var translateX = imgFinalPosition.left - imgInitPosition.left,
-            translateY = imgFinalPosition.top - imgInitPosition.top;
-
-        var finTranslateX = translateX - initTranslateX,
-            finTranslateY = translateY - initTranslateY;
-
-        var initScaleX = imgInitPosition.width/initWidth,
-            initScaleY = imgInitPosition.height/initHeight,
-            finScaleX = 1,
-            finScaleY = 1;
-
-        if(bool) { // update params if this is a closing animation
-            scale = 1/scale;
-            finScaleX = initScaleX;
-            finScaleY = initScaleY;
-            initScaleX = 1;
-            initScaleY = 1;
-            finTranslateX = -1*finTranslateX;
-            finTranslateY = -1*finTranslateY;
-            initTop = imgFinalPosition.top;
-            initLeft = imgFinalPosition.left;
-            initHeight = imgFinalPosition.height;
-            initWidth = imgFinalPosition.width;
-        }
-
-        if(!bool) {
-            imgFinal.style.visibility = ''; // reset visibility
-        }
-
-        // set initial status
-        gallery.imgMorph.setAttribute('style', 'height: '+initHeight+'px; width: '+initWidth+'px; top: '+initTop+'px; left: '+initLeft+'px;');
-        gallery.imgMorphSVG.setAttribute('viewbox', '0 0 '+initWidth+' '+initHeight);
-        Util.setAttributes(gallery.imgMorphImg, {'xlink:href': imgInit.getAttribute('src'), 'href': imgInit.getAttribute('src')});
-        Util.setAttributes(gallery.imgMorphRect, {'style': 'height: '+initHeight+'px; width: '+initWidth+'px;', 'transform': 'translate('+(initWidth/2)*(1 - initScaleX)+' '+(initHeight/2)*(1 - initScaleY)+') scale('+initScaleX+','+initScaleY+')'});
-
-        // reveal image and start animation
-        Util.addClass(gallery.imgMorph, 'exp-lightbox__clone-img-wrapper--is-visible');
-        Util.addClass(gallery.slideshowList, 'slideshow__content--is-hidden');
-        Util.addClass(gallery.galleryItems[gallery.selectedSlide], 'exp-gallery-item-hidden');
-
-        gallery.imgMorph.addEventListener('transitionend', function cb(event){ // reset elements once animation is over
-            if(event.propertyName.indexOf('transform') < 0) return;
-            Util.removeClass(gallery.element, 'exp-lightbox--no-transition');
-            Util.removeClass(gallery.imgMorph, 'exp-lightbox__clone-img-wrapper--is-visible');
-            Util.removeClass(gallery.slideshowList, 'slideshow__content--is-hidden');
-            gallery.imgMorph.removeAttribute('style');
-            gallery.imgMorphRect.removeAttribute('style');
-            gallery.imgMorphRect.removeAttribute('transform');
-            gallery.imgMorphImg.removeAttribute('href');
-            gallery.imgMorphImg.removeAttribute('xlink:href');
-            Util.removeClass(gallery.galleryItems[gallery.selectedSlide], 'exp-gallery-item-hidden');
-            gallery.imgMorph.removeEventListener('transitionend', cb);
-        });
-
-        // trigger expanding/closing animation
-        gallery.imgMorph.style.transform = 'translateX('+finTranslateX+'px) translateY('+finTranslateY+'px) scale('+scale+')';
-        animateRectScale(gallery.imgMorphRect, initScaleX, initScaleY, finScaleX, finScaleY, initWidth, initHeight);
-    };
-
-    function animateRectScale(rect, scaleX, scaleY, finScaleX, finScaleY, width, height) {
-        var currentTime = null,
-            duration =  parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--exp-gallery-animation-duration'))*1000 || 300;
-
-        var animateScale = function(timestamp){
-            if (!currentTime) currentTime = timestamp;
-            var progress = timestamp - currentTime;
-            if(progress > duration) progress = duration;
-
-            var valX = easeOutQuad(progress, scaleX, finScaleX-scaleX, duration),
-                valY = easeOutQuad(progress, scaleY, finScaleY-scaleY, duration);
-
-            rect.setAttribute('transform', 'translate('+(width/2)*(1 - valX)+' '+(height/2)*(1 - valY)+') scale('+valX+','+valY+')');
-            if(progress < duration) {
-                window.requestAnimationFrame(animateScale);
-            }
-        };
-
-        function easeOutQuad(t, b, c, d) {
-            t /= d;
-            return -c * t*(t-2) + b;
-        };
-
-        window.requestAnimationFrame(animateScale);
-    };
-
-    function keyboardNavigateLightbox(gallery, direction) {
-        if(!Util.hasClass(gallery.element, 'modal--is-visible')) return;
-        if(!document.activeElement.closest('.js-exp-lightbox__body') && document.activeElement.closest('.js-modal')) return;
-        if(!gallery.slideshowObj) return;
-        (direction == 'next') ? gallery.slideshowObj.showNext() : gallery.slideshowObj.showPrev();
-    };
-
-    function triggerMenuEvent(gallery) {
-        if(gallery.menuBar.length < 1) return;
-        var event = new CustomEvent('update-menu',
-            {detail: {
-                    index: gallery.selectedSlide,
-                    item: gallery.slides[gallery.selectedSlide]
-                }});
-        gallery.menuBar[0].dispatchEvent(event);
-    };
-
-    function isVisible(element) {
-        return (element.offsetWidth || element.offsetHeight || element.getClientRects().length);
-    };
-
-    window.ExpGallery = ExpGallery;
-
-    // init ExpGallery objects
-    var expGalleries = document.getElementsByClassName('js-exp-lightbox'),
-        animationSupported = window.requestAnimationFrame && !Util.osHasReducedMotion();
-    if( expGalleries.length > 0 ) {
-        var expGalleriesArray = [];
-        for( var i = 0; i < expGalleries.length; i++) {
-            (function(i){ expGalleriesArray.push(new ExpGallery(expGalleries[i]));})(i);
-
-            // Lightbox gallery navigation with keyboard
-            window.addEventListener('keydown', function(event){
-                if(event.keyCode && event.keyCode == 39 || event.key && event.key.toLowerCase() == 'arrowright') {
-                    updateLightbox('next');
-                } else if(event.keyCode && event.keyCode == 37 || event.key && event.key.toLowerCase() == 'arrowleft') {
-                    updateLightbox('prev');
-                }
-            });
-
-            function updateLightbox(direction) {
-                for( var i = 0; i < expGalleriesArray.length; i++) {
-                    (function(i){keyboardNavigateLightbox(expGalleriesArray[i], direction);})(i);
-                };
-            };
-        }
-    }
 }());
 // File#: _3_mega-site-navigation
 // Usage: codyhouse.co/license

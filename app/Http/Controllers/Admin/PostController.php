@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PostRequest;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -59,7 +61,7 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PostRequest $request)
     {
@@ -79,8 +81,43 @@ class PostController extends Controller
             'title' => request('title'),
             'subtitle' => request('title'),
             'description' => request('description'),
-            'content' => request('content')
+            'sources' => request('sources'),
+            'content_raw' => request('content'),
         ]);
+
+        if($post->getMedia('posts')) {
+
+            $images = $post->getMedia('posts');
+            $content = $post->content_raw;
+
+            for ($image = 0; $image < count($images); $image++) {
+                $content = str_replace("<box_img." . $image . ">",
+                    '<figure class="box">
+               <a href="' . $images[$image]->getUrl() . '">
+                <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'">
+               </a>
+               </figure>',
+                    $content);
+                $content = str_replace("<img." . $image . ">",
+                    '<img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'">',
+                    $content);
+
+            }
+
+            $post->content = $content;
+            $post->save();
+        }
+
 
         /**
          * Загрузка картинок на сайт и в БД
@@ -103,7 +140,7 @@ class PostController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
@@ -130,16 +167,6 @@ class PostController extends Controller
         $slug = $request->slug;
         $slug = Str::slug($slug, '-');
 
-        $post->update([
-            'user_id' => request('user_id'),
-            'name' => request('name'),
-            'slug' => $slug,
-            'title' => request('title'),
-            'subtitle' => request('title'),
-            'description' => request('description'),
-            'content' => request('content')
-        ]);
-
         /**
          * Загрузка картинок на сайт и в БД
          */
@@ -154,7 +181,79 @@ class PostController extends Controller
             }
         }
 
-        return redirect()->route('posts.index');
+        $post->update([
+            'user_id' => request('user_id'),
+            'name' => request('name'),
+            'slug' => $slug,
+            'title' => request('title'),
+            'subtitle' => request('title'),
+            'description' => request('description'),
+            'sources' => request('sources'),
+            'content_raw' => request('content')
+        ]);
+
+        if($post->getMedia('posts')) {
+
+            $images = $post->getMedia('posts');
+            $content = $post->content_raw;
+
+            for ($image = 0; $image < count($images); $image++) {
+                $content = str_replace("<box_img_half." . $image . ">",
+                    '<div class="box">
+               <a href="' . $images[$image]->getUrl() . '">
+              <figure class="text-component__block width-50%@md margin-x-auto">
+                <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<box_img." . $image . ">",
+                    '<div class="box">
+               <a href="' . $images[$image]->getUrl() . '">
+              <figure class="text-component__block">
+                <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<img." . $image . ">",
+                    '
+                    <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>',
+                    $content);
+
+            }
+
+
+            $post->content = $content;
+            $post->save();
+        }
+
+        //Обложка статьи
+
+        $cover = request('cover');
+
+        if (isset($cover)) {
+            $post->addMediaFromRequest('cover')->toMediaCollection('covers');
+        }
+
+        return back();
     }
 
     /**
@@ -200,9 +299,7 @@ class PostController extends Controller
 
     public function imgdelete(Request $request) {
 
-        $imgid = $request->imgid;
-
-        $mediaItems = Media::find($imgid);
+        $mediaItems = Media::find($request->input('imgdelid'));
 
         $mediaItems->delete();
 

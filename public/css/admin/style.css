@@ -17272,7 +17272,7 @@ Usage: codyhouse.co/license
 
 -------------------------------- */
 :root {
-  --drawer-width: 400px;
+  --drawer-width: 600px;
 }
 
 .drawer {
@@ -18013,6 +18013,70 @@ Usage: codyhouse.co/license
 }
 .form-validate__input-wrapper--error .form-validate__error-msg {
   display: block;
+}
+
+/* --------------------------------
+
+File#: _1_input-group
+Title: Input Group
+Descr: A group of connected form elements, distributed on a single row
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.input-group {
+  display: flex;
+}
+.input-group > * {
+  position: relative;
+}
+.input-group > *:not(:last-child):not(:first-child) {
+  border-radius: 0;
+}
+.input-group > *:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.input-group > *:first-child .select__input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.input-group > *:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.input-group > *:last-child .select__input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.input-group > *:focus, .input-group *:focus-within {
+  z-index: 1;
+}
+
+.input-group__tag {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-sm);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-contrast-lower);
+  white-space: nowrap;
+  color: var(--color-contrast-medium);
+}
+.input-group__tag:first-child {
+  border-right-width: 0px;
+}
+.input-group__tag:last-child {
+  border-left-width: 0px;
+}
+
+/* custom select */
+.input-group .select {
+  --select-icon-size: 16px;
+  --select-icon-right-margin: var(--space-sm);
+  --select-text-icon-gap: var(--space-xxxs);
+}
+.input-group .select .input-group__tag:focus {
+  outline: 2px solid var(--color-primary);
 }
 
 /* -------------------------------- 

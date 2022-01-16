@@ -25,6 +25,10 @@
               <span class="font-semibold">Название/slug</span>
             </th>
 
+              <th class="tbl__cell text-left" scope="col">
+                  <span class="font-semibold">Превью</span>
+              </th>
+
             <th class="tbl__cell text-left" scope="col">
               <span class="font-semibold">Опубликован</span>
             </th>
@@ -60,7 +64,18 @@
             </div>
         </td>
 
-        <td class="tbl__cell" role="cell">
+            <td class="tbl__cell" role="cell">
+                @if($post->getFirstMediaUrl('covers'))
+                    <figure>
+
+                        <img src="{{ $post->getFirstMediaUrl('covers') }}" width="150" alt="">
+
+                    </figure>
+                @endif
+            </td>
+
+
+            <td class="tbl__cell" role="cell">
 
         @if ($post->published)
          <span class="color-success text-bold">да</span>
