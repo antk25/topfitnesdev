@@ -19,11 +19,11 @@
             <ul class="flex flex-wrap gap-sm js-tabs__controls" aria-label="Tabs Interface">
                 <li><a href="#tab1Panel1" class="tabs__control" aria-selected="true">Статья</a></li>
                 <li><a href="#tab1Panel2" class="tabs__control">Комментарии</a></li>
-                <li><a href="#tab1Panel3" class="tabs__control">Картинки</a></li>
+                <li><a href="#tab1Panel3" class="tabs__control">Ссылки</a></li>
             </ul>
 
             <div class="js-tabs__panels">
-                <section id="tab1Panel1" class="is-visible js-tabs__panel">
+                <section id="tab1Panel1" class="is-visible js-tabs__panel padding-top-sm">
 
                     <form class="form-template-v3" method="POST"
                           action="{{ route('posts.update', ['post' => $post->id]) }}" enctype="multipart/form-data">
@@ -151,11 +151,13 @@
 
                         </div>
 
-                        <button class="btn btn--primary" aria-controls="drawer-1">Toggle Drawer Panel</button>
 
 
                         <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-                            @include('admin.layouts.parts.htmlcomponents')
+                                    @include('admin.layouts.parts.htmlcomponents')
+
+                                    <button class="btn btn--primary margin-y-sm" aria-controls="drawer-1">Галерея</button>
+
 
                             <x-admin.codemirror-editor :content="$post->content_raw" name="content" id="content">
                                 <h4>Основной контент</h4>
@@ -274,8 +276,10 @@
                                             </form>
 
                                             <pre><code class="language-html">&lt;img.{{ $loop->index }}&gt;</code></pre>
-                                            <pre><code class="language-html">&lt;box_img.{{ $loop->index }}&gt;</code></pre>
-                                            <pre><code class="language-html">&lt;box_img_half.{{ $loop->index }}&gt;</code></pre>
+                                            <pre><code
+                                                    class="language-html">&lt;box_img.{{ $loop->index }}&gt;</code></pre>
+                                            <pre><code
+                                                    class="language-html">&lt;box_img_half.{{ $loop->index }}&gt;</code></pre>
 
                                             <button type="submit" class="btn btn--accent text-sm margin-top-sm"
                                                     aria-controls="dialog-{{ $loop->index }}">Удалить картинку
@@ -334,12 +338,9 @@
 
                 </section>
 
-                <section id="tab1Panel2" class="js-tabs__panel">
+                <section id="tab1Panel2" class="js-tabs__panel padding-top-sm">
 
                     {{-- Таблица комментариев для текущей страницы. В функции foreach заменить модель для вызова комментов --}}
-                    <div class="text-component margin-bottom-md text-center">
-                        <h2>Комментарии</h2>
-                    </div>
 
                     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
@@ -451,100 +452,10 @@
 
                 </section>
 
-                <section id="tab1Panel2" class="js-tabs__panel">
-                    <div class="text-component margin-bottom-md text-center">
-                        <h2>Картинки</h2>
-                    </div>
 
+                <section id="tab1Panel3" class="js-tabs__panel padding-top-sm">
                     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-
-                        <div class="tbl">
-                            <table class="tbl__table text-unit-em text-sm border-bottom border-2" aria-label="Картинки">
-                                <thead class="tbl__header border-bottom border-2">
-                                <tr class="tbl__row">
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span
-                                            class="text-xs text-uppercase letter-spacing-lg font-semibold">Картинка</span>
-                                    </th>
-
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span
-                                            class="text-xs text-uppercase letter-spacing-lg font-semibold">Код и Alt</span>
-                                    </th>
-
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span
-                                            class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <tbody class="tbl__body">
-                                @foreach ($media as $image)
-                                    <tr class="tbl__row">
-                                        <td class="tbl__cell" role="cell">
-                                            <div class="items-center">
-                                                <figure class="width-lg height-lg overflow-hidden margin-right-xs">
-                                                    <img class="block width-100% height-100% object-cover"
-                                                         src="{{ $image->getFullUrl('thumb') }}">
-                                                </figure>
-
-                                                <div class="line-height-xs">
-                                                    <p class="color-contrast-medium">{{ $image->human_readable_size }}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="tbl__cell" role="cell">
-        <pre><code class="language-html">
-          &lt;img src="{{ $image->getFullUrl() }}"
-          srcset="{{ $image->getFullUrl('320') }} 320w,
-          {{ $image->getFullUrl('640') }} 640w,
-          {{ $image->getFullUrl('960') }} 960w,
-          {{ $image->getFullUrl('1280') }} 1280w"
-          alt="{{ $image->name }}"&gt;
-          </code>
-        </pre>
-
-
-                                            <form method="POST" action="{{ route('bracelets.updimg') }}">
-                                                @csrf
-                                                <input type="text" hidden value="{{ $image->id }}" name="imgid">
-                                                <div class="input-group">
-                                                    <input class="form-control flex-grow width-80%" type="text"
-                                                           name="nameimg" id="nameimg" value="{{ $image->name }}">
-                                                    <button class="btn btn--success" type="submit">
-                                                        <svg class="icon menu-bar__icon" aria-hidden="true"
-                                                             viewBox="0 0 16 16">
-                                                            <g>
-                                                                <path
-                                                                    d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
-                                                                <path
-                                                                    d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </td>
-
-                                        <td class="tbl__cell" role="cell">
-
-                                        </td>
-
-                                        <td class="tbl__cell" role="cell">
-                                            <form method="POST" action="{{ route('bracelets.delimg') }}">
-                                                @csrf
-                                                <input type="text" hidden value="{{ $image->id }}" name="imgid">
-                                                <button type="submit" class="btn btn--accent text-sm">&times;</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-
-                                </tbody>
-                            </table>
-                        </div>
+                        @livewire('admin.create-links')
                     </div>
                 </section>
 

@@ -14222,6 +14222,10 @@ i {
   font-style: italic;
 }
 
+mark {
+  background-color: #ffefcc;
+}
+
 /* -------------------------------- 
 
 File#: _1_accordion
@@ -15675,6 +15679,42 @@ Usage: codyhouse.co/license
     stroke-dashoffset: -35;
   }
 }
+/* --------------------------------
+
+File#: _1_code-snippet
+Title: Code Snippet
+Descr: A block of preformatted text, containing computer code
+Usage: codyhouse.co/license
+
+-------------------------------- */
+code {
+  background-color: var(--color-bg-dark);
+  font-family: monospace;
+  padding: var(--space-xxxxs) var(--space-xxxs);
+  border-radius: var(--radius-md);
+}
+code::-moz-selection {
+  background-color: var(--color-contrast-high);
+  color: var(--color-bg);
+}
+code::selection {
+  background-color: var(--color-contrast-high);
+  color: var(--color-bg);
+}
+
+.code-snippet {
+  background-color: var(--color-bg-dark);
+  border-radius: var(--radius-md);
+}
+.code-snippet code {
+  background-color: transparent;
+  line-height: 1.45;
+  font-size: var(--text-sm);
+  display: block;
+  padding: var(--space-md);
+  overflow-x: auto;
+}
+
 /* --------------------------------
 
 File#: _1_color-swatches
