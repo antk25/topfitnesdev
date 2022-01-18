@@ -9,14 +9,14 @@ class PostController extends Controller
 
 {
     public function index() {
+
         $posts = Post::paginate(10);
 
         return view('posts.index', compact('posts'));
     }
 
-    public function show($slug) {
+    public function show(Post $post) {
 
-        $post = Post::where('slug', $slug)->first();
         if (Auth::check()) {
             $user = \Auth::user()->id;
         }

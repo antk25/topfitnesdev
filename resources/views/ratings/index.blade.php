@@ -1,23 +1,23 @@
 @extends('layouts.base')
 
 @section('title')
-    Блог TopFitnesBraslet.ru
+   Рейтинги фитнес-браслетов
 @endsection
 
 @section('description')
-    Информационные статьи о фитнес-браслетах и многое другое
+    Все рейтинги фитнес-браслетов
 @endsection
 
 @section('content')
 
     <div class="container max-width-md padding-top-md">
-        {{ Breadcrumbs::render('blog') }}
+        {{ Breadcrumbs::render('ratings') }}
     </div>
 
     <section class="articles-v3 padding-y-md">
         <div class="container max-width-adaptive-md">
             <ul class="grid gap-lg">
-                @foreach($posts as $item)
+                @foreach($ratings as $item)
                     <li>
                         <div class="grid gap-md items-start">
                             <a href="{{ route('pub.posts.show', ['post' => $item]) }}" class="articles-v3__img col-6@md col-7@xl">

@@ -1,15 +1,34 @@
 
-<div class="bg-contrast-lower radius-md padding-md text-center flex@md flex-column@md col-4@md">
+<div class="border-contrast-lower border radius-md padding-md text-center flex@md flex-column@md col-4@md">
 
-    <div class="rating rating--read-only js-rating js-rating--read-only margin-bottom-sm">
-      <p class="sr-only">Оценка <span class="rating__value js-rating__value">{{ $review->rating_user }}</span> из 5</p>
+    <div class="margin-bottom-sm">
+    @switch($review->rating_user)
+        @case(1)
+        <div class="text-center">
+            <span class="badge badge--error-light text-sm">Плохо 👍</span>
+        </div>
+        @break
 
-      <div class="rating__control rating__control--is-hidden js-rating__control">
-        <svg width="24" height="24" viewBox="0 0 24 24"><polygon points="12 1.489 15.09 7.751 22 8.755 17 13.629 18.18 20.511 12 17.261 5.82 20.511 7 13.629 2 8.755 8.91 7.751 12 1.489" fill="currentColor"/></svg>
-      </div>
+        @case(2)
+        <div class="text-center">
+            <span class="badge badge--warning-light text-sm">Средне 👍</span>
+        </div>
+        @break
+
+        @case(3)
+        <div class="text-center">
+            <span class="badge badge--success-light text-sm">Отлично 👍</span>
+        </div>
+        @break
+
+        @default
+        <div class="text-center">
+            <span class="badge badge--outline text-sm">Нет оценки</span>
+        </div>
+    @endswitch
     </div>
 
-    <blockquote class="line-height-md margin-bottom-md">{{ $review->review_text }}</blockquote>
+    <blockquote class="line-height-md margin-bottom-md">{!! Str::words($review->review_text, 30) !!}</blockquote>
 
     <footer class="flex flex-column items-center margin-top-auto@md">
         <cite class="text-sm">

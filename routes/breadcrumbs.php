@@ -12,9 +12,15 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('Главная', route('index'));
 });
 
+// Home > Ratings
+Breadcrumbs::for('ratings', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Рейтинги', route('pub.ratings.index'));
+});
+
 // Home > Rating
 Breadcrumbs::for('rating', function (BreadcrumbTrail $trail, $rating) {
-    $trail->parent('home');
+    $trail->parent('ratings');
     $trail->push($rating->name, route('pub.ratings.show', ['slug' => $rating->slug]));
 });
 
@@ -27,7 +33,7 @@ Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
 // Home > Blog > Post
 Breadcrumbs::for('post', function (BreadcrumbTrail $trail, $post) {
     $trail->parent('blog');
-    $trail->push($post->name, route('pub.posts.show', ['slug' => $post->slug]));
+    $trail->push($post->name, route('pub.posts.show', ['post' => $post]));
 });
 
 
@@ -134,20 +140,20 @@ Breadcrumbs::for('admin_bracelet_create', function (BreadcrumbTrail $trail) {
 });
 
 // Admin > Pages > Ratings
-Breadcrumbs::for('ratings', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('admin_ratings', function (BreadcrumbTrail $trail) {
     $trail->parent('pages');
     $trail->push('Рейтинги', route('ratings.index'));
 });
 
 // Admin > Pages > Ratings > Rating
 Breadcrumbs::for('admin_rating', function (BreadcrumbTrail $trail, $rating) {
-    $trail->parent('ratings');
+    $trail->parent('admin_ratings');
     $trail->push($rating->name . " (id =  $rating->id)", route('ratings.edit', ['rating' => $rating->id]));
 });
 
 // Admin > Pages > Ratings > Create Rating
 Breadcrumbs::for('admin_rating_create', function (BreadcrumbTrail $trail) {
-    $trail->parent('ratings');
+    $trail->parent('admin_ratings');
     $trail->push("Создать рейтинг", route('ratings.create'));
 });
 

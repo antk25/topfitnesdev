@@ -41,12 +41,12 @@ Route::get('/katalog', [BraceletController::class, 'index'])->name('pub.bracelet
 Route::get('/podbor', [BraceletController::class, 'selection'])->name('pub.bracelets.selection');
 Route::get('/katalog/{slug}', [BraceletController::class, 'show'])->name('pub.bracelets.show');
 Route::get('/ratings', [RatingController::class, 'index'])->name('pub.ratings.index');
-Route::get('/{slug}', [RatingController::class, 'show'])->name('pub.ratings.show');
 Route::get('/blog', [PostController::class, 'index'])->name('pub.posts.index');
-Route::get('/blog/{slug}', [PostController::class, 'show'])->name('pub.posts.show');
+Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('pub.posts.show');
 Route::post('/katalog/{bracelet}/review', [ReviewController::class, 'store']);
 Route::get('/katalog/{bracelet}/reviews', [ReviewController::class, 'index']);
 Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.add');
+Route::get('/{slug}', [RatingController::class, 'show'])->name('pub.ratings.show');
 
 
 Route::get('user/login', [LoginController::class, 'login'])->name('login');

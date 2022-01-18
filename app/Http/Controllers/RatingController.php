@@ -8,6 +8,14 @@ use Auth;
 
 class RatingController extends Controller
 {
+    public function index() {
+
+       $ratings = Rating::paginate(10);
+
+       return view('ratings.index', compact('ratings'));
+
+    }
+
     public function show($slug) {
 
         $rating = Rating::where('slug', $slug)->with('bracelets')->first();
