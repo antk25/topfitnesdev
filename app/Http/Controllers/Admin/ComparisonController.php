@@ -7,6 +7,13 @@ use App\Http\Requests\Admin\ComparisonRequest;
 use App\Models\Comparison;
 use App\Models\Bracelet;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,7 +23,7 @@ class ComparisonController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -25,7 +32,7 @@ class ComparisonController extends Controller
         return view('admin.comparisons.index', compact('comparisons'));
     }
 
-    public function publish($id)
+    public function publish($id): RedirectResponse
     {
         $comparison = Comparison::find($id);
 
@@ -46,7 +53,7 @@ class ComparisonController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
@@ -60,18 +67,20 @@ class ComparisonController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ComparisonRequest $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function store(ComparisonRequest $request)
+    public function store(ComparisonRequest $request): RedirectResponse
     {
-        if ($request->slug)
+        if ($request->input('slug'))
         {
-            $slug = Str::slug($request->slug, '-');
+            $slug = Str::slug($request->input('slug'), '-');
         }
         else
         {
-            $slug = Str::slug($request->name, '-');
+            $slug = Str::slug($request->input('name'), '-');
         }
 
         $comparison = Comparison::create([
@@ -112,7 +121,7 @@ class ComparisonController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function edit($id)
     {
@@ -130,15 +139,17 @@ class ComparisonController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param ComparisonRequest $request
+     * @param int $id
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function update(ComparisonRequest $request, $id)
+    public function update(ComparisonRequest $request, $id): RedirectResponse
     {
         $comparison = Comparison::find($id);
 
-        $slug = $request->slug;
+        $slug = $request->input('slug');
         $slug = Str::slug($slug, '-');
 
         $comparison->update([
@@ -169,9 +180,9 @@ class ComparisonController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $comparison = Comparison::withTrashed()->find($id);
 
@@ -191,11 +202,10 @@ class ComparisonController extends Controller
                 $comparison->delete();
             }
 
-
         return back();
     }
 
-    public function restore($id)
+    public function restore($id): RedirectResponse
     {
 
         $comparison = Comparison::onlyTrashed()->find($id);
@@ -206,7 +216,8 @@ class ComparisonController extends Controller
 
     }
 
-    public function imgdelete(Request $request) {
+    public function imgdelete(Request $request): RedirectResponse
+    {
 
         $imgid = $request->imgid;
 
@@ -218,7 +229,8 @@ class ComparisonController extends Controller
 
     }
 
-    public function imgupdate(Request $request) {
+    public function imgupdate(Request $request): RedirectResponse
+    {
         $id = $request->imgid;
         $image = Media::find($id);
 

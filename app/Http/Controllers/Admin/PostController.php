@@ -7,8 +7,11 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -28,7 +31,7 @@ class PostController extends Controller
         return view('admin.posts.index', compact('posts'));
     }
 
-    public function publish($id): \Illuminate\Http\RedirectResponse
+    public function publish($id): RedirectResponse
     {
         $post = Post::find($id);
 
@@ -49,7 +52,7 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -60,12 +63,14 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param PostRequest $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function store(PostRequest $request)
+    public function store(PostRequest $request): RedirectResponse
     {
-        if ($request->slug)
+        if ($request->input('slug'))
         {
             $slug = Str::slug($request->slug, '-');
         }
@@ -156,15 +161,17 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return Response
+     * @param PostRequest $request
+     * @param int $id
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function update(PostRequest $request, $id)
+    public function update(PostRequest $request, $id): RedirectResponse
     {
         $post = Post::find($id);
 
-        $slug = $request->slug;
+        $slug = $request->input('slug');
         $slug = Str::slug($slug, '-');
 
         /**
@@ -259,9 +266,9 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $post = Post::withTrashed()->find($id);
 
@@ -285,7 +292,7 @@ class PostController extends Controller
         return back();
     }
 
-    public function restore($id)
+    public function restore($id): RedirectResponse
     {
 
         $post = Post::onlyTrashed()->find($id);
@@ -296,7 +303,8 @@ class PostController extends Controller
 
     }
 
-    public function imgdelete(Request $request) {
+    public function imgdelete(Request $request): RedirectResponse
+    {
 
         $mediaItems = Media::find($request->input('imgdelid'));
 
@@ -306,8 +314,9 @@ class PostController extends Controller
 
     }
 
-    public function imgupdate(Request $request) {
-        $id = $request->imgid;
+    public function imgupdate(Request $request): RedirectResponse
+    {
+        $id = $request->input('imgid');
         $image = Media::find($id);
 
         $image->update([

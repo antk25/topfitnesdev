@@ -7,7 +7,13 @@ use App\Http\Requests\Admin\OverviewRequest;
 use App\Models\Overview;
 use App\Models\Bracelet;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application as ApplicationAlias;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -26,7 +32,7 @@ class OverviewController extends Controller
         return view('admin.overviews.index', compact('overviews'));
     }
 
-    public function publish($id): \Illuminate\Http\RedirectResponse
+    public function publish($id): RedirectResponse
     {
         $overview = Overview::find($id);
 
@@ -47,7 +53,7 @@ class OverviewController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return ApplicationAlias|Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -61,10 +67,10 @@ class OverviewController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\Admin\OverviewRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
-     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
+     * @param OverviewRequest $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function store(OverviewRequest $request)
     {
@@ -109,7 +115,7 @@ class OverviewController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return ApplicationAlias|Factory|\Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
@@ -127,17 +133,17 @@ class OverviewController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\Admin\OverviewRequest $request
+     * @param OverviewRequest $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
-     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function update(OverviewRequest $request, int $id): \Illuminate\Http\RedirectResponse
+    public function update(OverviewRequest $request, int $id): RedirectResponse
     {
         $overview = Overview::find($id);
 
-        $slug = $request->slug;
+        $slug = $request->input('slug');
         $slug = Str::slug($slug, '-');
 
         $overview->update([
@@ -172,7 +178,7 @@ class OverviewController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
@@ -198,7 +204,7 @@ class OverviewController extends Controller
         return back();
     }
 
-    public function restore($id)
+    public function restore($id): RedirectResponse
     {
 
         $overview = Overview::onlyTrashed()->find($id);
@@ -209,7 +215,8 @@ class OverviewController extends Controller
 
     }
 
-    public function imgdelete(Request $request) {
+    public function imgdelete(Request $request): RedirectResponse
+    {
 
         $imgid = $request->imgid;
 
@@ -221,7 +228,8 @@ class OverviewController extends Controller
 
     }
 
-    public function imgupdate(Request $request) {
+    public function imgupdate(Request $request): RedirectResponse
+    {
         $id = $request->imgid;
         $image = Media::find($id);
 

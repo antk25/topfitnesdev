@@ -7,8 +7,15 @@ use App\Models\Rating;
 use App\Models\Bracelet;
 use App\Http\Requests\Admin\RatingRequest;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class RatingController extends Controller
@@ -16,7 +23,7 @@ class RatingController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -27,7 +34,7 @@ class RatingController extends Controller
     }
 
 
-    public function publish($id)
+    public function publish($id): RedirectResponse
     {
         $rating = Rating::find($id);
 
@@ -48,7 +55,7 @@ class RatingController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
@@ -63,19 +70,21 @@ class RatingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param RatingRequest $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function store(RatingRequest $request)
+    public function store(RatingRequest $request): RedirectResponse
     {
 
-        if ($request->slug)
+        if ($request->input('slug'))
         {
-            $slug = Str::slug($request->slug, '-');
+            $slug = Str::slug($request->input('slut'), '-');
         }
         else
         {
-            $slug = Str::slug($request->name, '-');
+            $slug = Str::slug($request->input('name'), '-');
         }
 
         $rating = Rating::create([
@@ -144,7 +153,7 @@ class RatingController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function edit(int $id)
     {
@@ -160,15 +169,16 @@ class RatingController extends Controller
     }
 
 
-
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param RatingRequest $request
+     * @param int $id
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function update(RatingRequest $request, $id)
+    public function update(RatingRequest $request, $id): RedirectResponse
     {
         $rating = Rating::find($id);
 
@@ -186,7 +196,7 @@ class RatingController extends Controller
 
 //        $keys = array_column($listspecs, 'specs');
 //        $values = array_column($listspecs, 'value');
-        $slug = $request->slug;
+        $slug = $request->input('slug');
         $slug = Str::slug($slug, '-');
 
 //        $listspecs = array_combine($request->input('listspecskey'), $request->input('listspecsvalue'));
@@ -262,16 +272,13 @@ class RatingController extends Controller
                     ->withErrors(['msg' => 'Ошибка сохранения'])
                     ->withInput();
            }
-
-
-        return redirect()->route('ratings.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
 
     public function destroy($id)
@@ -294,11 +301,10 @@ class RatingController extends Controller
                 $rating->delete();
             }
 
-
         return back();
     }
 
-    public function restore($id)
+    public function restore($id): RedirectResponse
     {
 
         $rating = Rating::onlyTrashed()->find($id);
@@ -309,7 +315,8 @@ class RatingController extends Controller
 
     }
 
-    public function imgdelete(Request $request) {
+    public function imgdelete(Request $request): RedirectResponse
+    {
 
         $imgid = $request->imgid;
 
@@ -321,7 +328,8 @@ class RatingController extends Controller
 
     }
 
-    public function imgupdate(Request $request) {
+    public function imgupdate(Request $request): RedirectResponse
+    {
         $id = $request->imgid;
         $image = Media::find($id);
 
