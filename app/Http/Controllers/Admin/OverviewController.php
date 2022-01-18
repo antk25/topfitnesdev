@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\OverviewRequest;
 use App\Models\Overview;
 use App\Models\Bracelet;
 use App\Models\User;
+use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,16 +17,16 @@ class OverviewController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $overviews = Overview::paginate(20);
 
         return view('admin.overviews.index', compact('overviews'));
     }
 
-    public function publish($id)
+    public function publish($id): \Illuminate\Http\RedirectResponse
     {
         $overview = Overview::find($id);
 
@@ -128,11 +129,11 @@ class OverviewController extends Controller
      *
      * @param \App\Http\Requests\Admin\OverviewRequest $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
      * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
      */
-    public function update(OverviewRequest $request, int $id): \Illuminate\Http\Response
+    public function update(OverviewRequest $request, int $id): \Illuminate\Http\RedirectResponse
     {
         $overview = Overview::find($id);
 
@@ -147,7 +148,7 @@ class OverviewController extends Controller
             'title' => request('title'),
             'subtitle' => request('title'),
             'description' => request('description'),
-            'content' => request('content')
+            'content' => request('content'),
         ]);
 
         /**
@@ -164,7 +165,7 @@ class OverviewController extends Controller
             }
         }
 
-        return redirect()->route('overviews.index');
+        return back();
     }
 
     /**

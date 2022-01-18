@@ -17431,40 +17431,6 @@ Usage: codyhouse.co/license
   white-space: nowrap;
 }
 
-/* --------------------------------
-
-File#: _1_popover
-Title: Popover
-Descr: A pop-up box controlled by a trigger element
-Usage: codyhouse.co/license
-
--------------------------------- */
-:root {
-  --popover-width: 250px;
-  --popover-control-gap: 4px;
-  --popover-viewport-gap: 20px;
-  --popover-transition-duration: 0.2s;
-}
-
-.popover {
-  position: fixed;
-  width: var(--popover-width);
-  z-index: var(--z-index-popover, 5);
-  margin-top: var(--popover-control-gap);
-  margin-bottom: var(--popover-control-gap);
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s var(--popover-transition-duration), opacity var(--popover-transition-duration);
-}
-
-.popover--is-visible {
-  visibility: visible;
-  opacity: 1;
-  transition: visibility 0s, opacity var(--popover-transition-duration);
-}
-
 /* -------------------------------- 
 
 File#: _1_power-link
@@ -18978,69 +18944,6 @@ Usage: codyhouse.co/license
     transform: translateY(0px);
   }
 }
-/* --------------------------------
-
-File#: _2_adv-custom-select
-Title: Advanced Custom Select
-Descr: Custom select with advanced structure options
-Usage: codyhouse.co/license
-
--------------------------------- */
-.adv-select-popover {
-  --space-unit: 1rem;
-  --text-unit: 1rem;
-  font-size: var(--text-unit);
-}
-.adv-select-popover.popover {
-  --popover-width: 250px;
-  --popover-control-gap: 4px;
-  --popover-viewport-gap: 20px;
-  --popover-transition-duration: 0.2s;
-}
-@media (min-width: 64rem) {
-  .adv-select-popover.popover {
-    --popover-width: 320px;
-  }
-}
-
-.adv-select-popover__optgroup:not(:first-of-type) {
-  padding-top: var(--space-xxs);
-}
-
-.adv-select-popover__optgroup:not(:last-of-type) {
-  border-bottom: 1px solid hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.1);
-  padding-bottom: var(--space-xxs);
-}
-
-.adv-select-popover__check {
-  display: none;
-}
-
-.adv-select-popover__option {
-  position: relative;
-  cursor: pointer;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: 0.2s;
-}
-.adv-select-popover__option:hover {
-  background-color: hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.075);
-}
-.adv-select-popover__option:focus {
-  outline: none;
-  background-color: hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.15);
-}
-.adv-select-popover__option[aria-selected=true] {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-}
-.adv-select-popover__option[aria-selected=true] .adv-select-popover__check {
-  display: block;
-}
-.adv-select-popover__option[aria-selected=true]:focus {
-  box-shadow: inset 0 0 0 2px var(--color-primary-dark);
-}
-
 /* --------------------------------
 
 File#: _2_cart

@@ -240,7 +240,6 @@ class PostController extends Controller
 
             }
 
-
             $post->content = $content;
             $post->save();
         }

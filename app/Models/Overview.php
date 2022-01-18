@@ -67,28 +67,28 @@ class Overview extends Model implements HasMedia
 
     // Связываем с одним браслетом
 
-    public function bracelet()
+    public function bracelet(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Bracelet::class);
     }
 
     // Связываем с одним пользователем
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     // Связываем с комментариями
 
-    public function comments()
+    public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
     // Связываем с меню
 
-    public function menuitem()
+    public function menuitem(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(MenuItem::class);
     }
