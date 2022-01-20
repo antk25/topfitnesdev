@@ -140,7 +140,7 @@
                 <h1 class="text-center">Новые рейтинги</h1>
             </div>
             @foreach($lastratings as $item)
-                <a href="{{ route('pub.ratings.show', ['slug' => $item->slug]) }}">{{ $item->name }}</a>
+                <a href="{{ route('pub.ratings.show', ['rating' => $item]) }}">{{ $item->name }}</a>
             @endforeach
         </div>
     </section>

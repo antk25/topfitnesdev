@@ -172,7 +172,7 @@ class BraceletController extends Controller
             $lastbracelet = Bracelet::find($bracelet->id);
             foreach ($files as $file) {
                 $lastbracelet->addMedia($file)
-                    ->toMediaCollection('bracelet');
+                    ->toMediaCollection('bracelets');
             }
         }
 
@@ -305,7 +305,7 @@ class BraceletController extends Controller
 
         $reviews = $bracelet->reviews()->paginate(20);
 
-        $media = $bracelet->getMedia('bracelet');
+        $media = $bracelet->getMedia('bracelets');
 
         $specs = Spec::where('device', 'bracelet')->get();
 
@@ -466,14 +466,14 @@ class BraceletController extends Controller
             foreach ($files as $file) {
                 $lastbracelet->addMedia($file)
                     ->usingName($nameimg[$i++])
-                    ->toMediaCollection('bracelet');
+                    ->toMediaCollection('bracelets');
             }
         }
         elseif ($files != '') {
             $lastbracelet = Bracelet::find($bracelet->id);
             foreach ($files as $file) {
                 $lastbracelet->addMedia($file)
-                    ->toMediaCollection('bracelet');
+                    ->toMediaCollection('bracelets');
             }
         }
 

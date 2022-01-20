@@ -5,12 +5,8 @@
             <h2>{{ $bracelet->name }}</h2>
             <div class="grid gap-md items-center">
                 <div class="col-4@sm">
-                    <img loading="lazy" data-src="{{ $bracelet->getFirstMediaUrl('bracelet') }}"
-                         src="/assets/theme/back-image/lazy-load-placeholder.svg"
-                         class="block width-100% shadow-xs">
-                    <noscript>
-                        <img class="block width-100%" src="{{ $bracelet->getFirstMediaUrl('bracelet') }}">
-                    </noscript>
+                    <img src="{{ $bracelet->getFirstMediaUrl('bracelets') }}"
+                         class="block width-100% shadow-xs" alt="{{ $bracelet->name }}">
                 </div>
 
                 <div class="col-8@sm">
@@ -75,7 +71,7 @@
                         </tbody>
                     </table>
                     <div class="text-right">
-                    <a class="btn-fx-1" href="{{ route('pub.bracelets.show', ['slug' => $bracelet->slug]) }}">
+                    <a class="btn-fx-1" href="{{ route('pub.bracelets.show', ['bracelet' => $bracelet]) }}">
                         <div class="btn-fx-1__inner padding-y-xs padding-x-sm">
                             <span>Подробнее</span>
 

@@ -74,6 +74,7 @@ class ComparisonController extends Controller
      */
     public function store(ComparisonRequest $request): RedirectResponse
     {
+
         if ($request->input('slug'))
         {
             $slug = Str::slug($request->input('slug'), '-');
@@ -83,6 +84,10 @@ class ComparisonController extends Controller
             $slug = Str::slug($request->input('name'), '-');
         }
 
+        $listspecs = collect($request->input('listspecs'));
+
+        $listspecs = $listspecs->whereNotNull('specs')->toArray();
+
         $comparison = Comparison::create([
             'user_id' => request('user_id'),
             'name' => request('name'),
@@ -90,7 +95,9 @@ class ComparisonController extends Controller
             'title' => request('title'),
             'subtitle' => request('title'),
             'description' => request('description'),
-            'content' => request('content')
+            'content_raw' => request('content'),
+            'list_specs' => $listspecs ?? [],
+            'type_table' => $request->input('type_table'),
         ]);
 
         $comparison->bracelets()->attach($request->input('allbracelets', []));
@@ -104,6 +111,15 @@ class ComparisonController extends Controller
                     ->toMediaCollection('comparisons');
             }
         }
+
+        //Обложка статьи
+
+        $cover = request('cover');
+
+        if (isset($cover)) {
+            $comparison->addMediaFromRequest('cover')->toMediaCollection('covers');
+        }
+
 
         if ($comparison) {
             return redirect()
@@ -147,22 +163,14 @@ class ComparisonController extends Controller
      */
     public function update(ComparisonRequest $request, $id): RedirectResponse
     {
+        $listspecs = collect($request->input('listspecs'));
+
+        $listspecs = $listspecs->whereNotNull('specs')->toArray();
+
         $comparison = Comparison::find($id);
 
         $slug = $request->input('slug');
         $slug = Str::slug($slug, '-');
-
-        $comparison->update([
-            'user_id' => request('user_id'),
-            'name' => request('name'),
-            'slug' => $slug,
-            'title' => request('title'),
-            'subtitle' => request('title'),
-            'description' => request('description'),
-            'content' => request('content')
-        ]);
-
-        $comparison->bracelets()->sync($request->input('allbracelets', []));
 
         $files = request('files');
 
@@ -173,7 +181,81 @@ class ComparisonController extends Controller
             }
         }
 
-        return redirect()->route('comparisons.index');
+        $comparison->update([
+            'user_id' => $request->input('user_id'),
+            'name' => $request->input('name'),
+            'slug' => $slug,
+            'title' => $request->input('title'),
+            'subtitle' => $request->input('title'),
+            'description' => $request->input('description'),
+            'content_raw' => $request->input('content'),
+            'list_specs' => $listspecs ?? [],
+            'type_table' => $request->input('type_table'),
+        ]);
+
+        $comparison->bracelets()->sync($request->input('allbracelets', []));
+
+        if($comparison->getMedia('comparisons')) {
+
+            $images = $comparison->getMedia('comparisons');
+            $content = $comparison->content_raw;
+
+            for ($image = 0; $image < count($images); $image++) {
+                $content = str_replace("<box_img_half." . $image . ">",
+                    '<div class="box">
+               <a href="' . $images[$image]->getUrl() . '">
+              <figure class="text-component__block width-50%@md margin-x-auto">
+                <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<box_img." . $image . ">",
+                    '<div class="box">
+               <a href="' . $images[$image]->getUrl() . '">
+              <figure class="text-component__block">
+                <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<img." . $image . ">",
+                    '
+                    <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>',
+                    $content);
+
+            }
+
+            $comparison->content = $content;
+            $comparison->save();
+        }
+
+        //Обложка статьи
+
+        $cover = request('cover');
+
+        if (isset($cover)) {
+            $comparison->addMediaFromRequest('cover')->toMediaCollection('covers');
+        }
+
+        return back();
     }
 
     /**

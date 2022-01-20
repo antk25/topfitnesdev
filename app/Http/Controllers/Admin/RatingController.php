@@ -18,6 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+
 class RatingController extends Controller
 {
     /**
@@ -80,7 +81,7 @@ class RatingController extends Controller
 
         if ($request->input('slug'))
         {
-            $slug = Str::slug($request->input('slut'), '-');
+            $slug = Str::slug($request->input('slug'), '-');
         }
         else
         {
@@ -88,13 +89,16 @@ class RatingController extends Controller
         }
 
         $rating = Rating::create([
-                    'user_id' => request('user_id'),
-                    'subtitle' => request('subtitle'),
-                    'name' => request('name'),
+                    'user_id' => $request->input('user_id'),
+                    'subtitle' => $request->input('subtitle'),
+                    'name' => $request->input('name'),
                     'slug' => $slug,
-                    'title' => request('title'),
-                    'description' => request('description'),
-                    'text' => request('text')
+                    'title' => $request->input('title'),
+                    'description' => $request->input('description'),
+                    'intro' => $request->input('intro'),
+                    'conclusion' => $request->input('conclusion'),
+                    'list_specs' => $request->input('listspecs') ?? [],
+                    'type_table' => $request->input('type_table'),
                 ]);
 
         /**
@@ -112,41 +116,29 @@ class RatingController extends Controller
             }
         }
 
+        $allbracelets = collect($request->input('allbracelets'))->filter()->toArray();
 
-        /**
-         * Подготовка данных по товарам для прикрепления их к рейтингу
-         *
-         * Используется PHP функция для работы с массивами array_column
-         * https://www.php.net/manual/ru/function.array-column.php
-         *
-         */
-
-        $allbracelets = $request->input('allbracelets');
-
-        if ($allbracelets != '') {
-            $bracelets = array_column($allbracelets, 'bracelets');
-            $position_rating = array_column($allbracelets, 'position_rating');
-            $text_rating = array_column($allbracelets, 'text_rating');
-            $head_rating = array_column($allbracelets, 'head_rating');
-
-            /**
-            * Перебор подготовленных данных в цикле для правильной передачи их функции Laravel attach()
-            *
-            * https://laravel.com/docs/8.x/eloquent-relationships#updating-many-to-many-relationships
-            *
-            */
-
-            for ($bracelet=0; $bracelet < count($bracelets); $bracelet++) {
-
-                $rating->bracelets()->attach($bracelets[$bracelet], ['position' => $position_rating[$bracelet], 'text_rating' => $text_rating[$bracelet], 'head_rating' => $head_rating[$bracelet]]);
-
-            }
-
-
+        if(count($allbracelets)) {
+            $rating->bracelets()->attach($allbracelets);
         }
 
+        //Обложка статьи
 
-        return redirect()->route('ratings.index');
+        $cover = request('cover');
+
+        if (isset($cover)) {
+            $rating->addMediaFromRequest('cover')->toMediaCollection('covers');
+        }
+
+        if ($rating) {
+            return redirect()
+                ->route('ratings.edit', $rating->id)
+                ->with(['success' => 'Новая статья успешно добавлена. Отредактируйте данные, если нужно']);
+        } else {
+            return back()
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
+        }
     }
 
     /**
@@ -202,12 +194,13 @@ class RatingController extends Controller
 //        $listspecs = array_combine($request->input('listspecskey'), $request->input('listspecsvalue'));
 
         $result = $rating->update([
-            'user_id' => request('user_id'),
-            'subtitle' => request('subtitle'),
+            'user_id' => $request->input('user_id'),
+            'subtitle' => $request->input('subtitle'),
             'slug' => $slug,
-            'title' => request('title'),
-            'description' => request('description'),
-            'text' => request('text'),
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'intro' => $request->input('intro'),
+            'conclusion' => $request->input('conclusion'),
             'list_specs' => $request->input('listspecs'),
             'type_table' => $request->input('type_table'),
         ]);
@@ -263,6 +256,14 @@ class RatingController extends Controller
             }
         }
 
+        //Обложка статьи
+
+        $cover = request('cover');
+
+        if (isset($cover)) {
+            $rating->addMediaFromRequest('cover')->toMediaCollection('covers');
+        }
+
         if ($result) {
           return redirect()
                  ->route('ratings.edit', $rating->id)
@@ -281,7 +282,7 @@ class RatingController extends Controller
      * @return RedirectResponse
      */
 
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $rating = Rating::withTrashed()->find($id);
 
@@ -318,7 +319,7 @@ class RatingController extends Controller
     public function imgdelete(Request $request): RedirectResponse
     {
 
-        $imgid = $request->imgid;
+        $imgid = $request->input('imgid');
 
         $mediaItems = Media::find($imgid);
 
@@ -330,13 +331,12 @@ class RatingController extends Controller
 
     public function imgupdate(Request $request): RedirectResponse
     {
-        $id = $request->imgid;
+        $id = $request->input('imgid');
         $image = Media::find($id);
 
         $image->update([
             'name' => request('nameimg')
         ]);
-
 
         return back();
 

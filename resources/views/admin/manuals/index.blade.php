@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
-  {{ Breadcrumbs::render('manuals') }}
+  {{ Breadcrumbs::render('admin_manuals') }}
   </div>
 <div class="bg radius-md padding-md shadow-xs col-12">
   <a class="btn btn--success text-sm" href="{{ route('manuals.create') }}">Добавить</a>

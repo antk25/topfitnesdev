@@ -10,19 +10,18 @@ class RatingController extends Controller
 {
     public function index() {
 
-       $ratings = Rating::paginate(10);
+       $ratings = Rating::where('published', 1)->paginate(10);
 
        return view('ratings.index', compact('ratings'));
 
     }
 
-    public function show($slug) {
-
-        $rating = Rating::where('slug', $slug)->with('bracelets')->first();
+    public function show(Rating $rating) {
 
         $bracelets = $rating->bracelets;
 
         $topbracelets = Bracelet::where('hit', 1)->limit(3)->get();
+
         if (Auth::check()) {
             $user = \Auth::user()->id;
         }

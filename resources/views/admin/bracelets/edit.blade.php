@@ -1,5 +1,11 @@
 @extends('admin.layouts.base')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/prism.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
+@endpush
+
 @section('content')
 
 <div id="float-sidenav-id" class="float-sidenav js-float-sidenav">
@@ -111,10 +117,15 @@
 </div>
 
 <div class="container">
-
-<div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
-  {{ Breadcrumbs::render('admin_bracelet', $bracelet) }}
-</div>
+    <div class="flex justify-between bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
+        <div>
+            {{ Breadcrumbs::render('admin_bracelet', $bracelet) }}
+        </div>
+        <div>
+            <a target="_blank" title="Откроется в новом окне" class="text-sm block font-bold text-decoration-none"
+               href="{{ route('pub.bracelets.show', ['bracelet' => $bracelet]) }}">Посмотреть 👉</a>
+        </div>
+    </div>
 
   <div class="tabs js-tabs">
     <ul class="flex flex-wrap gap-sm js-tabs__controls margin-bottom-sm" aria-label="Tabs Interface">
@@ -162,7 +173,6 @@
             </div>
           @endif
           {{-- Конец сообщения об успешности сохранения --}}
-
 
             <div class="grid gap-xxs margin-bottom-xs">
               <div class="col-6@md">

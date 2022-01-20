@@ -5,7 +5,8 @@
 
     <div id="component-{{ $loop->iteration }}" class="is-hidden js-collapse" data-collapse-animate="on">
         <p class="text-sm color-contrast-medium">
-            {{ $item->about }}
+            {{ $item->about }}<br>
+            <strong>Посмотреть:</strong> <a href="{{ $item->link }}" rel="nofollow">Перейти к описанию</a>
         </p>
 
         <div class="margin-top-xs padding-xs bg-dark radius-md">

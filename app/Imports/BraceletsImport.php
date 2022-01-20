@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Bracelet;
 use App\Models\Brand;
 use App\Models\Grade;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Validators\Failure;
@@ -46,11 +47,8 @@ class BraceletsImport implements
 
 
     /**
-     * @param array $row
-     *
-     * Иcпользуем метод Collection для создания моделей отношения
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @param Collection $rows
+     * @return void
      */
 
     public function collection(Collection $rows)
@@ -222,23 +220,23 @@ class BraceletsImport implements
 
         // Импорт картинок
 
-        // $files = $row['files'];
-        //     if ($files != '') {
-        //         if (Str::contains($files, '|')) {
-        //             $files = explode("|", $files);
-        //             foreach ($files as $file) {
-        //                 $bracelet->addMedia($file)
-        //                     ->preservingOriginal()
-        //                     ->toMediaCollection('bracelet');
-        //             }
+         $files = $row['files'];
+             if ($files != '') {
+                 if (Str::contains($files, '|')) {
+                     $files = explode("|", $files);
+                     foreach ($files as $file) {
+                         $bracelet->addMedia($file)
+                             ->preservingOriginal()
+                             ->toMediaCollection('bracelets');
+                     }
 
-        //         }
-        //     else  {
-        //             $bracelet->addMedia($files)
-        //                 ->preservingOriginal()
-        //                 ->toMediaCollection('bracelet');
-        //     }
-        // }
+                 }
+             else  {
+                     $bracelet->addMedia($files)
+                         ->preservingOriginal()
+                         ->toMediaCollection('bracelets');
+             }
+         }
 
         }
 

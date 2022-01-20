@@ -21,7 +21,7 @@ Breadcrumbs::for('ratings', function (BreadcrumbTrail $trail) {
 // Home > Rating
 Breadcrumbs::for('rating', function (BreadcrumbTrail $trail, $rating) {
     $trail->parent('ratings');
-    $trail->push($rating->name, route('pub.ratings.show', ['slug' => $rating->slug]));
+    $trail->push($rating->name, route('pub.ratings.show', ['rating' => $rating]));
 });
 
 // Home > Blog
@@ -36,6 +36,44 @@ Breadcrumbs::for('post', function (BreadcrumbTrail $trail, $post) {
     $trail->push($post->name, route('pub.posts.show', ['post' => $post]));
 });
 
+// Home > Oveviews
+Breadcrumbs::for('overviews', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Обзоры', route('pub.overviews.index'));
+});
+
+// Home > Overviews > Overview
+Breadcrumbs::for('overview', function (BreadcrumbTrail $trail, $overview) {
+    $trail->parent('overviews');
+    $trail->push($overview->name, route('pub.overviews.show', ['overview' => $overview]));
+});
+
+// Home > Comparisons
+Breadcrumbs::for('comparisons', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Сравнения', route('pub.comparisons.index'));
+});
+
+// Home > Comparisons > Comparison
+Breadcrumbs::for('comparison', function (BreadcrumbTrail $trail, $comparison) {
+    $trail->parent('comparisons');
+    $trail->push($comparison->name, route('pub.comparisons.show', ['comparison' => $comparison]));
+});
+
+// Home > Manuals
+Breadcrumbs::for('manuals', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Мануалы', route('pub.manuals.index'));
+});
+
+// Home >  Manuals > Manual
+Breadcrumbs::for('manual', function (BreadcrumbTrail $trail, $manual) {
+    $trail->parent('manuals');
+    $trail->push($manual->name, route('pub.manuals.show', ['manual' => $manual]));
+});
+
+
+
 
 // Home > Catalog
 Breadcrumbs::for('katalog', function (BreadcrumbTrail $trail) {
@@ -46,7 +84,7 @@ Breadcrumbs::for('katalog', function (BreadcrumbTrail $trail) {
 // Home > Catalog > Bracelet
 Breadcrumbs::for('bracelet', function (BreadcrumbTrail $trail, $bracelet) {
     $trail->parent('katalog');
-    $trail->push($bracelet->name, route('pub.bracelets.show', ['slug' => $bracelet->slug]));
+    $trail->push($bracelet->name, route('pub.bracelets.show', ['bracelet' => $bracelet]));
 });
 
 
@@ -135,7 +173,7 @@ Breadcrumbs::for('admin_bracelet', function (BreadcrumbTrail $trail, $bracelet) 
 
 // Admin > Pages > Bracelets > Create Bracelet
 Breadcrumbs::for('admin_bracelet_create', function (BreadcrumbTrail $trail) {
-    $trail->parent('bracelets');
+    $trail->parent('admin_bracelets');
     $trail->push("Создать браслет", route('bracelets.create'));
 });
 
@@ -177,58 +215,58 @@ Breadcrumbs::for('admin_post_create', function (BreadcrumbTrail $trail) {
 
 
 // Admin > Pages > Overviews
-Breadcrumbs::for('overviews', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('admin_overviews', function (BreadcrumbTrail $trail) {
     $trail->parent('pages');
     $trail->push('Обзоры', route('overviews.index'));
 });
 
 // Admin > Pages > Overviews > Rating
 Breadcrumbs::for('admin_overview', function (BreadcrumbTrail $trail, $overview) {
-    $trail->parent('overviews');
+    $trail->parent('admin_overviews');
     $trail->push($overview->name . " (id =  $overview->id)", route('overviews.edit', ['overview' => $overview->id]));
 });
 
 // Admin > Pages > Overviews > Create Post
 Breadcrumbs::for('admin_overview_create', function (BreadcrumbTrail $trail) {
-    $trail->parent('overviews');
+    $trail->parent('admin_overviews');
     $trail->push("Создать обзор браслета", route('overviews.create'));
 });
 
 
 // Admin > Pages > Comparisons
-Breadcrumbs::for('comparisons', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('admin_comparisons', function (BreadcrumbTrail $trail) {
     $trail->parent('pages');
     $trail->push('Сравнения', route('comparisons.index'));
 });
 
 // Admin > Pages > Comparisons > Comparison
 Breadcrumbs::for('admin_comparison', function (BreadcrumbTrail $trail, $comparison) {
-    $trail->parent('comparisons');
+    $trail->parent('admin_comparisons');
     $trail->push($comparison->name . " (id =  $comparison->id)", route('comparisons.edit', ['comparison' => $comparison->id]));
 });
 
 // Admin > Pages > Comparisons > Create Comparison
 Breadcrumbs::for('admin_comparison_create', function (BreadcrumbTrail $trail) {
-    $trail->parent('comparisons');
+    $trail->parent('admin_comparisons');
     $trail->push("Создать сравнение браслетов", route('comparisons.create'));
 });
 
 
 // Admin > Pages > Manuals
-Breadcrumbs::for('manuals', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('admin_manuals', function (BreadcrumbTrail $trail) {
     $trail->parent('pages');
     $trail->push('Мануалы', route('manuals.index'));
 });
 
 // Admin > Pages  > Manuals > Manual
 Breadcrumbs::for('admin_manual', function (BreadcrumbTrail $trail, $manual) {
-    $trail->parent('manuals');
+    $trail->parent('admin_manuals');
     $trail->push($manual->name . " (id =  $manual->id)", route('manuals.edit', ['manual' => $manual->id]));
 });
 
 // Admin > Pages  > Manuals > Create Manual
 Breadcrumbs::for('admin_manual_create', function (BreadcrumbTrail $trail) {
-    $trail->parent('manuals');
+    $trail->parent('admin_manuals');
     $trail->push("Создать мануал (инструкцию)", route('manuals.create'));
 });
 

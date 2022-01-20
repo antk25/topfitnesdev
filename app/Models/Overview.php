@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -22,15 +27,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string|null $description
  * @property string|null $content
  * @property int $published
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Bracelet $bracelet
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Bracelet $bracelet
+ * @property-read Collection|Comment[] $comments
  * @property-read int|null $comments_count
- * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|Media[] $media
+ * @property-read MediaCollection|Media[] $media
  * @property-read int|null $media_count
- * @property-read \App\Models\MenuItem $menuitem
- * @property-read \App\Models\User $user
+ * @property-read MenuItem $menuitem
+ * @property-read User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Overview newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Overview newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Overview query()
@@ -46,7 +51,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|Overview whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Overview whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Overview whereUserId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Overview extends Model implements HasMedia
 {
@@ -59,7 +64,7 @@ class Overview extends Model implements HasMedia
         'title',
         'subtitle',
         'description',
-        'content',
+        'content_raw',
         'published',
         'user_id',
         'bracelet_id'
@@ -93,7 +98,14 @@ class Overview extends Model implements HasMedia
         return $this->belongsTo(MenuItem::class);
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('covers')->singleFile();
+    }
 
+    /**
+     * @throws InvalidManipulation
+     */
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('320')
@@ -109,8 +121,9 @@ class Overview extends Model implements HasMedia
             ->width(1280);
 
         $this->addMediaConversion('thumb')
-        ->crop('crop-center', 300, 300);
+            ->crop('crop-center', 300, 300);
 
     }
+
 
 }

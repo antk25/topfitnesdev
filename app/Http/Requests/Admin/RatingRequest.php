@@ -27,6 +27,7 @@ class RatingRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'title' => 'required|min:5',
+            'type_table' => 'required',
             'name' => [
                 'required',
                 'min:5',
@@ -50,6 +51,7 @@ class RatingRequest extends FormRequest
         return [
             'name' => 'Название рейтинга',
             'title' => 'title рейтинга',
+            'type_table' => 'Тип таблицы',
             'user_id' => 'Автор'
         ];
     }

@@ -1,36 +1,21 @@
 @extends('admin.layouts.base')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/prism.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
+@endpush
+
 @section('content')
 
 <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
   {{ Breadcrumbs::render('admin_overview_create') }}
 </div>
 
-<form class="form-template-v3" method="POST" action="{{ route('overviews.store') }}" enctype="multipart/form-data">
+<div class="form-template-v3" method="POST" action="{{ route('overviews.store') }}" enctype="multipart/form-data">
     @csrf
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-
-      <div class="grid gap-xxs">
-
-      <div class="col-6@md margin-bottom-xs">
-        <label class="form-label margin-y-xs" for="user_id">Автор</label>
-        <div class="select">
-          <select class="select__input form-control @error('user_id') form-control--error @enderror" name="user_id">
-              <option value="">Выбрать автора</option>
-            @foreach ($users as $k => $v)
-              <option value="{{ $k }}">{{ $v }}</option>
-            @endforeach
-          </select>
-
-          <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><g stroke-width="1" stroke="currentColor"><polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,4.5 8,12 0.5,4.5 "></polyline></g></svg>
-        </div>
-          @error('user_id')
-          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
-          @enderror
-      </div>
-
-      <div class="col-6@md margin-bottom-xs">
         <label class="form-label margin-y-xs" for="bracelet_id">Браслет</label>
         <div class="select">
           <select class="select__input form-control @error('bracelet_id') form-control--error @enderror" name="bracelet_id">
@@ -46,71 +31,28 @@
           <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
           @enderror
       </div>
-    </div>
-    </div>
+</div>
 
-    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+<x-admin.seo-block-create :users="$users">
 
-      <div class="grid gap-xxs margin-bottom-xs">
-        <div class="col-6@md">
-          <label class="form-label margin-bottom-xxs" for="name">Название</label>
-          <input class="form-control width-100% @error('name') form-control--error @enderror" type="text" name="name" id="name" value="{{ old('name') }}">
-            @error('name')
-            <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
-            @enderror
-          <p class="text-xs color-contrast-medium margin-top-xxs">Короткое название, menutitle</p>
-        </div>
+</x-admin.seo-block-create>
 
-        <div class="col-6@md">
-          <label class="form-label margin-bottom-xxs" for="slug">URI (SLUG)</label>
-        <input class="form-control width-100%" type="text" name="slug" id="slug" value="{{ old('slug') }}">
-        </div>
-      </div>
-
-      <div class="margin-bottom-xs">
-        <label class="form-label margin-bottom-xxs" for="title">Title</label>
-        <input class="form-control width-100% @error('title') form-control--error @enderror" type="text" name="title" id="title" value="{{ old('title') }}">
-          @error('title')
-          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
-          @enderror
-      </div>
-
-      <div class="grid gap-xxs margin-bottom-xs">
-        <div class="col-6@md">
-          <label class="form-label margin-bottom-xxs" for="subtitle">Subtitle (h1)</label>
-          <input class="form-control width-100%" type="text" name="subtitle" id="subtitle" value="{{ old('subtitle') }}">
-        </div>
-        <div class="col-6@md">
-          <div class="character-count js-character-count">
-            <label class="form-label margin-bottom-xxs" for="textareaName">Description:</label>
-            <textarea class="form-control width-100% js-character-count__input" name="description" id="description" maxlength="300">{{ old('description') }}</textarea>
-            <div class="character-count__helper character-count__helper--dynamic text-sm margin-top-xxxs" aria-live="polite" aria-atomic="true">
-              Осталось <span class="js-character-count__counter"></span> символов
-            </div>
-            <div class="character-count__helper character-count__helper--static text-sm margin-top-xxxs">Макс 300 символов</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+<div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
       @include('admin.layouts.parts.htmlcomponents')
 
 
-      <section class="margin-y-sm">
-        <div class="text-component padding-y-sm">
-          <h4>Основной контент</h4>
-          <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
-        </div>
-      <div class="border radius-md padding-sm bg-gradient-3">
-        <label class="form-label margin-bottom-xxs sr-only" for="text">Основной контент</label>
-            <textarea rows="20" class="form-control width-100% text-sm text" spellcheck="false" name="content" id="content">{{ old('content') }}</textarea>
-      </div>
-    </section>
+    <x-admin.codemirror-editor :content="old('content')" name="content" id="content">
+        <h4>Основной контент</h4>
+        <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
+            полный экран, ESC для выхода.</p>
+    </x-admin.codemirror-editor>
 
     </div>
+
+    <x-admin.add-cover currentCover="{{ asset('img/theme/img-placeholder.svg') }}" alt="Превью">
+
+    </x-admin.add-cover>
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
     {{-- Add images --}}
@@ -141,34 +83,6 @@
   </form>
 @endsection
 
-@section('scripts')
-@parent
-<script src="{{ asset("js/admin/prism.min.js") }}"></script>
-    <script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
-    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
-    <script src="{{ asset("js/admin/closetag.js") }}"></script>
-    <script src="{{ asset("js/admin/matchtags.js") }}"></script>
-    <script src="{{ asset("js/admin/trailingspace.js") }}"></script>
-    <script src="{{ asset("js/admin/xml.js") }}"></script>
-    <script src="{{ asset("js/admin/fullscreen.js") }}"></script>
-    <script>
-      var myCodeMirror = CodeMirror.fromTextArea((content), {
-        lineNumbers: true,
-        tabSize: 2,
-        mode: "text/html",
-        autoCloseTags: true,
-        lineWrapping: true,
-        matchTags: {bothTags: true},
-        extraKeys: {"Ctrl-J": "toMatchingTag"},
-        showTrailingSpace: true,
-        extraKeys: {
-        "F11": function(cm) {
-          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
-        },
-        "Esc": function(cm) {
-          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-        }
-      }
-      });
-    </script>
-@endsection
+@push('js')
+    <script src="{{ asset("js/admin/prism.min.js") }}"></script>
+@endpush

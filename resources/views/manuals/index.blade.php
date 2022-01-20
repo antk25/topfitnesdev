@@ -1,26 +1,26 @@
 @extends('layouts.base')
 
 @section('title')
-   Рейтинги фитнес-браслетов
+    Блог TopFitnesBraslet.ru
 @endsection
 
 @section('description')
-    Все рейтинги фитнес-браслетов
+    Информационные статьи о фитнес-браслетах и многое другое
 @endsection
 
 @section('content')
 
     <div class="container max-width-md padding-top-md">
-        {{ Breadcrumbs::render('ratings') }}
+        {{ Breadcrumbs::render('manuals') }}
     </div>
 
     <section class="articles-v3 padding-y-md">
         <div class="container max-width-adaptive-md">
             <ul class="grid gap-lg">
-                @foreach($ratings as $item)
+                @foreach($manuals as $item)
                     <li>
                         <div class="grid gap-md items-start">
-                            <a href="{{ route('pub.ratings.show', ['rating' => $item]) }}" class="articles-v3__img col-6@md col-7@xl">
+                            <a href="{{ route('pub.posts.show', ['post' => $item]) }}" class="articles-v3__img col-6@md col-7@xl">
                                 <figure class="aspect-ratio-16:9">
                                     <img src="{{ $item->getFirstMediaUrl('covers') }}" alt="{{ $item->name }}">
                                 </figure>
@@ -28,7 +28,7 @@
 
                             <div class="col-6@md col-5@xl">
                                 <div class="text-component">
-                                    <h4 class="articles-v3__headline"><a href="{{ route('pub.ratings.show', ['rating' => $item]) }}">{{ $item->name }}</a></h4>
+                                    <h4 class="articles-v3__headline"><a href="{{ route('pub.posts.show', ['post' => $item]) }}">{{ $item->name }}</a></h4>
                                     <p>{!! Str::words($item->description, 20) !!}</p>
                                 </div>
 

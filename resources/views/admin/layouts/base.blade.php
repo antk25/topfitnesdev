@@ -5,16 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @section('styles')
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
     <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('css/admin/prism.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
-
     <livewire:styles />
-    @show
+    @stack('css')
+
+
     <title>Управление сайтом Topfitnesbraslet</title>
 </head>
 <body>

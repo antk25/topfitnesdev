@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\Image\Image;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -68,20 +69,30 @@ class Rating extends Model implements HasMedia
      'list_specs' => 'array',
     ];
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function bracelets() {
+    public function bracelets(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Bracelet::class)->withPivot('position', 'text_rating', 'head_rating')->orderBy('pivot_position');
     }
 
-    public function comments() {
+    public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('covers')->singleFile();
+    }
+
+    /**
+     * @throws InvalidManipulation
+     */
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('320')
@@ -97,7 +108,8 @@ class Rating extends Model implements HasMedia
             ->width(1280);
 
         $this->addMediaConversion('thumb')
-        ->crop('crop-center', 300, 300);
+            ->crop('crop-center', 300, 300);
+
     }
 
     public function getLink() {

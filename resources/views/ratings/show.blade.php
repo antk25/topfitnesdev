@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/simple-lightbox.min.css') }}">
+@endpush
+
 @section('title')
     {{ $rating->title }}
 @endsection
@@ -40,7 +44,6 @@
                         <div class="toc non-jquery">
 
                         </div>
-
                     </div>
                 </details>
 
@@ -127,9 +130,11 @@
 
 @endsection
 
-@section('footerScripts')
-    @parent
+
+@push('js')
+    <script src="{{ asset("js/alpine.min.js") }}"></script>
     <script src="{{ asset("js/toc.min.js") }}"></script>
+    <script src="{{ asset("js/simple-lightbox.min.js") }}"></script>
     <script>
         var options = {
             selector: 'h2, h3, h4',
@@ -140,5 +145,7 @@
         var toc = initTOC(options);
 
         container.appendChild(toc);
+
+        new SimpleLightbox('.box a', { /* options */});
     </script>
-@endsection
+@endpush

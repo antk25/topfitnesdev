@@ -72,7 +72,7 @@ class OverviewController extends Controller
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function store(OverviewRequest $request)
+    public function store(OverviewRequest $request): RedirectResponse
     {
         if ($request->slug)
         {
@@ -91,7 +91,7 @@ class OverviewController extends Controller
             'title' => request('title'),
             'subtitle' => request('title'),
             'description' => request('description'),
-            'content' => request('content')
+            'content_raw' => request('content')
         ]);
 
         /**
@@ -146,17 +146,6 @@ class OverviewController extends Controller
         $slug = $request->input('slug');
         $slug = Str::slug($slug, '-');
 
-        $overview->update([
-            'user_id' => request('user_id'),
-            'bracelet_id' => request('bracelet_id'),
-            'name' => request('name'),
-            'slug' => $slug,
-            'title' => request('title'),
-            'subtitle' => request('title'),
-            'description' => request('description'),
-            'content' => request('content'),
-        ]);
-
         /**
          * Загрузка картинок на сайт и в БД
          */
@@ -170,6 +159,80 @@ class OverviewController extends Controller
                     ->toMediaCollection('overviews');
             }
         }
+
+        $overview->update([
+            'user_id' => request('user_id'),
+            'bracelet_id' => request('bracelet_id'),
+            'name' => request('name'),
+            'slug' => $slug,
+            'title' => request('title'),
+            'subtitle' => request('title'),
+            'description' => request('description'),
+            'content_raw' => request('content'),
+
+        ]);
+
+        if($overview->getMedia('overviews')) {
+
+            $images = $overview->getMedia('overviews');
+            $content = $overview->content_raw;
+
+            for ($image = 0; $image < count($images); $image++) {
+                $content = str_replace("<box_img_half." . $image . ">",
+                    '<div class="box">
+               <a href="' . $images[$image]->getUrl() . '">
+              <figure class="text-component__block width-50%@md margin-x-auto">
+                <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<box_img." . $image . ">",
+                    '<div class="box">
+               <a href="' . $images[$image]->getUrl() . '">
+              <figure class="text-component__block">
+                <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<img." . $image . ">",
+                    '
+                    <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl() . '"
+                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
+                ' . $images[$image]->getUrl('640') . ' 640w,
+                ' . $images[$image]->getUrl('960') . ' 960w,
+                ' . $images[$image]->getUrl('1280') . ' 1280w,
+                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>',
+                    $content);
+
+            }
+
+            $overview->content = $content;
+            $overview->save();
+        }
+
+        //Обложка статьи
+
+        $cover = request('cover');
+
+        if (isset($cover)) {
+            $overview->addMediaFromRequest('cover')->toMediaCollection('covers');
+        }
+
+
 
         return back();
     }

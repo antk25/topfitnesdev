@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
-  {{ Breadcrumbs::render('comparisons') }}
+  {{ Breadcrumbs::render('admin_comparisons') }}
   </div>
 
 <div class="bg radius-md padding-md shadow-xs col-12">

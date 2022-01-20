@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -20,7 +21,7 @@ class Manual extends Model implements HasMedia
         'title',
         'subtitle',
         'description',
-        'content',
+        'content_raw',
         'published',
         'user_id'
     ];
@@ -42,6 +43,14 @@ class Manual extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('covers')->singleFile();
+    }
+
+    /**
+     * @throws InvalidManipulation
+     */
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('320')
@@ -57,7 +66,8 @@ class Manual extends Model implements HasMedia
             ->width(1280);
 
         $this->addMediaConversion('thumb')
-        ->crop('crop-center', 300, 300);
+            ->crop('crop-center', 300, 300);
+
     }
 
 }
