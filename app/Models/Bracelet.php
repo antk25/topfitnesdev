@@ -42,6 +42,7 @@ class Bracelet extends Model implements HasMedia
            'protect_stand',
            'terms_of_use',
            'dimensions',
+           'weight',
            'disp_diag',
            'disp_tech',
            'disp_resolution',
