@@ -566,7 +566,7 @@
 
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Диагональ</th>
-                            <td class="prop-table__cell">{{ $bracelet->disp_diag }}</td>
+                            <td class="prop-table__cell">{{ $bracelet->disp_diag }}&#8243;</td>
                         </tr>
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Технология</th>
@@ -1128,7 +1128,7 @@
                         </tr>
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Емкость</th>
-                            <td class="prop-table__cell">{{ $bracelet->capacity_battery }}</td>
+                            <td class="prop-table__cell">{{ $bracelet->capacity_battery }} мАч</td>
                         </tr>
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Время работы в режиме ожидания</th>
@@ -1136,11 +1136,11 @@
                         </tr>
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Реальное время работы</th>
-                            <td class="prop-table__cell">{{ $bracelet->real_time }}</td>
+                            <td class="prop-table__cell">{{ $bracelet->real_time }} {{ trans_choice('день|дня|дней', $bracelet->real_time) }}</td>
                         </tr>
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Время полной зарядки</th>
-                            <td class="prop-table__cell">{{ $bracelet->full_charge_time }}</td>
+                            <td class="prop-table__cell">{{ $bracelet->full_charge_time }} мин.</td>
                         </tr>
                         <tr class="prop-table__row">
                             <th class="prop-table__cell prop-table__cell--th">Зарядное устройство</th>
