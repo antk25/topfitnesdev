@@ -127,9 +127,9 @@ class SpecController extends Controller
         return redirect()->route('specs.index');
     }
 
-    private function slugAr($values)
+    private function slugAr($values): string
     {
-       return (Str::slug($values, '-'));
+       return (Str::lower($values));
     }
 
 

@@ -161,7 +161,7 @@ class BraceletController extends Controller
            'real_time' => request('real_time'),
            'full_charge_time' => request('full_charge_time'),
            'charger' => request('charger'),
-           'destination' => request('destination'),
+           'destination' => request('destination') ?? [],
            // 'avg_price' => $price_seller_avg,
            // 'grade_bracelet' => $value_grade_avg
         ]);
@@ -551,7 +551,7 @@ class BraceletController extends Controller
            'real_time' => request('real_time'),
            'full_charge_time' => request('full_charge_time'),
            'charger' => request('charger'),
-           'destination' => request('destination'),
+           'destination' => request('destination') ?? [],
            // 'avg_price' => $price_seller_avg,
            // 'grade_bracelet' => $value_grade_avg
         ]);

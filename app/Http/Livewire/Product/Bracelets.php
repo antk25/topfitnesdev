@@ -18,7 +18,10 @@ class Bracelets extends Component
 {
     use WithPagination;
 
-    public $name, $disp_tech, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $min_rating, $protect_stand, $max_price, $brand, $country, $compatibility;
+    public $name, $disp_tech, $blood_oxy,
+        $blood_pressure, $smart_alarm,
+        $gps, $nfc, $min_rating, $protect_stand,
+        $max_price, $brand, $country, $compatibility, $destination;
 
     public $page = 1;
 
@@ -51,6 +54,7 @@ class Bracelets extends Component
         'min_rating' => ['except' => ''],
         'country' => ['except' => ''],
         'compatibility' => ['except' => ''],
+        'destination' => ['except' => ''],
     ];
 
     // protected $queryString = ['heart_rate', 'disp_tech', 'protect_stand', 'max_price', 'min_price', 'blood_oxy', 'blood_pressure', 'smart_alarm', 'gps', 'disp_sens', 'nfc', 'brand'];
@@ -72,12 +76,13 @@ class Bracelets extends Component
         $max_price = $this->max_price;
         $country = $this->country;
         $compatibility = $this->compatibility;
+        $destination = $this->destination;
 
         $filters = EloquentFilters::make([
                                           new BraceletBrandFilter($brand),
                                           new NameFilter($name),
                                         //   new BraceletCheckedFilter($disp_tech, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $country),
-                                        //   new BraceletJsonFieldsFilter($protect_stand, $compatibility),
+                                           new BraceletJsonFieldsFilter($protect_stand, $compatibility, $destination),
                                         //   new BraceletPriceRangeFilter($max_price)
                                         ]);
 

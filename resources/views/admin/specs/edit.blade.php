@@ -37,6 +37,7 @@
                 <option value="charger" {{ $spec->name == 'charger' ? 'selected' : '' }}>Зарядное устройство</option>
                 <option value="terms_of_use" {{ $spec->name == 'terms_of_use' ? 'selected' : '' }}>Допустимые условия использования</option>
                 <option value="compatibility" {{ $spec->name == 'compatibility' ? 'selected' : '' }}>Совместимость</option>
+                <option value="destination" {{ $spec->name == 'destination' ? 'selected' : '' }}>Предназначение</option>
             </select>
 
             <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>

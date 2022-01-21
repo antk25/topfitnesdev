@@ -48,6 +48,13 @@
         <p class="text-xs color-contrast-medium x-iq">Мытье рук, пыль</p>
       </li>
 
+        <li>
+            <input class="radio radio--bg" type="radio" wire:model="destination" name="radio-button" id="radio-3" value="бег">
+            <label for="radio-3">Бег</label>
+            <p class="text-xs color-contrast-medium x-iq">Подходит для бега</p>
+        </li>
+
+
     </ul>
 </div>
 
