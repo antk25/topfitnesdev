@@ -747,7 +747,11 @@
                             <th class="prop-table__cell prop-table__cell--th">Уведомления</th>
                             <td class="prop-table__cell">
                                 @foreach($bracelet->notification as $item)
-                                    {{ $item }}
+                                    @if ($loop->last)
+                                        {{ $item }}
+                                    @else
+                                        {{ $item }},
+                                    @endif
                                 @endforeach
                             </td>
                         </tr>
