@@ -405,7 +405,7 @@
                             <th class="prop-table__cell prop-table__cell--th">Совместимость</th>
                             <td class="prop-table__cell">
                                 @foreach($bracelet->compatibility as $item)
-                                    {{ $item }}
+                                    {{ $item }}+<br>
                                 @endforeach
                             </td>
                         </tr>
