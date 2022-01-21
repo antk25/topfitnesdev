@@ -1,5 +1,14 @@
 @extends('layouts.base')
 
+@section('title')
+    {{ $bracelet->title }}
+@endsection
+
+@section('description')
+    {{ $bracelet->description }}
+@endsection
+
+
 @section('content')
 
     <div class="container max-width-lg padding-top-md">
