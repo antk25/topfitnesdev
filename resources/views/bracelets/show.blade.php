@@ -491,37 +491,30 @@
                                                 <option value="голубой" data-style="background-color: #00bfff;">
                                                     Голубой
                                                 </option>
-                                                @break
                                                 @case('желтый')
                                                 <option value="желтый" data-style="background-color: #ffff00;">
                                                     Желтый
                                                 </option>
-                                                @break
                                                 @case('красный')
                                                 <option value="красный" data-style="background-color: #ff0000;">
                                                     Красный
                                                 </option>
-                                                @break
                                                 @case('оранжевый')
                                                 <option value="оранжевый" data-style="background-color: #ffa500;">
                                                     Оранжевый
                                                 </option>
-                                                @break
                                                 @case('розовый')
                                                 <option value="розовый" data-style="background-color: #ffc0cb;">
                                                     Розовый
                                                 </option>
-                                                @break
                                                 @case('серый')
                                                 <option value="серый" data-style="background-color: #808080;">
                                                     Серый
                                                 </option>
-                                                @break
                                                 @case('фиолетовый')
                                                 <option value="фиолетовый" data-style="background-color: #8b00ff;">
                                                     Фиолетовый
                                                 </option>
-                                                @break
                                                 @default
                                             @endswitch
                                         @endforeach
