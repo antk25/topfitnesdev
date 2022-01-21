@@ -777,7 +777,7 @@
                                 пульса
                             </th>
                             <td class="prop-table__cell">
-                                @if ($bracelet->pulse_permanent == '1')
+                                @if ($bracelet->heart_rate == '1')
                                     <svg class="icon icon--sm" viewBox="0 0 24 24"><title>Option included</title>
                                         <circle cx="12" cy="12" r="12" fill="#6ad354" opacity="0.2"/>
                                         <polyline points="6 12 10 16 19 7" fill="none" stroke="#57d339"
