@@ -986,8 +986,8 @@
               <div class="col-6@md">
                 <input class="checkbox" type="checkbox" id="heart_rate" name="heart_rate" value="1" @if ($bracelet->heart_rate == 1) checked @endif>
                 <label for="heart_rate">Постоянное измерение пульса</label><br>
-                <input class="checkbox" type="checkbox" id="bood_oxy" name="bood_oxy" value="1" @if ($bracelet->bood_oxy == 1) checked @endif>
-                <label for="bood_oxy">Измерение кислорода в крови</label><br>
+                <input class="checkbox" type="checkbox" id="blood_oxy" name="blood_oxy" value="1" @if ($bracelet->blood_oxy == 1) checked @endif>
+                <label for="blood_oxy">Измерение кислорода в крови</label><br>
                 <input class="checkbox" type="checkbox" id="blood_pressure" name="blood_pressure" value="1" @if ($bracelet->blood_pressure == 1) checked @endif>
                 <label for="blood_pressure">Измерение артериального давления</label><br>
                 <input class="checkbox" type="checkbox" id="stress" name="stress" value="1" @if ($bracelet->stress == 1) checked @endif>
