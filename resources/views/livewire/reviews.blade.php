@@ -1,4 +1,14 @@
 <div>
+    @once
+        @push('css')
+            <link rel="stylesheet" href="{{ asset('css/admin/trix.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/trix/custom-trix.min.css') }}">
+        @endpush
+
+        @push('js')
+            <script src="{{ asset('js/admin/trix.js') }}"></script>
+        @endpush
+    @endonce
     @if ($model->reviews->count())
         <div id="toc4">
             <h2>{{ $model->reviews->count() }} {{ trans_choice('отзыв|отзыва|отзывов', $model->reviews->count()) }}</h2>
@@ -12,16 +22,6 @@
         </ul>
     @endif
 
-    @section('style')
-        @parent
-        <link rel="stylesheet" href="{{ asset('css/admin/trix.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/trix/custom-trix.min.css') }}">
-    @endsection
-
-    @section('footerScripts')
-        @parent
-        <script src="{{ asset('js/admin/trix.js') }}"></script>
-    @endsection
     <div class="border-contrast-lower border padding-sm radius-md" id="toc5">
     <form wire:submit.prevent="store()">
         <div class="emoji-rate bg radius-md">
