@@ -10,3 +10,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+rsync.sh
+rsyncDatabase.sh
+__rsyncpublic.sh
