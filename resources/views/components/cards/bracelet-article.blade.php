@@ -2,7 +2,11 @@
     @foreach ($bracelets as $bracelet)
         <div class="text-component__block">
 
-            <h2>{{ $bracelet->name }}</h2>
+            @if($bracelet->pivot->text_rating)
+                <h2>{{ $bracelet->pivot->head_rating }}</h2>
+            @else
+                <h2>{{ $bracelet->name }}</h2>
+            @endif
             <div class="grid gap-md items-center">
                 <div class="col-4@sm">
                     <img src="{{ $bracelet->getFirstMediaUrl('bracelets') }}"
@@ -88,9 +92,13 @@
             </div>
         </div>
 
-       <x-cards.bracelet-grades-article :bracelet="$bracelet"/>
+       <x-cards.bracelet-grades-article :bracelet="$bracelet">
 
-       <x-cards.bracelet-sellers-article :bracelet="$bracelet"/>
+       </x-cards.bracelet-grades-article>
+
+       <x-cards.bracelet-sellers-article :bracelet="$bracelet">
+
+       </x-cards.bracelet-sellers-article>
 
        @if($bracelet->pivot->text_rating)
          {!! $bracelet->pivot->text_rating !!}
@@ -98,7 +106,9 @@
          {!! $bracelet->about !!}
        @endif
 
-       <x-cards.bracelet-plusminus-article :bracelet="$bracelet"/>
+       <x-cards.bracelet-plusminus-article :bracelet="$bracelet">
+
+       </x-cards.bracelet-plusminus-article>
 
     @endforeach
 </div>
