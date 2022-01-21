@@ -25,7 +25,7 @@ class BraceletController extends Controller
     public function show($slug) {
 
         $bracelet = Bracelet::where('slug', $slug)->with('manuals', 'comparisons')->first();
-        $media = $bracelet->getMedia('bracelet');
+        $media = $bracelet->getMedia('bracelets');
         return view('bracelets.show', compact('bracelet', 'media'));
     }
 
