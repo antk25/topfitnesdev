@@ -2,7 +2,7 @@
     @foreach ($bracelets as $bracelet)
         <div class="text-component__block">
 
-            @if($bracelet->pivot->text_rating)
+            @if($bracelet->pivot->head_rating)
                 <h2>{{ $bracelet->pivot->head_rating }}</h2>
             @else
                 <h2>{{ $bracelet->name }}</h2>

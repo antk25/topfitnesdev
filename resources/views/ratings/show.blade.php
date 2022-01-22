@@ -53,6 +53,8 @@
 
                 </x-cards.bracelet-article>
 
+                {!! $rating->conclusion !!}
+
             </div>
         </div>
 </section>
