@@ -83,9 +83,7 @@ class Post extends Model implements HasMedia
     public function getLink(): string
     {
 
-        $link = $this->slug;
-
-        return route('pub.posts.show', ['slug' => $link]);
+        return route('pub.posts.show', ['post' => $this]);
 
      }
 

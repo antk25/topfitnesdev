@@ -10,7 +10,7 @@ use App\Models\User;
 
 class Reviews extends Component
 {
-    public $review_text;
+    public $review_text = "<i>Ваш комментарий...</i>";
     public $model;
     public $name;
     public $email;
@@ -41,7 +41,13 @@ class Reviews extends Component
 
         $this->model->refresh();
 
-        $this->reset(['review_text', 'rating_user', 'period_use', 'name', 'email']);
+        $this->reset([
+            'review_text',
+            'rating_user',
+            'period_use',
+            'name',
+            'email',
+        ]);
 
     }
 

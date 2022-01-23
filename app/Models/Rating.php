@@ -112,11 +112,8 @@ class Rating extends Model implements HasMedia
 
     }
 
-    public function getLink() {
-
-        $link = $this->slug;
-
-        return route('pub.ratings.show', ['slug' => $link]);
-
-     }
+    public function getLink()
+    {
+        return route('pub.ratings.show', ['rating' => $this]);
+    }
 }

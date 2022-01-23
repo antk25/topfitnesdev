@@ -1,14 +1,4 @@
 <div>
-    @once
-        @push('css')
-            <link rel="stylesheet" href="{{ asset('css/admin/trix.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/trix/custom-trix.min.css') }}">
-        @endpush
-
-        @push('js')
-            <script src="{{ asset('js/admin/trix.js') }}"></script>
-        @endpush
-    @endonce
     @if ($model->reviews->count())
         <div id="toc4">
             <h2>{{ $model->reviews->count() }} {{ trans_choice('отзыв|отзыва|отзывов', $model->reviews->count()) }}</h2>
@@ -161,7 +151,10 @@
                 </div>
 
                 <div class="margin-y-md">
-                    <div x-data="{textEditor: $wire.entangle('review_text').defer}"
+                    <x-trix-editor comment="review_text">
+
+                    </x-trix-editor>
+                    {{-- <div x-data="{textEditor: $wire.entangle('review_text').defer}"
                          x-init="()=>{var element = document.querySelector('trix-editor');
                                    element.editor.insertHTML(textEditor);}"
                          wire:ignore>
@@ -176,8 +169,7 @@
                                      wire:model.debounce.999999ms="review_text"
 
                         ></trix-editor>
-                    </div>
-
+                    </div> --}}
                 </div>
                 @error('review_text')
                 <div role="alert"
@@ -193,7 +185,3 @@
     </form>
 </div>
 </div>
-
-
-
-

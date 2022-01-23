@@ -14366,6 +14366,67 @@ Usage: codyhouse.co/license
 }
 /* --------------------------------
 
+File#: _1_alert
+Title: Alert
+Descr: Feedback message
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.alert {
+  background-color: hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.2);
+  color: var(--color-contrast-higher);
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+          clip-path: inset(50%);
+}
+
+.alert__icon {
+  color: var(--color-primary);
+}
+
+.alert__close-btn {
+  display: inline-block;
+  flex-shrink: 0;
+  transition: 0.2s;
+}
+.alert__close-btn .icon {
+  display: block;
+}
+.alert__close-btn:hover {
+  opacity: 0.7;
+}
+
+.alert--success {
+  background-color: hsla(var(--color-success-h), var(--color-success-s), var(--color-success-l), 0.2);
+}
+.alert--success .alert__icon {
+  color: var(--color-success);
+}
+
+.alert--error {
+  background-color: hsla(var(--color-error-h), var(--color-error-s), var(--color-error-l), 0.2);
+}
+.alert--error .alert__icon {
+  color: var(--color-error);
+}
+
+.alert--warning {
+  background-color: hsla(var(--color-warning-h), var(--color-warning-s), var(--color-warning-l), 0.2);
+}
+.alert--warning .alert__icon {
+  color: var(--color-warning);
+}
+
+.alert--is-visible {
+  position: static;
+  clip: auto;
+  -webkit-clip-path: none;
+          clip-path: none;
+}
+
+/* --------------------------------
+
 File#: _1_article-gallery-v3
 Title: Article Gallery v3
 Descr: A gallery of blog articles

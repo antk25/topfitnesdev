@@ -29,7 +29,7 @@
                             wire:click.prevent="commentId({{ $comment->id }})">Ответить
                     </button>
                 @else
-                    <form wire:submit.prevent="replyStore({{ $comment->id }})">
+                    <form wire:submit.prevent="store({{ $comment->id }})">
                         @if($user == '')
                             <div class="grid gap-xxs">
                             <div class="col-6@md">
@@ -65,7 +65,7 @@
                                 <div class="margin-y-xs">
                                     <label class="sr-only" for="comment">Ваш комментарий</label>
                                     <div class="margin-y-md">
-                                                <div x-data="{textEditor: $wire.entangle('comment').defer}"
+                                                {{-- <div x-data="{textEditor: $wire.entangle('comment').defer}"
                                                      x-init="()=>{var element = document.querySelector('trix-editor');
                                                                element.editor.insertHTML(textEditor);}"
                                                      wire:ignore>
@@ -77,12 +77,15 @@
 
                                                     <trix-editor class="trix-editor border-gray-300 trix-content" input="editor-x"
                                                                  x-on:trix-change="textEditor=$refs.editor.value;"
-                                                                 wire:model.debounce.999999ms="comment"
+                                                                 wire:model.lazy="comment"
                                                     ></trix-editor>
-                                                </div>
+                                                </div> --}}
 
+                                                <x-trix-editor comment="comment_text">
+
+                                                </x-trix-editor>
                                             </div>
-                                            @error('comment')
+                                            @error('comment_text')
                                             <div role="alert"
                                                  class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs">
                                                 <p><strong>ошибка:</strong> {{ $message }}</p></div>
@@ -91,7 +94,7 @@
                             </div>
                         </fieldset>
                         <button class="btn btn--primary" type="submit">Написать</button>
-                        <button class="btn btn--secondary" wire:click.prevent="resetInputFields">Отмена</button>
+                        <button class="btn btn--secondary" wire:click.prevent="resetCommentId">Отмена</button>
                     </form>
                 @endif
 

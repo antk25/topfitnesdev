@@ -1,15 +1,4 @@
 <div>
-    @once
-        @push('css')
-            <link rel="stylesheet" href="{{ asset('css/admin/trix.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/trix/custom-trix.min.css') }}">
-        @endpush
-
-        @push('js')
-            <script src="{{ asset('js/admin/trix.js') }}"></script>
-        @endpush
-    @endonce
-
     @if ($model->comments->count())
         <section class="comments">
             <div class="margin-bottom-sm">
@@ -30,7 +19,8 @@
                         @endforeach
             </ul>
             @if (session()->has('message'))
-                <div class="alert alert--success alert--is-visible padding-sm radius-md js-alert" role="alert">
+            <div x-data="{ open: true }">
+                <div x-show="open" x-transition class="alert alert--success alert--is-visible padding-sm radius-md js-alert" role="alert">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <svg class="icon icon--sm alert__icon margin-right-xxs" viewBox="0 0 24 24"
@@ -42,7 +32,7 @@
                             <p class="text-sm">{{ session('message') }}.</p>
                         </div>
 
-                        <button class="reset alert__close-btn margin-left-sm js-alert__close-btn js-tab-focus">
+                        <button x-on:click="open = ! open" class="reset alert__close-btn margin-left-sm js-alert__close-btn js-tab-focus">
                             <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                 <title>Close alert</title>
@@ -52,19 +42,15 @@
                         </button>
                     </div>
                 </div>
-
-
+            </div>
             @endif
-
-
         </section>
 
     @endif
     <section class="form-comment">
         <h3 class="margin-y-xs">
             <a class="text-bg-fx text-bg-fx--underline text-bg-fx--text-shadow" href="#"
-               wire:click.prevent="resetInputFields">Написать комментарий</a>
-
+               wire:click.prevent="resetCommentId">Написать комментарий</a>
         </h3>
         @if($commentIdReply == '')
             <form wire:submit.prevent="store()">
@@ -101,9 +87,13 @@
                                 href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p>
                     @endif
                     <div class="margin-y-xs">
+
                         <label class="sr-only" for="commentNewContent">Ваш комментарий</label>
                         <div class="margin-y-md">
-                            <div x-data="{textEditor: $wire.entangle('comment').defer}"
+                            <x-trix-editor comment="comment_text">
+
+                            </x-trix-editor>
+                            {{-- <div x-data="{textEditor: $wire.entangle('comment').defer}"
                                  x-init="()=>{var element = document.querySelector('trix-editor');
                                    element.editor.insertHTML(textEditor);}"
                                  wire:ignore>
@@ -115,12 +105,12 @@
 
                                 <trix-editor class="trix-editor border-gray-300 trix-content" input="editor-x"
                                              x-on:trix-change="textEditor=$refs.editor.value;"
-                                             wire:model.debounce.999999ms="comment"
+                                             wire:model.lazy="comment"
                                 ></trix-editor>
-                            </div>
+                            </div> --}}
 
                         </div>
-                        @error('comment')
+                        @error('comment_text')
                         <div role="alert"
                              class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs">
                             <p><strong>ошибка:</strong> {{ $message }}</p></div>

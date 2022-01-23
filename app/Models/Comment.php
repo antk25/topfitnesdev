@@ -57,7 +57,7 @@ class Comment extends Model
         'user_id',
         'username',
         'useremail',
-        'created_at'
+        'created_at',
     ];
 
     // protected $dates = ['published_at'];

@@ -19,12 +19,12 @@
                     <div class="text-component">{!! $reply->comment !!}</div>
                   </div>
                   <div class="margin-top-xs text-sm">
-            
+
                         @if($commentIdReply !== $reply->id)
                         <button type="button" class="reset comments__label-btn js-tab-focus" wire:click.prevent="commentId({{ $reply->id }})">Ответить</button>
                         @else
-                        <form wire:submit.prevent="replyStore({{ $reply->id }})">
-                          
+                        <form wire:submit.prevent="store({{ $reply->id }})">
+
                           @if($user == '')
                           <div class="grid gap-xxs">
                             <div class="col-6@md">
@@ -49,7 +49,7 @@
                                 @enderror
                             </div>
                         </div>
-                          <p class="text-xs color-contrast-medium margin-y-xxxxs">Укажите <span class="text-bold">имя</span> и <span class="text-bold">email</span>, либо <a href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p> 
+                          <p class="text-xs color-contrast-medium margin-y-xxxxs">Укажите <span class="text-bold">имя</span> и <span class="text-bold">email</span>, либо <a href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p>
                           @endif
 
                           <fieldset>
@@ -58,21 +58,9 @@
                               <div class="margin-y-xs">
                                     <label class="sr-only" for="comment">Ваш комментарий</label>
                                     <div class="margin-y-md">
-                                                <div x-data="{textEditor: $wire.entangle('comment').defer}"
-                                                     x-init="()=>{var element = document.querySelector('trix-editor');
-                                                               element.editor.insertHTML(textEditor);}"
-                                                     wire:ignore>
+                                      <x-trix-editor comment="comment_text">
 
-                                                    <input x-ref="editor"
-                                                           id="editor-x"
-                                                           type="hidden"
-                                                           name="comment">
-
-                                                    <trix-editor class="trix-editor border-gray-300 trix-content" input="editor-x"
-                                                                 x-on:trix-change="textEditor=$refs.editor.value;"
-                                                                 wire:model.debounce.999999ms="comment"
-                                                    ></trix-editor>
-                                                </div>
+                                      </x-trix-editor>
 
                                             </div>
                                             @error('comment')
@@ -84,10 +72,10 @@
                             </div>
                           </fieldset>
                           <button class="btn btn--primary" type="submit">Написать</button>
-                          <button class="btn btn--secondary" wire:click.prevent="resetInputFields">Отмена</button>
+                          <button class="btn btn--secondary" wire:click.prevent="resetCommentId">Отмена</button>
                         </form>
                         @endif
-          
+
                   </div>
                 </div>
               </div>
@@ -98,6 +86,6 @@
                 </ul>
               </div>
               @endif
-              
+
             </li>
 @endforeach
