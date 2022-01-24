@@ -34,7 +34,7 @@
 
         <div class="padding-sm bg-contrast-lower margin-y-sm">
             &lt;a href="{{ $category }}/{{ $link->slug }}"&gt;{{ $link->name }}&lt;a&gt;
-            &lt;img src="{{ $link->getFirstMediaUrl('covers') }} {{ $link->getFirstMediaUrl('bracelet') }}"&gt;
+            &lt;img src="@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif"&gt;
         </div>
 
     @endif
