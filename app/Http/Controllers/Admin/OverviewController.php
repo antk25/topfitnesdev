@@ -94,6 +94,14 @@ class OverviewController extends Controller
             'content_raw' => request('content')
         ]);
 
+        //Обложка статьи
+
+        $cover = request('cover');
+
+        if (isset($cover)) {
+            $overview->addMediaFromRequest('cover')->toMediaCollection('covers');
+        }
+
         /**
          * Загрузка картинок на сайт и в БД
          */

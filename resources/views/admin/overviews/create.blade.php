@@ -12,9 +12,8 @@
   {{ Breadcrumbs::render('admin_overview_create') }}
 </div>
 
-<div class="form-template-v3" method="POST" action="{{ route('overviews.store') }}" enctype="multipart/form-data">
+<form class="form-template-v3" method="POST" action="{{ route('overviews.store') }}" enctype="multipart/form-data">
     @csrf
-
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
         <label class="form-label margin-y-xs" for="bracelet_id">Браслет</label>
         <div class="select">
@@ -30,8 +29,7 @@
           @error('bracelet_id')
           <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
           @enderror
-      </div>
-</div>
+    </div>
 
 <x-admin.seo-block-create :users="$users">
 
@@ -77,9 +75,9 @@
 {{-- End add images --}}
     </div>
 
-            <div class="margin-y-md">
-              <button type="submit" class="btn btn--success">Сохранить статью</button>
-            </div>
+      <div class="margin-y-md">
+        <button type="submit" class="btn btn--success">Сохранить статью</button>
+      </div>
   </form>
 @endsection
 
