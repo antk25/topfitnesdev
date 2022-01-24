@@ -110,7 +110,7 @@
                             </div>
 
                             <h4>Характеристики для таблицы</h4>
-
+                                <p class="text-sm color-contrast-medium">Порядок в таблице на фронте будет такой же как здесь!</p>
                             {{-- Add specs for table --}}
                                 <div class="js-repeater" data-repeater-input-name="listspecs[n]">
                                     <div class="js-repeater__list">
@@ -128,19 +128,85 @@
                                                                 id="listspecs[0][specs]"
                                                                 class="form-control">
                                                             <option value="">-- Выбрать харктеристику --</option>
-                                                            <option value="disp_color"
-                                                                    @if($item['specs'] == 'disp_color') selected @endif>
-                                                                disp_color
-                                                            </option>
                                                             <option value="real_time"
-                                                                    @if($item['specs'] == 'real_time') selected @endif>real_time
+                                                                    @if($item['specs'] == 'real_time') selected @endif>
+                                                                    Время работы
                                                             </option>
                                                             <option value="country"
-                                                                    @if($item['specs'] == 'country') selected @endif>country
+                                                                    @if($item['specs'] == 'country') selected @endif>
+                                                                    Страна
+                                                            </option>
+                                                            <option value="compatibility"
+                                                                    @if($item['specs'] == 'compatibility') selected @endif>
+                                                                   Совместимость
+                                                            </option>
+                                                            <option value="protect_stand"
+                                                                    @if($item['specs'] == 'protect_stand') selected @endif>
+                                                                   Стандарты защиты
+                                                            </option>
+                                                            <option value="terms_of_use"
+                                                                    @if($item['specs'] == 'terms_of_use') selected @endif>
+                                                                    Условия использования
+                                                            </option>
+                                                            <option value="disp_diag"
+                                                                    @if($item['specs'] == 'disp_diag') selected @endif>
+                                                                    Диагональ дисплея
+                                                            </option>
+                                                            <option value="disp_tech"
+                                                                    @if($item['specs'] == 'disp_tech') selected @endif>
+                                                                    Технология дисплея
+                                                            </option>
+                                                            <option value="disp_resolution"
+                                                                    @if($item['specs'] == 'disp_resolution') selected @endif>
+                                                                    Разрешение дисплея
+                                                            </option>
+                                                            <option value="disp_sens"
+                                                                    @if($item['specs'] == 'disp_sens') selected @endif>
+                                                                    Сенсорный дисплей
+                                                            </option>
+                                                            <option value="disp_color"
+                                                                    @if($item['specs'] == 'disp_color') selected @endif>
+                                                                    Цветной дисплей
+                                                            </option>
+                                                            <option value="gps"
+                                                                    @if($item['specs'] == 'gps') selected @endif>
+                                                                    GPS
+                                                            </option>
+                                                            <option value="nfc"
+                                                                    @if($item['specs'] == 'nfc') selected @endif>
+                                                                    NFC
+                                                            </option>
+                                                            <option value="phone_calls"
+                                                                    @if($item['specs'] == 'phone_calls') selected @endif>
+                                                                    Телефонные звонки
+                                                            </option>
+                                                            <option value="heart_rate"
+                                                                    @if($item['specs'] == 'heart_rate') selected @endif>
+                                                                    Постоянное измерение пульса
+                                                            </option>
+                                                            <option value="blood_oxy"
+                                                                    @if($item['specs'] == 'blood_oxy') selected @endif>
+                                                                    Измерение кислорода
+                                                            </option>
+                                                            <option value="blood_pressure"
+                                                                    @if($item['specs'] == 'blood_pressure') selected @endif>
+                                                                    Измерение давления
+                                                            </option>
+                                                            <option value="smart_alarm"
+                                                                    @if($item['specs'] == 'smart_alarm') selected @endif>
+                                                                    Умный будильник
+                                                            </option>
+                                                            <option value="camera_control"
+                                                                    @if($item['specs'] == 'camera_control') selected @endif>
+                                                                    Управление камерой
+                                                            </option>
+                                                            <option value="player_control"
+                                                                    @if($item['specs'] == 'player_control') selected @endif>
+                                                                    Управление плеером
                                                             </option>
                                                             <option value="grade_bracelet"
                                                                     @if($item['specs'] == 'grade_bracelet') selected @endif>
-                                                                grade_bracelet
+                                                                    Общий рейтинг
                                                             </option>
                                                         </select>
 
@@ -195,9 +261,26 @@
                                                                 name="listspecs[0][specs]" id="listspecs[0][specs]"
                                                                 class="form-control">
                                                             <option value="">-- Выбрать харктеристику --</option>
-                                                            <option value="disp_color">disp_color</option>
-                                                            <option value="real_time">real_time</option>
-                                                            <option value="grade_bracelet">grade_bracelet</option>
+                                                            <option value="real_time">Время работы</option>
+                                                            <option value="country">Страна</option>
+                                                            <option value="compatibility">Совместимость</option>
+                                                            <option value="protect_stand">Стандарты защиты</option>
+                                                            <option value="terms_of_use">Условия использования</option>
+                                                            <option value="disp_diag">Диагональ дисплея</option>
+                                                            <option value="disp_tech">Технология дисплея</option>
+                                                            <option value="disp_resolution">Разрешение дисплея</option>
+                                                            <option value="disp_sens">Сенсорный дисплей</option>
+                                                            <option value="disp_color">Цветной дисплей</option>
+                                                            <option value="gps">GPS</option>
+                                                            <option value="nfc">NFC</option>
+                                                            <option value="phone_calls">Телефонные звонки</option>
+                                                            <option value="heart_rate">Постоянное измерение пульса</option>
+                                                            <option value="blood_oxy">Измерение кислорода</option>
+                                                            <option value="blood_pressure">Измерение давления</option>
+                                                            <option value="smart_alarm">Умный будильник</option>
+                                                            <option value="camera_control">Управление камерой</option>
+                                                            <option value="player_control">Управление плеером</option>
+                                                            <option value="grade_bracelet">Общий рейтинг</option>
                                                         </select>
 
                                                         <svg class="icon select__icon" aria-hidden="true"

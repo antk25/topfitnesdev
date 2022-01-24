@@ -40,11 +40,59 @@
                         @case('disp_color')
                         <x-table-row.rows.bool :item="$item->disp_color"/>
                         @break
+                        @case('disp_sens')
+                        <x-table-row.rows.bool :item="$item->disp_sens"/>
+                        @break
+                        @case('gps')
+                        <x-table-row.rows.bool :item="$item->gps"/>
+                        @break
+                        @case('nfc')
+                        <x-table-row.rows.bool :item="$item->nfc"/>
+                        @break
+                        @case('heart_rate')
+                        <x-table-row.rows.bool :item="$item->heart_rate"/>
+                        @break
+                        @case('blood_oxy')
+                        <x-table-row.rows.bool :item="$item->blood_oxy"/>
+                        @break
+                        @case('blood_pressure')
+                        <x-table-row.rows.bool :item="$item->blood_pressure"/>
+                        @break
+                        @case('smart_alarm')
+                        <x-table-row.rows.bool :item="$item->smart_alarm"/>
+                        @break
+                        @case('camera_control')
+                        <x-table-row.rows.bool :item="$item->camera_control"/>
+                        @break
+                        @case('player_control')
+                        <x-table-row.rows.bool :item="$item->player_control"/>
+                        @break
                         @case('grade_bracelet')
                         <x-table-row.rows.rating :item="$item->grade_bracelet"/>
                         @break
                         @case('country')
                         <x-table-row.rows.string :item="$item->country"/>
+                        @break
+                        @case('disp_tech')
+                        <x-table-row.rows.string :item="$item->disp_tech"/>
+                        @break
+                        @case('disp_diag')
+                        <x-table-row.rows.string :item="$item->disp_diag"/>
+                        @break
+                        @case('disp_resolution')
+                        <x-table-row.rows.string :item="$item->disp_resolution"/>
+                        @break
+                        @case('phone_calls')
+                        <x-table-row.rows.string :item="$item->phone_calls"/>
+                        @break
+                        @case('compatibility')
+                        <x-table-row.rows.json :item="$item->compatibility"/>
+                        @break
+                        @case('protect_stand')
+                        <x-table-row.rows.json :item="$item->protect_stand"/>
+                        @break
+                        @case('terms_of_use')
+                        <x-table-row.rows.json :item="$item->terms_of_use"/>
                         @break
                     @endswitch
                 @endforeach

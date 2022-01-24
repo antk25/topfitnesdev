@@ -73,9 +73,26 @@
                                           name="listspecs[0][specs]" id="listspecs[0][specs]"
                                           class="form-control">
                                       <option value="">-- Выбрать харктеристику --</option>
-                                      <option value="disp_color">disp_color</option>
-                                      <option value="real_time">real_time</option>
-                                      <option value="grade_bracelet">grade_bracelet</option>
+                                      <option value="real_time">Время работы</option>
+                                      <option value="country">Страна</option>
+                                      <option value="compatibility">Совместимость</option>
+                                      <option value="protect_stand">Стандарты защиты</option>
+                                      <option value="terms_of_use">Условия использования</option>
+                                      <option value="disp_diag">Диагональ дисплея</option>
+                                      <option value="disp_tech">Технология дисплея</option>
+                                      <option value="disp_resolution">Разрешение дисплея</option>
+                                      <option value="disp_sens">Сенсорный дисплей</option>
+                                      <option value="disp_color">Цветной дисплей</option>
+                                      <option value="gps">GPS</option>
+                                      <option value="nfc">NFC</option>
+                                      <option value="phone_calls">Телефонные звонки</option>
+                                      <option value="heart_rate">Постоянное измерение пульса</option>
+                                      <option value="blood_oxy">Измерение кислорода</option>
+                                      <option value="blood_pressure">Измерение давления</option>
+                                      <option value="smart_alarm">Умный будильник</option>
+                                      <option value="camera_control">Управление камерой</option>
+                                      <option value="player_control">Управление плеером</option>
+                                      <option value="grade_bracelet">Общий рейтинг</option>
                                   </select>
 
                                   <svg class="icon select__icon" aria-hidden="true"
