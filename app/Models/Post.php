@@ -82,10 +82,8 @@ class Post extends Model implements HasMedia
 
     public function getLink(): string
     {
-
         return route('pub.posts.show', ['post' => $this]);
-
-     }
+    }
 
     public function registerMediaCollections(): void
     {

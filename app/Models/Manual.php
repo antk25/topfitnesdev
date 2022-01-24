@@ -48,6 +48,11 @@ class Manual extends Model implements HasMedia
         $this->addMediaCollection('covers')->singleFile();
     }
 
+    public function getLink(): string
+    {
+        return route('pub.manuals.show', ['manual' => $this]);
+    }
+
     /**
      * @throws InvalidManipulation
      */

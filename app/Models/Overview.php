@@ -103,6 +103,11 @@ class Overview extends Model implements HasMedia
         $this->addMediaCollection('covers')->singleFile();
     }
 
+    public function getLink(): string
+    {
+        return route('pub.overviews.show', ['overview' => $this]);
+    }
+
     /**
      * @throws InvalidManipulation
      */
