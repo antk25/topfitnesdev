@@ -84,7 +84,7 @@ class PostController extends Controller
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
-            'subtitle' => request('title'),
+            'subtitle' => request('subtitle'),
             'description' => request('description'),
             'sources' => request('sources'),
             'content_raw' => request('content'),
@@ -193,7 +193,7 @@ class PostController extends Controller
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
-            'subtitle' => request('title'),
+            'subtitle' => request('subtitle'),
             'description' => request('description'),
             'sources' => request('sources'),
             'content_raw' => request('content')

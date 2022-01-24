@@ -89,7 +89,7 @@ class OverviewController extends Controller
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
-            'subtitle' => request('title'),
+            'subtitle' => request('subtitle'),
             'description' => request('description'),
             'content_raw' => request('content')
         ]);
@@ -174,7 +174,7 @@ class OverviewController extends Controller
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
-            'subtitle' => request('title'),
+            'subtitle' => request('subtitle'),
             'description' => request('description'),
             'content_raw' => request('content'),
 
