@@ -14226,6 +14226,12 @@ mark {
   background-color: #ffefcc;
 }
 
+.text-component blockquote {
+  padding-left: 1em;
+  border-left: 4px solid var(--color-contrast-lower);
+  font-style: italic;
+}
+
 /* -------------------------------- 
 
 File#: _1_accordion
