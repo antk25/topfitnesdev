@@ -300,13 +300,20 @@
                       type="button">+ Добавить характеристику
               </button>
           </div>
+      </div>
           {{-- End add specs --}}
 
       {{-- Add bracelets --}}
+  <div class="bg radius-md shadow-xs padding-md margin-bottom-md @error('allbracelets') border border-error @enderror">
     <section class="margin-bottom-md">
       <div class="text-component">
         <h4>Добавить браслеты для сравнения</h4>
       </div>
+      @error('allbracelets')
+            <div role="alert"
+                 class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs">
+                <p><strong>ошибка:</strong> {{ $message }}</p></div>
+      @enderror
 
       <div class="js-repeater" data-repeater-input-name="allbracelets[n]">
         <div class="js-repeater__list">
@@ -345,12 +352,13 @@
           </div>
 
           @endforelse
+
         </div>
         <button class="btn btn--primary width-100% margin-top-xs js-repeater__add" type="button">+ Добавить браслет</button>
       </div>
     </section>
-    {{-- End add bracelets --}}
       </div>
+    {{-- End add bracelets --}}
 
 
       <button class="btn btn--primary" aria-controls="collapse-content">Посмотреть хар-ки сравниваемых браслетов</button>

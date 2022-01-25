@@ -167,6 +167,8 @@ class ComparisonController extends Controller
 
         $listspecs = $listspecs->whereNotNull('specs')->toArray();
 
+        $allbracelets = array_filter($request->input('allbracelets'));
+
         $comparison = Comparison::find($id);
 
         $slug = $request->input('slug');
@@ -193,7 +195,7 @@ class ComparisonController extends Controller
             'type_table' => $request->input('type_table'),
         ]);
 
-        $comparison->bracelets()->sync($request->input('allbracelets', []));
+        $comparison->bracelets()->sync($allbracelets);
 
         if($comparison->getMedia('comparisons')) {
 

@@ -31,7 +31,8 @@ class ComparisonRequest extends FormRequest
                 'required',
                 'min:5',
                 Rule::unique('comparisons', 'name')->ignore($this->comparison),
-            ]
+            ],
+            'allbracelets' => 'required|array|min:2'
         ];
     }
 
@@ -50,7 +51,8 @@ class ComparisonRequest extends FormRequest
         return [
             'name' => 'Название статьи',
             'title' => 'Title',
-            'user_id' => 'Автор'
+            'user_id' => 'Автор',
+            'allbracelets' => 'Сравниваемые модели',
         ];
     }
 }
