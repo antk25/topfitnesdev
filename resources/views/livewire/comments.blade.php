@@ -15,8 +15,7 @@
                         </div>
                         @endif
                         </li>
-
-                        @endforeach
+                @endforeach
             </ul>
             @if (session()->has('message'))
             <div x-data="{ open: true }">
