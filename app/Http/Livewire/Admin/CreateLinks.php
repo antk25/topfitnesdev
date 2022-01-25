@@ -5,6 +5,9 @@ namespace App\Http\Livewire\Admin;
 use Livewire\Component;
 use App\Models\Post;
 use App\Models\Bracelet;
+use App\Models\Manual;
+use App\Models\Comparison;
+use App\Models\Overview;
 
 class CreateLinks extends Component
 {
@@ -12,6 +15,8 @@ class CreateLinks extends Component
     public $links;
     public $link;
     public $category;
+    public $linkText = "";
+    public $domain = "https://topfitnesbraslet.ru";
 
     public $selectedModel = null;
     public $selectedLink = null;
@@ -21,6 +26,9 @@ class CreateLinks extends Component
         $this->model = [
             'Блог' => 'Post',
             'Браслеты' => 'Bracelet',
+            'Сравнения' => 'Comparison',
+            'Обзоры' => 'Overview',
+            'Мануалы' => 'Manual',
         ];
 
         $this->link = null;
@@ -40,6 +48,18 @@ class CreateLinks extends Component
             case('Post'):
                 $this->links = Post::get();
                 $this->category = 'blog';
+                break;
+            case('Manual'):
+                $this->links = Manual::get();
+                $this->category = 'manuals';
+                break;
+            case('Comparison'):
+                $this->links = Comparison::get();
+                $this->category = 'sravneniya';
+                break;
+            case('Overview'):
+                $this->links = Overview::get();
+                $this->category = 'obzory';
                 break;
             case ('Bracelet'):
                 $this->links = Bracelet::get();

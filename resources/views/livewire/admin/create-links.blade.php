@@ -26,15 +26,40 @@
         <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
     </div>
     @endif
-
+    <div class="margin-y-sm">
+        <label class="form-label margin-bottom-xxxs" for="linkText">Текст ссылки:</label>
+        <input class="form-control width-100%" wire:model.debounce.500ms="linkText" name="linkText" placeholder="Свой текст ссылки">
+    </div>
     @if(!is_null($selectedLink))
-       <div class="padding-sm bg-contrast-lower margin-y-sm">
-          &lt;a href="{{ $category }}/{{ $link->slug }}"&gt;{{ $link->name }}&lt;a&gt;
+    <p class="color-contrast-medium">Простая ссылка:</p>
+       <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
+          &lt;a href="{{ $domain }}/{{ $category }}/{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;
        </div>
 
-        <div class="padding-sm bg-contrast-lower margin-y-sm">
-            &lt;a href="{{ $category }}/{{ $link->slug }}"&gt;{{ $link->name }}&lt;a&gt;
-            &lt;img src="@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif"&gt;
+    <p class="color-contrast-medium">Ссылка и картинка без оформления:</p>
+        <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
+            &lt;a href="{{ $domain }}/{{ $category }}/{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;<br>
+            &lt;img src="@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers', '640') }} @else {{ $link->getFirstMediaUrl('bracelets', '640') }} @endif"&gt;
+        </div>
+
+
+    <p class="color-contrast-medium">Баннер:</p>
+        <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
+            &lt;a class=&quot;banner&quot; href=&quot;{{ $domain }}/{{ $category }}/{{ $link->slug }}&quot; aria-label=&quot;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&quot;&gt;<br>
+            &lt;div class=&quot;grid flex-row-reverse@md&quot;&gt;<br>
+                &lt;div class=&quot;col-6@md overflow-hidden&quot; aria-hidden=&quot;true&quot;&gt;<br>
+                &lt;div class=&quot;banner__figure width-100%&quot; style=&quot;background-image: url(@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers', '640') }} @else {{ $link->getFirstMediaUrl('bracelets', '640') }} @endif);&quot;&gt;&lt;/div&gt;<br>
+                &lt;/div&gt;<br><br>
+
+                &lt;div class=&quot;col-6@md&quot;&gt;<br>
+                &lt;div class=&quot;text-component text-space-y-md height-100% flex flex-column padding-md padding-lg@md&quot;&gt;<br>
+                    &lt;p class=&quot;text-lg text-bold&quot;&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/p&gt;
+                    &lt;h2&gt;Перейти&lt;/h2&gt;<br>
+                    &lt;p class=&quot;margin-top-sm margin-top-md@md&quot;&gt;&lt;span class=&quot;banner__link&quot;&gt;&lt;i&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;<br>
+                &lt;/div&gt;<br>
+                &lt;/div&gt;<br>
+            &lt;/div&gt;<br>
+            &lt;/a&gt;
         </div>
 
     @endif
