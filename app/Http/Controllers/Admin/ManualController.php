@@ -98,19 +98,16 @@ class ManualController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $i = 0;
             foreach ($files as $file) {
                 $manual->addMedia($file)
                     ->toMediaCollection('manuals');
             }
         }
 
-        //Обложка статьи
-
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $manual->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $manual->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
         if ($manual) {
@@ -255,12 +252,10 @@ class ManualController extends Controller
             $manual->save();
         }
 
-        //Обложка статьи
-
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $manual->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $manual->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
         return back();

@@ -105,19 +105,16 @@ class ComparisonController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $i = 0;
             foreach ($files as $file) {
                 $comparison->addMedia($file)
                     ->toMediaCollection('comparisons');
             }
         }
 
-        //Обложка статьи
-
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $comparison->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $comparison->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
 
@@ -249,12 +246,10 @@ class ComparisonController extends Controller
             $comparison->save();
         }
 
-        //Обложка статьи
-
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $comparison->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $comparison->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
         return back();

@@ -42,6 +42,11 @@
 
         <td class="tbl__cell" role="cell">
             <div class="flex items-center">
+              @if ($item->getFirstMediaUrl('covers'))
+                <figure class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
+                <img class="block width-100% height-100% object-cover" src="{{ $item->getFirstMediaUrl('covers') }}">
+                </figure>
+              @endif
                 <div class="line-height-xs">
                 <p class="margin-bottom-xxxxs">{{ $item->name }}</p>
                 <p class="color-contrast-medium">{{ $item->slug }}</p>

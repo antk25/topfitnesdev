@@ -58,21 +58,8 @@ class Manual extends Model implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('320')
-            ->width(320);
-
-        $this->addMediaConversion('640')
-            ->width(640);
-
-        $this->addMediaConversion('960')
-            ->width(960);
-
-        $this->addMediaConversion('1280')
-            ->width(1280);
-
         $this->addMediaConversion('thumb')
-            ->crop('crop-center', 300, 300);
-
+                ->width(640);
     }
 
 }

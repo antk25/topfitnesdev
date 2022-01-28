@@ -108,11 +108,9 @@ class RatingController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $lastrating = Rating::find($rating->id);
-            $i = 0;
             foreach ($files as $file) {
-                $lastrating->addMedia($file)
-                    ->toMediaCollection('rating');
+                $rating->addMedia($file)
+                    ->toMediaCollection('ratings');
             }
         }
 
@@ -122,12 +120,14 @@ class RatingController extends Controller
             $rating->bracelets()->attach($allbracelets);
         }
 
-        //Обложка статьи
+        /**
+        * Обложка
+        */
 
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $rating->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $rating->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
         if ($rating) {
@@ -248,21 +248,22 @@ class RatingController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $lastrating = Rating::find($rating->id);
-            $i = 0;
             foreach ($files as $file) {
-                $lastrating->addMedia($file)
-                    ->toMediaCollection('rating');
+                $rating->addMedia($file)
+                    ->toMediaCollection('ratings');
             }
         }
 
-        //Обложка статьи
+       /**
+        * Обложка
+        */
 
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $rating->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $rating->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
+
 
         if ($result) {
           return redirect()

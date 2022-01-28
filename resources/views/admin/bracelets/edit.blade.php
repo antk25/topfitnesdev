@@ -312,6 +312,9 @@
 
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
         @include('admin.layouts.parts.htmlcomponents')
+
+        <button class="btn btn--primary margin-y-sm" aria-controls="drawer-1">Галерея</button>
+
         <x-admin.codemirror-editor :content="$bracelet->about" name="about" id="about">
             <h4>Описание браслета</h4>
             <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
@@ -1368,31 +1371,38 @@
     </div>
     {{-- End add sellers --}}
 
-     {{-- Add images --}}
-     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-      <div class="text-component margin-y-sm">
-        <h4 id="section-13">Добавить изображения браслета</h4>
-        <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После сохранения изменений можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
-      </div>
+     <x-admin.add-images>
 
-      <div class="file-upload inline-block">
-        <label for="files" class="file-upload__label btn btn--primary">
-          <span class="flex items-center">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
-
-            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
-          </span>
-        </label>
-
-        <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
-      </div>
-    </div>
-{{-- End add images --}}
+    </x-admin.add-images>
 
           <div class="margin-y-sm">
             <button type="submit" class="btn btn--primary width-100%">Обновить/Сохранить</button>
           </div>
         </form>
+
+        {{-- Control Images --}}
+        <div class="margin-top-lg drawer js-drawer" id="drawer-1">
+          <div class="drawer__content bg-light inner-glow shadow-md" role="alertdialog" aria-labelledby="drawer-title-1">
+              <div class="drawer__body padding-sm js-drawer__body">
+
+                  @livewire('admin.control-images', ['images' => $bracelet->getMedia('bracelets')])
+
+              </div>
+
+              <button
+                  class="reset drawer__close-btn position-fixed top-0 right-0 z-index-fixed-element margin-xs js-drawer__close js-tab-focus">
+                  <svg class="icon icon--xs" viewBox="0 0 16 16">
+                      <title>Close drawer panel</title>
+                      <g stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-miterlimit="10">
+                          <line x1="13.5" y1="2.5" x2="2.5" y2="13.5"></line>
+                          <line x1="2.5" y1="2.5" x2="13.5" y2="13.5"></line>
+                      </g>
+                  </svg>
+              </button>
+          </div>
+      </div>
+      {{-- End Control Images --}}
       </section>
 
       <section id="tab1Panel2" class="js-tabs__panel">
@@ -1485,125 +1495,9 @@
       </section>
 
       <section id="tab1Panel3" class="js-tabs__panel">
-
-        <div class="tbl">
-          <table class="tbl__table text-unit-em text-sm border-bottom border-2" aria-label="Table Example">
-            <thead class="tbl__header border-bottom border-2">
-              <tr class="tbl__row">
-                <th class="tbl__cell text-left" scope="col">
-                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Картинка</span>
-                </th>
-
-                <th class="tbl__cell text-left" scope="col">
-                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Код и Alt</span>
-                </th>
-
-                <th class="tbl__cell text-left" scope="col">
-                  <span class="text-xs text-uppercase letter-spacing-lg font-semibold">Удалить</span>
-                </th>
-              </tr>
-            </thead>
-
-            <tbody class="tbl__body">
-              @foreach ($media as $image)
-              <tr class="tbl__row">
-                <td class="tbl__cell" role="cell">
-                  <div class="items-center">
-                    <figure class="width-lg height-lg overflow-hidden margin-right-xs">
-                      <img class="block width-100% height-100% object-cover" src="{{ $image->getFullUrl('thumb') }}">
-                    </figure>
-
-                    <div class="line-height-xs">
-                      <p class="color-contrast-medium">{{ $image->human_readable_size }}</p>
-                    </div>
-                  </div>
-                </td>
-
-                <td class="tbl__cell" role="cell">
-                  <pre><code class="language-html">
-                    &lt;img src="{{ $image->getFullUrl() }}"
-                    srcset="{{ $image->getFullUrl('320') }} 320w,
-                    {{ $image->getFullUrl('640') }} 640w"
-                    alt="{{ $image->name }}"&gt;
-                    </code>
-                  </pre>
-
-
-                  <form method="POST" action="{{ route('bracelets.updimg') }}">
-                    @csrf
-                    <input type="text" hidden value="{{ $image->id }}" name="imgid">
-                    <div class="input-group">
-                      <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
-                      <button class="btn btn--primary" type="submit">
-                        <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
-                          <g>
-                            <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
-                            <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
-                          </g>
-                        </svg>
-                      </button>
-                    </div>
-                </form>
-                </td>
-
-                <td class="tbl__cell" role="cell">
-
-                </td>
-
-                <td class="tbl__cell" role="cell">
-                  <form method="POST" action="{{ route('bracelets.delimg') }}">
-                    @csrf
-                    <input type="text" hidden value="{{ $image->id }}" name="imgid">
-                    <button type="submit" class="btn btn--accent text-sm">&times;</button>
-                  </form>
-                </td>
-              </tr>
-              @endforeach
-
-            </tbody>
-          </table>
-        </div>
-
-        {{-- <table>
-        @foreach ($media as $image)
-        <tr>
-          <td>
-          <img width="200px" src="{{ $image->getFullUrl('thumb') }}" alt=""><br>
-            <strong>{{ $image->human_readable_size }}</strong>
-          </td>
-          <td>
-          <div class="width-50% margin-y-sm">
-            <pre><code class="language-html">
-              &lt;img src="{{ $image->getFullUrl() }}" srcset="{{ $image->getFullUrl('320') }} 320w, {{ $image->getFullUrl('640') }} 640w" alt="{{ $image->name }}"&gt;
-              </code>
-            </pre>
+          <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
+              @livewire('admin.create-links')
           </div>
-            <form method="POST" action="{{ route('bracelets.updimg') }}">
-              @csrf
-              <input type="text" hidden value="{{ $image->id }}" name="imgid">
-              <div class="input-group">
-                <input class="form-control flex-grow" type="text" name="nameimg" id="nameimg" value="{{ $image->name }}">
-                <button class="btn btn--success" type="submit">
-                  <svg class="icon menu-bar__icon" aria-hidden="true" viewBox="0 0 16 16">
-                    <g>
-                      <path d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
-                      <path d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
-                    </g>
-                  </svg>
-                </button>
-              </div>
-          </form>
-
-
-          <form method="POST" action="{{ route('bracelets.delimg') }}">
-            @csrf
-            <input type="text" hidden value="{{ $image->id }}" name="imgid">
-            <button type="submit" class="btn btn--accent text-sm">&times;</button>
-          </form>
-          </td>
-        @endforeach
-        </tr>
-        </table> --}}
       </section>
     </div>
 </div>

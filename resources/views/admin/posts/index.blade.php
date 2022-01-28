@@ -25,10 +25,6 @@
               <span class="font-semibold">Название/slug</span>
             </th>
 
-              <th class="tbl__cell text-left" scope="col">
-                  <span class="font-semibold">Превью</span>
-              </th>
-
             <th class="tbl__cell text-left" scope="col">
               <span class="font-semibold">Опубликован</span>
             </th>
@@ -52,9 +48,9 @@
 
         <td class="tbl__cell" role="cell">
             <div class="flex items-center">
-              @if ($post->getFirstMediaUrl('images'))
+              @if ($post->getFirstMediaUrl('covers'))
                 <figure class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
-                <img class="block width-100% height-100% object-cover" src="{{ $post->getFirstMediaUrl('images') }}">
+                <img class="block width-100% height-100% object-cover" src="{{ $post->getFirstMediaUrl('covers') }}">
                 </figure>
               @endif
                 <div class="line-height-xs">
@@ -63,16 +59,6 @@
                 </div>
             </div>
         </td>
-
-            <td class="tbl__cell" role="cell">
-                @if($post->getFirstMediaUrl('covers'))
-                    <figure>
-
-                        <img src="{{ $post->getFirstMediaUrl('covers') }}" width="150" alt="">
-
-                    </figure>
-                @endif
-            </td>
 
 
             <td class="tbl__cell" role="cell">

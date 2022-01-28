@@ -71,6 +71,9 @@
 
                         <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
                             @include('admin.layouts.parts.htmlcomponents')
+
+                           <button class="btn btn--primary margin-y-sm" aria-controls="drawer-1">Галерея</button>
+
                             <x-admin.codemirror-editor :content="$rating->intro" name="intro" id="intro">
                                 <h4>Основной контент (в начале статьи)</h4>
                                 <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
@@ -84,9 +87,9 @@
                             </x-admin.codemirror-editor>
                         </div>
 
-                        <x-admin.add-cover :currentCover="$rating->getFirstMediaUrl('covers','320')" alt="Превью">
+                        <x-admin.add-images :currentCover="$rating->getFirstMedia('covers')" alt="Превью">
 
-                        </x-admin.add-cover>
+                        </x-admin.add-images>
 
 
                         <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
@@ -500,44 +503,33 @@
                             {{-- End add bracelets --}}
                         </div>
 
-
-                        <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-
-                            {{-- Add images --}}
-                            <div class="text-component margin-y-sm">
-                                <h4>Добавить картинки для статьи</h4>
-                                <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в
-                                    формате
-                                    <mark>jpg</mark>
-                                    . После публикации рейтинга можно будет редактировать теги
-                                    <mark>alt</mark>
-                                    у каждой картинки.
-                                </p>
-                            </div>
-
-                            <div class="file-upload inline-block">
-                                <label for="files" class="file-upload__label btn btn--primary">
-          <span class="flex items-center">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor"
-                                                                        stroke-width="2"><path stroke-linecap="square"
-                                                                                               stroke-linejoin="miter"
-                                                                                               d="M2 16v6h20v-6"></path><path
-                        stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square"
-                                                                                                stroke-linejoin="miter"
-                                                                                                d="M18 8l-6-6-6 6"></path></g></svg>
-
-            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
-          </span>
-                                </label>
-
-                                <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
-                            </div>
-                            {{-- End add images --}}
-                        </div>
-
                         <button class="btn btn--primary" type="submit">Сохранить</button>
 
                     </form>
+
+                    {{-- Control Images --}}
+                    <div class="margin-top-lg drawer js-drawer" id="drawer-1">
+                        <div class="drawer__content bg-light inner-glow shadow-md" role="alertdialog"
+                             aria-labelledby="drawer-title-1">
+                            <div class="drawer__body padding-sm js-drawer__body">
+
+                                    @livewire('admin.control-images', ['images' => $rating->getMedia('ratings')])
+
+                            </div>
+
+                            <button
+                                class="reset drawer__close-btn position-fixed top-0 right-0 z-index-fixed-element margin-xs js-drawer__close js-tab-focus">
+                                <svg class="icon icon--xs" viewBox="0 0 16 16"><title>Close drawer panel</title>
+                                    <g stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                       stroke-linejoin="round" stroke-miterlimit="10">
+                                        <line x1="13.5" y1="2.5" x2="2.5" y2="13.5"></line>
+                                        <line x1="2.5" y1="2.5" x2="13.5" y2="13.5"></line>
+                                    </g>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    {{-- End Control Images --}}
 
                 </section>
 

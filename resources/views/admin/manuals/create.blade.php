@@ -74,30 +74,9 @@
           </x-admin.codemirror-editor>
     </div>
 
-    <x-admin.add-cover currentCover="{{ asset('img/theme/img-placeholder.svg') }}" alt="Превью">
+    <x-admin.add-images currentCover="placeholder">
 
-    </x-admin.add-cover>
-
-    {{-- Add images --}}
-    <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-      <div class="text-component margin-y-sm">
-        <h4 id="section-13">Добавить изображения</h4>
-        <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в формате <mark>jpg</mark>. После сохранения изменений можно будет редактировать теги <mark>alt</mark> у каждой картинки.</p>
-      </div>
-
-      <div class="file-upload inline-block">
-        <label for="files" class="file-upload__label btn btn--primary">
-          <span class="flex items-center">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
-
-            <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
-          </span>
-        </label>
-
-        <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
-      </div>
-    </div>
-{{-- End add images --}}
+    </x-admin.add-images>
 
     <div class="margin-y-md">
       <button type="submit" class="btn btn--success">Сохранить статью</button>

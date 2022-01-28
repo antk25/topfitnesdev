@@ -94,12 +94,14 @@ class OverviewController extends Controller
             'content_raw' => request('content')
         ]);
 
-        //Обложка статьи
+        /**
+        * Обложка
+        */
 
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $overview->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $overview->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
         /**
@@ -109,7 +111,6 @@ class OverviewController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $i = 0;
             foreach ($files as $file) {
                 $overview->addMedia($file)
                     ->toMediaCollection('overviews');
@@ -161,7 +162,6 @@ class OverviewController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $i = 0;
             foreach ($files as $file) {
                 $overview->addMedia($file)
                     ->toMediaCollection('overviews');
@@ -232,13 +232,17 @@ class OverviewController extends Controller
             $overview->save();
         }
 
-        //Обложка статьи
 
-        $cover = request('cover');
+        /**
+        * Обложка
+        */
 
-        if (isset($cover)) {
-            $overview->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $overview->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
+
 
 
 

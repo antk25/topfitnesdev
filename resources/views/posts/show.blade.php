@@ -17,7 +17,6 @@
         {{ Breadcrumbs::render('post', $post) }}
     </div>
 
-
     <article class="padding-y-md">
         <header class="container max-width-sm margin-bottom-lg">
             <div class="text-component line-height-lg text-space-y-md margin-bottom-md">
@@ -113,6 +112,7 @@
     <script src="{{ asset("js/alpine.min.js") }}"></script>
     <script src="{{ asset("js/toc.min.js") }}"></script>
     <script src="{{ asset("js/simple-lightbox.min.js") }}"></script>
+    <script src="{{ asset("js/lazysizes.min.js") }}"></script>
     <script>
         var options = {
             selector: 'h2, h3, h4',

@@ -115,128 +115,23 @@
 
                         </div>
 
-                        <x-admin.add-cover :currentCover="$overview->getFirstMediaUrl('covers','320')" alt="Превью">
+                        <x-admin.add-images :currentCover="$overview->getFirstMedia('covers')" alt="Превью">
 
-                        </x-admin.add-cover>
-
-
-                        <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-                            {{-- Add images --}}
-                            <section class="margin-bottom-md">
-                                <div class="text-component margin-y-sm">
-                                    <h4>Добавить изображения для обзора</h4>
-                                    <p class="text-md color-contrast-medium">Выберите одно или несколько изображений в
-                                        формате
-                                        <mark>jpg</mark>
-                                        . После публикации можно будет редактировать теги
-                                        <mark>alt</mark>
-                                        у каждой картинки.
-                                    </p>
-                                </div>
-
-                                <div class="file-upload inline-block">
-                                    <label for="files" class="file-upload__label btn btn--primary">
-            <span class="flex items-center">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor"
-                                                                          stroke-width="2"><path stroke-linecap="square"
-                                                                                                 stroke-linejoin="miter"
-                                                                                                 d="M2 16v6h20v-6"></path><path
-                          stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path
-                          stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
-
-              <span class="margin-left-xxs file-upload__text file-upload__text--has-max-width">Загрузить</span>
-            </span>
-                                    </label>
-
-                                    <input type="file" class="file-upload__input" name="files[]" id="files" multiple>
-                                </div>
-                            </section>
-                            {{-- End add images --}}
-                        </div>
+                        </x-admin.add-images>
 
                         <div class="margin-y-md">
                             <button type="submit" class="btn btn--success">Сохранить</button>
                         </div>
                     </form>
 
+                    {{-- Control Images --}}
                     <div class="margin-top-lg drawer js-drawer" id="drawer-1">
                         <div class="drawer__content bg-light inner-glow shadow-md" role="alertdialog"
                              aria-labelledby="drawer-title-1">
                             <div class="drawer__body padding-sm js-drawer__body">
-                                @foreach ($media as $image)
-                                    <div
-                                        class="gap-xxs grid border border-contrast-low radius-md margin-bottom-sm padding-sm">
-                                        <div class="col-4 text-center">
-                                            <img class="block width-100%" src="{{ $image->getFullUrl('320') }}">
-                                            <p class="color-contrast-medium">{{ $image->human_readable_size }}</p>
-                                        </div>
-                                        <div class="col-8 text-center">
-                                            <form method="POST" action="{{ route('bracelets.updimg') }}">
-                                                @csrf
-                                                <input type="text" hidden value="{{ $image->id }}" name="imgid">
-                                                <div class="input-group">
-                                                    <div class="input-group__tag">alt</div>
-                                                    <input class="form-control flex-grow width-100% text-xs" type="text"
-                                                           name="nameimg" id="nameimg" value="{{ $image->name }}">
 
-                                                    <button title="Обновить" class="btn btn--success" type="submit">
-                                                        <svg class="icon menu-bar__icon" aria-hidden="true"
-                                                             viewBox="0 0 16 16">
-                                                            <g>
-                                                                <path
-                                                                    d="M8,3c1.179,0,2.311,0.423,3.205,1.17L8.883,6.492l6.211,0.539L14.555,0.82l-1.93,1.93 C11.353,1.632,9.71,1,8,1C4.567,1,1.664,3.454,1.097,6.834l1.973,0.331C3.474,4.752,5.548,3,8,3z"></path>
-                                                                <path
-                                                                    d="M8,13c-1.179,0-2.311-0.423-3.205-1.17l2.322-2.322L0.906,8.969l0.539,6.211l1.93-1.93 C4.647,14.368,6.29,15,8,15c3.433,0,6.336-2.454,6.903-5.834l-1.973-0.331C12.526,11.248,10.452,13,8,13z"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </form>
+                                    @livewire('admin.control-images', ['images' => $overview->getMedia('overviews')])
 
-                                            <pre><code class="language-html">&lt;img.{{ $loop->index }}&gt;</code></pre>
-                                            <pre><code
-                                                    class="language-html">&lt;box_img.{{ $loop->index }}&gt;</code></pre>
-                                            <pre><code
-                                                    class="language-html">&lt;box_img_half.{{ $loop->index }}&gt;</code></pre>
-
-                                            <button type="submit" class="btn btn--accent text-sm margin-top-sm"
-                                                    aria-controls="dialog-{{ $loop->index }}">Удалить картинку
-                                            </button>
-
-                                            <div id="dialog-{{ $loop->index }}" class="dialog js-dialog"
-                                                 data-animation="on">
-                                                <div class="dialog__content max-width-xxs" role="alertdialog"
-                                                     aria-labelledby="dialog-title-{{ $loop->index }}"
-                                                     aria-describedby="dialog-description-{{ $loop->index }}">
-                                                    <div class="text-component">
-                                                        <h4 id="dialog-title-{{ $loop->index }}">Вы уверены, что хотите
-                                                            удалить картинку {{ $image->name }} c id={{ $image->id }}
-                                                            ?</h4>
-                                                        <p id="dialog-description-{{ $loop->index }}">После
-                                                            подтверждения картинка будет удалена
-                                                            <mark>безвозвратно</mark>
-                                                            !!!.
-                                                        </p>
-                                                    </div>
-
-                                                    <footer class="margin-top-md">
-                                                        <div class="flex justify-end gap-xs flex-wrap">
-                                                            <button class="btn btn--subtle js-dialog__close">Отмена
-                                                            </button>
-                                                            <form method="POST" action="{{ route('posts.delimg') }}">
-                                                                @csrf
-                                                                <input type="text" name="imgdelid" hidden
-                                                                       value="{{ $image->id }}">
-                                                                <button type="submit" class="btn btn--accent">Удалить
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </footer>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
                             </div>
 
                             <button
@@ -251,6 +146,7 @@
                             </button>
                         </div>
                     </div>
+                    {{-- End Control Images --}}
 
                 </section>
 

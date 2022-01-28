@@ -40,9 +40,14 @@
 
         <td class="tbl__cell" role="cell">
             <div class="flex items-center">
+              @if ($manual->getFirstMediaUrl('covers'))
+                <figure class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
+                <img class="block width-100% height-100% object-cover" src="{{ $manual->getFirstMediaUrl('covers') }}">
+                </figure>
+              @endif
                 <div class="line-height-xs">
-                <p class="margin-bottom-xxxxs">{{ $item->name }}</p>
-                <p class="color-contrast-medium">{{ $item->slug }}</p>
+                <p class="margin-bottom-xxxxs">{{ $manual->name }}</p>
+                <p class="color-contrast-medium">{{ $manual->slug }}</p>
                 </div>
             </div>
         </td>
@@ -50,7 +55,7 @@
         <td class="tbl__cell" role="cell">
           @foreach ($item->bracelets as $bracelet)
            {{ $bracelet->name }}
-           @if (! $loop->last) <br>VS<br> @endif
+           @if (! $loop->last) |  @endif
           @endforeach
         </td>
 

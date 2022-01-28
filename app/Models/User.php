@@ -142,8 +142,4 @@ class User extends Authenticatable implements HasMedia
             ->crop(Manipulations::CROP_TOP, 150, 150);
     }
 
-
-    // public function setPasswordAttribute($password){
-    //     $this->attributes['password'] = Hash::make($password);
-    // }
 }

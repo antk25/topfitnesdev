@@ -131,11 +131,20 @@ class PostController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $i = 0;
             foreach ($files as $file) {
                 $post->addMedia($file)
                     ->toMediaCollection('posts');
             }
+        }
+
+       /**
+        * Обложка
+        */
+
+        if (request('cover') != null) {
+            $post->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
         return redirect()->route('posts.index');
@@ -153,9 +162,7 @@ class PostController extends Controller
 
         $users = User::pluck('name', 'id')->all();
 
-        $media = $post->getMedia('posts');
-
-        return view('admin.posts.edit', compact('post', 'media', 'users'));
+        return view('admin.posts.edit', compact('post', 'users'));
     }
 
     /**
@@ -181,9 +188,9 @@ class PostController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $i = 0;
             foreach ($files as $file) {
                 $post->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('posts');
             }
         }
@@ -207,41 +214,38 @@ class PostController extends Controller
             for ($image = 0; $image < count($images); $image++) {
                 $content = str_replace("<box_img_half." . $image . ">",
                     '<div class="box">
-               <a href="' . $images[$image]->getUrl() . '">
-              <figure class="text-component__block width-50%@md margin-x-auto">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block width-50%@md margin-x-auto">
                 <img src="' . $images[$image]->getUrl() . '"
-                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
-                ' . $images[$image]->getUrl('640') . ' 640w,
-                ' . $images[$image]->getUrl('960') . ' 960w,
-                ' . $images[$image]->getUrl('1280') . ' 1280w,
-                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
                 </figure>
                </a>
                </div>',
                     $content);
                 $content = str_replace("<box_img." . $image . ">",
                     '<div class="box">
-               <a href="' . $images[$image]->getUrl() . '">
-              <figure class="text-component__block">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block">
                 <img src="' . $images[$image]->getUrl() . '"
-                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
-                ' . $images[$image]->getUrl('640') . ' 640w,
-                ' . $images[$image]->getUrl('960') . ' 960w,
-                ' . $images[$image]->getUrl('1280') . ' 1280w,
-                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
                 </figure>
                </a>
                </div>',
                     $content);
                 $content = str_replace("<img." . $image . ">",
                     '
-                    <figure class="text-component__block">
+                <figure class="text-component__block">
                     <img src="' . $images[$image]->getUrl() . '"
-                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
-                ' . $images[$image]->getUrl('640') . ' 640w,
-                ' . $images[$image]->getUrl('960') . ' 960w,
-                ' . $images[$image]->getUrl('1280') . ' 1280w,
-                " alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
                 </figure>',
                     $content);
 
@@ -253,10 +257,10 @@ class PostController extends Controller
 
         //Обложка статьи
 
-        $cover = request('cover');
-
-        if (isset($cover)) {
-            $post->addMediaFromRequest('cover')->toMediaCollection('covers');
+        if (request('cover') != null) {
+            $post->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
 
         return back();
@@ -303,28 +307,4 @@ class PostController extends Controller
 
     }
 
-    public function imgdelete(Request $request): RedirectResponse
-    {
-
-        $mediaItems = Media::find($request->input('imgdelid'));
-
-        $mediaItems->delete();
-
-        return back();
-
-    }
-
-    public function imgupdate(Request $request): RedirectResponse
-    {
-        $id = $request->input('imgid');
-        $image = Media::find($id);
-
-        $image->update([
-            'name' => request('nameimg')
-        ]);
-
-
-        return back();
-
-    }
 }

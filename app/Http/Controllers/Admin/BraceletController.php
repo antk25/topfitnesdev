@@ -170,9 +170,8 @@ class BraceletController extends Controller
         $files = request('files');
 
         if ($files != '') {
-            $lastbracelet = Bracelet::find($bracelet->id);
             foreach ($files as $file) {
-                $lastbracelet->addMedia($file)
+                $bracelet->addMedia($file)
                     ->toMediaCollection('bracelets');
             }
         }
@@ -459,21 +458,10 @@ class BraceletController extends Controller
 
 
         $files = request('files');
-        $nameimg = request('nameimg');
 
-        if ($files != '' && isset($nameimg[0])) {
-            $lastbracelet = Bracelet::find($bracelet->id);
-            $i = 0;
+        if ($files != '') {
             foreach ($files as $file) {
-                $lastbracelet->addMedia($file)
-                    ->usingName($nameimg[$i++])
-                    ->toMediaCollection('bracelets');
-            }
-        }
-        elseif ($files != '') {
-            $lastbracelet = Bracelet::find($bracelet->id);
-            foreach ($files as $file) {
-                $lastbracelet->addMedia($file)
+                $bracelet->addMedia($file)
                     ->toMediaCollection('bracelets');
             }
         }

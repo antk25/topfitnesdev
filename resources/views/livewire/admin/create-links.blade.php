@@ -39,7 +39,7 @@
     <p class="color-contrast-medium">Ссылка и картинка без оформления:</p>
         <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
             &lt;a href="{{ $domain }}/{{ $category }}/{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;<br>
-            &lt;img src="@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers', '640') }} @else {{ $link->getFirstMediaUrl('bracelets', '640') }} @endif"&gt;
+            &lt;img src="@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif"&gt;
         </div>
 
 
@@ -48,7 +48,7 @@
             &lt;a class=&quot;banner&quot; href=&quot;{{ $domain }}/{{ $category }}/{{ $link->slug }}&quot; aria-label=&quot;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&quot;&gt;<br>
             &lt;div class=&quot;grid flex-row-reverse@md&quot;&gt;<br>
                 &lt;div class=&quot;col-6@md overflow-hidden&quot; aria-hidden=&quot;true&quot;&gt;<br>
-                &lt;div class=&quot;banner__figure width-100%&quot; style=&quot;background-image: url(@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers', '640') }} @else {{ $link->getFirstMediaUrl('bracelets', '640') }} @endif);&quot;&gt;&lt;/div&gt;<br>
+                &lt;div class=&quot;banner__figure width-100%&quot; style=&quot;background-image: url(@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif);&quot;&gt;&lt;/div&gt;<br>
                 &lt;/div&gt;<br><br>
 
                 &lt;div class=&quot;col-6@md&quot;&gt;<br>
