@@ -27,7 +27,7 @@ class BrandRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'min:5',
+                'min:3',
                 Rule::unique('brands', 'name')->ignore($this->brand),
             ]
         ];
