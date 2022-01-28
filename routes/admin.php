@@ -45,6 +45,7 @@ Route::get('/bracelet/restore/{bracelet}', [BraceletController::class, 'restore'
 
 Route::get('/gradeupdate', [BraceletController::class, 'gradeUpdate'])->name('bracelets.updategrades');
 Route::post('/import', [BraceletController::class, 'import'])->name('bracelets.import');
+Route::get('/export', [BraceletController::class, 'export'])->name('bracelets.export');
 
 Route::resource('/menuitems', MenuItemController::class);
 Route::resource('/groupmenus', GroupMenuController::class);

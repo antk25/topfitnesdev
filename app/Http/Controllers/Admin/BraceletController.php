@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\BraceletExport;
 use App\Filters\CheckedAdminFilter;
 use App\Filters\NameFilter;
 use App\Filters\PublishedFilter;
@@ -666,9 +667,9 @@ class BraceletController extends Controller
        return back()->with('success', 'Завершено!');
     }
 
-    // private function delNull($item)
-    // {
-    //     return $item != null;
-    // }
+    public function export()
+    {
+        return new BraceletExport;
+    }
 }
 
