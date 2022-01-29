@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\HtmlComponentExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\HtmcomponentRequest;
+use App\Imports\HtmlComponentImport;
 use App\Models\HtmlComponent;
 use Illuminate\Http\Request;
 
@@ -111,5 +113,25 @@ class HtmlComponentController extends Controller
         HtmlComponent::destroy($id);
 
         return back();
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('importFile');
+
+        $import = new HtmlComponentImport();
+
+        $import->import($file);
+
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
+        }
+
+        return back()->with('success', 'Завершено!');
+    }
+
+    public function export()
+    {
+        return new HtmlComponentExport;
     }
 }

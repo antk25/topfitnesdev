@@ -92,4 +92,6 @@ Route::post('/bracelets/updimg', [BraceletController::class, 'imgupdate'])->name
 Route::resource('/comments', CommentController::class);
 Route::post('/comments/reply', [CommentController::class, 'replyStore'])->name('comments.reply');
 Route::resource('/htmlcomponents', HtmlComponentController::class);
+Route::post('/import/htmlcomponents', [HtmlComponentController::class, 'import'])->name('htmlcomponents.import');
+Route::get('/export/htmlcomponents', [HtmlComponentController::class, 'export'])->name('htmlcomponents.export');
 });
