@@ -45,13 +45,9 @@ class BraceletController extends Controller
                                           new NameFilter($request->name)
                                         ]);
 
-        $bracelets = Bracelet::withTrashed()->with('brands')->filter($filters)->paginate(20);
+        $bracelets = Bracelet::withTrashed()->with('brand')->filter($filters)->paginate(20);
 
-        $lastfile = head(Storage::files('import'));
-
-        // $lastfile = Storage::url($lastfile);
-
-        return view('admin.bracelets.index', compact('bracelets', 'lastfile'));
+        return view('admin.bracelets.index', compact('bracelets'));
     }
 
     /**
@@ -173,6 +169,7 @@ class BraceletController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $bracelet->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('bracelets');
             }
         }
@@ -321,9 +318,7 @@ class BraceletController extends Controller
      */
     public function update(BraceletRequest $request, $id)
     {
-
         $bracelet = Bracelet::find($id);
-
 
         if (empty($bracelet)) {
             return back()
@@ -331,9 +326,7 @@ class BraceletController extends Controller
                 ->withInput();
         }
 
-
         // $request->merge(["avg_price" => $avg_price]);
-
 
         // работа обсервера
 
@@ -463,6 +456,7 @@ class BraceletController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $bracelet->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('bracelets');
             }
         }
@@ -648,15 +642,9 @@ class BraceletController extends Controller
         'importFile' => 'required',
        ]);
 
-       $file = $request->file('importFile')->store('import');
-
-    //    $import = new BraceletsImport();
-
-    //    $import->import($file);
+       $file = $request->file('importFile');
 
        Excel::import(new BraceletsImport, $file);
-
-
 
     //    if ($import->failures()->isNotEmpty())
     //    {

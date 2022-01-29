@@ -17,7 +17,8 @@
 
     <form action="{{ route('bracelets.import') }}" method="POST" enctype="multipart/form-data">
      @csrf
-     <div class="file-upload inline-block">
+     <div class="flex gap-xxs">
+     <div class="file-upload">
       <label for="importFile" class="file-upload__label btn btn--primary">
         <span class="flex items-center">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path  stroke-linecap="square" stroke-linejoin="miter" d="M2 16v6h20v-6"></path><path stroke-linejoin="miter" stroke-linecap="butt" d="M12 17V2"></path><path stroke-linecap="square" stroke-linejoin="miter" d="M18 8l-6-6-6 6"></path></g></svg>
@@ -27,19 +28,15 @@
       </label>
 
       <input type="file" class="file-upload__input" name="importFile" id="importFile">
+      👉
     </div>
-     <button class="btn" type="submit">Импортировать</button>
+     <button class="btn btn--success" type="submit">Импортировать</button>
+     </div>
     </form>
 
-
-
-    @if ($lastfile)
-    <div>
-      <p>Последние импортированные:</p>
-      <a href="/{{ $lastfile }}">Скачать последний импорт</a>
+    <div class="margin-y-sm">
+      <a href="{{ route('bracelets.export') }}" type="button" class="btn btn--subtle">Экспорт &#128640;</a>
     </div>
-    @endif
-
 
     @if (isset($errors) && $errors->any())
       @foreach ($errors->all() as $error)

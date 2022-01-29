@@ -129,7 +129,7 @@ class Bracelet extends Model implements HasMedia
 
     // Связываем с брендами
 
-    public function brands(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function brand(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }

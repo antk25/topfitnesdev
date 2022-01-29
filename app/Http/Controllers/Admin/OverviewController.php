@@ -113,6 +113,7 @@ class OverviewController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $overview->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('overviews');
             }
         }
@@ -164,6 +165,7 @@ class OverviewController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $overview->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('overviews');
             }
         }

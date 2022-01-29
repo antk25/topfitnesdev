@@ -36,16 +36,18 @@ Route::post('/notifications/mark', [NotificationController::class, 'markNotifica
 
 Route::resource('/brands', BrandController::class);
 Route::post('/brands/import', [BrandController::class, 'import'])->name('brands.import');
+Route::get('/export/brands', [BrandController::class, 'export'])->name('brands.export');
 
 Route::resource('/specs', SpecController::class);
 Route::post('/specs/import', [SpecController::class, 'import'])->name('specs.import');
+Route::get('/export/specs', [SpecController::class, 'export'])->name('specs.export');
 
 Route::resource('/bracelets', BraceletController::class);
 Route::get('/bracelet/restore/{bracelet}', [BraceletController::class, 'restore'])->name('bracelets.restore');
 
 Route::get('/gradeupdate', [BraceletController::class, 'gradeUpdate'])->name('bracelets.updategrades');
 Route::post('/import', [BraceletController::class, 'import'])->name('bracelets.import');
-Route::get('/export', [BraceletController::class, 'export'])->name('bracelets.export');
+Route::get('/export/bracelets', [BraceletController::class, 'export'])->name('bracelets.export');
 
 Route::resource('/menuitems', MenuItemController::class);
 Route::resource('/groupmenus', GroupMenuController::class);

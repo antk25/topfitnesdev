@@ -87,7 +87,7 @@ class Bracelets extends Component
                                         ]);
 
 
-        $bracelets = Bracelet::with('sellers', 'media', 'brands')->filter($filters)->paginate(15);
+        $bracelets = Bracelet::with('sellers', 'media', 'brand')->filter($filters)->paginate(15);
 
         $brands = Brand::pluck('id', 'name')->all();
 

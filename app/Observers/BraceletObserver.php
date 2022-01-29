@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Bracelet;
+use Carbon\Carbon;
 
 class BraceletObserver
 {
@@ -25,7 +26,7 @@ class BraceletObserver
      */
     public function updated(Bracelet $bracelet)
     {
-       
+
 
 
 
@@ -61,7 +62,7 @@ class BraceletObserver
      */
     public function forceDeleted(Bracelet $bracelet)
     {
-        //
+        $bracelet->reviews->each->delete();
     }
 
     protected function setPublishedAt (Bracelet $bracelet)

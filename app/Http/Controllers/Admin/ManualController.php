@@ -100,6 +100,7 @@ class ManualController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $manual->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('manuals');
             }
         }
@@ -176,6 +177,7 @@ class ManualController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $manual->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('manuals');
             }
         }

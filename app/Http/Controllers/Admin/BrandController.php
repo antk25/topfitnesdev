@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\BrandExport;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Http\Requests\Admin\BrandRequest;
@@ -21,9 +22,7 @@ class BrandController extends Controller
     {
         $brands = Brand::paginate(20);
 
-        $lastfile = head(Storage::files('import/brands'));
-
-        return view('admin.brands.index', compact('brands', 'lastfile'));
+        return view('admin.brands.index', compact('brands'));
     }
 
     /**
@@ -114,7 +113,7 @@ class BrandController extends Controller
 
     public function import(Request $request)
     {
-        $file = $request->file('importFile')->store('import/brands');
+        $file = $request->file('importFile');
 
         $import = new BrandsImport();
 
@@ -142,5 +141,10 @@ class BrandController extends Controller
         Brand::destroy($id);
 
         return redirect()->route('brands.index');
+    }
+
+    public function export()
+    {
+        return new BrandExport;
     }
 }

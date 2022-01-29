@@ -110,6 +110,7 @@ class RatingController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $rating->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('ratings');
             }
         }
@@ -250,6 +251,7 @@ class RatingController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $rating->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('ratings');
             }
         }

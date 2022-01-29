@@ -133,6 +133,7 @@ class PostController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $post->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('posts');
             }
         }

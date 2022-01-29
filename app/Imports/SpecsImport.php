@@ -26,14 +26,14 @@ class SpecsImport implements
 
     public function model(array $row)
     {
-        $values = explode("|", $row['value']);
-        $slugs = explode("|", $row['slugs']);
-        $values = array_combine($values, $slugs);
+        // $values = explode("|", $row['value']);
+        // $slugs = explode("|", $row['slugs']);
+        // $values = array_combine($values, $slugs);
 
         $spec = Spec::create([
            'name' => $row['name'],
            'device' => $row['device'],
-           'value' => $values,
+           'value' => json_decode($row['value'], true, 64),
         ]);
 
         return $spec;

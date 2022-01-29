@@ -107,6 +107,7 @@ class ComparisonController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $comparison->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('comparisons');
             }
         }
@@ -176,6 +177,7 @@ class ComparisonController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $comparison->addMedia($file)
+                    ->withResponsiveImages()
                     ->toMediaCollection('comparisons');
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SpecExport;
 use App\Http\Controllers\Controller;
 use App\Imports\SpecsImport;
 use Illuminate\Http\Request;
@@ -21,9 +22,7 @@ class SpecController extends Controller
     {
         $specs = Spec::paginate(20);
 
-        $lastfile = head(Storage::files('import/specs'));
-
-        return view('admin.specs.index', compact('specs', 'lastfile'));
+        return view('admin.specs.index', compact('specs'));
     }
 
     /**
@@ -103,6 +102,7 @@ class SpecController extends Controller
         $slugs = array_column($allvalues, 'slug');
 
         $values = array_combine($values, $slugs);
+        dd($values);
 
         $spec->update([
             'device' => request('device'),
@@ -140,7 +140,7 @@ class SpecController extends Controller
         'importFile' => 'required',
        ]);
 
-       $file = $request->file('importFile')->store('import/specs');
+       $file = $request->file('importFile');
 
        $import = new SpecsImport();
 
@@ -156,5 +156,9 @@ class SpecController extends Controller
        return back()->with('success', 'Завершено!');
     }
 
+    public function export()
+    {
+        return new SpecExport;
+    }
 
 }

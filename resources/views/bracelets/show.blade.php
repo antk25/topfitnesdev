@@ -77,11 +77,11 @@
                                 data-placeholder="assets/img/expandable-img-gallery-placeholder.svg">
                                 @foreach ($media as $image)
                                     <li class="col-4 col-3@sm js-exp-gallery__item">
-                                        <figure class="border border-contrast-middle border-opacity-30% shadow-xs">
+                                        {{-- <figure class="border border-contrast-middle border-opacity-30% shadow-xs">
                                             <img src="{{ $image->getFullUrl('320') }}"
                                                  data-modal-src="{{ $image->getFullUrl() }}" alt="Image Description">
                                             <figcaption class="sr-only js-exp-gallery__caption"></figcaption>
-                                        </figure>
+                                        </figure> --}}
                                     </li>
                                 @endforeach
                             </ul>

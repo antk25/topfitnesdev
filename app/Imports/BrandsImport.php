@@ -38,11 +38,14 @@ class BrandsImport implements
         $brand = Brand::create([
            'name' => $row['name'],
            'slug' => Str::slug($row['name'], '-'),
+           'title' => $row['title'],
+           'subtitle' => $row['subtitle'],
+           'description' => $row['description'],
+           'about' => $row['about'],
         ]);
 
         return $brand;
     }
-
 
     public function rules(): array
     {
