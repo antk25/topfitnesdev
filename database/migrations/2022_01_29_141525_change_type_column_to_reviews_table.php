@@ -27,8 +27,7 @@ class ChangeTypeColumnToReviewsTable extends Migration
     public function down()
     {
         Schema::table('reviews', function (Blueprint $table) {
-           $table->json('what_like')->nullable()->change();
-           $table->json('what_nolike')->nullable()->change();
+
         });
     }
 }
