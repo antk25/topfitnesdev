@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Bracelet;
 use App\Models\Review;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -36,8 +37,8 @@ class ReviewsImport implements ToModel, WithHeadingRow
                 'review_text' => $row['review_text'],
                 'what_like' => $row['what_like'],
                 'what_nolike' => $row['what_nolike'],
-                'votes_review' => $row['votes_review'],
-                'created_at' => $row['created_at'],
+                // 'votes_review' => $row['votes_review'],
+                'created_at' => Carbon::now()->subDays(rand(0, 730))->format('Y-m-d'),
             ]);
         }
         else {

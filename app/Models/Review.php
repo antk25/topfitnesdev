@@ -50,7 +50,8 @@ class Review extends Model
         'rating_user',
         'review_text',
         'what_like',
-        'what_nolike'
+        'what_nolike',
+        'created_at'
     ];
 
     public function reviewable()

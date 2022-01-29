@@ -1,10 +1,9 @@
 @extends('admin.layouts.base')
 
-@section('styles')
-    @parent
-    <link rel="stylesheet" href="{{ asset('css/admin/trix.css') }}">
-@endsection
-
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
+@endpush
 
 @section('content')
 
@@ -145,10 +144,11 @@
                 <div class="select">
                     <select class="select__input form-control" name="period_use" id="period_use">
                         <option value="">Период владения браслетом</option>
-                        <option value="Несколько дней" @if ($review->period_use == 'Несколько дней') selected @endif>Несколько дней</option>
-                        <option value="Более 2-х недель" @if ($review->period_use == 'Более 2-х недель') selected @endif>Более 2-х недель</option>
-                        <option value="Более месяца" @if ($review->period_use == 'Более месяца') selected @endif>Более месяца</option>
-                        <option value="Более полугода" @if ($review->period_use == 'Более полугода') selected @endif>Более полугода</option>
+                        <option value="только купил" @if ($review->period_use == 'только купил') selected @endif>только купил</option>
+                        <option value="несколько дней" @if ($review->period_use == 'несколько дней') selected @endif>несколько дней</option>
+                        <option value="менее месяца" @if ($review->period_use == 'менее месяца') selected @endif>менее месяца</option>
+                        <option value="несколько месяцев" @if ($review->period_use == 'несколько месяцев') selected @endif>несколько месяцев</option>
+                        <option value="более полугода" @if ($review->period_use == 'более полугода') selected @endif>более полугода</option>
                     </select>
 
                     <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -161,13 +161,21 @@
                 </div>
 
 
-            <label class="inline-block text-sm color-contrast-medium margin-bottom-xs" for="emoji-rate-msg">Напишите свои впечателения о товаре</label>
+            <x-admin.codemirror-editor :content="$review->review_text" name="review_text" id="review_text">
+            </x-admin.codemirror-editor>
 
-            <textarea class="form-control width-100% hide" rows="4" name="review_text" id="review_text">{{ $review->review_text }}</textarea>
-            @include('admin.layouts.parts.trixeditor')
-            @error('review_text')
-            <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
-            @enderror
+            <div class="grid">
+                <div class="col-6@md">
+                    <x-admin.codemirror-editor :content="$review->what_like" name="what_like" id="what_like">
+                        <h4>Что понравилось:</h4>
+                    </x-admin.codemirror-editor>
+                </div>
+                <div class="col-6@md">
+                    <x-admin.codemirror-editor :content="$review->what_nolike" name="what_nolike" id="what_nolike">
+                        <h4>Что не понравилось:</h4>
+                    </x-admin.codemirror-editor>
+                </div>
+            </div>
 
             <div class="margin-top-xs text-right">
                 <button type="submit" class="btn btn--primary">Отправить</button>
@@ -177,8 +185,4 @@
   </form>
 @endsection
 
-@section('scripts')
-    @parent
-    <script src="{{ asset("js/admin/trix.js") }}"></script>
-@endsection
 

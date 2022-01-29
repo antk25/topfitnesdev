@@ -55,6 +55,7 @@ Route::resource('/grades', GradeController::class);
 Route::resource('/sellers', SellerController::class);
 Route::resource('/reviews', ReviewController::class);
 Route::post('/reviews/import', [ReviewController::class, 'import'])->name('reviews.import');
+Route::get('/export/reviews', [ReviewController::class, 'export'])->name('reviews.export');
 
 Route::resource('/ratings', RatingController::class);
 Route::get('/rating/restore/{rating}', [RatingController::class, 'restore'])->name('ratings.restore');

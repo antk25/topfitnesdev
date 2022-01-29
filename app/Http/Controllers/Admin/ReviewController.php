@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ReviewExport;
 use App\Http\Controllers\Controller;
 use App\Imports\BraceletsImport;
 use App\Imports\ReviewsImport;
@@ -57,6 +58,8 @@ class ReviewController extends Controller
             'reviewable_id' => $pst[0],
             'name' => request('name'),
             'email' => request('email'),
+            'what_like' => request('what_like'),
+            'what_nolike' => request('what_nolike'),
             'review_text' => request('review_text'),
             'rating_user' => request('rating_user'),
             'period_use' => request('period_use')
@@ -119,6 +122,8 @@ class ReviewController extends Controller
             'bracelet_id' => request('bracelet_id'),
             'name' => request('name'),
             'email' => request('email'),
+            'what_like' => request('what_like'),
+            'what_nolike' => request('what_nolike'),
             'review_text' => request('review_text'),
             'rating_user' => request('rating_user'),
             'period_use' => request('period_use')
@@ -177,24 +182,17 @@ class ReviewController extends Controller
             'importFile' => 'required',
         ]);
 
-        $file = $request->file('importFile')->store('import');
-
-        //    $import = new BraceletsImport();
-
-        //    $import->import($file);
+        $file = $request->file('importFile');
 
         Excel::import(new ReviewsImport(), $file);
-
-
-
-        //    if ($import->failures()->isNotEmpty())
-        //    {
-        //        return back()->withFailures($import->failures());
-        //    }
-
 
         return back()->with('success', 'Завершено!');
     }
 
+
+    public function export()
+    {
+        return new ReviewExport;
+    }
 
 }

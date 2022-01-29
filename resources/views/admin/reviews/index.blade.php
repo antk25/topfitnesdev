@@ -13,7 +13,8 @@
 
         <form action="{{ route('reviews.import') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="file-upload inline-block">
+            <div class="flex gap-xxs">
+            <div class="file-upload">
                 <label for="importFile" class="file-upload__label btn btn--primary">
         <span class="flex items-center">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -29,9 +30,15 @@
                 </label>
 
                 <input type="file" class="file-upload__input" name="importFile" id="importFile">
+                👉
             </div>
-            <button class="btn" type="submit">Импортировать</button>
+            <button class="btn btn--success" type="submit">Импортировать</button>
+            </div>
         </form>
+
+        <div class="margin-y-sm">
+          <a href="{{ route('reviews.export') }}" type="button" class="btn btn--subtle">Экспорт &#128640;</a>
+      </div>
 
         @if (isset($errors) && $errors->any())
             @foreach ($errors->all() as $error)
