@@ -60,6 +60,9 @@
 </section>
     </article>
 
+    <x-cards.author :author="$rating->user">
+    </x-cards.author>
+
 <div class="container max-width-md">
 
     <div class="bg padding-x-lg@md margin-y-sm@md">

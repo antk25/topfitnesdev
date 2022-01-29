@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Егор',
             'contacts' => '{}',
             'email' => 'egorkunaev@gmail.com',
+            'about' => 'Занимаюсь изучением рынка мобильных и других гаджетов. Делаю обзоры и тестирование фитнес-браслетов. Составляю рейтинги и пишу статьи для нескольких профильных сайтов.',
             'password' => Hash::make('egor12345'),
             'is_admin' => true,
         ]
