@@ -8,7 +8,7 @@
                     <figure
                         class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-x-auto margin-bottom-sm">
                         <img alt="Изображение {{ $item->name }}" class="block width-100% height-100% object-cover"
-                             src="{{ $item->getFirstMediaUrl('bracelets', '320') }}">
+                             src="{{ $item->getFirstMediaUrl('bracelets', 'thumb') }}">
                     </figure>
                     {{ $item->name }}
                 </th>

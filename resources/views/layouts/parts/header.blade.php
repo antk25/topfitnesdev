@@ -1,416 +1,312 @@
-<header class="mega-nav mega-nav--mobile mega-nav--desktop@md position-relative js-mega-nav">
-        <div class="mega-nav__container">
-          <!-- 👇 logo -->
-          <a href="#0" class="mega-nav__logo">
-            <svg width="104" height="30" viewBox="0 0 104 30">
-              <title>Go to homepage</title>
-              <path d="M37.54 24.08V3.72h4.92v16.37h8.47v4zM60.47 24.37a7.82 7.82 0 01-5.73-2.25 8.36 8.36 0 01-2-5.62 8.32 8.32 0 012.08-5.71 8 8 0 015.64-2.18 8.07 8.07 0 015.68 2.2 8.49 8.49 0 012 5.69 8.63 8.63 0 01-1.78 5.38 7.6 7.6 0 01-5.89 2.49zm0-3.67c2.42 0 2.73-3 2.73-4.23s-.31-4.26-2.73-4.26-2.79 3-2.79 4.26.32 4.23 2.82 4.23zM95.49 24.37a7.82 7.82 0 01-5.73-2.25 8.36 8.36 0 01-2-5.62 8.32 8.32 0 012.08-5.71 8.4 8.4 0 0111.31 0 8.43 8.43 0 012 5.69 8.6 8.6 0 01-1.77 5.38 7.6 7.6 0 01-5.89 2.51zm0-3.67c2.42 0 2.73-3 2.73-4.23s-.31-4.26-2.73-4.26-2.8 3-2.8 4.26.31 4.23 2.83 4.23zM77.66 30c-5.74 0-7-3.25-7.23-4.52l4.6-.26c.41.91 1.17 1.41 2.76 1.41a2.45 2.45 0 002.82-2.53v-2.68a7 7 0 01-1.7 1.75 6.12 6.12 0 01-5.85-.08c-2.41-1.37-3-4.25-3-6.66 0-.89.12-3.67 1.45-5.42a5.67 5.67 0 014.64-2.4c1.2 0 3 .25 4.46 2.82V8.81h4.85v15.33a5.2 5.2 0 01-2.12 4.32A9.92 9.92 0 0177.66 30zm.15-9.66c2.53 0 2.81-2.69 2.81-3.91s-.31-4-2.81-4-2.81 2.8-2.81 4 .27 3.91 2.81 3.91zM55.56 3.72h9.81v2.41h-9.81z" fill="var(--color-contrast-higher)" />
-              <circle cx="15" cy="15" r="15" fill="var(--color-primary)" />
-            </svg>
-
-          </a>
-
-          <!-- 👇 icon buttons --mobile -->
-          <div class="mega-nav__icon-btns mega-nav__icon-btns--mobile">
-            @if (auth()->check())
-
-            <a href="{{ route('profile.index') }}" class="mega-nav__icon-btn">
-
-              <svg class="icon" viewBox="0 0 24 24">
-                <title>Перейти к настройкам профиля</title>
-                <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                  <circle cx="12" cy="6" r="4" />
-                  <path d="M12 13a8 8 0 00-8 8h16a8 8 0 00-8-8z" />
-                </g>
-              </svg>
-            </a>
-                @else
-                <a href="{{ route('login') }}" class="mega-nav__icon-btn">
-
-                  <svg class="icon" viewBox="0 0 24 24">
-                    <title>Войти или зарегистрироваться</title>
-                    <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                      <circle cx="12" cy="6" r="4" />
-                      <path d="M12 13a8 8 0 00-8 8h16a8 8 0 00-8-8z" />
-                    </g>
-                  </svg>
+<header class="header-v2 js-header-v2" data-animation="on" data-animation-offset="400">
+    <div class="header-v2__wrapper">
+        <div class="header-v2__container container max-width-lg">
+            <div class="header-v2__logo">
+                <a href="/">
+                    <svg width="104" height="30" viewBox="0 0 104 30">
+                        <title>Go to homepage</title>
+                        <path
+                            d="M37.54 24.08V3.72h4.92v16.37h8.47v4zM60.47 24.37a7.82 7.82 0 01-5.73-2.25 8.36 8.36 0 01-2-5.62 8.32 8.32 0 012.08-5.71 8 8 0 015.64-2.18 8.07 8.07 0 015.68 2.2 8.49 8.49 0 012 5.69 8.63 8.63 0 01-1.78 5.38 7.6 7.6 0 01-5.89 2.49zm0-3.67c2.42 0 2.73-3 2.73-4.23s-.31-4.26-2.73-4.26-2.79 3-2.79 4.26.32 4.23 2.82 4.23zM95.49 24.37a7.82 7.82 0 01-5.73-2.25 8.36 8.36 0 01-2-5.62 8.32 8.32 0 012.08-5.71 8.4 8.4 0 0111.31 0 8.43 8.43 0 012 5.69 8.6 8.6 0 01-1.77 5.38 7.6 7.6 0 01-5.89 2.51zm0-3.67c2.42 0 2.73-3 2.73-4.23s-.31-4.26-2.73-4.26-2.8 3-2.8 4.26.31 4.23 2.83 4.23zM77.66 30c-5.74 0-7-3.25-7.23-4.52l4.6-.26c.41.91 1.17 1.41 2.76 1.41a2.45 2.45 0 002.82-2.53v-2.68a7 7 0 01-1.7 1.75 6.12 6.12 0 01-5.85-.08c-2.41-1.37-3-4.25-3-6.66 0-.89.12-3.67 1.45-5.42a5.67 5.67 0 014.64-2.4c1.2 0 3 .25 4.46 2.82V8.81h4.85v15.33a5.2 5.2 0 01-2.12 4.32A9.92 9.92 0 0177.66 30zm.15-9.66c2.53 0 2.81-2.69 2.81-3.91s-.31-4-2.81-4-2.81 2.8-2.81 4 .27 3.91 2.81 3.91zM55.56 3.72h9.81v2.41h-9.81z"
+                            fill="var(--color-contrast-higher)" />
+                        <circle cx="15" cy="15" r="15" fill="var(--color-primary)" />
+                    </svg>
                 </a>
-                @endif
+            </div>
 
-            <button class="reset mega-nav__icon-btn mega-nav__icon-btn--search js-tab-focus" aria-label="Toggle search" aria-controls="mega-nav-search">
-              <svg class="icon" viewBox="0 0 24 24">
-                <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                  <path d="M4.222 4.222l15.556 15.556" />
-                  <path d="M19.778 4.222L4.222 19.778" />
-                  <circle cx="9.5" cy="9.5" r="6.5" />
-                </g>
-              </svg>
+            <button class="header-v2__nav-control reset anim-menu-btn js-anim-menu-btn js-tab-focus"
+                aria-label="Toggle menu">
+                <i class="anim-menu-btn__icon anim-menu-btn__icon--close" aria-hidden="true"></i>
             </button>
 
-            <button class="reset mega-nav__icon-btn mega-nav__icon-btn--menu js-tab-focus" aria-label="Toggle menu" aria-controls="mega-nav-navigation">
-              <svg class="icon" viewBox="0 0 24 24">
-                <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                  <path d="M1 6h22" />
-                  <path d="M1 12h22" />
-                  <path d="M1 18h22" />
-                </g>
-              </svg>
-            </button>
-          </div>
+            <nav class="header-v2__nav" role="navigation">
+                <ul class="header-v2__nav-list header-v2__nav-list--main">
+                    <li class="header-v2__nav-item header-v2__nav-item--main header-v2__nav-item--search">
+                        <form>
+                            <label class="sr-only" for="searchInputX">Search</label>
+                            <input class="form-control width-100%" type="search" name="searchInputX" id="searchInputX"
+                                placeholder="Search...">
+                        </form>
+                    </li>
 
-          <div class="mega-nav__nav js-mega-nav__nav" id="mega-nav-navigation" role="navigation" aria-label="Main">
-            <div class="mega-nav__nav-inner">
-              <ul class="mega-nav__items">
-                <li class="mega-nav__label">Menu</li>
+                    <li class="header-v2__nav-item header-v2__nav-item--main header-v2__nav-item--has-children">
+                        <a href="#0" class="header-v2__nav-link">
+                            <span>Новинки</span>
+                            <svg class="header-v2__nav-dropdown-icon icon margin-left-xxxs" aria-hidden="true"
+                                viewBox="0 0 16 16">
+                                <polyline fill="none" stroke-width="1" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-miterlimit="10" points="3.5,6.5 8,11 12.5,6.5 ">
+                                </polyline>
+                            </svg>
+                        </a>
 
-                <!-- 👇 layout 1 -> tabbed content -->
-                <li class="mega-nav__item js-mega-nav__item">
-                  <button class="reset mega-nav__control js-mega-nav__control js-tab-focus">
-                    Products
-                    <i class="mega-nav__arrow-icon" aria-hidden="true">
-                      <svg class="icon" viewBox="0 0 16 16">
-                        <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                          <path d="M2 2l12 12" />
-                          <path d="M14 2L2 14" />
-                        </g>
-                      </svg>
-                    </i>
-                  </button>
-
-                  <div class="mega-nav__sub-nav-wrapper">
-                    <div class="mega-nav__sub-nav mega-nav__sub-nav--layout-1">
-                      <!-- 👇 links - visible on mobile -->
-                      <ul class="mega-nav__sub-items">
-                        <li class="mega-nav__sub-item">
-                          <a href="#0" class="mega-nav__sub-link">
-                            <span class="flex items-center gap-xs">
-
-                              <i>Product One</i>
-                            </span>
-                          </a>
-                        </li>
-
-                        <li class="mega-nav__sub-item">
-                          <a href="#0" class="mega-nav__sub-link">
-                            <span class="flex items-center gap-xs">
-
-                              <i>Product Two</i>
-                            </span>
-                          </a>
-                        </li>
-
-                        <li class="mega-nav__sub-item">
-                          <a href="#0" class="mega-nav__sub-link">
-                            <span class="flex items-center gap-xs">
-
-                              <i>Product Three</i>
-                            </span>
-                          </a>
-                        </li>
-                      </ul>
-
-                      <!-- 👇 tabs - visible on desktop -->
-                      <div class="mega-nav__tabs grid gap-lg js-tabs" data-tabs-layout="vertical">
-                        <ul class="col-4 mega-nav__tabs-controls js-tabs__controls" aria-label="Select a product">
-                          <li>
-                            <a href="#tabProduct1" class="mega-nav__tabs-control js-tab-focus" aria-selected="true">
-                              <span class="flex items-center gap-xs">
-
-
-                                <i class="margin-right-xxxs">Product One</i>
-
-                                <svg class="icon icon--xs margin-left-auto" viewBox="0 0 16 16" aria-hidden="true">
-                                  <path d="M5,2l6,6L5,14" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1" /></svg>
-                              </span>
-                            </a>
-                          </li>
-
-                          <li>
-                            <a href="#tabProduct2" class="mega-nav__tabs-control js-tab-focus" aria-selected="true">
-                              <span class="flex items-center gap-xs">
-
-
-                                <i class="margin-right-xxxs">Product Two</i>
-
-                                <svg class="icon icon--xs margin-left-auto" viewBox="0 0 16 16" aria-hidden="true">
-                                  <path d="M5,2l6,6L5,14" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1" /></svg>
-                              </span>
-                            </a>
-                          </li>
-
-                          <li>
-                            <a href="#tabProduct3" class="mega-nav__tabs-control js-tab-focus" aria-selected="true">
-                              <span class="flex items-center gap-xs">
-
-
-                                <i class="margin-right-xxxs">Product Three</i>
-
-                                <svg class="icon icon--xs margin-left-auto" viewBox="0 0 16 16" aria-hidden="true">
-                                  <path d="M5,2l6,6L5,14" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1" /></svg>
-                              </span>
-                            </a>
-                          </li>
-                        </ul>
-
-                        <div class="col-8 js-tabs__panels">
-                          <section id="tabProduct1" class="mega-nav__tabs-panel js-tabs__panel">
-                            <a href="#0" class="mega-nav__tabs-img margin-bottom-md">
-
-                            </a>
-
-                            <div class="text-component">
-                              <h1 class="text-xl">Product One</h1>
-                              <p class="color-contrast-medium">Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, quaerat.</p>
-                              <p class="flex gap-xxs">
-                                <a href="#0" class="btn btn--subtle">Learn More</a>
-                                <a href="#0" class="btn btn--primary">Buy</a>
-                              </p>
-                            </div>
-                          </section>
-
-                          <section id="tabProduct2" class="mega-nav__tabs-panel js-tabs__panel">
-                            <a href="#0" class="mega-nav__tabs-img margin-bottom-md">
-
-                            </a>
-
-                            <div class="text-component">
-                              <h1 class="text-xl">Product Two</h1>
-                              <p class="color-contrast-medium">Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, quaerat.</p>
-                              <p class="flex gap-xxs">
-                                <a href="#0" class="btn btn--subtle">Learn More</a>
-                                <a href="#0" class="btn btn--primary">Buy</a>
-                              </p>
-                            </div>
-                          </section>
-
-                          <section id="tabProduct3" class="mega-nav__tabs-panel js-tabs__panel">
-                            <a href="#0" class="mega-nav__tabs-img margin-bottom-md">
-
-                            </a>
-
-                            <div class="text-component">
-                              <h1 class="text-xl">Product Three</h1>
-                              <p class="color-contrast-medium">Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, quaerat.</p>
-                              <p class="flex gap-xxs">
-                                <a href="#0" class="btn btn--subtle">Learn More</a>
-                                <a href="#0" class="btn btn--primary">Buy</a>
-                              </p>
-                            </div>
-                          </section>
+                        <div class="header-v2__nav-dropdown header-v2__nav-dropdown--md">
+                            <ul class="header-v2__nav-list header-v2__nav-list--title-desc">
+                                @foreach ($items as $item)
+                                    @if ($item->name == 'top_brasletov')
+                                        @foreach ($item->menuitems as $menu)
+                                            <li class="header-v2__nav-item">
+                                                <a href="{{ $menu->link }}" class="header-v2__nav-link">
+                                                    <figure
+                                                        class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
+                                                        <img class="header-v2__nav-icon"
+                                                            src="{{ $menu->getFirstMediaUrl('menu', 'thumb') }}"
+                                                            alt="">
+                                                    </figure>
+                                                    <div>
+                                                        <strong>{{ $menu->name }}</strong>
+                                                        <small>{{ $menu->about }}</small>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            </ul>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                    </li>
 
-                <!-- 👇 layout 2 -> multiple lists -->
-                <li class="mega-nav__item js-mega-nav__item">
-                  <button class="reset mega-nav__control js-mega-nav__control js-tab-focus">
-                    Lists
-                    <i class="mega-nav__arrow-icon" aria-hidden="true">
-                      <svg class="icon" viewBox="0 0 16 16">
-                        <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                          <path d="M2 2l12 12" />
-                          <path d="M14 2L2 14" />
-                        </g>
-                      </svg>
-                    </i>
-                  </button>
+                    <li class="header-v2__nav-item header-v2__nav-item--main header-v2__nav-item--has-children">
+                        <a href="#0" class="header-v2__nav-link" aria-current="page">
+                            <span>Категории</span>
+                            <svg class="header-v2__nav-dropdown-icon icon margin-left-xxxs" aria-hidden="true"
+                                viewBox="0 0 16 16">
+                                <polyline fill="none" stroke-width="1" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-miterlimit="10" points="3.5,6.5 8,11 12.5,6.5 ">
+                                </polyline>
+                            </svg>
+                        </a>
 
-                  <div class="mega-nav__sub-nav-wrapper">
-                    <div class="mega-nav__sub-nav mega-nav__sub-nav--layout-2">
-               <ul class="mega-nav__sub-items">
-                  <li class="mega-nav__label">Группа 1</li>
-                  @foreach ($items as $item)
-                  <li class="mega-nav__sub-item"><a href="{{ $item->link }}" class="mega-nav__sub-link">{{ $item->name }}</a></li>
-                  @endforeach
+                        <div class="header-v2__nav-dropdown header-v2__nav-dropdown--md">
+                            <ul class="header-v2__nav-list">
+                                <li class="header-v2__nav-item header-v2__nav-col-2">
+
+                                    @foreach ($items as $item)
+                                        @if ($item->id == 4)
+                                            <ul class="header-v2__nav-list">
+                                                <li class="header-v2__nav-item header-v2__nav-item--label">
+                                                    {{ $item->name }}</li>
+                                                @foreach ($item->menuitems as $menu)
+                                                    <li class="header-v2__nav-item"><a href="{{ $menu->link }}"
+                                                            class="header-v2__nav-link">{{ $menu->name }}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        @elseif ($item->id == 6)
+                                            <ul class="header-v2__nav-list">
+                                                <li class="header-v2__nav-item header-v2__nav-item--label">
+                                                    {{ $item->name }}</li>
+                                                @foreach ($item->menuitems as $menu)
+                                                    <li class="header-v2__nav-item"><a href="{{ $menu->link }}"
+                                                            class="header-v2__nav-link">{{ $menu->name }}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    @endforeach
+
+                                </li>
+
+                                @foreach ($items as $item)
+                                    @if ($item->id == 7)
+                                        <li class="header-v2__nav-item header-v2__nav-item--divider" role="separator">
+                                        </li>
+
+                                        @foreach ($item->menuitems as $menu)
+                                            <li class="header-v2__nav-item">
+                                                <ul class="header-v2__nav-list header-v2__nav-list--title-desc">
+                                                    <li class="header-v2__nav-item">
+                                                        <a href="{{ $menu->link }}" class="header-v2__nav-link">
+                                                            <figure
+                                                                class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
+                                                                <img class="header-v2__nav-icon"
+                                                                    src="{{ $menu->getFirstMediaUrl('menu', 'thumb') }}"
+                                                                    alt="">
+                                                            </figure>
+
+                                                            <div>
+                                                                <strong>{{ $menu->name }}</strong>
+                                                                <small>{{ $menu->about }}</small>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="header-v2__nav-item header-v2__nav-item--main header-v2__nav-item--has-children">
+                        <a href="#0" class="header-v2__nav-link">
+                            <span>Блог</span>
+                            <svg class="header-v2__nav-dropdown-icon icon margin-left-xxxs" aria-hidden="true"
+                                viewBox="0 0 16 16">
+                                <polyline fill="none" stroke-width="1" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-miterlimit="10" points="3.5,6.5 8,11 12.5,6.5 ">
+                                </polyline>
+                            </svg>
+                        </a>
+
+                        <div class="header-v2__nav-dropdown header-v2__nav-dropdown--md">
+                            <ul class="header-v2__nav-list header-v2__nav-list--title-desc">
+                                @foreach ($items as $item)
+                                    @if ($item->id == 9)
+                                        @foreach ($item->menuitems as $menu)
+                                            <li class="header-v2__nav-item">
+                                                <a href="{{ $menu->link }}" class="header-v2__nav-link">
+                                                    <figure
+                                                        class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
+                                                        <img class="header-v2__nav-icon"
+                                                            src="{{ $menu->getFirstMediaUrl('menu', 'thumb') }}"
+                                                            alt="">
+                                                    </figure>
+                                                    <div>
+                                                        <strong>{{ $menu->name }}</strong>
+                                                        <small>{{ $menu->about }}</small>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="header-v2__nav-item header-v2__nav-item--main"><a href="/katalog"
+                            class="header-v2__nav-link">Каталог</a></li>
+                    <li class="header-v2__nav-item header-v2__nav-item--main"><a href="/sale"
+                            class="header-v2__nav-link">Скидки</a></li>
                 </ul>
 
-                      <div class="mega-nav__card width-100% max-width-xs margin-x-auto">
-                        <a href="#0" class="block radius-lg overflow-hidden">
-
+                <ul class="header-v2__nav-list header-v2__nav-list--main">
+                    <li class="header-v2__nav-item header-v2__nav-item--main header-v2__nav-item--has-children">
+                        <a href="#0" class="header-v2__nav-link">
+                            <span>Help</span>
+                            <svg class="header-v2__nav-dropdown-icon icon margin-left-xxxs" aria-hidden="true"
+                                viewBox="0 0 16 16">
+                                <polyline fill="none" stroke-width="1" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-miterlimit="10" points="3.5,6.5 8,11 12.5,6.5 ">
+                                </polyline>
+                            </svg>
                         </a>
 
-                        <div class="margin-top-sm">
-                          <h3 class="text-base"><a href="#0" class="mega-nav__card-title">Browse all →</a></h3>
+                        <div class="header-v2__nav-dropdown">
+                            <ul class="header-v2__nav-list">
+                                <li class="header-v2__nav-item"><a href="#0" class="header-v2__nav-link">Sub Item
+                                        One</a></li>
+                                <li class="header-v2__nav-item">
+                                    <a href="#0" class="header-v2__nav-link justify-between">
+                                        <span>Sub Item Two <i class="sr-only">(opens in new window)</i></span>
+                                        <svg class="icon icon--xxs" aria-hidden="true" viewBox="0 0 12 12">
+                                            <g stroke-width="1" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" fill="none">
+                                                <path d="M11.5,8.5v2a1,1,0,0,1-1,1h-9a1,1,0,0,1-1-1v-9a1,1,0,0,1,1-1h2">
+                                                </path>
+                                                <polyline points="6.5 0.5 11.5 0.5 11.5 5.5"></polyline>
+                                                <line x1="11.5" y1="0.5" x2="5.5" y2="6.5"></line>
+                                            </g>
+                                        </svg>
+                                    </a>
+                                </li>
+
+                                <li class="header-v2__nav-item header-v2__nav-item--has-children">
+                                    <a href="#0" class="header-v2__nav-link justify-between">
+                                        <span>Sub Item Three</span>
+                                        <svg class="icon header-v2__nav-dropdown-icon" aria-hidden="true"
+                                            viewBox="0 0 16 16">
+                                            <g stroke-width="1" stroke="currentColor">
+                                                <polyline fill="none" stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-miterlimit="10"
+                                                    points="6.5,3.5 11,8 6.5,12.5 "></polyline>
+                                            </g>
+                                        </svg>
+                                    </a>
+
+                                    <div class="header-v2__nav-dropdown header-v2__nav-dropdown--nested">
+                                        <ul class="header-v2__nav-list">
+                                            <li class="header-v2__nav-item"><a href="#0" class="header-v2__nav-link">Sub
+                                                    Item One</a></li>
+                                            <li class="header-v2__nav-item"><a href="#0" class="header-v2__nav-link">Sub
+                                                    Item Two</a></li>
+                                            <li class="header-v2__nav-item"><a href="#0" class="header-v2__nav-link">Sub
+                                                    Item Three</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="header-v2__nav-item header-v2__nav-item--divider" role="separator"></li>
+                                <li class="header-v2__nav-item header-v2__nav-item--label">Label</li>
+                                <li class="header-v2__nav-item"><a href="#0" class="header-v2__nav-link">Sub Item
+                                        Four</a></li>
+                            </ul>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                    </li>
+                    <li class="header-v2__nav-item header-v2__nav-item--main header-v2__nav-item--divider"
+                        role="separator"></li>
 
-                <!-- 👇 layout 3 -> gallery -->
-                <li class="mega-nav__item js-mega-nav__item">
-                  <button class="reset mega-nav__control js-mega-nav__control js-tab-focus">
-                    Gallery
-                    <i class="mega-nav__arrow-icon" aria-hidden="true">
-                      <svg class="icon" viewBox="0 0 16 16">
-                        <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                          <path d="M2 2l12 12" />
-                          <path d="M14 2L2 14" />
-                        </g>
-                      </svg>
-                    </i>
-                  </button>
-
-                  <div class="mega-nav__sub-nav-wrapper">
-                    <div class="mega-nav__sub-nav mega-nav__sub-nav--layout-3">
-                      <div class="mega-nav__card">
-                        <a href="#0" class="block radius-lg overflow-hidden">
-
-                        </a>
-
-                        <div class="margin-top-sm">
-                          <h3 class="text-base"><a href="#0" class="mega-nav__card-title">Clothing</a></h3>
-                        </div>
-                      </div>
-
-                      <div class="mega-nav__card">
-                        <a href="#0" class="block radius-lg overflow-hidden">
-
-                        </a>
-
-                        <div class="margin-top-sm">
-                          <h3 class="text-base"><a href="#0" class="mega-nav__card-title">Shoes</a></h3>
-                        </div>
-                      </div>
-
-                      <div class="mega-nav__card">
-                        <a href="#0" class="block radius-lg overflow-hidden">
-
-                        </a>
-
-                        <div class="margin-top-sm">
-                          <h3 class="text-base"><a href="#0" class="mega-nav__card-title">Home</a></h3>
-                        </div>
-                      </div>
-
-                      <div class="mega-nav__card">
-                        <a href="#0" class="block radius-lg overflow-hidden">
-
-                        </a>
-
-                        <div class="margin-top-sm">
-                          <h3 class="text-base"><a href="#0" class="mega-nav__card-title">Accessories</a></h3>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                <!-- 👇 layout 4 -> single list -->
-                <li class="mega-nav__item js-mega-nav__item">
-                  <button class="reset mega-nav__control js-mega-nav__control js-tab-focus">
-                    Support
-                    <i class="mega-nav__arrow-icon" aria-hidden="true">
-                      <svg class="icon" viewBox="0 0 16 16">
-                        <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                          <path d="M2 2l12 12" />
-                          <path d="M14 2L2 14" />
-                        </g>
-                      </svg>
-                    </i>
-                  </button>
-
-                  <div class="mega-nav__sub-nav-wrapper">
-                    <div class="mega-nav__sub-nav mega-nav__sub-nav--layout-4">
-                      <ul class="mega-nav__sub-items">
-                        <li class="mega-nav__label">Help &amp; Support</li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Documentation</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Questions &amp; Answers</a></li>
-                        <li class="mega-nav__sub-item"><a href="#0" class="mega-nav__sub-link">Contact us</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-
-                <li class="mega-nav__label">Other</li>
-
-                <!-- 👇 link -->
-                <li class="mega-nav__item">
-                  <a href="#0" class="mega-nav__control">Link</a>
-                </li>
-              </ul>
-
-              <ul class="mega-nav__items">
-                <!-- 👇 icon buttons --desktop -->
-                @if (auth()->check())
-                <li class="mega-nav__icon-btns mega-nav__icon-btns--desktop">
-                  <div class="dropdown inline-block js-dropdown">
-                    <div class="mega-nav__icon-btn dropdown__wrapper inline-block">
-                      <a href="#0" class="color-inherit flex height-100% width-100% flex-center dropdown__trigger js-dropdown__trigger">
-                        @if (Auth::user()->getFirstMediaUrl('avatars', 'thumb'))
-
-                            <img class="radius-50%" src="{{ Auth::user()->getFirstMediaUrl('avatars', 'thumb') }}">
-
-                          @else
-                        <svg class="icon" viewBox="0 0 24 24">
-                          <title>Go to account settings</title>
-                          <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                            <circle cx="12" cy="6" r="4" />
-                            <path d="M12 13a8 8 0 00-8 8h16a8 8 0 00-8-8z" />
-                          </g>
-                        </svg>
-                        @endif
-                      </a>
-
-                      <ul class="dropdown__menu js-dropdown__menu" aria-label="submenu">
-                        <li><a href="{{ route('profile.index') }}" class="dropdown__item">Профиль</a></li>
-                        <li class="dropdown__separator" role="separator"></li>
-
-                        <li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown__item">Выйти</a></li>
+                    @if (auth()->check())
+                        <li class="header-v2__nav-item header-v2__nav-item--main"><a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                class="header-v2__nav-link">Выйти</a></li>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                          @csrf
-                      </form>
+                            @csrf
+                        </form>
                         @can('view-admin-panel')
-                        <li><a href="/admin/dashboard" class="dropdown__item">Админка</a></li>
+                            <li class="header-v2__nav-item header-v2__nav-item--main"><a href="/admin/dashboard"
+                                    class="btn btn--primary">Админка</a></li>
                         @endcan
-                      </ul>
-                    </div>
-                  </div>
+                    @else
+                        <li class="header-v2__nav-item header-v2__nav-item--main"><a href="{{ route('login') }}"
+                                class="header-v2__nav-link">Войти</a></li>
+                    @endif
 
-                  <button class="reset mega-nav__icon-btn mega-nav__icon-btn--search js-tab-focus" aria-label="Toggle search" aria-controls="mega-nav-search">
-                    <svg class="icon" viewBox="0 0 24 24">
-                      <g class="icon__group" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2">
-                        <path d="M4.222 4.222l15.556 15.556" />
-                        <path d="M19.778 4.222L4.222 19.778" />
-                        <circle cx="9.5" cy="9.5" r="6.5" />
-                      </g>
-                    </svg>
-                  </button>
-                </li>
-                @else
-                <li class="mega-nav__item">
-                  <a href="{{ route('login') }}" class="btn btn--primary mega-nav__btn">Войти</a>
-                </li>
-                @endif
-
-                <!-- 👇 button -->
-                <li class="mega-nav__item">
-                  <a href="#0" class="btn btn--primary mega-nav__btn">Download</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 👇 search -->
-          <div class="mega-nav__search js-mega-nav__search" id="mega-nav-search">
-            <div class="mega-nav__search-inner">
-              <input class="form-control width-100%" type="reset search" name="megasite-search" id="megasite-search" placeholder="Search..." aria-label="Search">
-
-              <div class="margin-top-lg">
-                <p class="mega-nav__label">Quick Links</p>
-
-                <ul>
-                  <li><a href="#0" class="mega-nav__quick-link">Find a Store</a></li>
-                  <li><a href="#0" class="mega-nav__quick-link">Your Orders</a></li>
-                  <li><a href="#0" class="mega-nav__quick-link">Documentation</a></li>
-                  <li><a href="#0" class="mega-nav__quick-link">Questions &amp; Answers</a></li>
-                  <li><a href="#0" class="mega-nav__quick-link">Contact Us</a></li>
+                    <li class="header-v2__nav-item header-v2__nav-item--main header-v2__nav-item--search-btn">
+                        <button class="reset js-tab-focus" aria-label="Toggle search" aria-controls="modal-search">
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 16 16">
+                                <g stroke-width="1" fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-miterlimit="10">
+                                    <circle cx="7.5" cy="7.5" r="6"></circle>
+                                    <line x1="15.5" y1="15.5" x2="11.742" y2="11.742"></line>
+                                </g>
+                            </svg>
+                        </button>
+                    </li>
                 </ul>
-              </div>
-            </div>
-          </div>
+            </nav>
         </div>
-      </header>
+    </div>
+</header>
+
+<div class="modal modal--search modal--animate-fade bg bg-opacity-90% flex flex-center padding-md backdrop-blur-10 js-modal"
+    id="modal-search">
+    <div class="modal__content width-100% max-width-sm max-height-100% overflow-auto" role="alertdialog"
+        aria-labelledby="modal-search-title" aria-describedby="">
+        <form class="full-screen-search">
+            <label for="search-input-x" id="modal-search-title" class="sr-only">Search</label>
+            <input class="reset full-screen-search__input" type="search" name="search-input-x" id="search-input-x"
+                placeholder="Search...">
+            <button class="reset full-screen-search__btn">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <title>Search</title>
+                    <g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" stroke="currentColor"
+                        fill="none" stroke-miterlimit="10">
+                        <line x1="22" y1="22" x2="15.656" y2="15.656"></line>
+                        <circle cx="10" cy="10" r="8"></circle>
+                    </g>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <button class="reset modal__close-btn modal__close-btn--outer  js-modal__close js-tab-focus">
+        <svg class="icon icon--sm" viewBox="0 0 24 24">
+            <title>Close modal window</title>
+            <g fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="3" y1="3" x2="21" y2="21" />
+                <line x1="21" y1="3" x2="3" y2="21" />
+            </g>
+        </svg>
+    </button>
+</div>

@@ -23,7 +23,7 @@
                             <figure
                                 class="width-lg height-lg radius-50% flex-shrink-0 overflow-hidden margin-right-xs">
                                 <img class="block width-100% height-100% object-cover"
-                                     src="{{ $item->getFirstMediaUrl('bracelets', '320') }}">
+                                     src="{{ $item->getFirstMediaUrl('bracelets', 'thumb') }}">
                             </figure>
 
                             <div class="line-height-xs">

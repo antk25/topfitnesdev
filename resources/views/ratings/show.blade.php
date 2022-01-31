@@ -75,7 +75,7 @@
                     <div class="cart__product-img margin-right-sm">
                         <a href="#0" class="radius-md shadow-md">
                             <img alt="Изображение {{ $topbracelet->name }}"
-                                 src="{{ $topbracelet->getFirstMediaUrl('bracelet', 'thumb') }}">
+                                 src="{{ $topbracelet->getFirstMediaUrl('bracelets', 'thumb') }}">
                         </a>
                     </div>
 

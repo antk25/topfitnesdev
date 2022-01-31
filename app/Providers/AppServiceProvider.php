@@ -36,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
             'overview' => 'App\Models\Overview',
             'rating' => 'App\Models\Rating',
             'user' => 'App\Models\User',
+            'menuitem' => 'App\Models\MenuItem',
         ]);
     }
 }

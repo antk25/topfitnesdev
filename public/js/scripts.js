@@ -432,6 +432,27 @@ function resetFocusTabsStyle() {
 		}
 	}
 }());
+// File#: _1_anim-menu-btn
+// Usage: codyhouse.co/license
+(function() {
+  var menuBtns = document.getElementsByClassName('js-anim-menu-btn');
+  if( menuBtns.length > 0 ) {
+    for(var i = 0; i < menuBtns.length; i++) {(function(i){
+      initMenuBtn(menuBtns[i]);
+    })(i);}
+
+    function initMenuBtn(btn) {
+      btn.addEventListener('click', function(event){
+        event.preventDefault();
+        var status = !Util.hasClass(btn, 'anim-menu-btn--state-b');
+        Util.toggleClass(btn, 'anim-menu-btn--state-b', status);
+        // emit custom event
+        var event = new CustomEvent('anim-menu-btn-clicked', {detail: status});
+        btn.dispatchEvent(event);
+      });
+    };
+  }
+}());
 // File#: _1_back-to-top
 // Usage: codyhouse.co/license
 (function() {
@@ -2372,134 +2393,6 @@ function resetFocusTabsStyle() {
         }
     }
 }());
-// File#: _1_tabs
-// Usage: codyhouse.co/license
-(function() {
-  var Tab = function(element) {
-    this.element = element;
-    this.tabList = this.element.getElementsByClassName('js-tabs__controls')[0];
-    this.listItems = this.tabList.getElementsByTagName('li');
-    this.triggers = this.tabList.getElementsByTagName('a');
-    this.panelsList = this.element.getElementsByClassName('js-tabs__panels')[0];
-    this.panels = Util.getChildrenByClassName(this.panelsList, 'js-tabs__panel');
-    this.hideClass = 'is-hidden';
-    this.customShowClass = this.element.getAttribute('data-show-panel-class') ? this.element.getAttribute('data-show-panel-class') : false;
-    this.layout = this.element.getAttribute('data-tabs-layout') ? this.element.getAttribute('data-tabs-layout') : 'horizontal';
-    // deep linking options
-    this.deepLinkOn = this.element.getAttribute('data-deep-link') == 'on';
-    // init tabs
-    this.initTab();
-  };
-
-  Tab.prototype.initTab = function() {
-    //set initial aria attributes
-    this.tabList.setAttribute('role', 'tablist');
-    for( var i = 0; i < this.triggers.length; i++) {
-      var bool = (i == 0),
-        panelId = this.panels[i].getAttribute('id');
-      this.listItems[i].setAttribute('role', 'presentation');
-      Util.setAttributes(this.triggers[i], {'role': 'tab', 'aria-selected': bool, 'aria-controls': panelId, 'id': 'tab-'+panelId});
-      Util.addClass(this.triggers[i], 'js-tabs__trigger');
-      Util.setAttributes(this.panels[i], {'role': 'tabpanel', 'aria-labelledby': 'tab-'+panelId});
-      Util.toggleClass(this.panels[i], this.hideClass, !bool);
-
-      if(!bool) this.triggers[i].setAttribute('tabindex', '-1');
-    }
-
-    //listen for Tab events
-    this.initTabEvents();
-
-    // check deep linking option
-    this.initDeepLink();
-  };
-
-  Tab.prototype.initTabEvents = function() {
-    var self = this;
-    //click on a new tab -> select content
-    this.tabList.addEventListener('click', function(event) {
-      if( event.target.closest('.js-tabs__trigger') ) self.triggerTab(event.target.closest('.js-tabs__trigger'), event);
-    });
-    //arrow keys to navigate through tabs
-    this.tabList.addEventListener('keydown', function(event) {
-      ;
-      if( !event.target.closest('.js-tabs__trigger') ) return;
-      if( tabNavigateNext(event, self.layout) ) {
-        event.preventDefault();
-        self.selectNewTab('next');
-      } else if( tabNavigatePrev(event, self.layout) ) {
-        event.preventDefault();
-        self.selectNewTab('prev');
-      }
-    });
-  };
-
-  Tab.prototype.selectNewTab = function(direction) {
-    var selectedTab = this.tabList.querySelector('[aria-selected="true"]'),
-      index = Util.getIndexInArray(this.triggers, selectedTab);
-    index = (direction == 'next') ? index + 1 : index - 1;
-    //make sure index is in the correct interval
-    //-> from last element go to first using the right arrow, from first element go to last using the left arrow
-    if(index < 0) index = this.listItems.length - 1;
-    if(index >= this.listItems.length) index = 0;
-    this.triggerTab(this.triggers[index]);
-    this.triggers[index].focus();
-  };
-
-  Tab.prototype.triggerTab = function(tabTrigger, event) {
-    var self = this;
-    event && event.preventDefault();
-    var index = Util.getIndexInArray(this.triggers, tabTrigger);
-    //no need to do anything if tab was already selected
-    if(this.triggers[index].getAttribute('aria-selected') == 'true') return;
-
-    for( var i = 0; i < this.triggers.length; i++) {
-      var bool = (i == index);
-      Util.toggleClass(this.panels[i], this.hideClass, !bool);
-      if(this.customShowClass) Util.toggleClass(this.panels[i], this.customShowClass, bool);
-      this.triggers[i].setAttribute('aria-selected', bool);
-      bool ? this.triggers[i].setAttribute('tabindex', '0') : this.triggers[i].setAttribute('tabindex', '-1');
-    }
-
-    // update url if deepLink is on
-    if(this.deepLinkOn) {
-      history.replaceState(null, '', '#'+tabTrigger.getAttribute('aria-controls'));
-    }
-  };
-
-  Tab.prototype.initDeepLink = function() {
-    if(!this.deepLinkOn) return;
-    var hash = window.location.hash.substr(1);
-    var self = this;
-    if(!hash || hash == '') return;
-    for(var i = 0; i < this.panels.length; i++) {
-      if(this.panels[i].getAttribute('id') == hash) {
-        this.triggerTab(this.triggers[i], false);
-        setTimeout(function(){self.panels[i].scrollIntoView(true);});
-        break;
-      }
-    };
-  };
-
-  function tabNavigateNext(event, layout) {
-    if(layout == 'horizontal' && (event.keyCode && event.keyCode == 39 || event.key && event.key == 'ArrowRight')) {return true;}
-    else if(layout == 'vertical' && (event.keyCode && event.keyCode == 40 || event.key && event.key == 'ArrowDown')) {return true;}
-    else {return false;}
-  };
-
-  function tabNavigatePrev(event, layout) {
-    if(layout == 'horizontal' && (event.keyCode && event.keyCode == 37 || event.key && event.key == 'ArrowLeft')) {return true;}
-    else if(layout == 'vertical' && (event.keyCode && event.keyCode == 38 || event.key && event.key == 'ArrowUp')) {return true;}
-    else {return false;}
-  };
-
-  //initialize the Tab objects
-  var tabs = document.getElementsByClassName('js-tabs');
-  if( tabs.length > 0 ) {
-    for( var i = 0; i < tabs.length; i++) {
-      (function(i){new Tab(tabs[i]);})(i);
-    }
-  }
-}());
 // File#: _1_tooltip
 // Usage: codyhouse.co/license
 (function() {
@@ -3177,280 +3070,306 @@ function resetFocusTabsStyle() {
     };
   }
 }());
-// File#: _3_mega-site-navigation
+// File#: _3_main-header-v2
 // Usage: codyhouse.co/license
 (function() {
-  var MegaNav = function(element) {
+  var Submenu = function(element) {
     this.element = element;
-    this.search = this.element.getElementsByClassName('js-mega-nav__search');
-    this.searchActiveController = false;
-    this.menu = this.element.getElementsByClassName('js-mega-nav__nav');
-    this.menuItems = this.menu[0].getElementsByClassName('js-mega-nav__item');
-    this.menuActiveController = false;
-    this.itemExpClass = 'mega-nav__item--expanded';
-    this.classIconBtn = 'mega-nav__icon-btn--state-b';
-    this.classSearchVisible = 'mega-nav__search--is-visible';
-    this.classNavVisible = 'mega-nav__nav--is-visible';
-    this.classMobileLayout = 'mega-nav--mobile';
-    this.classDesktopLayout = 'mega-nav--desktop';
-    this.layout = 'mobile';
-    // store dropdown elements (if present)
-    this.dropdown = this.element.getElementsByClassName('js-dropdown');
-    // expanded class - added to header when subnav is open
-    this.expandedClass = 'mega-nav--expanded';
-    // check if subnav should open on hover
-    this.hover = this.element.getAttribute('data-hover') && this.element.getAttribute('data-hover') == 'on';
-    initMegaNav(this);
+    this.trigger = this.element.getElementsByClassName('header-v2__nav-link')[0];
+    this.dropdown = this.element.getElementsByClassName('header-v2__nav-dropdown')[0];
+    this.triggerFocus = false;
+    this.dropdownFocus = false;
+    this.hideInterval = false;
+    this.prevFocus = false; // nested dropdown - store element that was in focus before focus changed
+    initSubmenu(this);
+    initNestedDropdown(this);
   };
 
-  function initMegaNav(megaNav) {
-    setMegaNavLayout(megaNav); // switch between mobile/desktop layout
-    initSearch(megaNav); // controll search navigation
-    initMenu(megaNav); // control main menu nav - mobile only
-    initSubNav(megaNav); // toggle sub navigation visibility
+  function initSubmenu(list) {
+    initElementEvents(list, list.trigger);
+    initElementEvents(list, list.dropdown);
+  };
 
-    megaNav.element.addEventListener('update-menu-layout', function(event){
-      setMegaNavLayout(megaNav); // window resize - update layout
+  function initElementEvents(list, element, bool) {
+    element.addEventListener('focus', function(){
+      bool = true;
+      showDropdown(list);
+    });
+    element.addEventListener('focusout', function(event){
+      bool = false;
+      hideDropdown(list, event);
     });
   };
 
-  function setMegaNavLayout(megaNav) {
-    var layout = getComputedStyle(megaNav.element, ':before').getPropertyValue('content').replace(/\'|"/g, '');
-    if(layout == megaNav.layout) return;
-    megaNav.layout = layout;
-    Util.toggleClass(megaNav.element, megaNav.classDesktopLayout, megaNav.layout == 'desktop');
-    Util.toggleClass(megaNav.element, megaNav.classMobileLayout, megaNav.layout != 'desktop');
-    if(megaNav.layout == 'desktop') {
-      closeSubNav(megaNav, false);
-      // if the mega navigation has dropdown elements -> make sure they are in the right position (viewport awareness)
-      triggerDropdownPosition(megaNav);
-    }
-    closeSearch(megaNav, false);
-    resetMegaNavOffset(megaNav); // reset header offset top value
-    resetNavAppearance(megaNav); // reset nav expanded appearance
+  function showDropdown(list) {
+    if(list.hideInterval) clearInterval(list.hideInterval);
+    Util.addClass(list.dropdown, 'header-v2__nav-list--is-visible');
+    resetDropdownStyle(list.dropdown, true);
   };
 
-  function resetMegaNavOffset(megaNav) {
-    document.documentElement.style.setProperty('--mega-nav-offset-y', megaNav.element.getBoundingClientRect().top+'px');
+  function hideDropdown(list, event) {
+    if(list.hideInterval) clearInterval(this.hideInterval);
+    list.hideInterval = setTimeout(function(){
+      var submenuFocus = document.activeElement.closest('.header-v2__nav-item--main'),
+        inFocus = submenuFocus && (submenuFocus == list.element);
+      if(!list.triggerFocus && !list.dropdownFocus && !inFocus) { // hide if focus is outside submenu
+        Util.removeClass(list.dropdown, 'header-v2__nav-list--is-visible');
+        resetDropdownStyle(list.dropdown, false);
+        hideSubLevels(list);
+        list.prevFocus = false;
+      }
+    }, 100);
   };
 
-  function closeNavigation(megaNav) { // triggered by Esc key press
-    // close search
-    closeSearch(megaNav);
-    // close nav
-    if(Util.hasClass(megaNav.menu[0], megaNav.classNavVisible)) {
-      toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuActiveController, true);
-    }
-    //close subnav
-    closeSubNav(megaNav, false);
-    resetNavAppearance(megaNav); // reset nav expanded appearance
-  };
-
-  function closeFocusNavigation(megaNav) { // triggered by Tab key pressed
-    // close search when focus is lost
-    if(Util.hasClass(megaNav.search[0], megaNav.classSearchVisible) && !document.activeElement.closest('.js-mega-nav__search')) {
-      toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchActiveController, true);
-    }
-    // close nav when focus is lost
-    if(Util.hasClass(megaNav.menu[0], megaNav.classNavVisible) && !document.activeElement.closest('.js-mega-nav__nav')) {
-      toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuActiveController, true);
-    }
-    // close subnav when focus is lost
-    for(var i = 0; i < megaNav.menuItems.length; i++) {
-      if(!Util.hasClass(megaNav.menuItems[i], megaNav.itemExpClass)) continue;
-      var parentItem = document.activeElement.closest('.js-mega-nav__item');
-      if(parentItem && parentItem == megaNav.menuItems[i]) continue;
-      closeSingleSubnav(megaNav, i);
-    }
-    resetNavAppearance(megaNav); // reset nav expanded appearance
-  };
-
-  function closeSearch(megaNav, bool) {
-    if(megaNav.search.length < 1) return;
-    if(Util.hasClass(megaNav.search[0], megaNav.classSearchVisible)) {
-      toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchActiveController, bool);
-    }
-  } ;
-
-  function initSearch(megaNav) {
-    if(megaNav.search.length == 0) return;
-    // toggle search
-    megaNav.searchToggles = document.querySelectorAll('[aria-controls="'+megaNav.search[0].getAttribute('id')+'"]');
-    for(var i = 0; i < megaNav.searchToggles.length; i++) {(function(i){
-      megaNav.searchToggles[i].addEventListener('click', function(event){
-        // toggle search
-        toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchToggles[i], true);
-        // close nav if it was open
-        if(Util.hasClass(megaNav.menu[0], megaNav.classNavVisible)) {
-          toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuActiveController, false);
-        }
-        // close subnavigation if open
-        closeSubNav(megaNav, false);
-        resetNavAppearance(megaNav); // reset nav expanded appearance
+  function initNestedDropdown(list) {
+    var dropdownMenu = list.element.getElementsByClassName('header-v2__nav-list');
+    for(var i = 0; i < dropdownMenu.length; i++) {
+      var listItems = dropdownMenu[i].children;
+      // bind hover
+      new menuAim({
+        menu: dropdownMenu[i],
+        activate: function(row) {
+        	var subList = row.getElementsByClassName('header-v2__nav-dropdown')[0];
+        	if(!subList) return;
+        	Util.addClass(row.querySelector('a.header-v2__nav-link'), 'header-v2__nav-link--hover');
+        	showLevel(list, subList);
+        },
+        deactivate: function(row) {
+        	var subList = row.getElementsByClassName('header-v2__nav-dropdown')[0];
+        	if(!subList) return;
+        	Util.removeClass(row.querySelector('a.header-v2__nav-link'), 'header-v2__nav-link--hover');
+        	hideLevel(list, subList);
+        },
+        exitMenu: function() {
+          return true;
+        },
+        submenuSelector: '.header-v2__nav-item--has-children',
       });
-    })(i);}
-  };
-
-  function initMenu(megaNav) {
-    if(megaNav.menu.length == 0) return;
-    // toggle nav
-    megaNav.menuToggles = document.querySelectorAll('[aria-controls="'+megaNav.menu[0].getAttribute('id')+'"]');
-    for(var i = 0; i < megaNav.menuToggles.length; i++) {(function(i){
-      megaNav.menuToggles[i].addEventListener('click', function(event){
-        // toggle nav
-        toggleMenu(megaNav, megaNav.menu[0], 'menuActiveController', megaNav.classNavVisible, megaNav.menuToggles[i], true);
-        // close search if it was open
-        if(Util.hasClass(megaNav.search[0], megaNav.classSearchVisible)) {
-          toggleMenu(megaNav, megaNav.search[0], 'searchActiveController', megaNav.classSearchVisible, megaNav.searchActiveController, false);
-        }
-        resetNavAppearance(megaNav); // reset nav expanded appearance
-      });
-    })(i);}
-  };
-
-  function toggleMenu(megaNav, element, controller, visibleClass, toggle, moveFocus) {
-    var menuIsVisible = Util.hasClass(element, visibleClass);
-    Util.toggleClass(element, visibleClass, !menuIsVisible);
-    Util.toggleClass(toggle, megaNav.classIconBtn, !menuIsVisible);
-    menuIsVisible ? toggle.removeAttribute('aria-expanded') : toggle.setAttribute('aria-expanded', 'true');
-    if(menuIsVisible) {
-      if(toggle && moveFocus) toggle.focus();
-      megaNav[controller] = false;
-    } else {
-      if(toggle) megaNav[controller] = toggle;
-      getFirstFocusable(element).focus(); // move focus to first focusable element
     }
+    // store focus element before change in focus
+    list.element.addEventListener('keydown', function(event) {
+      if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+        list.prevFocus = document.activeElement;
+      }
+    });
+    // make sure that sublevel are visible when their items are in focus
+    list.element.addEventListener('keyup', function(event) {
+      if( event.keyCode && event.keyCode == 9 || event.key && event.key == 'Tab' ) {
+        // focus has been moved -> make sure the proper classes are added to subnavigation
+        var focusElement = document.activeElement,
+          focusElementParent = focusElement.closest('.header-v2__nav-dropdown'),
+          focusElementSibling = focusElement.nextElementSibling;
+
+        // if item in focus is inside submenu -> make sure it is visible
+        if(focusElementParent && !Util.hasClass(focusElementParent, 'header-v2__nav-list--is-visible')) {
+          showLevel(list, focusElementParent);
+        }
+        // if item in focus triggers a submenu -> make sure it is visible
+        if(focusElementSibling && !Util.hasClass(focusElementSibling, 'header-v2__nav-list--is-visible')) {
+          showLevel(list, focusElementSibling);
+        }
+
+        // check previous element in focus -> hide sublevel if required
+        if( !list.prevFocus) return;
+        var prevFocusElementParent = list.prevFocus.closest('.header-v2__nav-dropdown'),
+          prevFocusElementSibling = list.prevFocus.nextElementSibling;
+
+        if( !prevFocusElementParent ) return;
+
+        // element in focus and element prev in focus are siblings
+        if( focusElementParent && focusElementParent == prevFocusElementParent) {
+          if(prevFocusElementSibling) hideLevel(list, prevFocusElementSibling);
+          return;
+        }
+
+        // element in focus is inside submenu triggered by element prev in focus
+        if( prevFocusElementSibling && focusElementParent && focusElementParent == prevFocusElementSibling) return;
+
+        // shift tab -> element in focus triggers the submenu of the element prev in focus
+        if( focusElementSibling && prevFocusElementParent && focusElementSibling == prevFocusElementParent) return;
+
+        var focusElementParentParent = focusElementParent.parentNode.closest('.header-v2__nav-dropdown');
+
+        // shift tab -> element in focus is inside the dropdown triggered by a siblings of the element prev in focus
+        if(focusElementParentParent && focusElementParentParent == prevFocusElementParent) {
+          if(prevFocusElementSibling) hideLevel(list, prevFocusElementSibling);
+          return;
+        }
+
+        if(prevFocusElementParent && Util.hasClass(prevFocusElementParent, 'header-v2__nav-list--is-visible')) {
+          hideLevel(list, prevFocusElementParent);
+        }
+      }
+    });
   };
 
-  function getFirstFocusable(element) {
-    var focusableEle = element.querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary'),
-      firstFocusable = false;
-    for(var i = 0; i < focusableEle.length; i++) {
-      if( focusableEle[i].offsetWidth || focusableEle[i].offsetHeight || focusableEle[i].getClientRects().length ) {
-        firstFocusable = focusableEle[i];
-        break;
+  function hideSubLevels(list) {
+    var visibleSubLevels = list.dropdown.getElementsByClassName('header-v2__nav-list--is-visible');
+    if(visibleSubLevels.length == 0) return;
+    while (visibleSubLevels[0]) {
+      hideLevel(list, visibleSubLevels[0]);
+   	}
+   	var hoveredItems = list.dropdown.getElementsByClassName('header-v2__nav-link--hover');
+   	while (hoveredItems[0]) {
+      Util.removeClass(hoveredItems[0], 'header-v2__nav-link--hover');
+   	}
+  };
+
+  function showLevel(list, level, bool) {
+    if(bool == undefined) {
+      //check if the sublevel needs to be open to the left
+      Util.removeClass(level, 'header-v2__nav-dropdown--nested-left');
+      var boundingRect = level.getBoundingClientRect();
+      if(window.innerWidth - boundingRect.right < 5 && boundingRect.left + window.scrollX > 2*boundingRect.width) Util.addClass(level, 'header-v2__nav-dropdown--nested-left');
+    }
+    Util.addClass(level, 'header-v2__nav-list--is-visible');
+  };
+
+  function hideLevel(list, level) {
+    if(!Util.hasClass(level, 'header-v2__nav-list--is-visible')) return;
+    Util.removeClass(level, 'header-v2__nav-list--is-visible');
+
+    level.addEventListener('transition', function cb(){
+      level.removeEventListener('transition', cb);
+      Util.removeClass(level, 'header-v2__nav-dropdown--nested-left');
+    });
+  };
+
+  var mainHeader = document.getElementsByClassName('js-header-v2');
+  if(mainHeader.length > 0) {
+    var menuTrigger = mainHeader[0].getElementsByClassName('js-anim-menu-btn')[0],
+      firstFocusableElement = getMenuFirstFocusable();
+
+    // we'll use these to store the node that needs to receive focus when the mobile menu is closed
+    var focusMenu = false;
+
+    menuTrigger.addEventListener('anim-menu-btn-clicked', function(event){ // toggle menu visibility an small devices
+      Util.toggleClass(document.getElementsByClassName('header-v2__nav')[0], 'header-v2__nav--is-visible', event.detail);
+      Util.toggleClass(mainHeader[0], 'header-v2--expanded', event.detail);
+      menuTrigger.setAttribute('aria-expanded', event.detail);
+      if(event.detail) firstFocusableElement.focus(); // move focus to first focusable element
+      else if(focusMenu) {
+        focusMenu.focus();
+        focusMenu = false;
+      }
+    });
+
+    // take care of submenu
+    var mainList = mainHeader[0].getElementsByClassName('header-v2__nav-list--main');
+    if(mainList.length > 0) {
+      for( var i = 0; i < mainList.length; i++) {
+        (function(i){
+          new menuAim({ // use diagonal movement detection for main submenu
+            menu: mainList[i],
+            activate: function(row) {
+            	var submenu = row.getElementsByClassName('header-v2__nav-dropdown');
+            	if(submenu.length == 0 ) return;
+            	Util.addClass(submenu[0], 'header-v2__nav-list--is-visible');
+            	resetDropdownStyle(submenu[0], true);
+            },
+            deactivate: function(row) {
+            	var submenu = row.getElementsByClassName('header-v2__nav-dropdown');
+            	if(submenu.length == 0 ) return;
+            	Util.removeClass(submenu[0], 'header-v2__nav-list--is-visible');
+            	resetDropdownStyle(submenu[0], false);
+            },
+            exitMenu: function() {
+              return true;
+            },
+            submenuSelector: '.header-v2__nav-item--has-children',
+            submenuDirection: 'below'
+          });
+
+          // take care of focus event for main submenu
+          var subMenu = mainList[i].getElementsByClassName('header-v2__nav-item--main');
+          for(var j = 0; j < subMenu.length; j++) {(function(j){if(Util.hasClass(subMenu[j], 'header-v2__nav-item--has-children')) new Submenu(subMenu[j]);})(j);};
+        })(i);
       }
     }
-    return firstFocusable;
-  };
 
-  function initSubNav(megaNav) {
-    // toggle subnavigation visibility
-    megaNav.element.addEventListener('click', function(event){
-      toggleSubNav(megaNav, event, 'click');
-    });
+    // if data-animation-offset is set -> check scrolling
+    var animateHeader = mainHeader[0].getAttribute('data-animation');
+    if(animateHeader && animateHeader == 'on') {
+      var scrolling = false,
+        scrollOffset = (mainHeader[0].getAttribute('data-animation-offset')) ? parseInt(mainHeader[0].getAttribute('data-animation-offset')) : 400,
+        mainHeaderHeight = mainHeader[0].offsetHeight,
+        mainHeaderWrapper = mainHeader[0].getElementsByClassName('header-v2__wrapper')[0];
 
-    if(megaNav.hover) { // data-hover="on" => use mouse events
-      megaNav.element.addEventListener('mouseover', function(event) {
-        if(megaNav.layout != 'desktop') return;
-        toggleSubNav(megaNav, event, 'mouseover')
+      window.addEventListener("scroll", function(event) {
+        if( !scrolling ) {
+          scrolling = true;
+          (!window.requestAnimationFrame) ? setTimeout(function(){checkMainHeader();}, 250) : window.requestAnimationFrame(checkMainHeader);
+        }
       });
 
-      megaNav.element.addEventListener('mouseout', function(event){
-        if(megaNav.layout != 'desktop') return;
-        var mainItem = event.target.closest('.js-mega-nav__item');
-        if(!mainItem) return;
-        var triggerBtn = mainItem.getElementsByClassName('js-mega-nav__control');
-        if(triggerBtn.length < 1) return;
-        var itemExpanded = Util.hasClass(mainItem, megaNav.itemExpClass);
-        if(!itemExpanded) return;
-        var mainItemHover = event.relatedTarget;
-        if(mainItemHover && mainItem.contains(mainItemHover)) return;
-
-        Util.toggleClass(mainItem, megaNav.itemExpClass, !itemExpanded);
-        itemExpanded ? triggerBtn[0].removeAttribute('aria-expanded') : triggerBtn[0].setAttribute('aria-expanded', 'true');
-      });
-    }
-  };
-
-  function toggleSubNav(megaNav, event, eventType) {
-    var triggerBtn = event.target.closest('.js-mega-nav__control');
-    if(!triggerBtn) return;
-    var mainItem = triggerBtn.closest('.js-mega-nav__item');
-    if(!mainItem) return;
-    var itemExpanded = Util.hasClass(mainItem, megaNav.itemExpClass);
-    if(megaNav.hover && itemExpanded && megaNav.layout == 'desktop' && eventType != 'click') return;
-    Util.toggleClass(mainItem, megaNav.itemExpClass, !itemExpanded);
-    itemExpanded ? triggerBtn.removeAttribute('aria-expanded') : triggerBtn.setAttribute('aria-expanded', 'true');
-    if(megaNav.layout == 'desktop' && !itemExpanded) closeSubNav(megaNav, mainItem);
-    // close search if open
-    closeSearch(megaNav, false);
-    resetNavAppearance(megaNav); // reset nav expanded appearance
-  };
-
-  function closeSubNav(megaNav, selectedItem) {
-    // close subnav when a new sub nav element is open
-    if(megaNav.menuItems.length == 0 ) return;
-    for(var i = 0; i < megaNav.menuItems.length; i++) {
-      if(megaNav.menuItems[i] != selectedItem) closeSingleSubnav(megaNav, i);
-    }
-  };
-
-  function closeSingleSubnav(megaNav, index) {
-    Util.removeClass(megaNav.menuItems[index], megaNav.itemExpClass);
-    var triggerBtn = megaNav.menuItems[index].getElementsByClassName('js-mega-nav__control');
-    if(triggerBtn.length > 0) triggerBtn[0].removeAttribute('aria-expanded');
-  };
-
-  function triggerDropdownPosition(megaNav) {
-    // emit custom event to properly place dropdown elements - viewport awarness
-    if(megaNav.dropdown.length == 0) return;
-    for(var i = 0; i < megaNav.dropdown.length; i++) {
-      megaNav.dropdown[i].dispatchEvent(new CustomEvent('placeDropdown'));
-    }
-  };
-
-  function resetNavAppearance(megaNav) {
-    ( (megaNav.element.getElementsByClassName(megaNav.itemExpClass).length > 0 && megaNav.layout == 'desktop') || megaNav.element.getElementsByClassName(megaNav.classSearchVisible).length > 0 ||(megaNav.element.getElementsByClassName(megaNav.classNavVisible).length > 0 && megaNav.layout == 'mobile'))
-      ? Util.addClass(megaNav.element, megaNav.expandedClass)
-      : Util.removeClass(megaNav.element, megaNav.expandedClass);
-  };
-
-  //initialize the MegaNav objects
-  var megaNav = document.getElementsByClassName('js-mega-nav');
-  if(megaNav.length > 0) {
-    var megaNavArray = [];
-    for(var i = 0; i < megaNav.length; i++) {
-      (function(i){megaNavArray.push(new MegaNav(megaNav[i]));})(i);
+      function checkMainHeader() {
+        var windowTop = window.scrollY || document.documentElement.scrollTop;
+        Util.toggleClass(mainHeaderWrapper, 'header-v2__wrapper--is-fixed', windowTop >= mainHeaderHeight);
+        Util.toggleClass(mainHeaderWrapper, 'header-v2__wrapper--slides-down', windowTop >= scrollOffset);
+        scrolling = false;
+      };
     }
 
-    // key events
+    // listen for key events
     window.addEventListener('keyup', function(event){
-      if( (event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape' )) { // listen for esc key events
-        for(var i = 0; i < megaNavArray.length; i++) {(function(i){
-          closeNavigation(megaNavArray[i]);
-        })(i);}
+      // listen for esc key
+      if( (event.keyCode && event.keyCode == 27) || (event.key && event.key.toLowerCase() == 'escape' )) {
+        // close navigation on mobile if open
+        if(menuTrigger.getAttribute('aria-expanded') == 'true' && isVisible(menuTrigger)) {
+          focusMenu = menuTrigger; // move focus to menu trigger when menu is close
+          menuTrigger.click();
+        }
       }
       // listen for tab key
-      if( (event.keyCode && event.keyCode == 9) || (event.key && event.key.toLowerCase() == 'tab' )) { // close search or nav if it looses focus
-        for(var i = 0; i < megaNavArray.length; i++) {(function(i){
-          closeFocusNavigation(megaNavArray[i]);
-        })(i);}
+      if( (event.keyCode && event.keyCode == 9) || (event.key && event.key.toLowerCase() == 'tab' )) {
+        // close navigation on mobile if open when nav loses focus
+        if(menuTrigger.getAttribute('aria-expanded') == 'true' && isVisible(menuTrigger) && !document.activeElement.closest('.js-header-v2')) menuTrigger.click();
       }
     });
 
-    window.addEventListener('click', function(event){
-      if(!event.target.closest('.js-mega-nav')) closeNavigation(megaNavArray[0]);
-    });
-
-    // resize - update menu layout
-    var resizingId = false,
-      customEvent = new CustomEvent('update-menu-layout');
-    window.addEventListener('resize', function(event){
+    // listen for resize
+    var resizingId = false;
+    window.addEventListener('resize', function() {
       clearTimeout(resizingId);
-      resizingId = setTimeout(doneResizing, 200);
+      resizingId = setTimeout(doneResizing, 500);
     });
 
     function doneResizing() {
-      for( var i = 0; i < megaNavArray.length; i++) {
-        (function(i){megaNavArray[i].element.dispatchEvent(customEvent)})(i);
-      };
+      if( !isVisible(menuTrigger) && Util.hasClass(mainHeader[0], 'header-v2--expanded')) menuTrigger.click();
     };
 
-    (window.requestAnimationFrame) // init mega site nav layout
-      ? window.requestAnimationFrame(doneResizing)
-      : doneResizing();
+    function getMenuFirstFocusable() {
+      var focusableEle = mainHeader[0].getElementsByClassName('header-v2__nav')[0].querySelectorAll('[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable], audio[controls], video[controls], summary'),
+        firstFocusable = false;
+      for(var i = 0; i < focusableEle.length; i++) {
+        if( focusableEle[i].offsetWidth || focusableEle[i].offsetHeight || focusableEle[i].getClientRects().length ) {
+          firstFocusable = focusableEle[i];
+          break;
+        }
+      }
+
+      return firstFocusable;
+    };
   }
+
+  function resetDropdownStyle(dropdown, bool) {
+    if(!bool) {
+      dropdown.addEventListener('transitionend', function cb(){
+        dropdown.removeAttribute('style');
+        dropdown.removeEventListener('transitionend', cb);
+      });
+    } else {
+      var boundingRect = dropdown.getBoundingClientRect();
+      if(window.innerWidth - boundingRect.right < 5 && boundingRect.left + window.scrollX > 2*boundingRect.width) {
+        var left = parseFloat(window.getComputedStyle(dropdown).getPropertyValue('left'));
+        dropdown.style.left = (left + window.innerWidth - boundingRect.right - 5) + 'px';
+      }
+    }
+  };
+
+  function isVisible(element) {
+    return (element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+  };
 }());
 (function() {
   var autocomplete = document.getElementsByClassName('js-autocomplete');

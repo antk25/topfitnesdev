@@ -40,6 +40,7 @@
         <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
             &lt;a href="{{ $domain }}/{{ $category }}/{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;<br>
             &lt;img src="@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif"&gt;
+            &lt;img src="@if ($link->getFirstMediaUrl('bracelets', 'thumb')) {{ $link->getFirstMediaUrl('bracelets', 'thumb') }} @else @endif"&gt;
         </div>
 
 

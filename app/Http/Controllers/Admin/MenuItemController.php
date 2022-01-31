@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Core;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\MenuItem;
 use App\Models\GroupMenu;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class MenuItemController extends Controller
 {
@@ -17,7 +18,7 @@ class MenuItemController extends Controller
      */
     public function index()
     {
-        $menuitems = MenuItem::paginate(20);
+        $menuitems = MenuItem::with('groupmenu')->paginate(20);
 
         return view('admin.menuitems.index', compact('menuitems'));
     }
@@ -46,12 +47,20 @@ class MenuItemController extends Controller
     public function store(Request $request)
     {
 
-        MenuItem::create([
+        $menuitem = MenuItem::create([
             'group_menu_id' => request('group_menu_id'),
             'name' => request('name'),
             'link' => request('link'),
             'position' => request('position'),
+            'about' => request('about'),
         ]);
+
+        // Изображение
+
+        if (request('image') != null) {
+            $menuitem->addMediaFromRequest('image')
+            ->toMediaCollection('menu');
+        }
 
         return redirect()->route('menuitems.index');
     }
@@ -93,7 +102,15 @@ class MenuItemController extends Controller
             'name' => request('name'),
             'link' => request('link'),
             'position' => request('position'),
+            'about' => request('about'),
         ]);
+
+        // Изображение
+
+        if (request('image') != null) {
+            $menuitem->addMediaFromRequest('image')
+            ->toMediaCollection('menu');
+        }
 
         return redirect()->route('menuitems.index');
     }

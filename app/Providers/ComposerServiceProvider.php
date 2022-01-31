@@ -36,7 +36,6 @@ class ComposerServiceProvider extends ServiceProvider
         // });
 
         View::composer('layouts.parts.header', NavHeaderComposer::class);
-        View::composer('admin.layouts.parts.link-tree', LinkTreeMapComposer::class);
         View::composer('admin.layouts.parts.htmlcomponents', HtmlComponentsComposer::class);
         View::composer('layouts.parts.header-group', NavGroupHeaderComposer::class);
         View::composer('admin.layouts.base', NotifyAdminComposer::class);

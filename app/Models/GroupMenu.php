@@ -27,6 +27,8 @@ class GroupMenu extends Model
 {
     protected $fillable = [
         'name',
+        'place',
+        'about',
     ];
 
     public function menuitems()

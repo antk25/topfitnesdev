@@ -2,16 +2,16 @@
 
 namespace App\Http\ViewComposers;
 
-use App\Models\MenuItem;
+use App\Models\GroupMenu;
 use Illuminate\View\View;
 
 class NavHeaderComposer {
 
     public function compose(View $view) {
 
-        $menuitems = MenuItem::get();
+        $groupmenu = GroupMenu::with('menuitems')->where('place', 'header')->get();
 
-        return $view->with('items', $menuitems);
+        return $view->with('items', $groupmenu);
 
         // return $view->with('items', MenuItem::header());
     }

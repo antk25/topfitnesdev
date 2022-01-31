@@ -18,8 +18,8 @@ use App\Http\Controllers\Admin\SellerController;
 use App\Http\Controllers\Admin\SettingsPageController;
 use App\Http\Controllers\Admin\SpecController;
 use App\Http\Controllers\Admin\TypePageController;
-use App\Http\Controllers\Core\GroupMenuController;
-use App\Http\Controllers\Core\MenuItemController;
+use App\Http\Controllers\Admin\GroupMenuController;
+use App\Http\Controllers\Admin\MenuItemController;
 
 Route::middleware('can:view-admin-panel')->prefix('admin')->group(function () {
 // Редактирование профиля - админ

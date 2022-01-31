@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Core;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\MenuItem;
 use App\Models\GroupMenu;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class GroupMenuController extends Controller
 {
@@ -41,7 +42,9 @@ class GroupMenuController extends Controller
     {
 
         GroupMenu::create([
-            'name' => request('name'),
+            'name' => Str::slug(request('name'), '_'),
+            'place' => request('place'),
+            'about' => request('about'),
         ]);
 
         return redirect()->route('groupmenus.index');
@@ -72,7 +75,9 @@ class GroupMenuController extends Controller
         $groupmenu = GroupMenu::find($id);
 
         $groupmenu->update([
-            'name' => request('name'),
+            'name' => Str::slug(request('name'), '_'),
+            'place' => request('place'),
+            'about' => request('about'),
         ]);
 
         return redirect()->route('groupmenus.index');
