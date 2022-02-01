@@ -3,6 +3,7 @@
     <legend class="form-legend">SEO</legend>
 
     <div class="grid gap-xxs margin-bottom-xs">
+        @if (isset($users))
         <div class="col-6@md">
             <label class="form-label margin-bottom-xxs text-bold" for="user_id">Автор</label>
             <div class="select">
@@ -29,6 +30,7 @@
                 <p><strong>ошибка:</strong> {{ $message }}</p></div>
             @enderror
         </div>
+        @endif
         <div class="col-6@md">
             <label class="form-label margin-bottom-xxs text-bold" for="slug">URI (SLUG)</label>
             <input class="form-control width-100%" type="text" name="slug" id="slug"

@@ -15,7 +15,7 @@ class SeoBlock extends Component
      * @param $model
      * @param $users
      */
-    public function __construct($model, $users)
+    public function __construct($model, $users = null)
     {
        $this->model = $model;
        $this->users = $users;

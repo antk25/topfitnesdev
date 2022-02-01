@@ -1,25 +1,26 @@
 <?php
 
-use App\Http\Controllers\Admin\BraceletController;
+use App\Http\Controllers\Admin\StaticPageController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\SpecController;
 use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\CommentController;
-use App\Http\Controllers\Admin\ComparisonController;
-use App\Http\Controllers\Admin\ComponentsPageController;
 use App\Http\Controllers\Admin\GradeController;
-use App\Http\Controllers\Admin\HtmlComponentController;
 use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Admin\ManualController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\OverviewController;
-use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\RatingController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SellerController;
-use App\Http\Controllers\Admin\SettingsPageController;
-use App\Http\Controllers\Admin\SpecController;
+use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\BraceletController;
+use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\OverviewController;
 use App\Http\Controllers\Admin\TypePageController;
 use App\Http\Controllers\Admin\GroupMenuController;
-use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\ComparisonController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\SettingsPageController;
+use App\Http\Controllers\Admin\HtmlComponentController;
+use App\Http\Controllers\Admin\ComponentsPageController;
 
 Route::middleware('can:view-admin-panel')->prefix('admin')->group(function () {
 // Редактирование профиля - админ
@@ -86,6 +87,9 @@ Route::get('/overview/restore/{overview}', [OverviewController::class, 'restore'
 Route::get('/overview/publish/{overview}', [OverviewController::class, 'publish'])->name('overviews.publish');
 Route::post('/overviews/delimg', [OverviewController::class, 'imgdelete'])->name('overviews.delimg');
 Route::post('/overviews/updimg', [OverviewController::class, 'imgupdate']);
+
+Route::resource('/static-pages', StaticPageController::class);
+Route::get('/static-page/publish/{page}', [StaticPageController::class, 'publish'])->name('static-pages.publish');
 
 Route::post('/bracelets/delimg', [BraceletController::class, 'imgdelete'])->name('bracelets.delimg');
 Route::post('/bracelets/updimg', [BraceletController::class, 'imgupdate'])->name('bracelets.updimg');

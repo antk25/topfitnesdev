@@ -1,32 +1,33 @@
 <?php
 
-use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\ComponentsPageController;
-use App\Http\Controllers\Admin\GradeController;
-use App\Http\Controllers\ManualController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\SellerController;
-use App\Http\Controllers\Admin\SettingsPageController;
-use App\Http\Controllers\Admin\SpecController;
-use App\Http\Controllers\Admin\TypePageController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\UpdateUserPorfileInformation;
-use App\Http\Controllers\BraceletController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ComparisonController;
-use App\Http\Controllers\Core\GroupMenuController;
-use App\Http\Controllers\Core\MenuItemController;
-use App\Http\Controllers\IndexController as IndexController;
-use App\Http\Controllers\Admin\IndexController as AdminIndexController;
-use App\Http\Controllers\OverviewController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ManualController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ReviewController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\BraceletController;
+use App\Http\Controllers\OverviewController;
+use App\Http\Controllers\Admin\SpecController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ComparisonController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\GradeController;
+use App\Http\Controllers\Admin\SellerController;
+use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Core\MenuItemController;
+use App\Http\Controllers\Admin\TypePageController;
+use App\Http\Controllers\Core\GroupMenuController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\SettingsPageController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Admin\ComponentsPageController;
+use App\Http\Controllers\Auth\UpdateUserPorfileInformation;
+use App\Http\Controllers\IndexController as IndexController;
+use App\Http\Controllers\Admin\IndexController as AdminIndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,8 +56,8 @@ Route::get('/obzory/{overview:slug}', [OverviewController::class, 'show'])->name
 Route::post('/katalog/{bracelet}/review', [ReviewController::class, 'store']);
 Route::get('/katalog/{bracelet}/reviews', [ReviewController::class, 'index']);
 Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.add');
+Route::get('/page/{static_page:slug}', [StaticPageController::class, 'show'])->name('pub.static-pages.show');
 Route::get('/{rating:slug}', [RatingController::class, 'show'])->name('pub.ratings.show');
-
 
 Route::get('user/login', [LoginController::class, 'login'])->name('login');
 Route::post('user/login', [LoginController::class, 'authenticate'])->name('auth');
@@ -71,7 +72,3 @@ Route::get('user/profile', [ProfileController::class, 'index'])->name('profile.i
 Route::get('user/profile/edit', [UpdateUserPorfileInformation::class, 'edit'])->name('profile-edit');
 Route::put('user/profile/update', [UpdateUserPorfileInformation::class, 'update'])->name('update-user-profile');
 Route::get('admin/profile/edit', [UpdateUserPorfileInformation::class, 'edit'])->name('admin.profile.edit');
-
-
-
-

@@ -96,25 +96,41 @@ class PostController extends Controller
             $content = $post->content_raw;
 
             for ($image = 0; $image < count($images); $image++) {
-                $content = str_replace("<box_img." . $image . ">",
-                    '<figure class="box">
-               <a href="' . $images[$image]->getUrl() . '">
+                $content = str_replace("<box_img_half." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block width-50%@md margin-x-auto">
                 <img src="' . $images[$image]->getUrl() . '"
-                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
-                ' . $images[$image]->getUrl('640') . ' 640w,
-                ' . $images[$image]->getUrl('960') . ' 960w,
-                ' . $images[$image]->getUrl('1280') . ' 1280w,
-                " alt="'. $images[$image]->name .'">
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
                </a>
-               </figure>',
+               </div>',
+                    $content);
+                $content = str_replace("<box_img." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block">
+                <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
                     $content);
                 $content = str_replace("<img." . $image . ">",
-                    '<img src="' . $images[$image]->getUrl() . '"
-                 srcset="' . $images[$image]->getUrl('320') . ' 320w,
-                ' . $images[$image]->getUrl('640') . ' 640w,
-                ' . $images[$image]->getUrl('960') . ' 960w,
-                ' . $images[$image]->getUrl('1280') . ' 1280w,
-                " alt="'. $images[$image]->name .'">',
+                    '
+                <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>',
                     $content);
 
             }

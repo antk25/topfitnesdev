@@ -2,48 +2,41 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ManualRequest;
-use App\Models\Bracelet;
-use App\Models\Manual;
-use App\Models\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use App\Models\StaticPage;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Str;
+use App\Http\Requests\Admin\StaticPageRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
-class ManualController extends Controller
+class StaticPageController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $manuals = Manual::paginate(20);
+       $staticPages = StaticPage::get();
 
-        return view('admin.manuals.index', compact('manuals'));
+       return view('admin.static-pages.index', compact('staticPages'));
     }
 
     public function publish($id): RedirectResponse
     {
-        $manual = Manual::find($id);
+        $staticPage = StaticPage::find($id);
 
-        if ($manual->published)
-        {
-            $manual->published = false;
-        }
+        if ($staticPage->published)
+            {
+                $staticPage->published = false;
+            }
         else
-        {
-            $manual->published = true;
-        }
+            {
+                $staticPage->published = true;
+            }
 
-        $manual->save();
+        $staticPage->save();
 
         return back();
     }
@@ -51,24 +44,20 @@ class ManualController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|View
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        $users = User::pluck('name', 'id')->all();
-
-        $bracelets = Bracelet::pluck('name', 'id')->all();
-
-        return view('admin.manuals.create', compact('users', 'bracelets'));
+        return view('admin.static-pages.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param ManualRequest $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(ManualRequest $request): RedirectResponse
+    public function store(StaticPageRequest $request)
     {
         if ($request->slug)
         {
@@ -79,8 +68,7 @@ class ManualController extends Controller
             $slug = Str::slug($request->name, '-');
         }
 
-        $manual = Manual::create([
-            'user_id' => request('user_id'),
+        $staticPage = StaticPage::create([
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
@@ -89,32 +77,34 @@ class ManualController extends Controller
             'content_raw' => request('content')
         ]);
 
-        $allbracelets = collect($request->input('allbracelets'))->filter()->toArray();
+        /**
+        * Обложка
+        */
 
-        if(count($allbracelets)) {
-            $manual->bracelets()->attach($allbracelets);
+        if (request('cover') != null) {
+            $staticPage->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
         }
+
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
 
         $files = request('files');
 
         if ($files != '') {
             foreach ($files as $file) {
-                $manual->addMedia($file)
+                $staticPage->addMedia($file)
                     ->withResponsiveImages()
-                    ->toMediaCollection('manuals');
+                    ->toMediaCollection('static-pages');
             }
         }
 
-        if (request('cover') != null) {
-            $manual->addMediaFromRequest('cover')
-            ->withResponsiveImages()
-            ->toMediaCollection('covers');
-        }
+        if($staticPage->getMedia('static-pages')) {
 
-        if($manual->getMedia('manuals')) {
-
-            $images = $manual->getMedia('manuals');
-            $content = $manual->content_raw;
+            $images = $staticPage->getMedia('static-pages');
+            $content = $staticPage->content_raw;
 
             for ($image = 0; $image < count($images); $image++) {
                 $content = str_replace("<box_img_half." . $image . ">",
@@ -156,62 +146,42 @@ class ManualController extends Controller
 
             }
 
-            $manual->content = $content;
-            $manual->save();
+            $staticPage->content = $content;
+            $staticPage->save();
         }
 
-        if ($manual) {
+        if ($staticPage) {
             return redirect()
-                 ->route('manuals.edit', $manual->id)
-                 ->with(['success' => 'Новая статья успешно добавлена. Отредактируйте данные, если нужно']);
-           } else {
+                ->route('pages.edit', $staticPage)
+                ->with(['success' => 'Новая страница успешно добавлена. Отредактируйте данные, если нужно']);
+        } else {
             return back()
-                    ->withErrors(['msg' => 'Ошибка сохранения'])
-                    ->withInput();
-           }
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return void
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return Application|Factory|View
+     * @param  \App\Models\Page  $page
+     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(StaticPage $staticPage)
     {
-        $manual = Manual::with('bracelets')->find($id);
-
-        $users = User::pluck('name', 'id')->all();
-
-        $media = $manual->getMedia('manuals');
-
-        $bracelets = Bracelet::pluck('name', 'id')->all();
-
-        return view('admin.manuals.edit', compact('manual', 'media', 'users', 'bracelets'));
+        return view('admin.static-pages.edit', compact('staticPage'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param ManualRequest $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Page  $page
+     * @return \Illuminate\Http\Response
      */
-    public function update(ManualRequest $request, $id): RedirectResponse
+    public function update(StaticPageRequest $request, StaticPage $staticPage)
     {
-        $manual = Manual::find($id);
-
         if ($request->slug)
         {
             $slug = Str::slug($request->slug, '-');
@@ -221,40 +191,33 @@ class ManualController extends Controller
             $slug = Str::slug($request->name, '-');
         }
 
+        /**
+         * Загрузка картинок на сайт и в БД
+         */
+
         $files = request('files');
 
         if ($files != '') {
             foreach ($files as $file) {
-                $manual->addMedia($file)
+                $staticPage->addMedia($file)
                     ->withResponsiveImages()
-                    ->toMediaCollection('manuals');
+                    ->toMediaCollection('static-pages');
             }
         }
 
-        $manual->update([
-            'user_id' => request('user_id'),
+        $staticPage->update([
             'name' => request('name'),
             'slug' => $slug,
             'title' => request('title'),
             'subtitle' => request('subtitle'),
             'description' => request('description'),
-            'content_raw' => request('content')
+            'content_raw' => request('content'),
         ]);
 
-        $allbracelets = $request->input('allbracelets', []);
+        if($staticPage->getMedia('static-pages')) {
 
-        if(!is_null($allbracelets)) {
-            $manual->bracelets()->sync($allbracelets);
-        }
-        else {
-            $bracelets = $manual->bracelets->pluck('id')->all();
-            $manual->bracelets()->detach($bracelets);
-        }
-
-        if($manual->getMedia('manuals')) {
-
-            $images = $manual->getMedia('manuals');
-            $content = $manual->content_raw;
+            $images = $staticPage->getMedia('static-pages');
+            $content = $staticPage->content_raw;
 
             for ($image = 0; $image < count($images); $image++) {
                 $content = str_replace("<box_img_half." . $image . ">",
@@ -296,12 +259,16 @@ class ManualController extends Controller
 
             }
 
-            $manual->content = $content;
-            $manual->save();
+            $staticPage->content = $content;
+            $staticPage->save();
         }
 
+        /**
+        * Обложка
+        */
+
         if (request('cover') != null) {
-            $manual->addMediaFromRequest('cover')
+            $staticPage->addMediaFromRequest('cover')
             ->withResponsiveImages()
             ->toMediaCollection('covers');
         }
@@ -312,70 +279,13 @@ class ManualController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return RedirectResponse
+     * @param  \App\Models\Page  $page
+     * @return \Illuminate\Http\Response
      */
-    public function destroy($id): RedirectResponse
+    public function destroy(StaticPage $staticPage)
     {
-        $manual = Manual::withTrashed()->find($id);
-
-        if ($manual->trashed())
-            {
-                $manual->forceDelete();
-            }
-        else
-            {
-                if ($manual->published == true)
-
-                {
-                    $manual->published = false;
-                    $manual->save();
-                }
-
-                $manual->delete();
-            }
-
+        $staticPage->delete();
 
         return back();
-    }
-
-    public function restore($id): RedirectResponse
-    {
-
-        $manual = Manual::onlyTrashed()->find($id);
-
-        $manual->restore();
-
-        return back();
-
-    }
-
-    public function imgdelete(Request $request): RedirectResponse
-    {
-
-        $imgid = $request->imgid;
-
-        $mediaItems = Media::find($imgid);
-
-        $mediaItems->delete();
-
-        return back();
-
-    }
-
-    public function imgupdate(Request $request): RedirectResponse
-    {
-
-        $id = $request->imgid;
-
-        $image = Media::find($id);
-
-        $image->update([
-            'name' => request('nameimg')
-        ]);
-
-
-        return back();
-
     }
 }

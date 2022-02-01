@@ -7,6 +7,7 @@ use App\Models\GroupMenu;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GroupMenuRequest;
 
 class GroupMenuController extends Controller
 {
@@ -38,7 +39,7 @@ class GroupMenuController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GroupMenuRequest $request)
     {
 
         GroupMenu::create([
@@ -70,7 +71,7 @@ class GroupMenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(GroupMenuRequest $request, $id)
     {
         $groupmenu = GroupMenu::find($id);
 

@@ -229,6 +229,7 @@
                 @case('overviews')
                 @case('comparisons')
                 @case('manuals')
+                @case('static-pages')
                   sidenav__item sidenav__item--expanded
                   @break
                 @default
@@ -282,14 +283,25 @@
                     </a>
                   </li>
 
+                  <li class="sidenav__item">
+                    <a href="{{ route('static-pages.index') }}" class="sidenav__link" aria-current="{{ (request()->segment(2) == 'static-pages') ? 'page' : '' }}">
+                      <span class="sidenav__text text-sm@md">Статич. страницы</span>
+                    </a>
+                  </li>
+
                 </ul>
               </li>
 
-
-
-
-
-              <li class="sidenav__item sidenav__item--expanded">
+              <li class="
+              @switch(request()->segment(2))
+                @case('groupmenus')
+                @case('menuitems')
+                  sidenav__item sidenav__item--expanded
+                  @break
+                @default
+              sidenav__item sidenav__item
+              @endswitch
+              ">
                 <a href="#0" class="sidenav__link">
                   <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16"><g><path d="M14,0H2C1.4,0,1,0.4,1,1v14c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V1C15,0.4,14.6,0,14,0z M13,14H3V2h10V14z"></path><rect x="4" y="3" width="4" height="4"></rect><rect x="9" y="4" width="3" height="1"></rect><rect x="9" y="6" width="3" height="1"></rect><rect x="4" y="8" width="8" height="1"></rect> <rect x="4" y="10" width="8" height="1"></rect><rect x="4" y="12" width="5" height="1"></rect></g></svg>
 

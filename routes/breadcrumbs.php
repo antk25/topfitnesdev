@@ -12,6 +12,12 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('Главная', route('index'));
 });
 
+// Home > Page
+Breadcrumbs::for('static_page', function (BreadcrumbTrail $trail, $static_page) {
+    $trail->parent('home');
+    $trail->push($static_page->name, route('pub.static-pages.show', ['static_page' => $static_page]));
+});
+
 // Home > Ratings
 Breadcrumbs::for('ratings', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -251,7 +257,6 @@ Breadcrumbs::for('admin_comparison_create', function (BreadcrumbTrail $trail) {
     $trail->push("Создать сравнение браслетов", route('comparisons.create'));
 });
 
-
 // Admin > Pages > Manuals
 Breadcrumbs::for('admin_manuals', function (BreadcrumbTrail $trail) {
     $trail->parent('pages');
@@ -268,6 +273,25 @@ Breadcrumbs::for('admin_manual', function (BreadcrumbTrail $trail, $manual) {
 Breadcrumbs::for('admin_manual_create', function (BreadcrumbTrail $trail) {
     $trail->parent('admin_manuals');
     $trail->push("Создать мануал (инструкцию)", route('manuals.create'));
+});
+
+
+// Admin > Pages > StaticPages
+Breadcrumbs::for('admin_static_pages', function (BreadcrumbTrail $trail) {
+    $trail->parent('pages');
+    $trail->push('Статические страницы', route('static-pages.index'));
+});
+
+// Admin > Pages  > StaticPages > StaticPage
+Breadcrumbs::for('admin_static_page', function (BreadcrumbTrail $trail, $static_page) {
+    $trail->parent('admin_static_pages');
+    $trail->push($static_page->name . " (id =  $static_page->id)", route('static-pages.edit', ['static_page' => $static_page]));
+});
+
+// Admin > Pages  > StaticPages > Create StaticPage
+Breadcrumbs::for('admin_static_page_create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_static_pages');
+    $trail->push("Создать статическую страницу", route('static-pages.create'));
 });
 
 /**

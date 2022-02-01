@@ -16,7 +16,7 @@ class SeoBlockCreate extends Component
      *
      * @param $users
      */
-    public function __construct($users)
+    public function __construct($users = null)
     {
         $this->users = $users;
     }
