@@ -38,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
             'user' => 'App\Models\User',
             'menuitem' => 'App\Models\MenuItem',
             'staticPage' => 'App\Models\StaticPage',
+            'brand' => 'App\Models\Brand',
         ]);
     }
 }

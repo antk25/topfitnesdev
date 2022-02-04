@@ -102,7 +102,6 @@ class SpecController extends Controller
         $slugs = array_column($allvalues, 'slug');
 
         $values = array_combine($values, $slugs);
-        dd($values);
 
         $spec->update([
             'device' => request('device'),

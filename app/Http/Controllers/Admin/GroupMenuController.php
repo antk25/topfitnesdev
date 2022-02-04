@@ -7,7 +7,7 @@ use App\Models\GroupMenu;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GroupMenuRequest;
+use App\Http\Requests\Admin\GroupMenuRequest;
 
 class GroupMenuController extends Controller
 {
@@ -43,7 +43,7 @@ class GroupMenuController extends Controller
     {
 
         GroupMenu::create([
-            'name' => Str::slug(request('name'), '_'),
+            'name' => request('name'),
             'place' => request('place'),
             'about' => request('about'),
         ]);
@@ -76,7 +76,7 @@ class GroupMenuController extends Controller
         $groupmenu = GroupMenu::find($id);
 
         $groupmenu->update([
-            'name' => Str::slug(request('name'), '_'),
+            'name' => request('name'),
             'place' => request('place'),
             'about' => request('about'),
         ]);
