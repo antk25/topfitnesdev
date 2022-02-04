@@ -786,7 +786,7 @@
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_diag">Диагональ (дюймы)</label>
-                <input class="form-control width-100%" type="number" name="disp_diag" value="{{ $bracelet->disp_diag }}" min="0.1" max="3" step="0.1" value="">
+                <input class="form-control width-100%" type="number" name="disp_diag" value="{{ $bracelet->disp_diag }}" min="0.10" max="3.00" step="0.10" value="">
               </div>
               <div class="col-3@md"></div>
             </div>
