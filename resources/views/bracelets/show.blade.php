@@ -213,7 +213,7 @@
                     @if($bracelet->plus)
                         <div class="t-article-v4__divider margin-y-md" aria-hidden="true"><span></span></div>
                         <section class="toc-content__target" id="toc2">
-                            <div class="container grid">
+                            <div class="container grid gap-xs">
                                 <div class="col-6@sm">
                                     <h3 class="margin-y-sm text-center">Плюсы</h3>
 

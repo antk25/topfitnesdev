@@ -1,7 +1,7 @@
 <div>
     <div class="text-component__block">
         <div class="text-divider"><span>Плюсы и минусы {{ $bracelet->name }}</span></div>
-        <div class="grid">
+        <div class="grid gap-xs">
             <div class="col-6@sm">
                 <p class="text-center text-md">Плюсы</p>
 
