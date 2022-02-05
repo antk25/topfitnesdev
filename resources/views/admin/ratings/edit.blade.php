@@ -207,9 +207,13 @@
                                                                     @if($item['specs'] == 'player_control') selected @endif>
                                                                     Управление плеером
                                                             </option>
-                                                            <option value="grade_bracelet"
-                                                                    @if($item['specs'] == 'grade_bracelet') selected @endif>
+                                                            <option value="average_grade"
+                                                                    @if($item['specs'] == 'average_grade') selected @endif>
                                                                     Общий рейтинг
+                                                            </option>
+                                                            <option value="average_pressure_grade"
+                                                                    @if($item['specs'] == 'average_pressure_grade') selected @endif>
+                                                                    Общий с давлением
                                                             </option>
                                                         </select>
 
@@ -283,7 +287,8 @@
                                                             <option value="smart_alarm">Умный будильник</option>
                                                             <option value="camera_control">Управление камерой</option>
                                                             <option value="player_control">Управление плеером</option>
-                                                            <option value="grade_bracelet">Общий рейтинг</option>
+                                                            <option value="average_grade">Общий рейтинг</option>
+                                                            <option value="average_pressure_grade">Общий рейтинг с давлением</option>
                                                         </select>
 
                                                         <svg class="icon select__icon" aria-hidden="true"

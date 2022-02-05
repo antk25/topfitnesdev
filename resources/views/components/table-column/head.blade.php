@@ -67,8 +67,11 @@
                         @case('player_control')
                         <x-table-row.rows.bool :item="$item->player_control"/>
                         @break
-                        @case('grade_bracelet')
-                        <x-table-row.rows.rating :item="$item->grade_bracelet"/>
+                        @case('average_grade')
+                        <x-table-row.rows.rating :item="$item->average_grade"/>
+                        @break
+                        @case('average_pressure_grade')
+                        <x-table-row.rows.rating :item="$item->average_pressure_grade"/>
                         @break
                         @case('country')
                         <x-table-row.rows.string :item="$item->country"/>

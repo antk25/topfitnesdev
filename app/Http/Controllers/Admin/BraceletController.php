@@ -617,19 +617,57 @@ class BraceletController extends Controller
 
     protected function gradeUpdate() {
 
-        $bracelets = Bracelet::with('grades')->select('id')->get();
+        $bracelets = Bracelet::with('grades')->get();
 
         foreach ($bracelets as $bracelet)
         {
-           $brgrade = DB::table('bracelet_grade')->where('bracelet_id', $bracelet->id)->pluck('value');
+            $brgrade = $bracelet->grades->whereIn('name', ['Функциональность','Качество дисплея','Автономность','Дизайн','Удобство использования'])->all();
 
-           $brgrade = $brgrade->avg();
+            foreach ($brgrade as $item)
+            {
+                $grades1[] = $item->pivot->value;
+            }
 
-           $bracelet->grade_bracelet = $brgrade;
+            $result1 = round(collect($grades1)->avg(), 2);
 
-           $bracelet->save();
+            $grades1 = [];
+
+            $bracelet->average_grade = $result1;
+
+            $bracelet->save();
+
+            if($bracelet->grades->contains('name', 'Точность измерения давления'))
+            {
+                $brgrade2 = $bracelet->grades->whereIn('name', ['Функциональность','Качество дисплея','Автономность','Дизайн','Удобство использования','Точность измерения давления']);
+
+                foreach ($brgrade2 as $item)
+                {
+                    $grades2[] = $item->pivot->value;
+                }
+                $result2 = round(collect($grades2)->avg(), 2);
+
+                $grades2 = [];
+
+                $bracelet->average_pressure_grade = $result2;
+
+                $bracelet->save();
+            }
 
         }
+
+        // $bracelets = Bracelet::with('grades')->select('id')->get();
+
+        // foreach ($bracelets as $bracelet)
+        // {
+        //    $brgrade = DB::table('bracelet_grade')->where('bracelet_id', $bracelet->id)->pluck('value');
+
+        //    $brgrade = $brgrade->avg();
+
+        //    $bracelet->grade_bracelet = $brgrade;
+
+        //    $bracelet->save();
+
+        // }
 
         return back();
 
