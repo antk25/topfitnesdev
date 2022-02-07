@@ -49,7 +49,7 @@
 
                 {!! $rating->intro !!}
 
-                <x-cards.bracelet-article :bracelets="$rating->bracelets">
+                <x-cards.bracelet-article :bracelets="$rating->bracelets" typeGrade="{{ $rating->type_grade }}">
 
                 </x-cards.bracelet-article>
 

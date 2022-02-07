@@ -63,6 +63,7 @@ class Rating extends Model implements HasMedia
         'slug',
         'list_specs',
         'type_table',
+        'type_grade',
         'user_id',
     ];
 

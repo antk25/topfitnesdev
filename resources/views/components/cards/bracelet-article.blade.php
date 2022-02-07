@@ -92,7 +92,7 @@
             </div>
         </div>
 
-       <x-cards.bracelet-grades-article :bracelet="$bracelet">
+       <x-cards.bracelet-grades-article :bracelet="$bracelet" typeGrade="{{ $typeGrade }}">
 
        </x-cards.bracelet-grades-article>
 

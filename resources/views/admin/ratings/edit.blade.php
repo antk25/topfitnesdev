@@ -93,23 +93,50 @@
 
 
                         <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
-                            <h4>Тип таблицы</h4>
-                            <div class="select margin-y-sm">
-                                <select
-                                    class="select__input form-control @error('type_table') form-control--error @enderror"
-                                    name="type_table">
-                                    <option value="">Выбрать тип таблицы</option>
-                                    <option value="table-row.head" @if($rating->type_table == 'table-row.head') selected @endif>Как на амазоне</option>
-                                    <option value="table-column.head" @if($rating->type_table == 'table-column.head') selected @endif>Обычная</option>
-                                </select>
+                            <div class="grid gap-xxs">
+                                <div class="col-6@md">
+                                        <h4>Тип таблицы</h4>
+                                        <div class="select margin-y-sm">
+                                            <select
+                                                class="select__input form-control @error('type_table') form-control--error @enderror"
+                                                name="type_table">
+                                                <option value="">Выбрать тип таблицы</option>
+                                                <option value="table-row.head" @if($rating->type_table == 'table-row.head') selected @endif>Как на амазоне</option>
+                                                <option value="table-column.head" @if($rating->type_table == 'table-column.head') selected @endif>Обычная</option>
+                                            </select>
 
-                                <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
-                                    <g stroke-width="1" stroke="currentColor">
-                                        <polyline fill="none" stroke="currentColor" stroke-linecap="round"
-                                                  stroke-linejoin="round" stroke-miterlimit="10"
-                                                  points="15.5,4.5 8,12 0.5,4.5 "></polyline>
-                                    </g>
-                                </svg>
+                                            <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
+                                                <g stroke-width="1" stroke="currentColor">
+                                                    <polyline fill="none" stroke="currentColor" stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-miterlimit="10"
+                                                            points="15.5,4.5 8,12 0.5,4.5 "></polyline>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                </div>
+                                <div class="col-6@md">
+                                    <h4>Оценка для браслетов</h4>
+                                        <div class="select margin-y-sm">
+                                            <select
+                                                class="select__input form-control @error('type_grade') form-control--error @enderror"
+                                                name="type_grade">
+                                                <option value="">Выбрать тип оценки</option>
+                                                <option value="average_grade" @if($rating->type_grade == 'average_grade') selected @endif>Общий рейтинг</option>
+                                                <option value="average_swim_grade" @if($rating->type_grade == 'average_swim_grade') selected @endif>Плавание</option>
+                                                <option value="average_pulse_grade" @if($rating->type_grade == 'average_pulse_grade') selected @endif>Точность пульсометра</option>
+                                                <option value="average_pedometr_grade" @if($rating->type_grade == 'average_pedometr_grade') selected @endif>Точность шагомера</option>
+                                                <option value="average_smart_grade" @if($rating->type_grade == 'average_smart_grade') selected @endif>Умный будильник</option>
+                                                <option value="average_pressure_grade" @if($rating->type_grade == 'average_pressure_grade') selected @endif>Измерение давления</option>
+                                            </select>
+                                            <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
+                                                <g stroke-width="1" stroke="currentColor">
+                                                    <polyline fill="none" stroke="currentColor" stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-miterlimit="10"
+                                                            points="15.5,4.5 8,12 0.5,4.5 "></polyline>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                </div>
                             </div>
 
                             <h4>Характеристики для таблицы</h4>

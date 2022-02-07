@@ -625,14 +625,14 @@ class BraceletController extends Controller
 
             foreach ($brgrade as $item)
             {
-                $grades1[] = $item->pivot->value;
+                $grades[] = $item->pivot->value;
             }
 
-            $result1 = round(collect($grades1)->avg(), 2);
+            $average_grade = round(collect($grades)->avg(), 2);
 
-            $grades1 = [];
+            $grades = [];
 
-            $bracelet->average_grade = $result1;
+            $bracelet->average_grade = $average_grade;
 
             $bracelet->save();
 
@@ -644,30 +644,84 @@ class BraceletController extends Controller
                 {
                     $grades2[] = $item->pivot->value;
                 }
-                $result2 = round(collect($grades2)->avg(), 2);
+                $average_pressure_grade = round(collect($grades2)->avg(), 2);
 
                 $grades2 = [];
 
-                $bracelet->average_pressure_grade = $result2;
+                $bracelet->average_pressure_grade = $average_pressure_grade;
+
+                $bracelet->save();
+            }
+
+            if($bracelet->grades->contains('name', 'Точность умного будильника'))
+            {
+                $brgrade3 = $bracelet->grades->whereIn('name', ['Функциональность','Качество дисплея','Автономность','Дизайн','Удобство использования','Точность умного будильника']);
+
+                foreach ($brgrade3 as $item)
+                {
+                    $grades3[] = $item->pivot->value;
+                }
+                $average_smart_grade = round(collect($grades3)->avg(), 2);
+
+                $grades3 = [];
+
+                $bracelet->average_smart_grade = $average_smart_grade;
+
+                $bracelet->save();
+            }
+
+            if($bracelet->grades->contains('name', 'Точность шагомера'))
+            {
+                $brgrade4 = $bracelet->grades->whereIn('name', ['Функциональность','Качество дисплея','Автономность','Дизайн','Удобство использования','Точность шагомера']);
+
+                foreach ($brgrade4 as $item)
+                {
+                    $grades4[] = $item->pivot->value;
+                }
+                $average_pedometer_grade = round(collect($grades4)->avg(), 2);
+
+                $grades4 = [];
+
+                $bracelet->average_pedometer_grade = $average_pedometer_grade;
+
+                $bracelet->save();
+            }
+
+            if($bracelet->grades->contains('name', 'Точность измерения пульса'))
+            {
+                $brgrade5 = $bracelet->grades->whereIn('name', ['Функциональность','Качество дисплея','Автономность','Дизайн','Удобство использования','Точность измерения пульса']);
+
+                foreach ($brgrade5 as $item)
+                {
+                    $grades5[] = $item->pivot->value;
+                }
+                $average_pulse_grade = round(collect($grades5)->avg(), 2);
+
+                $grades5 = [];
+
+                $bracelet->average_pulse_grade = $average_pulse_grade;
+
+                $bracelet->save();
+            }
+
+            if($bracelet->grades->contains('name', 'Режим плавание'))
+            {
+                $brgrade6 = $bracelet->grades->whereIn('name', ['Функциональность','Качество дисплея','Автономность','Дизайн','Удобство использования','Режим плавание']);
+
+                foreach ($brgrade6 as $item)
+                {
+                    $grades6[] = $item->pivot->value;
+                }
+                $average_pulse_grade = round(collect($grades6)->avg(), 2);
+
+                $grades6 = [];
+
+                $bracelet->average_swim_grade = $average_swim_grade;
 
                 $bracelet->save();
             }
 
         }
-
-        // $bracelets = Bracelet::with('grades')->select('id')->get();
-
-        // foreach ($bracelets as $bracelet)
-        // {
-        //    $brgrade = DB::table('bracelet_grade')->where('bracelet_id', $bracelet->id)->pluck('value');
-
-        //    $brgrade = $brgrade->avg();
-
-        //    $bracelet->grade_bracelet = $brgrade;
-
-        //    $bracelet->save();
-
-        // }
 
         return back();
 
@@ -683,12 +737,6 @@ class BraceletController extends Controller
        $file = $request->file('importFile');
 
        Excel::import(new BraceletsImport, $file);
-
-    //    if ($import->failures()->isNotEmpty())
-    //    {
-    //        return back()->withFailures($import->failures());
-    //    }
-
 
        return back()->with('success', 'Завершено!');
     }

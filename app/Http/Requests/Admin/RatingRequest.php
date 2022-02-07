@@ -28,6 +28,7 @@ class RatingRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'title' => 'required|min:5',
             'type_table' => 'required',
+            'type_grade' => 'required',
             'name' => [
                 'required',
                 'min:5',
@@ -52,6 +53,7 @@ class RatingRequest extends FormRequest
             'name' => 'Название рейтинга',
             'title' => 'title рейтинга',
             'type_table' => 'Тип таблицы',
+            'type_grade' => 'Используемая оценка браслетов',
             'user_id' => 'Автор'
         ];
     }

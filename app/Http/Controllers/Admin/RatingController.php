@@ -99,6 +99,7 @@ class RatingController extends Controller
                     'conclusion' => $request->input('conclusion'),
                     'list_specs' => $request->input('listspecs') ?? [],
                     'type_table' => $request->input('type_table'),
+                    'type_grade' => $request->input('type_grade'),
                 ]);
 
         /**
@@ -204,6 +205,7 @@ class RatingController extends Controller
             'conclusion' => $request->input('conclusion'),
             'list_specs' => $request->input('listspecs'),
             'type_table' => $request->input('type_table'),
+            'type_grade' => $request->input('type_grade'),
         ]);
 
 

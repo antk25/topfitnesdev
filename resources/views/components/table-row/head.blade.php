@@ -64,6 +64,18 @@
                         @case('average_pressure_grade')
                         <x-table-row.rows.rating :item="$item->average_pressure_grade"/>
                         @break
+                        @case('average_pulse_grade')
+                        <x-table-row.rows.rating :item="$item->average_pulse_grade"/>
+                        @break
+                        @case('average_pedometer_grade')
+                        <x-table-row.rows.rating :item="$item->average_pedometer_grade"/>
+                        @break
+                        @case('average_swim_grade')
+                        <x-table-row.rows.rating :item="$item->average_swim_grade"/>
+                        @break
+                        @case('average_smart_grade')
+                        <x-table-row.rows.rating :item="$item->average_smart_grade"/>
+                        @break
                         @case('country')
                         <x-table-row.rows.string :item="$item->country"/>
                         @break
