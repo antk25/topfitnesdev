@@ -18,7 +18,8 @@ class ControlImages extends Component
     }
 
     public function updateName($imageId)
-    {        $this->imageId = $imageId;
+    {
+        $this->imageId = $imageId;
         $image = $this->images->where('id', $this->imageId)->first();
         $image->update([
             'name' => $this->imageName

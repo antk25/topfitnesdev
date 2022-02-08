@@ -96,7 +96,7 @@ class RatingController extends Controller
                     'title' => $request->input('title'),
                     'description' => $request->input('description'),
                     'intro' => $request->input('intro'),
-                    'conclusion' => $request->input('conclusion'),
+                    'conclusion_raw' => $request->input('conclusion'),
                     'list_specs' => $request->input('listspecs') ?? [],
                     'type_table' => $request->input('type_table'),
                     'type_grade' => $request->input('type_grade'),
@@ -116,12 +116,6 @@ class RatingController extends Controller
             }
         }
 
-        $allbracelets = collect($request->input('allbracelets'))->filter()->toArray();
-
-        if(count($allbracelets)) {
-            $rating->bracelets()->attach($allbracelets);
-        }
-
         /**
         * Обложка
         */
@@ -131,6 +125,64 @@ class RatingController extends Controller
             ->withResponsiveImages()
             ->toMediaCollection('covers');
         }
+
+        if($rating->getMedia('ratings')) {
+
+            $images = $rating->getMedia('ratings');
+            $content = $rating->conclusion_raw;
+
+            for ($image = 0; $image < count($images); $image++) {
+                $content = str_replace("<box_img_half." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block width-50%@md margin-x-auto">
+                <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<box_img." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block">
+                <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<img." . $image . ">",
+                    '
+                <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>',
+                    $content);
+
+            }
+
+            $rating->conclusion = $content;
+            $rating->save();
+        }
+
+
+        $allbracelets = collect($request->input('allbracelets'))->filter()->toArray();
+
+        if(count($allbracelets)) {
+            $rating->bracelets()->attach($allbracelets);
+        }
+
+
 
         if ($rating) {
             return redirect()
@@ -195,6 +247,30 @@ class RatingController extends Controller
 
 //        $listspecs = array_combine($request->input('listspecskey'), $request->input('listspecsvalue'));
 
+         /**
+         * Загрузка картинок на сайт и в БД
+         */
+
+        $files = request('files');
+
+        if ($files != '') {
+            foreach ($files as $file) {
+                $rating->addMedia($file)
+                    ->withResponsiveImages()
+                    ->toMediaCollection('ratings');
+            }
+        }
+
+       /**
+        * Обложка
+        */
+
+        if (request('cover') != null) {
+            $rating->addMediaFromRequest('cover')
+            ->withResponsiveImages()
+            ->toMediaCollection('covers');
+        }
+
         $result = $rating->update([
             'user_id' => $request->input('user_id'),
             'subtitle' => $request->input('subtitle'),
@@ -202,11 +278,62 @@ class RatingController extends Controller
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'intro' => $request->input('intro'),
-            'conclusion' => $request->input('conclusion'),
+            'conclusion_raw' => $request->input('conclusion'),
             'list_specs' => $request->input('listspecs'),
             'type_table' => $request->input('type_table'),
             'type_grade' => $request->input('type_grade'),
         ]);
+
+
+
+        if($rating->getMedia('ratings')) {
+
+            $images = $rating->getMedia('ratings');
+            $content = $rating->conclusion_raw;
+
+            for ($image = 0; $image < count($images); $image++) {
+                $content = str_replace("<box_img_half." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block width-50%@md margin-x-auto">
+                <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<box_img." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block">
+                <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<img." . $image . ">",
+                    '
+                <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl() . '"
+                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
+                    sizes="1px"
+                    srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                </figure>',
+                    $content);
+
+            }
+
+            $rating->conclusion = $content;
+            $rating->save();
+        }
 
 
         $allbracelets = $request->input('allbracelets');
@@ -244,29 +371,7 @@ class RatingController extends Controller
         }
 
 
-        /**
-         * Загрузка картинок на сайт и в БД
-         */
 
-        $files = request('files');
-
-        if ($files != '') {
-            foreach ($files as $file) {
-                $rating->addMedia($file)
-                    ->withResponsiveImages()
-                    ->toMediaCollection('ratings');
-            }
-        }
-
-       /**
-        * Обложка
-        */
-
-        if (request('cover') != null) {
-            $rating->addMediaFromRequest('cover')
-            ->withResponsiveImages()
-            ->toMediaCollection('covers');
-        }
 
 
         if ($result) {

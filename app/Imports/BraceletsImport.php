@@ -90,7 +90,7 @@ class BraceletsImport implements
             'dimensions' => $row['dimensions'],
             'weight' => $row['weight'],
             'disp_diag' => $row['disp_diag'],
-            'disp_tech' => $row['disp_techdisp_resolution'],
+            'disp_tech' => $row['disp_tech'],
             'disp_resolution' => $row['disp_resolution'],
             'disp_ppi' => $row['disp_ppi'],
             'disp_sens' => $row['disp_sens'] ? true : false,
@@ -147,6 +147,12 @@ class BraceletsImport implements
             2 => $row['disp_eval'],
             3 => $row['autonom'],
             4 => $row['design'],
+            8 => $row['pedometer_accu'],
+            5 => $row['easy_use_smart'],
+            6 => $row['tonometer'],
+            10 => $row['swim_prig'],
+            7 => $row['alarm_accu'],
+            9 => $row['pulse_accu'],
         ];
 
         $grades = array_filter($grades, function($element) {
@@ -172,71 +178,71 @@ class BraceletsImport implements
          *
          */
 
-        $prices = [
-            1 => $row['prod1'],
-            2 => $row['prod2'],
-            3 => $row['market1'],
-            4 => $row['market2'],
-        ];
+        // $prices = [
+        //     1 => $row['prod1'],
+        //     2 => $row['prod2'],
+        //     3 => $row['market1'],
+        //     4 => $row['market2'],
+        // ];
 
-        $prices = array_filter($prices, function($element) {
-            return ! empty($element);
-        });
+        // $prices = array_filter($prices, function($element) {
+        //     return ! empty($element);
+        // });
 
-        $old_prices = [
-            1 => $row['prod1_old'],
-            2 => $row['prod2_old'],
-            3 => $row['market1_old'],
-            4 => $row['market2_old'],
-        ];
+        // $old_prices = [
+        //     1 => $row['prod1_old'],
+        //     2 => $row['prod2_old'],
+        //     3 => $row['market1_old'],
+        //     4 => $row['market2_old'],
+        // ];
 
-        $old_prices = array_filter($old_prices, function($element) {
-            return ! empty($element);
-        });
+        // $old_prices = array_filter($old_prices, function($element) {
+        //     return ! empty($element);
+        // });
 
-        $links = [
-            1 => $row['prod1_link'],
-            2 => $row['prod2_link'],
-            3 => $row['market1_link'],
-            4 => $row['market2_link'],
-            ];
+        // $links = [
+        //     1 => $row['prod1_link'],
+        //     2 => $row['prod2_link'],
+        //     3 => $row['market1_link'],
+        //     4 => $row['market2_link'],
+        //     ];
 
-        $links = array_filter($links, function($element) {
-            return ! empty($element);
-        });
+        // $links = array_filter($links, function($element) {
+        //     return ! empty($element);
+        // });
 
-        $keys = array_keys($prices);
+        // $keys = array_keys($prices);
 
-        $merged = array_map(function($p, $o, $l){
-            return ['price' => $p, 'old_price' => $o, 'link' => $l];
-        }, $prices, $old_prices, $links);
+        // $merged = array_map(function($p, $o, $l){
+        //     return ['price' => $p, 'old_price' => $o, 'link' => $l];
+        // }, $prices, $old_prices, $links);
 
-        $result_s = array_combine($keys, $merged);
+        // $result_s = array_combine($keys, $merged);
 
 
-        $bracelet->sellers()->sync($result_s);
+        // $bracelet->sellers()->sync($result_s);
 
         // Конец импорта цен
 
         // Импорт картинок
 
-         $files = $row['files'];
-             if ($files != '') {
-                 if (Str::contains($files, '|')) {
-                     $files = explode("|", $files);
-                     foreach ($files as $file) {
-                         $bracelet->addMedia($file)
-                             ->preservingOriginal()
-                             ->toMediaCollection('bracelets');
-                     }
+        //  $files = $row['files'];
+        //      if ($files != '') {
+        //          if (Str::contains($files, '|')) {
+        //              $files = explode("|", $files);
+        //              foreach ($files as $file) {
+        //                  $bracelet->addMedia($file)
+        //                      ->preservingOriginal()
+        //                      ->toMediaCollection('bracelets');
+        //              }
 
-                 }
-             else  {
-                     $bracelet->addMedia($files)
-                         ->preservingOriginal()
-                         ->toMediaCollection('bracelets');
-             }
-         }
+        //          }
+        //      else  {
+        //              $bracelet->addMedia($files)
+        //                  ->preservingOriginal()
+        //                  ->toMediaCollection('bracelets');
+        //      }
+        //  }
 
         }
 

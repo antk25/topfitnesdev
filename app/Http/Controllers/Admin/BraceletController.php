@@ -712,7 +712,7 @@ class BraceletController extends Controller
                 {
                     $grades6[] = $item->pivot->value;
                 }
-                $average_pulse_grade = round(collect($grades6)->avg(), 2);
+                $average_swim_grade = round(collect($grades6)->avg(), 2);
 
                 $grades6 = [];
 

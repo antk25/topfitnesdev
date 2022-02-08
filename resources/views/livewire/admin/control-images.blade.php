@@ -53,7 +53,7 @@
                 </div>
                 @endif
 
-                @if (request()->segment(2) != 'bracelets' && request()->segment(2) != 'ratings')
+                @if (request()->segment(2) != 'bracelets')
 
                     <span class="text-xs">Просто картинка</span>
                     <div class="text-sm padding-xxxs bg-contrast-lower margin-y-xxxs">&lt;img.{{ $loop->index }}&gt;</div>

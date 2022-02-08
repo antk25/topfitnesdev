@@ -80,7 +80,7 @@
                                     полный экран, ESC для выхода.</p>
                             </x-admin.codemirror-editor>
 
-                            <x-admin.codemirror-editor :content="$rating->conclusion" name="conclusion" id="conclusion">
+                            <x-admin.codemirror-editor :content="$rating->conclusion_raw" name="conclusion" id="conclusion">
                                 <h4>Выводы (в конце статьи)</h4>
                                 <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
                                     полный экран, ESC для выхода.</p>

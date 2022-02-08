@@ -59,7 +59,7 @@ class Rating extends Model implements HasMedia
         'name',
         'subtitle',
         'intro',
-        'conclusion',
+        'conclusion_raw',
         'slug',
         'list_specs',
         'type_table',
