@@ -8,7 +8,7 @@
                 </th>
 
             @foreach($specs as $spec)
-                    <th class="tbl__cell text-left" scope="col">
+                    <th class="tbl__cell text-center" scope="col">
                         <span class="text-xs text-uppercase letter-spacing-lg font-semibold">{{ $spec['value'] }}</span>
                     </th>
             @endforeach
