@@ -28,7 +28,7 @@
         <div class="container max-width-adaptive-md">
             <div class="text-component line-height-lg text-space-y-md">
                 <div class="text-component__block">
-                    <x-dynamic-component :component="$rating->type_table" :bracelets="$bracelets" :specs="$rating->list_specs" />
+                    <x-dynamic-component :component="$rating->type_table" :bracelets="$rating->bracelets" :specs="$rating->list_specs" />
                 </div>
 
                 <details class="details js-details margin-y-sm">

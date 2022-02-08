@@ -3,6 +3,7 @@
     <section class="grid grid-gap-sm margin-y-md">
         <div class="col-9@md">
             @foreach ($bracelet->grades as $grade)
+                @if ($grade->id != 5)
                 <div
                     class="progress-bar progress-bar--color-update js-progress-bar flex flex-column items-center margin-y-xxs">
                     <p class="sr-only" aria-live="polite" aria-atomic="true">Оценка составляет
@@ -19,7 +20,7 @@
                              style="width: {{ $grade->pivot->value * 10 }}%;"></div>
                     </div>
                 </div>
-
+                @endif
             @endforeach
         </div>
         <div class="col-3@md margin-y-auto text-center">

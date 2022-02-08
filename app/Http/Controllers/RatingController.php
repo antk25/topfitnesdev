@@ -18,8 +18,6 @@ class RatingController extends Controller
 
     public function show(Rating $rating) {
 
-        $bracelets = $rating->bracelets;
-
         $topbracelets = Bracelet::where('hit', 1)->limit(3)->get();
 
         if (Auth::check()) {
@@ -29,7 +27,7 @@ class RatingController extends Controller
         {
             $user = null;
         }
-        // $media = $rating->getMedia('rating');
-        return view('ratings.show', compact('rating', 'user', 'topbracelets', 'bracelets'));
+
+        return view('ratings.show', compact('rating', 'user', 'topbracelets'));
     }
 }
