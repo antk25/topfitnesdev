@@ -27,6 +27,32 @@
                         </a>
                         @else
                         <form wire:submit.prevent="store({{ $reply->id }})">
+                          <fieldset>
+                            <label class="form-label margin-bottom-xxs text-bold" for="user_id">Автор</label>
+                        <div class="select margin-bottom-sm">
+                            <select
+                                class="select__input form-control @error('user') form-control--error @enderror"
+                                 wire:model="user">
+                                <option value="">Выбрать автора</option>
+                                @foreach ($users as $k => $v)
+                                    <option value="{{ $k }}"
+                                            selected>{{ $v }}</option>
+                                @endforeach
+                            </select>
+
+                            <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
+                                <g stroke-width="1" stroke="currentColor">
+                                    <polyline fill="none" stroke="currentColor" stroke-linecap="round"
+                                              stroke-linejoin="round" stroke-miterlimit="10"
+                                              points="15.5,4.5 8,12 0.5,4.5 "></polyline>
+                                </g>
+                            </svg>
+                        </div>
+                        @error('user')
+                        <div role="alert"
+                             class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs">
+                            <p><strong>ошибка:</strong> {{ $message }}</p></div>
+                        @enderror
 
                           @if($user == '')
                           <div class="grid gap-xxs">
@@ -52,8 +78,15 @@
                                 @enderror
                             </div>
                         </div>
-                          <p class="text-xs color-contrast-medium margin-y-xxxxs">Укажите <span class="text-bold">имя</span> и <span class="text-bold">email</span>, либо <a href="{{ route('register') }}" aria-controls="modal-form">зарегистрируйтесь</a>.</p>
                           @endif
+
+                          <div class="margin-y-sm">
+
+                            <label for="created_at" class="form-label margin-bottom-xxs">Выбрать дату</label>
+
+                            <x-admin.flatpickr wire:model="created_at" placeholder="DD/MM/YYYY"/>
+
+                        </div>
 
                           <fieldset>
                             <div class="margin-bottom-xs">

@@ -568,51 +568,10 @@
                 <section id="tab1Panel2" class="js-tabs__panel">
 
                     {{-- Таблица комментариев для текущей страницы. В функции foreach заменить модель для вызова комментов --}}
-                    <div class="text-component margin-bottom-md text-center">
-                        <h2>Комментарии</h2>
-                    </div>
 
                     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
-                        <div class="tbl text-sm">
-
-                            <table class="tbl__table border-bottom" aria-label="Таблица комментариев">
-                                <thead class="tbl__header border-bottom">
-                                <tr class="tbl__row">
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span class="font-semibold">ID</span>
-                                    </th>
-
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span class="font-semibold">Пользователь</span>
-                                    </th>
-
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span class="font-semibold">Ответ (id)</span>
-                                    </th>
-
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span class="font-semibold">Текст</span>
-                                    </th>
-
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span class="font-semibold">Дата</span>
-                                    </th>
-
-                                    <th class="tbl__cell text-left" scope="col">
-                                        <span class="font-semibold">Действия</span>
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <tbody class="tbl__body">
-
-                                    <x-admin.comments-table-row :comments="$rating->comments">
-                                    </x-admin.comments-table-row>
-
-                                </tbody>
-                            </table>
-                        </div>
+                        @livewire('admin.comments', ['model' => $rating, 'user' => null, 'users' => $users])
 
                     </div>
 

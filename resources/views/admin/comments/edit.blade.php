@@ -1,6 +1,12 @@
 
 @extends('admin.layouts.base')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/prism.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
+@endpush
+
 @section('content')
 
 <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
@@ -116,83 +122,14 @@
                   </div>
 
                   <div class="col-6@lg">
-                    <textarea class="form-control width-100%" name="comment" id="comment">{{ $comment->comment }}</textarea>
+                    <x-admin.codemirror-editor :content="$comment->comment" name="comment" id="comment">
+                    </x-admin.codemirror-editor>
                   </div>
                 </div>
               </div>
 
-              {{-- <div class="margin-bottom-sm">
-                <div class="grid gap-xxs">
-                  <div class="col-3@lg">
-                    <label class="inline-block text-sm" for="is_published">Опубликовано</label>
-                  </div>
-                  <div class="col-6@lg">
-                    <div class="switch ">
-                      <input class="switch__input" type="checkbox" name="is_published" id="is_published" value="1" @if ($comment->is_published)checked
-                      @endif>
-                      <label class="switch__label" for="is_published" aria-hidden="true">Опубликовано</label>
-                      <div class="switch__marker" aria-hidden="true"></div>
-                    </div>
-                  </div>
-                </div>
-              </div> --}}
-
-              <!-- date picker -->
-              <div class="margin-bottom-sm">
-                <div class="grid gap-xxs">
-                  <div class="col-3@lg">
-                    <label class="inline-block text-sm padding-top-xs@lg" for="created_at">Выбрать дату и время<i class="sr-only">, формат dd/mm/yyyy 18:45:32</i></label>
-                  </div>
-
-                  <div class="col-6@lg date-input js-date-input">
-                    <div class="date-input__wrapper">
-                      <input type="text" class="form-control width-100% date-input__text js-date-input__text" placeholder="dd/mm/yyyy" autocomplete="off" id="created_at" name="created_at"  value="{{ $comment->created_at->format('d/m/Y H:m:s') }}">
-
-                      <button class="reset date-input__trigger js-date-input__trigger js-tab-focus" aria-label="Select date using calendar widget" type="button">
-                        <svg class="icon" aria-hidden="true" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"><rect x="1" y="4" width="18" height="14" rx="1"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="1" y1="9" x2="19" y2="9"/></g></svg>
-                      </button>
-                    </div>
-
-                    <div class="date-picker bg radius-md shadow-md js-date-picker" role="dialog" aria-labelledby="calendar-label-1">
-                      <header class="date-picker__header">
-                        <div class="date-picker__month">
-                          <span class="date-picker__month-label js-date-picker__month-label" id="calendar-label-1"></span> <!-- this will contain month label + year -->
-
-                          <nav>
-                            <ul class="date-picker__month-nav js-date-picker__month-nav">
-                              <li>
-                                <button class="reset date-picker__month-nav-btn js-date-picker__month-nav-btn js-date-picker__month-nav-btn--prev js-tab-focus" type="button">
-                                  <svg class="icon icon--xs" viewBox="0 0 16 16"><title>Предыдущий месяц</title><polyline points="11 14 5 8 11 2" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/></svg>
-                                </button>
-                              </li>
-
-                              <li>
-                                <button class="reset date-picker__month-nav-btn js-date-picker__month-nav-btn js-date-picker__month-nav-btn--next js-tab-focus" type="button">
-                                  <svg class="icon icon--xs" viewBox="0 0 16 16"><title>Следующий месяц</title><polyline points="5 2 11 8 5 14" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/></svg>
-                                </button>
-                              </li>
-                            </ul>
-                          </nav>
-                        </div>
-
-                        <ol class="date-picker__week">
-                          <li><div class="date-picker__day">П<span class="sr-only">онедельник</span></div></li>
-                          <li><div class="date-picker__day">В<span class="sr-only">торник</span></div></li>
-                          <li><div class="date-picker__day">С<span class="sr-only">реда</span></div></li>
-                          <li><div class="date-picker__day">Ч<span class="sr-only">етверг</span></div></li>
-                          <li><div class="date-picker__day">П<span class="sr-only">ятница</span></div></li>
-                          <li><div class="date-picker__day">С<span class="sr-only">уббота</span></div></li>
-                          <li><div class="date-picker__day">В<span class="sr-only">оскресенье</span></div></li>
-                        </ol>
-                      </header>
-
-                      <ol class="date-picker__dates js-date-picker__dates" aria-labelledby="calendar-label-1">
-                        <!-- days will be created using js -->
-                      </ol>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <x-datepicker date="{{ $comment->created_at->format('d/m/Y H:m:s') }}">
+              </x-datepicker>
 
             </fieldset>
 
@@ -246,18 +183,7 @@
 
 
               <!-- input date -->
-              <div class="margin-bottom-sm">
-                <div class="grid gap-xxs">
-                  <div class="col-3@lg">
-                    <label class="inline-block text-sm padding-top-xs@lg" for="created_at">Дата создания</label>
-                  </div>
-
-                  <div class="col-6@lg">
-                    <input class="form-control width-100%" type="text" readonly name="created_at" id="created_at" value="{{ now()->format('d/m/Y H:m:s') }}">
-                  </div>
-                </div>
-              </div>
-
+              <x-datepicker date=""></x-datepicker>
 
               <fieldset class="margin-bottom-md">
 
@@ -370,19 +296,6 @@
       </div>
 @endsection
 
-@section('scripts')
-@parent
-<script src="{{ asset("js/admin/codemirror.js") }}"></script>
-    <script src="{{ asset("js/admin/closetag.js") }}"></script>
-    <script src="{{ asset("js/admin/htmlmixed.js") }}"></script>
-    <script src="{{ asset("js/admin/css.js") }}"></script>
-    <script src="{{ asset("js/admin/javascript.js") }}"></script>
-    <script src="{{ asset("js/admin/xml.js") }}"></script>
-    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
-    <script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        mode: 'text/html',
-        autoCloseTags: true
-      });
-    </script>
-@endsection
+@push('js')
+    <script src="{{ asset('js/admin/prism.min.js') }}"></script>
+@endpush
