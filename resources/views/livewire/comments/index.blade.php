@@ -6,7 +6,7 @@
 
                       <div class="flex items-center margin-bottom-sm">
                       <span class="comments__author-img">
-                            <img class="user-cell__img" src="/storage/theme/comments-placeholder.svg">
+                            <img class="user-cell__img" src="{{ asset('/img/theme/comments-placeholder.svg') }}">
                       </span>
 
                       <span class="color-contrast-high"><strong>@if($reply->user_id) {{ $reply->user->name }} @else {{ $reply->username }} @endif</strong></span>
@@ -21,10 +21,7 @@
                   <div class="margin-top-xs text-sm">
 
                         @if($commentIdReply !== $reply->id)
-                        <button type="button" class="reset comments__label-btn js-tab-focus" wire:click.prevent="commentId({{ $reply->id }})">Ответить</button> |
-                        <a type="button" class="reset comments__label-btn js-tab-focus"
-                                href="{{ route('comments.edit', ['comment' => $reply->id]) }}">Изменить
-                        </a>
+                        <button type="button" class="reset comments__label-btn js-tab-focus" wire:click.prevent="commentId({{ $reply->id }})">Ответить</button>
                         @else
                         <form wire:submit.prevent="store({{ $reply->id }})">
 

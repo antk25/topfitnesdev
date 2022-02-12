@@ -6,7 +6,7 @@
 
                       <div class="flex items-center margin-bottom-sm">
                       <span class="comments__author-img">
-                            <img class="user-cell__img" src="/storage/theme/comments-placeholder.svg">
+                            <img class="user-cell__img" src="{{ asset('/img/theme/comments-placeholder.svg') }}">
                       </span>
 
                       <span class="color-contrast-high"><strong>@if($reply->user_id) {{ $reply->user->name }} @else {{ $reply->username }} @endif</strong></span>
@@ -118,7 +118,7 @@
               @if($reply->replies->count() > 0)
               <div class="border-left border-3 border-opacity-20%">
                 <ul class="margin-left-sm  margin-top-sm">
-                  @include('livewire.comments.index', ['reply' => $reply->replies])
+                  @include('livewire.admin.comments.index', ['reply' => $reply->replies])
                 </ul>
               </div>
               @endif
