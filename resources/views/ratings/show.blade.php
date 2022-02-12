@@ -21,7 +21,16 @@
         <header class="container max-width-md margin-bottom-lg">
             <div class="text-component line-height-lg text-space-y-md margin-bottom-md">
                 <h1>{{ $rating->subtitle }}</h1>
-                <p class="color-contrast-medium text-sm">{{ $rating->created_at->diffForHumans() }}</p>
+                <p class="color-contrast-medium text-sm">{{ $rating->created_at->diffForHumans() }}
+                    &nbsp;
+                    <a class="text-bg-fx text-bg-fx--underline text-bg-fx--text-shadow" href="#comments">
+                    <svg class="icon" viewBox="0 0 12 12">
+                        <g>
+                          <path d="M6,0C2.691,0,0,2.362,0,5.267s2.691,5.266,6,5.266a6.8,6.8,0,0,0,1.036-.079l2.725,1.485A.505.505,0,0,0,10,12a.5.5,0,0,0,.5-.5V8.711A4.893,4.893,0,0,0,12,5.267C12,2.362,9.309,0,6,0Z"></path>
+                        </g>
+                      </svg> Комментарии
+                    </a>
+                </p>
             </div>
         </header>
 <section class="main">
@@ -60,11 +69,11 @@
 </section>
     </article>
 
-    <x-cards.author :author="$rating->user">
+    <x-cards.author :author="$rating->user" class="container max-width-md">
     </x-cards.author>
 
 <div class="container max-width-md">
-
+    @if (count($topbracelets))
     <div class="bg padding-x-lg@md margin-y-sm@md">
         <div class="text-component">
             <p class="text-lg">Наши рекомендации</p>
@@ -114,10 +123,10 @@
                 </li>
             @endforeach
         </ol>
-
     </div>
+        @endif
 
-    <div class="bg padding-md padding-x-lg@md margin-y-sm@md">
+    <div class="bg margin-y-sm@md">
         @livewire('comment.comments', ['model' => $rating, 'user' => $user])
     </div>
 </div>

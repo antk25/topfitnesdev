@@ -1,10 +1,14 @@
-    <div class="container max-width-sm">
-        <div class="author shadow-md padding-sm">
+    <div {{ $attributes }}>
+        <div class="author shadow-sm padding-sm">
             <a href="#0" class="author__img-wrapper">
-                <img src="{{ $author->getFirstMediaUrl('avatars') }}" alt="Author picture">
+                @if ($author->getFirstMediaUrl('avatars'))
+                    <img src="{{ $author->getFirstMediaUrl('avatars') }}" alt="Author picture">
+                @else
+                    <img src="{{ asset('/img/theme/comments-placeholder.svg') }}" alt="Author picture">
+                @endif
             </a>
             <div class="author__content text-component v-space-xxs">
-                <p class="text-md text-bold">Автор: <a href="#0" rel="author">{{ $author->name }}</a></p>
+                <p class="text-bold">Автор: <a href="#0" rel="author">{{ $author->name }}</a></p>
                 <p class="color-contrast-medium">{{ $author->about }}</p>
                 <div class="flex gap-xxs">
                     @if (isset($author->contacts['whatsapp']))

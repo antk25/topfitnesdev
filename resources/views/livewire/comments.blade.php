@@ -1,6 +1,6 @@
 <div>
     @if ($model->comments->count())
-        <section class="comments">
+        <section id="comments" class="comments">
             <div class="margin-bottom-sm">
                 <h2 class="text-md">Комментарии</h2>
             </div>
