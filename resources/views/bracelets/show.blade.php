@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/simple-lightbox.min.css') }}">
+@endpush
+
 @section('title')
     {{ $bracelet->title }}
 @endsection
@@ -73,18 +77,23 @@
                     <div class="grid gap-xxs">
                         <div class="col-5@md">
                             {{-- Gallery --}}
-                            <ul class="exp-gallery grid gap-xs js-exp-gallery" data-controls="expLightbox"
-                                data-placeholder="assets/img/expandable-img-gallery-placeholder.svg">
-                                @foreach ($media as $image)
-                                    <li class="col-4 col-3@sm js-exp-gallery__item">
-                                        {{-- <figure class="border border-contrast-middle border-opacity-30% shadow-xs">
-                                            <img src="{{ $image->getFullUrl('320') }}"
-                                                 data-modal-src="{{ $image->getFullUrl() }}" alt="Image Description">
-                                            <figcaption class="sr-only js-exp-gallery__caption"></figcaption>
-                                        </figure> --}}
-                                    </li>
-                                @endforeach
-                            </ul>
+                                <div class="grid gap-xxs">
+                            {{-- @foreach ($media as $image)
+                                    <div class="col-4 col-4@sm box">
+                                        <a href="{{ $image->getFullUrl() }}">
+                                            <img src="{{ $image->getFullUrl('thumb') }}" alt="{{ $image->name }}">
+                                        </a>
+                                    </div>
+                            @endforeach --}}
+
+                            @foreach ($bracelet->getMedia('bracelets') as $image)
+                            <div class="col-3 col-4@sm box">
+                                <a href="{{ $image->getFullUrl() }}">
+                                    <img src="{{ $image->getFullUrl('thumb') }}" alt="{{ $image->name }}">
+                                </a>
+                            </div>
+                            @endforeach
+                                </div>
                             {{-- End gallery --}}
                         </div>
                         <div class="col-7@md">
@@ -660,4 +669,8 @@
 
 @push('js')
     <script src="{{ asset("js/alpine.min.js") }}"></script>
+    <script src="{{ asset("js/simple-lightbox.min.js") }}"></script>
+    <script>
+        new SimpleLightbox('.box a', { /* options */});
+    </script>
 @endpush

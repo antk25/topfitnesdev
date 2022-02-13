@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Support\Str;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Pricecurrent\LaravelEloquentFilters\Filterable;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 class Bracelet extends Model implements HasMedia
@@ -211,11 +212,14 @@ class Bracelet extends Model implements HasMedia
     //     $this->attributes['buyers_like'] = collect($value)->filter()->values()->toJson(JSON_UNESCAPED_UNICODE);
     // }
 
-
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaCollections(): void
     {
-        $this->addMediaConversion('thumb')
-        ->crop('crop-center', 400, 400);
+        $this->addMediaCollection('bracelets')
+        ->registerMediaConversions(function (Media $media) {
+            $this
+                ->addMediaConversion('thumb')
+                ->fit(Manipulations::FIT_FILL, 300, 300);
+        });
     }
 
     public function setSlugAttribute($value)
