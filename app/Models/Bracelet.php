@@ -86,7 +86,8 @@ class Bracelet extends Model implements HasMedia
            'real_time',
            'full_charge_time',
            'charger',
-           'destination'
+           'destination',
+           'avg_price'
     ];
 
     protected $casts = [

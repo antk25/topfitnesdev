@@ -8,32 +8,36 @@ use Pricecurrent\LaravelEloquentFilters\AbstractEloquentFilter;
 
 class BraceletCheckedFilter extends AbstractEloquentFilter
 {
-    protected $disp_tech;
+    protected $disp_aod;
     protected $heart_rate;
     protected $blood_pressure;
     protected $smart_alarm;
     protected $gps;
     protected $blood_oxy;
     protected $nfc;
-    protected $country;
+    protected $stress;
+    protected $player_control;
+    protected $send_messages;
 
-    public function __construct($disp_tech, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $country)
+    public function __construct($disp_aod, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $send_messages, $stress, $player_control)
     {
         $this->heart_rate = $heart_rate;
-        $this->disp_tech = $disp_tech;
+        $this->disp_aod = $disp_aod;
         $this->blood_oxy = $blood_oxy;
         $this->blood_pressure = $blood_pressure;
         $this->smart_alarm = $smart_alarm;
         $this->gps = $gps;
         $this->nfc = $nfc;
-        $this->country = $country;
+        $this->stress = $stress;
+        $this->player_control = $player_control;
+        $this->send_messages = $send_messages;
     }
 
     public function apply(Builder $builder): Builder
     {
       return $builder
-        ->when($this->disp_tech, function ($builder) {
-            $builder->where('disp_tech', $this->disp_tech);
+        ->when($this->disp_aod, function ($builder) {
+            $builder->where('disp_aod', $this->disp_aod);
         })
         ->when($this->heart_rate, function ($builder) {
             $builder->where('heart_rate', $this->heart_rate);
@@ -53,8 +57,14 @@ class BraceletCheckedFilter extends AbstractEloquentFilter
         ->when($this->nfc, function ($builder) {
             $builder->where('nfc', '!=', '');
         })
-        ->when($this->country, function ($builder) {
-            $builder->where('country', $this->country);
+        ->when($this->stress, function ($builder) {
+            $builder->where('stress', '!=', '');
+        })
+        ->when($this->player_control, function ($builder) {
+            $builder->where('player_control', '!=', '');
+        })
+        ->when($this->send_messages, function ($builder) {
+            $builder->where('send_messages', $this->send_messages);
         });
     }
 }

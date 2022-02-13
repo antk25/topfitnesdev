@@ -413,7 +413,6 @@ class BraceletController extends Controller
 
         $allsellers = $request->input('allsellers');
 
-
         // $allsellers = array_filter($allsellers, array($this, 'delNull'));
 
         if ($allsellers != '') {
