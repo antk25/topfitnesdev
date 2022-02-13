@@ -30,7 +30,7 @@ class Bracelets extends Component
     public function clearFilter($namefilter)
     {
 
-        $this->$namefilter = '';
+        $this->$namefilter = null;
 
     }
 
@@ -81,7 +81,7 @@ class Bracelets extends Component
         $filters = EloquentFilters::make([
                                           new BraceletBrandFilter($brand),
                                           new NameFilter($name),
-                                        //   new BraceletCheckedFilter($disp_tech, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $country),
+                                          new BraceletCheckedFilter($disp_tech, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $country),
                                            new BraceletJsonFieldsFilter($protect_stand, $compatibility, $destination),
                                         //   new BraceletPriceRangeFilter($max_price)
                                         ]);

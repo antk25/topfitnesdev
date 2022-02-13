@@ -1,39 +1,37 @@
 <div>
     <section class="padding-y-md">
-<div class="container max-width-md">
+<div class="container max-width-lg">
   <div class="text-component text-center margin-bottom-lg">
       <h1>Каталог фитнес-браслетов</h1>
   </div>
-
 
     <div class="margin-top-sm grid gap-xs shadow-sm padding-sm border radius-md">
 
 <div class="col-3">
   <div class="text-sm">Рейтинг:</div>
+    <ul class="text-sm">
 
-                <ul class="text-sm">
+    <li>
+        <input class="radio radio--bg" type="radio" name="radio-5" id="radio-5" wire:model="min_rating" value="7">
+        <label for="radio-5">Более <span class="text-bold">7</span>&#9733;</label>
+    </li>
 
-                <li>
-                    <input class="radio radio--bg" type="radio" name="radio-5" id="radio-5" wire:model="min_rating" value="7">
-                    <label for="radio-5">Более <span class="text-bold">7</span>&#9733;</label>
-                </li>
+    <li>
+        <input class="radio radio--bg" type="radio" wire:model="min_rating" name="radio-6" id="radio-6" value="8">
+        <label for="radio-6">Более <span class="text-bold">8</span>&#9733;</label>
+    </li>
 
-                <li>
-                    <input class="radio radio--bg" type="radio" wire:model="min_rating" name="radio-6" id="radio-6" value="8">
-                    <label for="radio-6">Более <span class="text-bold">8</span>&#9733;</label>
-                </li>
+    <li>
+        <input class="radio radio--bg" wire:model="min_rating" type="radio" name="radio-7" id="radio-7" value="9">
+        <label for="radio-7">Более <span class="text-bold">9</span>&#9733;</label>
+    </li>
 
-                <li>
-                    <input class="radio radio--bg" wire:model="min_rating" type="radio" name="radio-7" id="radio-7" value="9">
-                    <label for="radio-7">Более <span class="text-bold">9</span>&#9733;</label>
-                </li>
-
-                </ul>
+    </ul>
 </div>
 
 <div class="col-3">
 
-                <div class="text-sm">Защита:</div>
+    <div class="text-sm">Защита:</div>
 
     <ul class="text-sm">
       <li>
@@ -54,35 +52,29 @@
             <p class="text-xs color-contrast-medium x-iq">Подходит для бега</p>
         </li>
 
-
     </ul>
 </div>
-
-
-
-
-
 
     <div class="col-3">
         <div class="text-sm">Цена:</div>
 
-                <ul class="text-sm">
-                <li>
-                    <input class="radio radio--bg" wire:model="max_price" type="radio" name="radio-8" id="radio-8" value="3000">
-                    <label for="radio-8">До 3 000 руб.</label>
-                </li>
-                <li>
-                    <input class="radio radio--bg" type="radio" name="radio-9" id="radio-9" wire:model="max_price" value="5000">
-                    <label for="radio-9">До 5 000 руб.</label>
-                </li>
+            <ul class="text-sm">
+            <li>
+                <input class="radio radio--bg" wire:model="max_price" type="radio" name="radio-8" id="radio-8" value="3000">
+                <label for="radio-8">До 3 000 руб.</label>
+            </li>
+            <li>
+                <input class="radio radio--bg" type="radio" name="radio-9" id="radio-9" wire:model="max_price" value="5000">
+                <label for="radio-9">До 5 000 руб.</label>
+            </li>
 
-                <li>
-                    <input class="radio radio--bg" type="radio" wire:model="max_price" name="radio-10" id="radio-10" value="7000">
-                    <label for="radio-10">До 7 000 руб.</label>
-                </li>
+            <li>
+                <input class="radio radio--bg" type="radio" wire:model="max_price" name="radio-10" id="radio-10" value="7000">
+                <label for="radio-10">До 7 000 руб.</label>
+            </li>
 
-                </ul>
-</div>
+            </ul>
+    </div>
 
 
 <div class="col-3">
@@ -102,7 +94,7 @@
 
 
                   </ul>
-  </div>
+    </div>
 
 
             </div>
@@ -122,7 +114,6 @@
                  <input class="checkbox" type="checkbox" name="blood_pressure" id="blood_pressure"  wire:model="blood_pressure">
                  <label for="blood_pressure">Измерение артериального давления</label>
                 </li>
-
 
              </ul>
 
@@ -144,12 +135,19 @@
             </div>
 
 
-            <select name="brand" wire:model="brand">
-                <option value="">Выбрать бренд</option>
-                @foreach ($brands as $v => $k)
-                   <option value="{{ $k }}">{{ $v }}</option>
-                @endforeach
-            </select>
+
+                <label class="form-label margin-bottom-xxxs" for="brand">Бренд:</label>
+
+                <div class="select">
+                <select class="select__input btn btn--subtle" name="brand"  wire:model="brand" id="select-this">
+                    <option value="">Выбрать бренд</option>
+                    @foreach ($brands as $v => $k)
+                    <option value="{{ $k }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16"><polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                </div>
 
 <section>
     {{-- <div class="grid gap-sm text-sm border padding-sm">
@@ -293,10 +291,7 @@
 <div class="padding-y-md padding-0@md">
 
             @if (request() != '')
-
-
             <ul class="flex flex-wrap gap-xxs">
-
 
                  <div class="margin-y-md">
                     <ul class="flex flex-wrap gap-xxs">
@@ -357,6 +352,19 @@
                     </li>
                     @endif
 
+                    @if ($destination != '')
+                    <li>
+                        <span class="chip text-sm chip--outline">
+                          <i class="chip__label">@if ($destination == 'бег')
+                            Предназначение: бег
+                          @endif</i>
+
+                          <button class="chip__btn"  wire:click.prevent="clearFilter(`destination`)">
+                            <svg class="icon" viewBox="0 0 12 12"><title>Delete attribute</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></g></svg>
+                          </button>
+                        </span>
+                    </li>
+                    @endif
 
                     @if ($min_rating != '')
                     <li>
@@ -372,10 +380,8 @@
 
                     </ul>
 
-
                  </div>
             @endif
-
 
             <div class="circle-loader circle-loader--v5 margin-x-auto margin-top-xl" role="alert" wire:loading>
                 <p class="circle-loader__label">Загрузка контента...</p>
@@ -385,10 +391,9 @@
                 </div>
             </div>
 
-
             <div class="grid gap-sm row">
                 @foreach ($bracelets as $bracelet)
-                @include('livewire.bracelets.index', ['bracelet' => $bracelet])
+                    @include('livewire.bracelets.index', ['bracelet' => $bracelet])
                 @endforeach
             </div>
             {{ $bracelets->links('vendor.pagination.livewire') }}

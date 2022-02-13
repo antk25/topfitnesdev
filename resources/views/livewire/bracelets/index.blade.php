@@ -30,14 +30,17 @@
   </div>
 </div> --}}
 
-<div class="grid gap-sm">
-  <div class="col-2@md border radius-md padding-xxxs">
-  <img src="{{ $bracelet->getFirstMediaUrl('bracelets', 'thumb') }}">
-</div>
-<div class="col-5@md">
+<div class="radius-md grid margin-bottom-sm shadow-sm padding-sm">
+  <div class="col-4 col-2@md padding-right-sm">
+    <div class="border radius-md padding-xxxs">
+      <img src="{{ $bracelet->getFirstMediaUrl('bracelets', 'thumb') }}">
+    </div>
+  </div>
+<div class="col-7">
   <h3 class="text-md"><a href="{{ route('pub.bracelets.show', ["bracelet" => $bracelet]) }}">{{ $bracelet->name }}</a></h3>
 
   <div class="text-sm margin-top-sm text-left">
+      <span class="color-contrast-medium">Дисплей:</span> {{ $bracelet->disp_diag }}&#8243;, {{ $bracelet->disp_resolution }}, {{ $bracelet->disp_tech }}<br>
       <span class="color-contrast-medium">Поддержка NFC:</span> @if ($bracelet->nfc != '') Да @else Нет @endif<br>
       <span class="color-contrast-medium">Пульсоксиметр:</span> @if ($bracelet->oxy_permanent != '') Да @else Нет @endif<br>
       <span class="color-contrast-medium">Измерение давления:</span> @if ($bracelet->ad_permanent != '') Да @else Нет @endif<br>
@@ -47,98 +50,40 @@
          {{ $item }},
       @endforeach
       @endif<br>
-      <span class="color-contrast-medium">Разрешение дисплея:</span> {{ $bracelet->disp_resolution }}<br>
-      <span class="color-contrast-medium">Постоянное измерение пульса:</span> {{ $bracelet->heart_rate }}<br>
+      <span class="color-contrast-medium">Постоянное измерение пульса:</span> @if ($bracelet->heart_rate != '') Да @else Нет @endif<br>
       </div>
     </div>
   </div>
-<div class="col-5@md">
-  @if ($bracelet->sellers->count())
-  @foreach ($bracelet->sellers as $seller)
-  <div class="flex">
-    <div class="padding-sm">
-  @if ($seller->marketplace)
-      {{ $seller->marketplace }}
-    @else
-      {{ $seller->name }}
+<div class="col-3@md border-left padding-left-sm text-sm">
+
+    @if ($bracelet->sellers->count())
+    <div class="text-center text-bold hide@sm">Цены:</div>
+      @foreach ($bracelet->sellers as $seller)
+      <div class="flex justify-between border-bottom">
+        <div class="text-sm padding-y-xxxxs">
+          @if ($seller->marketplace)
+            {{ $seller->marketplace }}
+          @else
+            {{ $seller->name }}
+          @endif
+        </div>
+      <div class="text-sm padding-y-xxxxs">
+        @if ($seller->pivot->old_price != '')
+          <del>
+              {{ $seller->pivot->old_price }}
+          </del>
+          <a href="{{ $seller->pivot->link }}">
+              <span>{{ $seller->pivot->price }}</span> &#8381;
+          </a>
+        @else
+          <a href="{{ $seller->pivot->link }}">
+              <span>{{ $seller->pivot->price }}</span> &#8381;
+          </a>
+        @endif
+      </div>
+      </div>
+      @endforeach
     @endif
-  </div>
-  <div class="padding-sm">
-    @if ($seller->pivot->old_price != '')
-    <del class="text-line-through text-bold color-contrast-medium margin-right-xxs">
-        {{ $seller->pivot->old_price }}
-    </del>
-    <a class="link-fx-1 color-contrast-higher text-bold color-success"
-       href="{{ $seller->pivot->link }}">
-        <span>{{ $seller->pivot->price }}</span>
-        <svg class="icon" viewBox="0 0 32 32"
-             aria-hidden="true">
-            <g fill="none" stroke="currentColor"
-               stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="16" cy="16" r="15.5"/>
-                <line x1="10" y1="18" x2="16" y2="12"/>
-                <line x1="16" y1="12" x2="22" y2="18"/>
-            </g>
-        </svg>
-    </a>
-    @else
-              <a class="link-fx-1 color-contrast-higher text-bold"
-                 href="{{ $seller->pivot->link }}">
-                  <span>{{ $seller->pivot->price }}</span>
-                  <svg class="icon" viewBox="0 0 32 32"
-                       aria-hidden="true">
-                      <g fill="none" stroke="currentColor"
-                         stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="16" cy="16" r="15.5"/>
-                          <line x1="10" y1="18" x2="16" y2="12"/>
-                          <line x1="16" y1="12" x2="22" y2="18"/>
-                      </g>
-                  </svg>
-              </a>
-          @endif
-        </div>
-        </div>
-@endforeach
-  @endif
 
 </div>
 </div>
-
-
-{{-- <div class="border radius-md padding-sm grid gap-md gap-lg@lg margin-bottom-sm shadow-sm">
-
-  <div class="col-2">
-  <a href="katalog/{{ $bracelet->slug }}"  aria-label="Подробнее о браслете {{ $bracelet->name }}">
-      <img src="{{ $bracelet->getFirstMediaUrl('bracelet', 'thumb') }}">
-  </a>
-  </div>
-
-  <div class="col-7">
-      <p class="text-md"><a href="katalog/{{ $bracelet->slug }}">{{ $bracelet->subtitle }}</a></p>
-      <div class="text-sm margin-top-sm">
-          <span class="color-contrast-medium">Поддержка NFC:</span> @if ($bracelet->nfc != '') Да @else Нет @endif<br>
-          <span class="color-contrast-medium">Пульсоксиметр:</span> @if ($bracelet->oxy_permanent != '') Да @else Нет @endif<br>
-          <span class="color-contrast-medium">Измерение давления:</span> @if ($bracelet->ad_permanent != '') Да @else Нет @endif<br>
-          <span class="color-contrast-medium">Совместимость:</span> @if ($bracelet->compatibility != null)
-          @foreach ($bracelet->compatibility as $item)
-             {{ $item }},
-          @endforeach
-          @endif<br>
-          <span class="color-contrast-medium">Разрешение дисплея:</span> {{ $bracelet->disp_resolution }}<br>
-          <span class="color-contrast-medium">Постоянное измерение пульса:</span> {{ $bracelet->heart_rate }}<br>
-          <span class="color-contrast-medium">GPS:</span> {{ $bracelet->gps }}<br>
-          <span class="color-contrast-medium">Защита:</span> @foreach ($bracelet->protect_stand as $item)
-             {{ $item }},
-          @endforeach<br>
-
-
-      </div>
-  </div>
-  <div class="col-3">
-      <div class="text-sm">
-      @if ($bracelet->avg_price != '')
-      <span class="color-contrast-medium">Средняя цена:</span> {{ $bracelet->avg_price }} руб<br>
-          @endif
-      </div>
-  </div>
-  </div> --}}
