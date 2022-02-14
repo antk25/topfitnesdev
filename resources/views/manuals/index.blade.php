@@ -20,7 +20,7 @@
                 @foreach($manuals as $item)
                     <li>
                         <div class="grid gap-md items-start">
-                            <a href="{{ route('pub.posts.show', ['post' => $item]) }}" class="articles-v3__img col-6@md col-7@xl">
+                            <a href="{{ route('pub.manuals.show', ['manual' => $item]) }}" class="articles-v3__img col-6@md col-7@xl">
                                 <figure class="aspect-ratio-16:9">
                                     <img src="{{ $item->getFirstMediaUrl('covers') }}" alt="{{ $item->name }}">
                                 </figure>
@@ -28,7 +28,7 @@
 
                             <div class="col-6@md col-5@xl">
                                 <div class="text-component">
-                                    <h4 class="articles-v3__headline"><a href="{{ route('pub.posts.show', ['post' => $item]) }}">{{ $item->name }}</a></h4>
+                                    <h4 class="articles-v3__headline"><a href="{{ route('pub.manuals.show', ['manual' => $item]) }}">{{ $item->name }}</a></h4>
                                     <p>{!! Str::words($item->description, 20) !!}</p>
                                 </div>
 
