@@ -62,22 +62,25 @@
                         </div>
                     @endif
 
+                    <x-cards.bracelet-article :bracelets="$manual->bracelets" typeGrade="average_grade">
+                    </x-cards.bracelet-article>
+
                 </div>
             </div>
         </section>
 
-
     </article>
 
-    <x-cards.author :author="$manual->user">
+    <x-cards.author :author="$manual->user" class="container max-width-sm">
     </x-cards.author>
+
+
 
     <div class="container max-width-sm padding-top-md">
         <div class="bg">
 
             @livewire('comment.comments', ['model' => $manual, 'user' => $user])
 
-            {{-- <livewire:comments :comments="$rating->comments", :user="$user", :post_id='$rating->id'> --}}
         </div>
     </div>
 
