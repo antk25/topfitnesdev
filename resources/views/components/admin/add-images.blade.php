@@ -24,7 +24,7 @@
 
           @else
 
-          {{ $currentCover }}
+          {!! $currentCover !!}
 
         @endif
 
