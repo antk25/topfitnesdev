@@ -80,7 +80,7 @@
                     @if($user == '')
                         <div class="grid gap-xxs">
                             <div class="col-6@md">
-                                <input class="form-control width-100%" wire:model.debounce.999999ms="username"
+                                <input class="form-control width-100%" wire:model.lazy="username"
                                        @error('username') form-control--error @enderror" type="text" name="username"
                                 id="username"
                                 placeholder="Имя" value="{{ old('username') }}">
@@ -92,7 +92,7 @@
                             </div>
 
                             <div class="col-6@md">
-                                <input class="form-control width-100%" wire:model.debounce.999999ms="useremail"
+                                <input class="form-control width-100%" wire:model.lazy="useremail"
                                        @error('useremail') form-control--error @enderror" type="email" name="useremail"
                                 id="useremail"
                                 placeholder="email@myemail.com">
@@ -109,7 +109,7 @@
 
                         <label for="created_at" class="form-label margin-bottom-xxs">Выбрать дату</label>
 
-                        <x-admin.flatpickr wire:model="created_at" placeholder="DD/MM/YYYY"/>
+                        <x-admin.flatpickr wire:model.lazy="created_at" placeholder="DD/MM/YYYY"/>
 
                     </div>
 

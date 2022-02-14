@@ -62,7 +62,12 @@ class Comments extends Component
 
        session()->flash('message', 'комментарий добавлен');
 
-       $this->reset();
+       $this->reset([
+           'comment_text',
+           'commentIdReply',
+           'username',
+           'useremail',
+       ]);
 
     }
 
