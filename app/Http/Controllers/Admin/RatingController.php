@@ -112,6 +112,9 @@ class RatingController extends Controller
             foreach ($files as $file) {
                 $rating->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('ratings');
             }
         }
@@ -123,6 +126,9 @@ class RatingController extends Controller
         if (request('cover') != null) {
             $rating->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 
@@ -257,6 +263,9 @@ class RatingController extends Controller
             foreach ($files as $file) {
                 $rating->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('ratings');
             }
         }
@@ -268,6 +277,9 @@ class RatingController extends Controller
         if (request('cover') != null) {
             $rating->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 

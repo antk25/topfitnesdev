@@ -108,6 +108,9 @@ class ComparisonController extends Controller
             foreach ($files as $file) {
                 $comparison->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('comparisons');
             }
         }
@@ -115,6 +118,9 @@ class ComparisonController extends Controller
         if (request('cover') != null) {
             $comparison->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 
@@ -227,6 +233,9 @@ class ComparisonController extends Controller
             foreach ($files as $file) {
                 $comparison->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('comparisons');
             }
         }
@@ -297,6 +306,9 @@ class ComparisonController extends Controller
         if (request('cover') != null) {
             $comparison->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 

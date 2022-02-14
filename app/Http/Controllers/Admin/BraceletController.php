@@ -170,6 +170,9 @@ class BraceletController extends Controller
             foreach ($files as $file) {
                 $bracelet->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('bracelets');
             }
         }
@@ -456,6 +459,9 @@ class BraceletController extends Controller
             foreach ($files as $file) {
                 $bracelet->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('bracelets');
             }
         }

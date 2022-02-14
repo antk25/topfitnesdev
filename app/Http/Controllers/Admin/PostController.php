@@ -150,6 +150,9 @@ class PostController extends Controller
             foreach ($files as $file) {
                 $post->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('posts');
             }
         }
@@ -161,6 +164,9 @@ class PostController extends Controller
         if (request('cover') != null) {
             $post->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 
@@ -208,6 +214,9 @@ class PostController extends Controller
             foreach ($files as $file) {
                 $post->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('posts');
             }
         }
@@ -277,6 +286,9 @@ class PostController extends Controller
         if (request('cover') != null) {
             $post->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 

@@ -84,6 +84,9 @@ class StaticPageController extends Controller
         if (request('cover') != null) {
             $staticPage->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 
@@ -97,6 +100,9 @@ class StaticPageController extends Controller
             foreach ($files as $file) {
                 $staticPage->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('static-pages');
             }
         }
@@ -201,6 +207,9 @@ class StaticPageController extends Controller
             foreach ($files as $file) {
                 $staticPage->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('static-pages');
             }
         }
@@ -270,6 +279,9 @@ class StaticPageController extends Controller
         if (request('cover') != null) {
             $staticPage->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 

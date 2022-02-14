@@ -101,6 +101,9 @@ class OverviewController extends Controller
         if (request('cover') != null) {
             $overview->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 
@@ -114,6 +117,9 @@ class OverviewController extends Controller
             foreach ($files as $file) {
                 $overview->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('overviews');
             }
         }
@@ -215,6 +221,9 @@ class OverviewController extends Controller
             foreach ($files as $file) {
                 $overview->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('overviews');
             }
         }
@@ -288,6 +297,9 @@ class OverviewController extends Controller
         if (request('cover') != null) {
             $overview->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 

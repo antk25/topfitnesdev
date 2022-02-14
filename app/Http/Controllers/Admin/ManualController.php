@@ -101,6 +101,9 @@ class ManualController extends Controller
             foreach ($files as $file) {
                 $manual->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('manuals');
             }
         }
@@ -108,6 +111,9 @@ class ManualController extends Controller
         if (request('cover') != null) {
             $manual->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 
@@ -227,6 +233,9 @@ class ManualController extends Controller
             foreach ($files as $file) {
                 $manual->addMedia($file)
                     ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        return Str::slug($fileName, '-');
+                     })
                     ->toMediaCollection('manuals');
             }
         }
@@ -303,6 +312,9 @@ class ManualController extends Controller
         if (request('cover') != null) {
             $manual->addMediaFromRequest('cover')
             ->withResponsiveImages()
+            ->sanitizingFileName(function($fileName) {
+                return Str::slug($fileName, '-');
+             })
             ->toMediaCollection('covers');
         }
 
