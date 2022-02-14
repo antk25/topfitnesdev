@@ -34,7 +34,11 @@
 
                                 <div class="articles-v3__author">
                                     <a href="#0" class="articles-v3__author-img">
-                                        <img src="{{ $item->user->getFirstMediaUrl('avatars') }}" alt="Author picture">
+                                        @if ($author->getFirstMediaUrl('avatars'))
+                                            <img src="{{ $item->user->getFirstMediaUrl('avatars') }}" alt="Author picture">
+                                        @else
+                                            <img src="{{ asset('/img/theme/comments-placeholder.svg') }}" alt="Author picture">
+                                        @endif
                                     </a>
 
                                     <div class="text-component text-sm line-height-xs text-space-y-xxs">
