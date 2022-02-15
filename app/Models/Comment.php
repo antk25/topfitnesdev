@@ -60,6 +60,8 @@ class Comment extends Model
         'created_at',
     ];
 
+    protected $with = ['replies'];
+
     // protected $dates = ['published_at'];
     /**
      * @var mixed
