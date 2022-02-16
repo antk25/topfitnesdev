@@ -62,8 +62,8 @@ class Manual extends Model implements HasMedia
         $this->addMediaConversion('thumb')
                 ->width(640);
 
-        // $this->addMediaConversion('lquip')
-        //         ->fit(Manipulations::FIT_MAX, 20, 20);
+        $this->addMediaConversion('lquip')
+                ->width(20);
     }
 
 }
