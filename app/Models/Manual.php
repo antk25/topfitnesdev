@@ -63,7 +63,7 @@ class Manual extends Model implements HasMedia
                 ->width(640);
 
         $this->addMediaConversion('lquip')
-                ->width(20);
+                ->fit(Manipulations::FIT_MAX, 20, 20);
     }
 
 }
