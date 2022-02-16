@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Manual;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -38,6 +39,9 @@ class ManualController extends Controller
         {
             $user = null;
         }
+
+        $manual->load('comments')->loadCount('comments');
+
         return view('manuals.show', compact('manual', 'user'));
     }
 }

@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use Spatie\Image\Exceptions\InvalidManipulation;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Image\Exceptions\InvalidManipulation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 /**
  * App\Models\Post
@@ -72,7 +73,7 @@ class Post extends Model implements HasMedia
 
     public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function menuitem(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -97,6 +98,8 @@ class Post extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')
             ->width(640);
+        $this->addMediaConversion('lquip')
+            ->fit(Manipulations::FIT_MAX, 20, 20);
     }
 
 

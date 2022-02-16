@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Image\Exceptions\InvalidManipulation;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
@@ -35,7 +36,7 @@ class Manual extends Model implements HasMedia
 
     public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -60,6 +61,8 @@ class Manual extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')
                 ->width(640);
+        $this->addMediaConversion('lquip')
+                ->fit(Manipulations::FIT_MAX, 20, 20);
     }
 
 }

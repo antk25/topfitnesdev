@@ -24,7 +24,8 @@ class PostController extends Controller
         {
             $user = null;
         }
-        // $media = $rating->getMedia('rating');
+        $post->load('comments')->loadCount('comments');
+
         return view('posts.show', compact('post', 'user'));
     }
 }

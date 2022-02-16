@@ -89,6 +89,7 @@
 
 @push('js')
     <script src="{{ asset("js/alpine.min.js") }}"></script>
+    <script src="{{ asset("js/lazyload.min.js") }}"></script>
     <script src="{{ asset("js/toc.min.js") }}"></script>
     <script src="{{ asset("js/simple-lightbox.min.js") }}"></script>
     <script>
@@ -103,5 +104,9 @@
         container.appendChild(toc);
 
         new SimpleLightbox('.box a', { /* options */});
+
+        var lazyLoadInstance = new LazyLoad({
+            elements_selector: ".lazy"
+        });
     </script>
 @endpush

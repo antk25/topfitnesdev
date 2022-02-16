@@ -2,7 +2,7 @@
     @if ($model->comments->count())
         <section id="comments" class="comments">
             <div class="margin-bottom-sm">
-                <h2 class="text-md">Комментарии</h2>
+                <h2 class="text-md">Комментарии ({{ $model->comments_count }})</h2>
             </div>
             <ul class="margin-bottom-lg">
                 @foreach ($model->comments as $comment)
@@ -46,9 +46,9 @@
         </section>
 
     @endif
-    <section class="form-comment">
+    <section class="form-comment" id="createcomment">
         <h3 class="margin-y-xs">
-            <a class="text-bg-fx text-bg-fx--underline text-bg-fx--text-shadow" href="#"
+            <a class="text-bg-fx text-bg-fx--underline text-bg-fx--text-shadow" href="#0"
                wire:click.prevent="resetCommentId">Написать комментарий</a>
         </h3>
         @if($commentIdReply == '')

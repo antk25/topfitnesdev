@@ -90,57 +90,7 @@ class PostController extends Controller
             'content_raw' => request('content'),
         ]);
 
-        if($post->getMedia('posts')) {
-
-            $images = $post->getMedia('posts');
-            $content = $post->content_raw;
-
-            for ($image = 0; $image < count($images); $image++) {
-                $content = str_replace("<box_img_half." . $image . ">",
-                    '<div class="box">
-                <a href="' . $images[$image]->getUrl() . '">
-                <figure class="text-component__block width-50%@md margin-x-auto">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
-                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
-                </figure>
-               </a>
-               </div>',
-                    $content);
-                $content = str_replace("<box_img." . $image . ">",
-                    '<div class="box">
-                <a href="' . $images[$image]->getUrl() . '">
-                <figure class="text-component__block">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
-                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
-                </figure>
-               </a>
-               </div>',
-                    $content);
-                $content = str_replace("<img." . $image . ">",
-                    '
-                <figure class="text-component__block">
-                    <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
-                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
-                </figure>',
-                    $content);
-
-            }
-
-            $post->content = $content;
-            $post->save();
-        }
-
-
-        /**
+         /**
          * Загрузка картинок на сайт и в БД
          */
 
@@ -151,11 +101,63 @@ class PostController extends Controller
                 $post->addMedia($file)
                     ->withResponsiveImages()
                     ->sanitizingFileName(function($fileName) {
-                        return Str::slug($fileName, '-');
-                     })
+                        $fileName = Str::remove('\'', Str::ascii($fileName));
+                        return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                    })
                     ->toMediaCollection('posts');
             }
         }
+
+        if($post->getMedia('posts')) {
+
+            $images = $post->getMedia('posts');
+            $content = $post->content_raw;
+
+            for ($image = 0; $image < count($images); $image++) {
+                $content = str_replace("<box_img_half." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block width-50%@md margin-x-auto">
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<box_img." . $image . ">",
+                    '<div class="box">
+                <a href="' . $images[$image]->getUrl() . '">
+                <figure class="text-component__block">
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
+                </figure>
+               </a>
+               </div>',
+                    $content);
+                $content = str_replace("<img." . $image . ">",
+                    '
+                <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
+                </figure>',
+                    $content);
+
+            }
+
+            $post->content = $content;
+            $post->save();
+        }
+
+
 
        /**
         * Обложка
@@ -163,10 +165,11 @@ class PostController extends Controller
 
         if (request('cover') != null) {
             $post->addMediaFromRequest('cover')
-            ->withResponsiveImages()
-            ->sanitizingFileName(function($fileName) {
-                return Str::slug($fileName, '-');
-             })
+                    ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        $fileName = Str::remove('\'', Str::ascii($fileName));
+                        return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                    })
             ->toMediaCollection('covers');
         }
 
@@ -215,8 +218,9 @@ class PostController extends Controller
                 $post->addMedia($file)
                     ->withResponsiveImages()
                     ->sanitizingFileName(function($fileName) {
-                        return Str::slug($fileName, '-');
-                     })
+                        $fileName = Str::remove('\'', Str::ascii($fileName));
+                        return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                    })
                     ->toMediaCollection('posts');
             }
         }
@@ -242,11 +246,11 @@ class PostController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block width-50%@md margin-x-auto">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -255,11 +259,11 @@ class PostController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -267,11 +271,11 @@ class PostController extends Controller
                 $content = str_replace("<img." . $image . ">",
                     '
                 <figure class="text-component__block">
-                    <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>',
                     $content);
 
@@ -285,10 +289,11 @@ class PostController extends Controller
 
         if (request('cover') != null) {
             $post->addMediaFromRequest('cover')
-            ->withResponsiveImages()
-            ->sanitizingFileName(function($fileName) {
-                return Str::slug($fileName, '-');
-             })
+                    ->withResponsiveImages()
+                    ->sanitizingFileName(function($fileName) {
+                        $fileName = Str::remove('\'', Str::ascii($fileName));
+                        return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                    })
             ->toMediaCollection('covers');
         }
 

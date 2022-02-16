@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ManualRequest;
-use App\Models\Bracelet;
-use App\Models\Manual;
+use Str;
 use App\Models\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Manual;
+use App\Models\Bracelet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Spatie\Image\Manipulations;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Requests\Admin\ManualRequest;
+use Illuminate\Contracts\Foundation\Application;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Str;
 
 class ManualController extends Controller
 {
@@ -102,8 +103,9 @@ class ManualController extends Controller
                 $manual->addMedia($file)
                     ->withResponsiveImages()
                     ->sanitizingFileName(function($fileName) {
-                        return Str::slug($fileName, '-');
-                     })
+                            $fileName = Str::remove('\'', Str::ascii($fileName));
+                            return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                        })
                     ->toMediaCollection('manuals');
             }
         }
@@ -112,8 +114,9 @@ class ManualController extends Controller
             $manual->addMediaFromRequest('cover')
             ->withResponsiveImages()
             ->sanitizingFileName(function($fileName) {
-                return Str::slug($fileName, '-');
-             })
+                    $fileName = Str::remove('\'', Str::ascii($fileName));
+                    return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                 })
             ->toMediaCollection('covers');
         }
 
@@ -127,11 +130,11 @@ class ManualController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block width-50%@md margin-x-auto">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -140,11 +143,11 @@ class ManualController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -152,11 +155,11 @@ class ManualController extends Controller
                 $content = str_replace("<img." . $image . ">",
                     '
                 <figure class="text-component__block">
-                    <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>',
                     $content);
 
@@ -232,11 +235,12 @@ class ManualController extends Controller
         if ($files != '') {
             foreach ($files as $file) {
                 $manual->addMedia($file)
-                    ->withResponsiveImages()
-                    ->sanitizingFileName(function($fileName) {
-                        return Str::slug($fileName, '-');
-                     })
-                    ->toMediaCollection('manuals');
+                ->withResponsiveImages()
+                ->sanitizingFileName(function($fileName) {
+                    $fileName = Str::remove('\'', Str::ascii($fileName));
+                    return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                 })
+                ->toMediaCollection('manuals');
             }
         }
 
@@ -270,11 +274,11 @@ class ManualController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block width-50%@md margin-x-auto">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -283,11 +287,11 @@ class ManualController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -295,11 +299,11 @@ class ManualController extends Controller
                 $content = str_replace("<img." . $image . ">",
                     '
                 <figure class="text-component__block">
-                    <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>',
                     $content);
 
@@ -313,8 +317,9 @@ class ManualController extends Controller
             $manual->addMediaFromRequest('cover')
             ->withResponsiveImages()
             ->sanitizingFileName(function($fileName) {
-                return Str::slug($fileName, '-');
-             })
+                $fileName = Str::remove('\'', Str::ascii($fileName));
+                return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+            })
             ->toMediaCollection('covers');
         }
 

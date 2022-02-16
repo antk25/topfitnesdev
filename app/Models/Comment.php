@@ -60,7 +60,7 @@ class Comment extends Model
         'created_at',
     ];
 
-    protected $with = ['replies'];
+    protected $with = ['replies', 'user'];
 
     // protected $dates = ['published_at'];
     /**
@@ -83,6 +83,7 @@ class Comment extends Model
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id');
     }
+
     public function scopeParent($query)
     {
         return $query->whereNull('parent_id');

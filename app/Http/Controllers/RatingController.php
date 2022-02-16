@@ -28,6 +28,8 @@ class RatingController extends Controller
             $user = null;
         }
 
+        $rating->load('comments')->loadCount('comments');
+
         return view('ratings.show', compact('rating', 'user', 'topbracelets'));
     }
 }

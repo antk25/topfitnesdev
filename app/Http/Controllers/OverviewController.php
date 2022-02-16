@@ -37,7 +37,8 @@ class OverviewController extends Controller
         {
             $user = null;
         }
-        // $media = $rating->getMedia('rating');
+        $overview->load('comments')->loadCount('comments');
+
         return view('overviews.show', compact('overview', 'user'));
     }
 

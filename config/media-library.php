@@ -186,7 +186,7 @@ return [
          * By default rendering media to a responsive image will add some javascript and a tiny placeholder.
          * This ensures that the browser can already determine the correct layout.
          */
-        'use_tiny_placeholders' => true,
+        'use_tiny_placeholders' => false,
 
         /*
          * This class will generate the tiny placeholder used for progressive image loading. By default

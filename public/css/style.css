@@ -14237,6 +14237,10 @@ mark {
   height: 20px;
 }
 
+html:not(.js) .lazy {
+  display: none;
+}
+
 /* -------------------------------- 
 
 File#: _1_accordion

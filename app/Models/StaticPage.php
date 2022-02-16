@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\Image\Exceptions\InvalidManipulation;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Image\Exceptions\InvalidManipulation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 class StaticPage extends Model implements HasMedia
 {
@@ -36,5 +37,7 @@ class StaticPage extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')
             ->width(640);
+        $this->addMediaConversion('lquip')
+            ->fit(Manipulations::FIT_MAX, 20, 20);
     }
 }
