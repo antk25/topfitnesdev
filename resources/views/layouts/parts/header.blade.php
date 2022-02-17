@@ -1,4 +1,4 @@
-<header class="header-v2 js-header-v2" data-animation="on" data-animation-offset="400">
+<header class="header-v2 js-header-v2" data-animation="on" data-animation-offset="600">
     <div class="header-v2__wrapper">
         <div class="header-v2__container container max-width-lg">
             <div class="header-v2__logo">

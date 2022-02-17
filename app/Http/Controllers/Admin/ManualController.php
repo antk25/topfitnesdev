@@ -306,7 +306,6 @@ class ManualController extends Controller
                     <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>',
                     $content);
-
             }
 
             $manual->content = $content;

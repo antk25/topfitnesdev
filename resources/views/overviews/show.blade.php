@@ -53,26 +53,23 @@
             </div>
         </header>
         <section class="main">
-            <div class="container max-width-adaptive-sm">
+            <div class="container max-width-adaptive-sm js-toc-content">
                 <div class="text-component line-height-lg text-space-y-md text-component--has-footnotes">
 
                     <details class="details js-details margin-y-sm">
                         <summary class="details__summary js-details__summary" role="button">
-                        <span class="flex items-center color-primary font-bold">
-                        <svg class="icon icon--xxs margin-right-xxxs" aria-hidden="true" viewBox="0 0 12 12"><path
-                                d="M2.783.088A.5.5,0,0,0,2,.5v11a.5.5,0,0,0,.268.442A.49.49,0,0,0,2.5,12a.5.5,0,0,0,.283-.088l8-5.5a.5.5,0,0,0,0-.824Z"></path></svg>
-                      <span>Содержание статьи</span>
-
-                    </span>
+                            <span class="flex items-center color-primary font-bold">
+                                <svg class="icon icon--xxs margin-right-xxxs" aria-hidden="true" viewBox="0 0 12 12"><path
+                                        d="M2.783.088A.5.5,0,0,0,2,.5v11a.5.5,0,0,0,.268.442A.49.49,0,0,0,2.5,12a.5.5,0,0,0,.283-.088l8-5.5a.5.5,0,0,0,0-.824Z"></path></svg>
+                                <span>Содержание статьи</span>
+                            </span>
                         </summary>
-
                         <div class="details__content text-component margin-top-xs js-details__content">
-                            <div class="toc non-jquery">
-
+                            <div class="js-tocs">
                             </div>
-
                         </div>
                     </details>
+
 
                     {!! $overview->content !!}
 
@@ -107,23 +104,45 @@
 @push('js')
     <script src="{{ asset("js/alpine.min.js") }}"></script>
     <script src="{{ asset("js/lazyload.min.js") }}"></script>
-    <script src="{{ asset("js/toc.min.js") }}"></script>
+    <script src="{{ asset("js/tocbot.min.js") }}"></script>
     <script src="{{ asset("js/simple-lightbox.min.js") }}"></script>
     <script>
-        var options = {
-            selector: 'h2, h3, h4',
-            scope: 'section.main'
-        };
-        var container = document.querySelector('.toc.non-jquery');
-
-        var toc = initTOC(options);
-
-        container.appendChild(toc);
-
         new SimpleLightbox('.box a', { /* options */});
 
-        var lazyLoadInstance = new LazyLoad({
-            elements_selector: ".lazy"
+        function makeIds () { // eslint-disable-line
+        var content = document.querySelector('.js-toc-content')
+        var headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6, h7')
+        var headingMap = {}
+
+        Array.prototype.forEach.call(headings, function (heading) {
+            var id = heading.id
+            ? heading.id
+            : heading.textContent.trim().toLowerCase()
+                .split(' ').join('-').replace(/[!@#$%^&*():]/ig, '').replace(/\//ig, '-')
+            headingMap[id] = !isNaN(headingMap[id]) ? ++headingMap[id] : 0
+            if (headingMap[id]) {
+            heading.id = id + '-' + headingMap[id]
+            } else {
+            heading.id = id
+            }
+        })
+        }
+        makeIds()
+
+        tocbot.init({
+            tocSelector: '.js-tocs',
+            contentSelector: '.js-toc-content',
+            headingSelector: 'h2, h3',
+            hasInnerContainers: true,
+            linkClass: 'text-bg-fx',
+            extraLinkClasses: 'text-bg-fx--scale-y',
+            activeLinkClass: ' ',
+            listClass: 'list',
+            extraListClasses: 'list--ul',
+            listItemClass: 'toc-item',
+            activeListItemClass: '',
+            collapseDepth: 6,
+            scrollSmoothOffset: -60,
         });
     </script>
 @endpush

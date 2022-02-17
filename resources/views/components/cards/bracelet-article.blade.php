@@ -3,9 +3,9 @@
         <div class="text-component__block">
 
             @if($bracelet->pivot->head_rating)
-                <h2>{{ $bracelet->pivot->head_rating }}</h2>
+                <h2 id="{{ Str::slug($bracelet->pivot->head_rating) }}">{{ $bracelet->pivot->head_rating }}</h2>
             @else
-                <h2>{{ $bracelet->name }}</h2>
+                <h2 id="{{ Str::slug($bracelet->name) }}">{{ $bracelet->name }}</h2>
             @endif
             <div class="grid gap-md items-center">
                 <div class="col-4@sm">
