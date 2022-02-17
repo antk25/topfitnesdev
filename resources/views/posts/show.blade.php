@@ -85,7 +85,7 @@
 
     </article>
 
-    <x-cards.author :author="$post->user">
+    <x-cards.author :author="$post->user" class="container max-width-sm">
     </x-cards.author>
 
 
