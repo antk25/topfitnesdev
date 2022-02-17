@@ -37,7 +37,7 @@
 
     </div>
 
-    <x-admin.add-images currentCover="placeholder" alt="Превью">
+    <x-admin.add-images currentCover="placeholder">
 
     </x-admin.add-images>
 

@@ -89,7 +89,7 @@
 
                     </div>
 
-                    <x-admin.add-images :currentCover="$post->getFirstMedia('covers')" alt="Превью">
+                    <x-admin.add-images currentCover="{{ $post->getFirstMedia('covers') }}" alt="Превью">
 
                     </x-admin.add-images>
 
