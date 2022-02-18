@@ -153,6 +153,28 @@ class StaticPageController extends Controller
                 </figure>',
                     $content);
 
+                $content = str_replace("<img_right_outset." . $image . ">",
+                    '
+                <figure class="text-component__block text-component__block--outset text-component__block--right">
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
+                </figure>',
+                    $content);
+
+                $content = str_replace("<img_left_outset." . $image . ">",
+                    '
+                <figure class="text-component__block text-component__block--outset text-component__block--left">
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
+                </figure>',
+                    $content);
+
             }
 
             $staticPage->content = $content;
@@ -262,6 +284,28 @@ class StaticPageController extends Controller
                 $content = str_replace("<img." . $image . ">",
                     '
                 <figure class="text-component__block">
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
+                </figure>',
+                    $content);
+
+                    $content = str_replace("<img_right_outset." . $image . ">",
+                    '
+                <figure class="text-component__block text-component__block--outset text-component__block--right">
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
+                    alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
+                </figure>',
+                    $content);
+
+                $content = str_replace("<img_left_outset." . $image . ">",
+                    '
+                <figure class="text-component__block text-component__block--outset text-component__block--left">
                     <img src="' . $images[$image]->getUrl('lquip') . '"
                     class="lazy block width-100%"
                     data-srcset="' . $images[$image]->getSrcset() . '"
