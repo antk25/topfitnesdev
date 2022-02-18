@@ -13,7 +13,7 @@ class HtmlComponent extends Model
         'name',
         'link',
         'code',
-        'about'
+        'about',
     ];
 
 }

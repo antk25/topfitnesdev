@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\HtmlComponentExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\HtmcomponentRequest;
+use App\Http\Requests\Admin\HtmlComponentRequest;
 use App\Imports\HtmlComponentImport;
 use App\Models\HtmlComponent;
 use Illuminate\Http\Request;
@@ -41,7 +41,7 @@ class HtmlComponentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(HtmcomponentRequest $request)
+    public function store(HtmlComponentRequest $request)
     {
        $htmlcomponent = HtmlComponent::create([
             'name' => $request->name,
@@ -62,17 +62,6 @@ class HtmlComponentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\HtmlComponent  $htmlComponent
-     * @return \Illuminate\Http\Response
-     */
-    public function show(HtmlComponent $htmlComponent)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\HtmlComponent  $htmlComponent
@@ -90,13 +79,15 @@ class HtmlComponentController extends Controller
      * @param  \App\Models\HtmlComponent  $htmlComponent
      * @return \Illuminate\Http\Response
      */
-    public function update(HtmcomponentRequest $request, HtmlComponent $htmlcomponent)
+    public function update(HtmlComponentRequest $request, $id)
     {
+        $htmlcomponent = HtmlComponent::find($id);
+
         $htmlcomponent->update([
-            'name' => $request->name,
-            'link' => $request->link,
-            'code' => $request->code,
-            'about' => $request->about,
+            'name' => $request->input('name'),
+            'link' => $request->input('link'),
+            'code' => $request->input('code'),
+            'about' => $request->input('about'),
        ]);
 
        return back();

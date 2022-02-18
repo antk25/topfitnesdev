@@ -1,5 +1,10 @@
 @extends('admin.layouts.base')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/fullscreen.css') }}">
+@endpush
+
 @section('content')
 
 <div class="bg radius-md padding-sm margin-bottom-sm border-dashed border-2 border">
@@ -31,7 +36,7 @@
 @endif
 {{-- Конец сообщения об успешности сохранения --}}
 
-<form class="form-template-v3" method="POST" action="{{ route('htmlcomponents.store') }}" enctype="multipart/form-data">
+<form class="form-template-v3" method="POST" action="{{ route('htmlcomponents.store') }}">
     @csrf
     <div class="bg radius-md shadow-xs padding-md margin-bottom-md">
 
@@ -59,22 +64,12 @@
       <textarea class="form-control width-100%" name="about" id="about">{{ old('about') }}</textarea>
       <p class="text-xs color-contrast-medium margin-top-xxxxs">Опционально</p>
 
-      <section>
-        <div class="text-component padding-y-sm">
-          <h4>Код элемента</h4>
-          <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на полный экран, ESC для выхода.</p>
-        </div>
-        <div class="border radius-md padding-sm bg-gradient-3">
-          <label class="form-label margin-bottom-xxs sr-only" for="text">Код элемента</label>
-          <textarea class="form-control width-100% text-sm text" spellcheck="false" name="code" id="code">{{ old('code') }}</textarea>
 
-        </div>
-          @error('code')
-          <div role="alert" class="bg-error bg-opacity-20% padding-xxxs radius-md text-xs color-contrast-higher margin-top-xxs"><p><strong>ошибка:</strong> {{ $message }}</p></div>
-          @enderror
-      </section>
-
-
+      <x-admin.codemirror-editor content="old('code')" name="code" id="code">
+        <h4>Код элемента</h4>
+        <p class="text-sm color-contrast-medium">Нажать F11 для переключения редактора на
+            полный экран, ESC для выхода.</p>
+      </x-admin.codemirror-editor>
 
     </div>
 
@@ -84,34 +79,3 @@
   </form>
 @endsection
 
-@section('scripts')
-@parent
-
-<script src="{{ asset("js/admin/codemirror.min.js") }}"></script>
-    <script src="{{ asset("js/admin/xml-fold.js") }}"></script>
-    <script src="{{ asset("js/admin/closetag.js") }}"></script>
-    <script src="{{ asset("js/admin/matchtags.js") }}"></script>
-    <script src="{{ asset("js/admin/trailingspace.js") }}"></script>
-    <script src="{{ asset("js/admin/xml.js") }}"></script>
-    <script src="{{ asset("js/admin/fullscreen.js") }}"></script>
-    <script>
-      var myCodeMirror = CodeMirror.fromTextArea((code), {
-        lineNumbers: true,
-        tabSize: 2,
-        mode: "text/html",
-        autoCloseTags: true,
-        lineWrapping: true,
-        matchTags: {bothTags: true},
-        extraKeys: {"Ctrl-J": "toMatchingTag"},
-        showTrailingSpace: true,
-        extraKeys: {
-        "F11": function(cm) {
-          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
-        },
-        "Esc": function(cm) {
-          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-        }
-      }
-      });
-</script>
-@endsection

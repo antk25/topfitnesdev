@@ -85,9 +85,11 @@ class StaticPageController extends Controller
             $staticPage->addMediaFromRequest('cover')
             ->withResponsiveImages()
             ->sanitizingFileName(function($fileName) {
-                return Str::slug($fileName, '-');
-             })
+                $fileName = Str::remove('\'', Str::ascii($fileName));
+                return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+            })
             ->toMediaCollection('covers');
+
         }
 
         /**
@@ -101,8 +103,9 @@ class StaticPageController extends Controller
                 $staticPage->addMedia($file)
                     ->withResponsiveImages()
                     ->sanitizingFileName(function($fileName) {
-                        return Str::slug($fileName, '-');
-                     })
+                        $fileName = Str::remove('\'', Str::ascii($fileName));
+                        return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                    })
                     ->toMediaCollection('static-pages');
             }
         }
@@ -117,11 +120,11 @@ class StaticPageController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block width-50%@md margin-x-auto">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -130,11 +133,11 @@ class StaticPageController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -142,11 +145,11 @@ class StaticPageController extends Controller
                 $content = str_replace("<img." . $image . ">",
                     '
                 <figure class="text-component__block">
-                    <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>',
                     $content);
 
@@ -208,8 +211,9 @@ class StaticPageController extends Controller
                 $staticPage->addMedia($file)
                     ->withResponsiveImages()
                     ->sanitizingFileName(function($fileName) {
-                        return Str::slug($fileName, '-');
-                     })
+                        $fileName = Str::remove('\'', Str::ascii($fileName));
+                        return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+                    })
                     ->toMediaCollection('static-pages');
             }
         }
@@ -233,11 +237,11 @@ class StaticPageController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block width-50%@md margin-x-auto">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -246,11 +250,11 @@ class StaticPageController extends Controller
                     '<div class="box">
                 <a href="' . $images[$image]->getUrl() . '">
                 <figure class="text-component__block">
-                <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>
                </a>
                </div>',
@@ -258,11 +262,11 @@ class StaticPageController extends Controller
                 $content = str_replace("<img." . $image . ">",
                     '
                 <figure class="text-component__block">
-                    <img src="' . $images[$image]->getUrl() . '"
-                    onload="window.requestAnimationFrame(function(){if(!(size=getBoundingClientRect().width))return;onload=null;sizes=Math.ceil(size/window.innerWidth*100)+\'vw\';});"
-                    sizes="1px"
-                    srcset="' . $images[$image]->getSrcset() . '"
+                    <img src="' . $images[$image]->getUrl('lquip') . '"
+                    class="lazy block width-100%"
+                    data-srcset="' . $images[$image]->getSrcset() . '"
                     alt="'. $images[$image]->name .'" title="'. $images[$image]->name .'">
+                    <noscript><img src="' . $images[$image]->getUrl() . '" alt="'. $images[$image]->name .'"></noscript>
                 </figure>',
                     $content);
 
@@ -280,8 +284,9 @@ class StaticPageController extends Controller
             $staticPage->addMediaFromRequest('cover')
             ->withResponsiveImages()
             ->sanitizingFileName(function($fileName) {
-                return Str::slug($fileName, '-');
-             })
+                $fileName = Str::remove('\'', Str::ascii($fileName));
+                return strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName));
+            })
             ->toMediaCollection('covers');
         }
 
