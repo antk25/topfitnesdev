@@ -46,5 +46,12 @@
 @endsection
 
 @push('js')
+    <script src="{{ asset("js/lazyload.min.js") }}"></script>
     <script src="{{ asset("js/simple-lightbox.min.js") }}"></script>
+    <script>
+        var lazyLoadInstance = new LazyLoad({
+            elements_selector: ".lazy"
+        });
+
+    </script>
 @endpush
