@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\ViewComposers\LinkTreeMapComposer;
 use App\Http\ViewComposers\NavHeaderComposer;
 use App\Http\ViewComposers\NavGroupHeaderComposer;
+use App\Http\ViewComposers\NavFooterComposer;
 use App\Http\ViewComposers\NotifyAdminComposer;
 use App\Http\ViewComposers\HtmlComponentsComposer;
 use Illuminate\Support\Facades\View;
@@ -36,6 +37,7 @@ class ComposerServiceProvider extends ServiceProvider
         // });
 
         View::composer('layouts.parts.header', NavHeaderComposer::class);
+        View::composer('layouts.parts.footer', NavFooterComposer::class);
         View::composer('admin.layouts.parts.htmlcomponents', HtmlComponentsComposer::class);
         View::composer('layouts.parts.header-group', NavGroupHeaderComposer::class);
         View::composer('admin.layouts.base', NotifyAdminComposer::class);
