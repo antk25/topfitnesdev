@@ -115,7 +115,7 @@
 
                         </div>
 
-                        <x-admin.add-images :currentCover="$overview->getFirstMedia('covers')" alt="Превью">
+                        <x-admin.add-images currentCover="{{ $manual->getFirstMedia('covers') }}" alt="Превью">
 
                         </x-admin.add-images>
 
