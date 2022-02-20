@@ -87,6 +87,11 @@ class Rating extends Model implements HasMedia
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function commentsParentless()
+    {
+        return $this->comments()->whereNull('parent_id');
+    }
+
 
     public function registerMediaCollections(): void
     {

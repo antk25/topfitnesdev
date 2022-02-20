@@ -145,8 +145,12 @@
     </div>
         @endif
 
-    <div class="bg margin-y-sm@md">
-        @livewire('comment.comments', ['model' => $rating, 'user' => $user])
+    <div class="container max-width-sm padding-top-md">
+        <div class="bg">
+
+            @livewire('comment.comments', ['model' => $rating, 'user' => $user, 'comments_count' => $rating->comments_count])
+
+        </div>
     </div>
 </div>
     @if (Auth::check())

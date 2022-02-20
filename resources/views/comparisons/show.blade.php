@@ -78,9 +78,8 @@
     <div class="container max-width-sm padding-top-md">
         <div class="bg">
 
-            @livewire('comment.comments', ['model' => $comparison, 'user' => $user])
+            @livewire('comment.comments', ['model' => $comparison, 'user' => $user, 'comments_count' => $comparison->comments_count])
 
-            {{-- <livewire:comments :comments="$rating->comments", :user="$user", :post_id='$rating->id'> --}}
         </div>
     </div>
 

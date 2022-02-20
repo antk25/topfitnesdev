@@ -41,7 +41,7 @@ class ComparisonController extends Controller
             $user = null;
         }
 
-        $comparison->load('comments')->loadCount('comments');
+        $comparison->loadCount('comments');
 
         return view('comparisons.show', compact('comparison', 'user', 'bracelets'));
     }

@@ -24,7 +24,7 @@ class PostController extends Controller
         {
             $user = null;
         }
-        $post->load('comments')->loadCount('comments');
+        $post->loadCount('comments');
 
         return view('posts.show', compact('post', 'user'));
     }

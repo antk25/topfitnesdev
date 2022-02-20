@@ -76,6 +76,11 @@ class Post extends Model implements HasMedia
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function commentsParentless()
+    {
+        return $this->comments()->whereNull('parent_id');
+    }
+
     public function menuitem(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(MenuItem::class);

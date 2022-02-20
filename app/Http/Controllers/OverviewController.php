@@ -37,7 +37,7 @@ class OverviewController extends Controller
         {
             $user = null;
         }
-        $overview->load('comments')->loadCount('comments');
+        $overview->loadCount('comments');
 
         return view('overviews.show', compact('overview', 'user'));
     }

@@ -41,10 +41,6 @@ class ManualController extends Controller
         }
 
        $manual->loadCount('comments');
-    //    $manual->load('commentsParentless');
-
-    //    $comments = $manual->comments->where('parent_id', null);
-
 
         return view('manuals.show', compact('manual', 'user'));
     }

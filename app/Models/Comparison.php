@@ -88,6 +88,11 @@ class Comparison extends Model implements HasMedia
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function commentsParentless()
+    {
+        return $this->comments()->whereNull('parent_id');
+    }
+
     // Связываем с несколькими CompareItems
 
     public function compareitems(): \Illuminate\Database\Eloquent\Relations\HasMany
