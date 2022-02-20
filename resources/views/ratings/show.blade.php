@@ -13,6 +13,9 @@
 @endsection
 
 @section('content')
+<progress aria-hidden="true" class="reset reading-progressbar js-reading-progressbar" max="100" value="0">
+    <div class="reading-progressbar__fallback js-reading-progressbar__fallback"></div>
+</progress>
     <div class="container max-width-md padding-top-md">
         {{ Breadcrumbs::render('rating', $rating) }}
     </div>

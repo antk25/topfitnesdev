@@ -13,6 +13,9 @@
 @endsection
 
 @section('content')
+<progress aria-hidden="true" class="reset reading-progressbar js-reading-progressbar" max="100" value="0">
+    <div class="reading-progressbar__fallback js-reading-progressbar__fallback"></div>
+</progress>
     <div class="container max-width-sm padding-top-md">
         {{ Breadcrumbs::render('overview', $overview) }}
     </div>
@@ -87,7 +90,7 @@
 
     </article>
 
-    <x-cards.author :author="$overview->user">
+    <x-cards.author :author="$overview->user" class="container max-width-sm">
     </x-cards.author>
 
     <div class="container max-width-sm padding-top-md">

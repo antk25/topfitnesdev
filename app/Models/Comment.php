@@ -84,11 +84,6 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id', 'id');
     }
 
-    public function scopeParent($query)
-    {
-        return $query->whereNull('parent_id');
-    }
-
     public function setCreatedAtAttribute($value)
 
     {

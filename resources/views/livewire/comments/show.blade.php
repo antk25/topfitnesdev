@@ -30,7 +30,7 @@
                     </button>
                 @else
                     <form wire:submit.prevent="store({{ $comment->id }})">
-                        @if($user == '')
+                        @if($user == null)
                             <div class="grid gap-xxs">
                             <div class="col-6@md">
                                 <input class="form-control width-100%" wire:model.debounce.999999ms="username"
@@ -65,22 +65,6 @@
                                 <div class="margin-y-xs">
                                     <label class="sr-only" for="comment">Ваш комментарий</label>
                                     <div class="margin-y-md">
-                                                {{-- <div x-data="{textEditor: $wire.entangle('comment').defer}"
-                                                     x-init="()=>{var element = document.querySelector('trix-editor');
-                                                               element.editor.insertHTML(textEditor);}"
-                                                     wire:ignore>
-
-                                                    <input x-ref="editor"
-                                                           id="editor-x"
-                                                           type="hidden"
-                                                           name="comment">
-
-                                                    <trix-editor class="trix-editor border-gray-300 trix-content" input="editor-x"
-                                                                 x-on:trix-change="textEditor=$refs.editor.value;"
-                                                                 wire:model.lazy="comment"
-                                                    ></trix-editor>
-                                                </div> --}}
-
                                                 <x-trix-editor comment="comment_text">
 
                                                 </x-trix-editor>

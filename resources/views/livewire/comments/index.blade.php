@@ -25,7 +25,7 @@
                         @else
                         <form wire:submit.prevent="store({{ $reply->id }})">
 
-                          @if($user == '')
+                          @if($user == null)
                           <div class="grid gap-xxs">
                             <div class="col-6@md">
                                 <input class="form-control width-100%" wire:model.debounce.999999ms="username"

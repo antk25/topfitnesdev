@@ -1,11 +1,11 @@
 <div>
-    @if ($model->comments->count())
+    @if ($comments_count)
         <section id="comments" class="comments">
             <div class="margin-bottom-sm">
-                <h2 class="text-md">Комментарии ({{ $model->comments_count }})</h2>
+                <h2 class="text-md">Комментарии ({{ $comments_count }})</h2>
             </div>
             <ul class="margin-bottom-lg">
-                @foreach ($model->comments as $comment)
+                @foreach ($model->commentsParentless as $comment)
                     @include('livewire.comments.show', ['comment' => $comment])
                     @if($comment->replies->count() > 0)
                         <div class="border-left border-3 border-opacity-20%">
@@ -54,7 +54,7 @@
         @if($commentIdReply == '')
             <form wire:submit.prevent="store()">
                 <fieldset>
-                    @if($user == '')
+                    @if($user == null)
                         <div class="grid gap-xxs">
                             <div class="col-6@md">
                                 <input class="form-control width-100%" wire:model.debounce.999999ms="username"
@@ -92,22 +92,6 @@
                             <x-trix-editor comment="comment_text">
 
                             </x-trix-editor>
-                            {{-- <div x-data="{textEditor: $wire.entangle('comment').defer}"
-                                 x-init="()=>{var element = document.querySelector('trix-editor');
-                                   element.editor.insertHTML(textEditor);}"
-                                 wire:ignore>
-
-                                <input x-ref="editor"
-                                       id="editor-x"
-                                       type="hidden"
-                                       name="comment">
-
-                                <trix-editor class="trix-editor border-gray-300 trix-content" input="editor-x"
-                                             x-on:trix-change="textEditor=$refs.editor.value;"
-                                             wire:model.lazy="comment"
-                                ></trix-editor>
-                            </div> --}}
-
                         </div>
                         @error('comment_text')
                         <div role="alert"

@@ -3,9 +3,7 @@
 namespace App\Http\Livewire\Comment;
 
 use Livewire\Component;
-use App\Models\Comment;
 
-use App\Models\User;
 use Carbon\Carbon;
 
 class Comments extends Component
@@ -16,6 +14,7 @@ class Comments extends Component
     public $useremail;
     public $username;
     public $commentIdReply;
+    public $comments_count;
 
     public function commentId($commentId)
     {
@@ -32,15 +31,15 @@ class Comments extends Component
     {
         if ($this->user) {
 
-        $this->validate(['comment_text' => 'required']);
+            $this->validate(['comment_text' => 'required']);
 
         }
         else {
 
-        $this->validate([
-            'comment_text' => 'required',
-            'username' => 'required',
-            'useremail' => 'required',
+            $this->validate([
+                'comment_text' => 'required',
+                'username' => 'required',
+                'useremail' => 'required',
         ]);
 
         }

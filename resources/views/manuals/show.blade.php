@@ -97,7 +97,7 @@
     <div class="container max-width-sm padding-top-md">
         <div class="bg">
 
-            @livewire('comment.comments', ['model' => $manual, 'user' => $user])
+            @livewire('comment.comments', ['model' => $manual, 'user' => $user, 'comments_count' => $manual->comments_count])
 
         </div>
     </div>

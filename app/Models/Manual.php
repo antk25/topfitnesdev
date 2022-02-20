@@ -39,6 +39,11 @@ class Manual extends Model implements HasMedia
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function commentsParentless()
+    {
+        return $this->comments()->whereNull('parent_id');
+    }
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
