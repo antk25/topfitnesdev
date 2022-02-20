@@ -15,11 +15,13 @@ class OverviewController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return void
+     * @return Application|Factory|View
      */
     public function index()
     {
-        //
+        $overviews = Overview::paginate(10);
+
+        return view('overviews.index', compact('overviews'));
     }
 
     /**
