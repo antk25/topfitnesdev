@@ -2,7 +2,7 @@
     @if ($model->comments->count())
         <section class="comments">
             <ul class="margin-bottom-lg">
-                @foreach ($model->comments as $comment)
+                @foreach ($model->commentsParentless as $comment)
                     @include('livewire.admin.comments.show', ['comment' => $comment])
                     @if($comment->replies->count() > 0)
                         <div class="border-left border-3 border-opacity-20%">

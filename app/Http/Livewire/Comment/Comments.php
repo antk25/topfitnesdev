@@ -23,8 +23,13 @@ class Comments extends Component
 
     public function resetCommentId()
     {
-        $this->comment_text = '';
-        $this->commentIdReply = NULL;
+        $this->reset([
+            'comment_text',
+            'commentIdReply',
+            'username',
+            'useremail',
+            'user',
+        ]);
     }
 
     public function store(int $commentId = null)
@@ -61,7 +66,9 @@ class Comments extends Component
 
        $this->reset([
            'comment_text',
-           'commentIdReply'
+           'commentIdReply',
+           'username',
+           'useremail',
        ]);
 
     }

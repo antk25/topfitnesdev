@@ -15,6 +15,7 @@ class Comments extends Component
     public $created_at;
     public $username;
     public $commentIdReply;
+    public $comments_count;
 
     public function mount()
     {
