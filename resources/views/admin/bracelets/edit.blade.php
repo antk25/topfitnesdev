@@ -782,7 +782,7 @@
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_col_depth">Глубина цвета (бит)</label>
-                <input class="form-control width-100%" type="number" name="disp_col_depth" value="{{ $bracelet->disp_col_depth }}" min="16" max="256" step="1" value="">
+                <input class="form-control width-100%" type="number" name="disp_col_depth" value="{{ $bracelet->disp_col_depth }}" min="8" max="256" step="1" value="">
               </div>
               <div class="col-3@md">
                 <label class="form-label margin-bottom-xxxs" for="disp_diag">Диагональ (дюймы)</label>
