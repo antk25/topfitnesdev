@@ -22,8 +22,8 @@
 
 
     <article class="padding-y-md">
+        <div class="text-component line-height-lg text-space-y-md margin-bottom-md">
         <header class="container max-width-sm margin-bottom-lg">
-            <div class="text-component line-height-lg text-space-y-md margin-bottom-md">
                 <h1>{{ $overview->subtitle }}</h1>
                 <p class="color-contrast-medium text-sm">
                     @if($overview->updated_at)
@@ -53,7 +53,6 @@
                     </a>
                     @endif
                 </p>
-            </div>
         </header>
         <section class="main">
             <div class="container max-width-adaptive-sm js-toc-content">
@@ -87,7 +86,7 @@
             </div>
         </section>
 
-
+        </div>
     </article>
 
     <x-cards.author :author="$overview->user" class="container max-width-sm">
