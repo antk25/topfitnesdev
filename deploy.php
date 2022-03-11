@@ -22,7 +22,7 @@ set('allow_anonymous_stats', false);
 
 // Hosts
 
-host('46.101.120.173')
+host('62.113.100.14')
     ->user('topfitnesbraslet')
     ->set('deploy_path', '~/public_html');
 
