@@ -63,6 +63,22 @@
             &lt;/a&gt;
         </div>
 
+        <p class="color-contrast-medium">Маленький баннер:</p>
+        <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
+            &lt;ul class=&quot;list-v3&quot;&gt;
+            &lt;li class=&quot;list-v3__item flex gap-sm items-center@sm&quot;&gt;
+                &lt;figure class=&quot;list-v3__figure&quot;&gt;
+                &lt;img class=&quot;block width-100% object-cover&quot; src=&quot;@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif&quot; alt=&quot;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&quot;&gt;
+                &lt;/figure&gt;
+
+                &lt;div class=&quot;text-component text-space-y-sm&quot;&gt;
+                &lt;h3 class=&quot;text-base&quot;&gt;&lt;a class=&quot;color-contrast-higher list-v3__link&quot; href=&quot;{{ $domain }}/{{ $category }}/{{ $link->slug }}&quot;&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;&lt;/h3&gt;
+                &lt;p class=&quot;text-sm color-contrast-medium&quot;&gt;Lorem ipsum dolor sit amet consectetur adipisicing elit&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;/ul&gt;
+        </div>
+
     @endif
 
 </div>

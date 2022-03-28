@@ -23,7 +23,7 @@ set('allow_anonymous_stats', false);
 // Hosts
 
 host('62.113.100.14')
-    ->user('topfitnesbraslet')
+    ->set('remote_user', 'topfitnesbraslet')
     ->set('deploy_path', '~/public_html');
 
 // Tasks
