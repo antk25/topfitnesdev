@@ -17211,6 +17211,74 @@ Usage: codyhouse.co/license
 
 /* --------------------------------
 
+File#: _1_list-v3
+Title: List v3
+Descr: Custom list component
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.list-v3 {
+  --list-v3-gap: var(--space-md);
+  /* icon wrapper */
+  --list-v3-figure-size: 48px;
+  --list-v3-icon-size: 24px;
+}
+@media (min-width: 64rem) {
+  .list-v3 {
+    --list-v3-figure-size: 64px;
+  }
+}
+
+.list-v3__item:not(:first-child) {
+  padding-top: var(--list-v3-gap);
+}
+.list-v3__item:not(:last-child) {
+  padding-bottom: var(--list-v3-gap);
+  border-bottom: 1px solid hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.1);
+}
+
+.list-v3__figure {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--list-v3-figure-size);
+  height: var(--list-v3-figure-size);
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+.list-v3__figure img, .list-v3__figure .list-v3__icon {
+  position: relative;
+  z-index: 1;
+}
+.list-v3__figure::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0.2;
+}
+
+.list-v3__icon {
+  --size: var(--list-v3-icon-size);
+}
+
+.list-v3__link {
+  text-decoration: none;
+  background-image: linear-gradient(to right, currentColor 50%, hsla(var(--color-contrast-higher-h), var(--color-contrast-higher-s), var(--color-contrast-higher-l), 0.15) 50%);
+  background-size: 200% 2px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  transition: background-position 0.3s;
+}
+.list-v3__link:hover {
+  background-position: 0% 100%;
+}
+
+/* --------------------------------
+
 File#: _1_list
 Title: List
 Descr: Custom list component
