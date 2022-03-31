@@ -2,10 +2,82 @@
 {{-- Переопределяем секцию content от базового шаблона --}}
 @section('content')
 
+<section class="position-relative z-index-1 margin-top-lg">
+  <div class="container max-width-adaptive-md padding-bottom-xl">
+    <div class="grid gap-sm">
+      <div class="col-4@md col-5@lg">
+        <h1 class="text-xl@lg">Выбор лучшего фитнес браслета в 2022 году</h1>
+      </div>
+
+      <div class="col-8@md col-7@lg">
+        <div class="text-component">
+          <p>На сегодняшний день рынок фитнес браслетов предлагает сотни различных вариантов для покупки, каждый из которых имеет как свои достоинства, так и недостатки. Перед покупателем встает вопрос: какой трекер выбрать? Важно не переплатить, но в то же время взять надежный и качественный фитнес браслет, функциональность которого соответствовала бы требованиям своего владельца. Именно для помощи обычному покупателю и предназначен наш сайт.</p>
+          <p>
+            <a class="link-fx-3" href="about.html">
+              <span>Как выбрать</span>
+              <svg class="icon" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="3.5" y2="11.5"/><line x1="3.5" y1="0.5" x2="9" y2="6"/></svg>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- classes -->
+<section class="position-relative z-index-1 padding-y-xl">
+  <div class="container max-width-xl">
+    <div class="grid gap-md items-start@md">
+      <div class="col-4@md position-sticky@md top-md@md">
+        <div class="text-component v-space-sm">
+          <h1>Our Classes</h1>
+          <p class="color-contrast-medium">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia nostrum, saepe enim amet.</p>
+          <p>
+            <a class="link-fx-3 color-contrast-higher" href="timetable.html">
+              <span>View Timetable</span>
+              <svg class="icon" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="3.5" y2="11.5"/><line x1="3.5" y1="0.5" x2="9" y2="6"/></svg>
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="col-8@md">
+        <div class="grid gap-sm">
+          @foreach ($hits as $hit)
+          <a class="card-v11 radius-md reveal-fx reveal-fx--translate-up col-6@md" href="classes.html#yoga-classes" style="background-image: url('{{ $hit->getFirstMediaUrl('bracelets', 'thumb') }}');" aria-label="{{ $hit->name }}">
+            <div class="card-v11__box width-100%">
+              <div class="padding-sm">
+                <p class="text-sm opacity-60% margin-bottom-xxs">Meditate</p>
+                <h2 class="text-lg color-inherit">{{ $hit->name }}</h2>
+              </div>
+
+              <div class="card-v11__btn padding-x-sm">
+                <svg class="card-v11__icon icon" viewBox="0 0 48 48">
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="37" y1="14" x2="47" y2="24" />
+                    <line x1="47" y1="24" x2="37" y2="34" />
+                    <line x1="47" y1="24" x2="1.5" y2="24" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </a>
+          @endforeach
+
+        </div>
+        <!-- end grid -->
+      </div>
+    </div>
+  </div>
+
+  <div class="corner-decoration corner-decoration--right bg" aria-hidden="true"></div>
+</section>
+
 <section class="position-relative z-index-1 padding-y-xl bg-cover bg-center" style="background-image: url('{{ asset("img/feature-v18-img-1.jpg") }}');">
     <div class="container max-width-adaptive-lg">
       <div class="margin-bottom-lg">
-        <h1 class="text-center">Лидеры рейтингов</h1>
+        <h1 class="text-center">Выбор лучшего фитнес браслета в 2022 году</h1>
       </div>
 
       <div class="grid gap-sm">

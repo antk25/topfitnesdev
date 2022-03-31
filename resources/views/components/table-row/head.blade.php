@@ -79,6 +79,9 @@
                         @case('country')
                         <x-table-row.rows.string :item="$item->country"/>
                         @break
+                        @case('year')
+                        <x-table-row.rows.string :item="$item->year"/>
+                        @break
                         @case('disp_tech')
                         <x-table-row.rows.string :item="$item->disp_tech"/>
                         @break

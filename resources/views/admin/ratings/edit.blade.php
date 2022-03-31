@@ -297,6 +297,7 @@
                                                             <option value="">-- Выбрать харктеристику --</option>
                                                             <option value="real_time">Время работы</option>
                                                             <option value="country">Страна</option>
+                                                            <option value="year">Год выпуска</option>
                                                             <option value="compatibility">Совместимость</option>
                                                             <option value="protect_stand">Стандарты защиты</option>
                                                             <option value="terms_of_use">Условия использования</option>
@@ -316,6 +317,10 @@
                                                             <option value="player_control">Управление плеером</option>
                                                             <option value="average_grade">Общий рейтинг</option>
                                                             <option value="average_pressure_grade">Общий рейтинг с давлением</option>
+                                                            <option value="average_swim_grade">Общий рейтинг с плаванием</option>
+                                                            <option value="average_pedometer_grade">Общий рейтинг с шагомером</option>
+                                                            <option value="average_smart_grade">Общий рейтинг с умным будильником</option>
+                                                            <option value="average_pulse_grade">Общий рейтинг с пульсометром</option>
                                                         </select>
 
                                                         <svg class="icon select__icon" aria-hidden="true"
