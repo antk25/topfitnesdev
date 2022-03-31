@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="position-relative z-index-1 margin-top-lg">
-  <div class="container max-width-adaptive-md padding-bottom-xl">
+  <div class="container max-width-adaptive-lg padding-bottom-xl">
     <div class="grid gap-sm">
       <div class="col-4@md col-5@lg">
         <h1 class="text-xl@lg">Выбор лучшего фитнес браслета в 2022 году</h1>
@@ -13,7 +13,7 @@
         <div class="text-component">
           <p>На сегодняшний день рынок фитнес браслетов предлагает сотни различных вариантов для покупки, каждый из которых имеет как свои достоинства, так и недостатки. Перед покупателем встает вопрос: какой трекер выбрать? Важно не переплатить, но в то же время взять надежный и качественный фитнес браслет, функциональность которого соответствовала бы требованиям своего владельца. Именно для помощи обычному покупателю и предназначен наш сайт.</p>
           <p>
-            <a class="link-fx-3" href="about.html">
+            <a class="link-fx-3" href="#kak-vybrat">
               <span>Как выбрать</span>
               <svg class="icon" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="3.5" y2="11.5"/><line x1="3.5" y1="0.5" x2="9" y2="6"/></svg>
             </a>
@@ -25,59 +25,10 @@
 </section>
 
 
-<!-- classes -->
-<section class="position-relative z-index-1 padding-y-xl">
-  <div class="container max-width-xl">
-    <div class="grid gap-md items-start@md">
-      <div class="col-4@md position-sticky@md top-md@md">
-        <div class="text-component v-space-sm">
-          <h1>Our Classes</h1>
-          <p class="color-contrast-medium">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia nostrum, saepe enim amet.</p>
-          <p>
-            <a class="link-fx-3 color-contrast-higher" href="timetable.html">
-              <span>View Timetable</span>
-              <svg class="icon" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="3.5" y2="11.5"/><line x1="3.5" y1="0.5" x2="9" y2="6"/></svg>
-            </a>
-          </p>
-        </div>
-      </div>
-
-      <div class="col-8@md">
-        <div class="grid gap-sm">
-          @foreach ($hits as $hit)
-          <a class="card-v11 radius-md reveal-fx reveal-fx--translate-up col-6@md" href="classes.html#yoga-classes" style="background-image: url('{{ $hit->getFirstMediaUrl('bracelets', 'thumb') }}');" aria-label="{{ $hit->name }}">
-            <div class="card-v11__box width-100%">
-              <div class="padding-sm">
-                <p class="text-sm opacity-60% margin-bottom-xxs">Meditate</p>
-                <h2 class="text-lg color-inherit">{{ $hit->name }}</h2>
-              </div>
-
-              <div class="card-v11__btn padding-x-sm">
-                <svg class="card-v11__icon icon" viewBox="0 0 48 48">
-                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="37" y1="14" x2="47" y2="24" />
-                    <line x1="47" y1="24" x2="37" y2="34" />
-                    <line x1="47" y1="24" x2="1.5" y2="24" />
-                  </g>
-                </svg>
-              </div>
-            </div>
-          </a>
-          @endforeach
-
-        </div>
-        <!-- end grid -->
-      </div>
-    </div>
-  </div>
-
-  <div class="corner-decoration corner-decoration--right bg" aria-hidden="true"></div>
-</section>
-
 <section class="position-relative z-index-1 padding-y-xl bg-cover bg-center" style="background-image: url('{{ asset("img/feature-v18-img-1.jpg") }}');">
     <div class="container max-width-adaptive-lg">
       <div class="margin-bottom-lg">
-        <h1 class="text-center">Выбор лучшего фитнес браслета в 2022 году</h1>
+        <h2 class="text-center">Топ лучших</h2>
       </div>
 
       <div class="grid gap-sm">
@@ -85,7 +36,7 @@
         <a class="card-v12 padding-top-sm radius-lg shadow-sm col-6@sm col-3@md" aria-controls="modal-name-{{ $loop->index }}" href="#0" aria-label="Link description">
           <div class="position-relative">
             <figure class="card-v12__figure radius-sm" >
-              <img class="block width-100%" src="{{ $hit->getFirstMediaUrl('bracelet', 'thumb') }}"  alt="Image description">
+              <img class="block width-100%" src="{{ $hit->getFirstMediaUrl('bracelets', 'thumb') }}"  alt="Image description">
             </figure>
 
             <svg class="icon card-v12__icon" viewBox="0 0 60 60">
@@ -102,7 +53,7 @@
 
             <div class="card-v12__separator border-top border-contrast-higher border-opacity-10% margin-x-auto margin-y-xs" role="presentation"></div>
 
-            <p class="text-xs color-contrast-higher color-opacity-50% text-uppercase letter-spacing-lg">Yoga</p>
+            <p class="text-xs color-contrast-higher color-opacity-50% text-uppercase letter-spacing-lg">&#11088; {{ $hit->average_grade }}</p>
           </div>
         </a>
 
@@ -129,7 +80,7 @@
   <div class="margin-bottom-md">
     <div class="flex items-baseline justify-between">
       <p class="color-contrast-medium">Оценки</p>
-      <p>Общая оценка <span class="text-md color-primary font-bold">{{ $hit->grade_bracelet }}</span></p>
+      <p>Общая оценка <span class="text-md color-primary font-bold">{{ $hit->average_grade }}</span></p>
     </div>
   </div>
 
@@ -191,6 +142,84 @@
       </div>
     </div>
   </section>
+
+<section class="position-relative z-index-1 margin-top-lg">
+  <div class="container max-width-adaptive-lg padding-bottom-xl">
+    <div class="text-component margin-y-md" id="kak-vybrat">
+    <h2>Как выбрать фитнес браслет (краткая инструкция)</h2>
+  </div>
+  <ol class="list-v2 list-v2--ol">
+    <li>
+      <div class="margin-bottom-xs">
+        <h4 class="list-v2__title">
+          <span class="list-v2__bullet" aria-hidden="true"></span>Бюджет
+        </h4>
+      </div>
+
+      <div class="list-v2__content">
+        <div class="text-component">
+          <p>Условно все браслеты можно разделить на 3 ценовых категории: <a href="/nedorogie">бюджетные</a>, средние и премиальные. Бюджетными можно считать фитнес браслеты стоимостью до 3&nbsp;000 рублей, средние же являются самыми массовыми, их ценовой диапазон от 3 000 до 10 000 рублей. Премиальные браслеты, как правило, стоят от 10&nbsp;000 рублей и могут достигать 15 000-16 000, а некоторые и 20&nbsp;000. Учтите, что не всегда от стоимости зависит функционал устройства и его надежность.</p>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="margin-bottom-xs">
+        <h4 class="list-v2__title">
+          <span class="list-v2__bullet" aria-hidden="true"></span>Цель покупки
+        </h4>
+      </div>
+
+      <div class="list-v2__content">
+        <div class="text-component">
+          <p>Определитесь для чего вам нужен фитнес браслет. Не стоит тратить большие деньги на трекер, если вы не занимаетесь спортом, а просто хотите следить за суточной активностью и получать уведомления и оповещения с телефона. Если же вы профессиональный или начинающий спортсмен и вам важны точные показатели активности во время тренировки, то взгляните на наши рейтинги браслетов с точным <a href="/s-tochnyim-shagomerom">шагомером</a> и <a href="/s-pulsometrom">пульсометром</a>.</p>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="margin-bottom-xs">
+        <h4 class="list-v2__title">
+          <span class="list-v2__bullet" aria-hidden="true"></span>Функционал
+        </h4>
+      </div>
+
+      <div class="list-v2__content">
+        <div class="text-component">
+          <p>Здесь все сугубо индивидуально. Кто-то ищет фитнес браслет для контроля сна и пробуждения (<a href="/s-umnyim-budilnikom">фитнес-браслеты с умным будильником</a>), кому-то необходимо постоянно следить за артериальным давлением (<a href="/s-tonometrom">фитнес браслеты с тонометром</a>), а кто-то просто хочет себе современный стильный гаджет. Если вы точно не знаете какие функции вам нужны, то взгляните на <a href="/rejting">общий рейтинг фитнес браслетов</a>.</p>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="margin-bottom-xs">
+        <h4 class="list-v2__title">
+          <span class="list-v2__bullet" aria-hidden="true"></span>Экран
+        </h4>
+      </div>
+
+      <div class="list-v2__content">
+        <div class="text-component">
+          <p>Сейчас экраны фитнес браслетов различаются не только по своим размерам, но и по технологии изготовления (AMOLED, POLED, OLED и др.), разрешению, цветопередачи, а также качеству подсветки. Покупателю нужно определиться с размером дисплея, его качеством (детализацией), а также решить цветным или монохромным он должен быть. Если вы ищете фитнес браслет исключительно для занятий спортом и отслеживания собственной активности, то смысла в цветном детализированном дисплее нет, вам подойдет любой монохромный экран с минимальным разрешением.</p>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="margin-bottom-xs">
+        <h4 class="list-v2__title">
+          <span class="list-v2__bullet" aria-hidden="true"></span>Водонепроницаемость
+        </h4>
+      </div>
+
+      <div class="list-v2__content">
+        <div class="text-component">
+          <p>Данная характеристика очень важна, так как от нее напрямую зависит сможете ли вы брать фитнес-трекер в бассейн и душ или вам придется снимать его даже перед мытьем рук. Итак, если вы хотите, чтобы ваш фитнес браслет стойко переносил все повседневные контакты с водой (мытье рук, дождь, попадание пота), то рекомендуем ознакомиться с рейтингом <a href="/vodoneproniczaemyie">водонепроницаемых фитнес браслетов</a>. Для регулярного плавания и водных процедур – <a href="/dlya-plavaniya">рейтинг фитнес браслетов для плавания</a>.</p>
+        </div>
+      </div>
+    </li>
+  </ol>
+  </div>
+</section>
+
 
     <section class="margin-y-lg">
       <div class="container max-width-adaptive-lg">

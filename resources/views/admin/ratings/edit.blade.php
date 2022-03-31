@@ -166,6 +166,10 @@
                                                                     @if($item['specs'] == 'country') selected @endif>
                                                                     Страна
                                                             </option>
+                                                            <option value="year"
+                                                                @if($item['specs'] == 'year') selected @endif>
+                                                                Год выпуска
+                                                            </option>
                                                             <option value="compatibility"
                                                                     @if($item['specs'] == 'compatibility') selected @endif>
                                                                    Совместимость
@@ -241,6 +245,22 @@
                                                             <option value="average_pressure_grade"
                                                                     @if($item['specs'] == 'average_pressure_grade') selected @endif>
                                                                     Общий с давлением
+                                                            </option>
+                                                            <option value="average_swim_grade"
+                                                                @if($item['specs'] == 'average_swim_grade') selected @endif>
+                                                                Общий рейтинг с плаванием
+                                                            </option>
+                                                                <option value="average_pedometer_grade"
+                                                                @if($item['specs'] == 'average_pedometer_grade') selected @endif>
+                                                                Общий рейтинг с шагомером
+                                                            </option>
+                                                                <option value="average_smart_grade"
+                                                                @if($item['specs'] == 'average_smart_grade') selected @endif>
+                                                                Общий рейтинг с умным будильником
+                                                            </option>
+                                                                <option value="average_pulse_grade"
+                                                                @if($item['specs'] == 'average_smart_grade') selected @endif>
+                                                                Общий рейтинг с пульсометром
                                                             </option>
                                                         </select>
 
