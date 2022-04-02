@@ -9,7 +9,7 @@
         {{-- <p class="card-v10__label text-uppercase color-primary letter-spacing-md">Category</p> --}}
 
         <div class="text-component">
-            <h1 class="card-v10__title"><a class="color-contrast-higher" href="{{ route('pub.overviews.show', ['rating' => $item]) }}">{{ $item->name }}</a></h1>
+            <h1 class="card-v10__title"><a class="color-contrast-higher" href="{{ route('pub.overviews.show', ['overview' => $item]) }}">{{ $item->name }}</a></h1>
             <p class="card-v10__excerpt color-contrast-medium">{!! Str::words($item->description, 15) !!}</p>
         </div>
         </div>
