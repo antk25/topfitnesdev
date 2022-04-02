@@ -1,5 +1,5 @@
 
-<div class="border-contrast-lower border radius-md padding-md text-center flex@md flex-column@md col-4@md">
+<div class="border-contrast-lower border radius-lg padding-md text-center flex@md flex-column@md">
 
     <div class="margin-bottom-sm">
     @switch($review->rating_user)

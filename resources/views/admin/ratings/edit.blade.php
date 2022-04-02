@@ -87,7 +87,7 @@
                             </x-admin.codemirror-editor>
                         </div>
 
-                        <x-admin.add-images :currentCover="$rating->getFirstMedia('covers')" alt="Превью">
+                        <x-admin.add-images currentCover="{{ $rating->getFirstMedia('covers') }}" alt="Превью">
 
                         </x-admin.add-images>
 
