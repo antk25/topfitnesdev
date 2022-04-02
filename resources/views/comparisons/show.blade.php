@@ -38,10 +38,6 @@
             <div class="container max-width-adaptive-sm js-toc-content">
                 <div class="text-component line-height-lg text-space-y-md">
 
-                    <div class="text-component__block">
-                        <x-dynamic-component :component="$comparison->type_table" :bracelets="$bracelets" :specs="$comparison->list_specs" />
-                    </div>
-
                     <details class="details js-details margin-y-sm">
                         <summary class="details__summary js-details__summary" role="button">
                             <span class="flex items-center color-primary font-bold">
@@ -72,7 +68,7 @@
 
     </article>
 
-    <x-cards.author :author="$comparison->user">
+    <x-cards.author :author="$comparison->user" class="container max-width-sm">
     </x-cards.author>
 
     <div class="container max-width-sm padding-top-md">
