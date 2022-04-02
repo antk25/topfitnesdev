@@ -253,7 +253,7 @@
                 <h1 class="text-center">Новые рейтинги</h1>
             </div>
             @foreach($lastratings as $item)
-            <div class="card-v10 card-v10--featured">
+            <div class="card-v10 card-v10--featured margin-y-md">
               <a class="card-v10__img-link radius-lg shadow-lg" href="{{ route('pub.ratings.show', ['rating' => $item]) }}">
                 <img src="{{ $item->getFirstMediaUrl('covers') }}" alt="Image description">
               </a>
