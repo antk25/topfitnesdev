@@ -55,7 +55,7 @@
                 &lt;div class=&quot;col-6@md&quot;&gt;<br>
                 &lt;div class=&quot;text-component text-space-y-md height-100% flex flex-column padding-md padding-lg@md&quot;&gt;<br>
                     &lt;p class=&quot;text-lg text-bold&quot;&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/p&gt;
-                    &lt;h2&gt;Перейти&lt;/h2&gt;<br>
+                    &lt;p class=&quot;text-md font-bold&quot;&gt;Перейти&lt;/p&gt;<br>
                     &lt;p class=&quot;margin-top-sm margin-top-md@md&quot;&gt;&lt;span class=&quot;banner__link&quot;&gt;&lt;i&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;<br>
                 &lt;/div&gt;<br>
                 &lt;/div&gt;<br>
@@ -72,12 +72,13 @@
                 &lt;/figure&gt;
 
                 &lt;div class=&quot;text-component text-space-y-sm&quot;&gt;
-                &lt;h3 class=&quot;text-base&quot;&gt;&lt;a class=&quot;color-contrast-higher list-v3__link&quot; href=&quot;{{ $domain }}/{{ $category }}/{{ $link->slug }}&quot;&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;&lt;/h3&gt;
+                &lt;p class=&quot;text-base font-bold&quot;&gt;&lt;a class=&quot;color-contrast-higher list-v3__link&quot; href=&quot;{{ $domain }}/{{ $category }}/{{ $link->slug }}&quot;&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;&lt;/p&gt;
                 &lt;p class=&quot;text-sm color-contrast-medium&quot;&gt;Lorem ipsum dolor sit amet consectetur adipisicing elit&lt;/p&gt;
                 &lt;/div&gt;
             &lt;/li&gt;
             &lt;/ul&gt;
         </div>
+
 
     @endif
 
