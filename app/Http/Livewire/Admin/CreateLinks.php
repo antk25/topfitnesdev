@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Livewire\Component;
 use App\Models\Post;
-use App\Models\Bracelet;
 use App\Models\Manual;
-use App\Models\Comparison;
+use App\Models\Rating;
+use Livewire\Component;
+use App\Models\Bracelet;
 use App\Models\Overview;
+use App\Models\Comparison;
 
 class CreateLinks extends Component
 {
@@ -29,6 +30,7 @@ class CreateLinks extends Component
             'Сравнения' => 'Comparison',
             'Обзоры' => 'Overview',
             'Мануалы' => 'Manual',
+            'Рейтинги' => 'Rating',
         ];
 
         $this->link = null;
@@ -47,23 +49,27 @@ class CreateLinks extends Component
         switch ($model){
             case('Post'):
                 $this->links = Post::get();
-                $this->category = 'blog';
+                $this->category = 'blog/';
                 break;
             case('Manual'):
                 $this->links = Manual::get();
-                $this->category = 'manuals';
+                $this->category = 'manuals/';
                 break;
             case('Comparison'):
                 $this->links = Comparison::get();
-                $this->category = 'sravneniya';
+                $this->category = 'sravneniya/';
                 break;
             case('Overview'):
                 $this->links = Overview::get();
-                $this->category = 'obzory';
+                $this->category = 'obzory/';
                 break;
             case ('Bracelet'):
                 $this->links = Bracelet::get();
-                $this->category = 'katalog';
+                $this->category = 'katalog/';
+                break;
+            case ('Rating'):
+                $this->links = Rating::get();
+                $this->category = '';
                 break;
         }
         $this->selectedLink = NULL;

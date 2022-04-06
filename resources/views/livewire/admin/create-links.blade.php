@@ -33,12 +33,12 @@
     @if(!is_null($selectedLink))
     <p class="color-contrast-medium">Простая ссылка:</p>
        <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
-          &lt;a href="{{ $domain }}/{{ $category }}/{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;
+          &lt;a href="{{ $domain }}/{{ $category }}{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;
        </div>
 
     <p class="color-contrast-medium">Ссылка и картинка без оформления:</p>
         <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
-            &lt;a href="{{ $domain }}/{{ $category }}/{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;<br>
+            &lt;a href="{{ $domain }}/{{ $category }}{{ $link->slug }}"&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;<br>
             &lt;img src="@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif"&gt;
             &lt;img src="@if ($link->getFirstMediaUrl('bracelets', 'thumb')) {{ $link->getFirstMediaUrl('bracelets', 'thumb') }} @else @endif"&gt;
         </div>
@@ -46,7 +46,7 @@
 
     <p class="color-contrast-medium">Баннер:</p>
         <div class="padding-sm bg-contrast-lower radius-md margin-y-sm">
-            &lt;a class=&quot;banner&quot; href=&quot;{{ $domain }}/{{ $category }}/{{ $link->slug }}&quot; aria-label=&quot;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&quot;&gt;<br>
+            &lt;a class=&quot;banner&quot; href=&quot;{{ $domain }}/{{ $category }}{{ $link->slug }}&quot; aria-label=&quot;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&quot;&gt;<br>
             &lt;div class=&quot;grid flex-row-reverse@md&quot;&gt;<br>
                 &lt;div class=&quot;col-6@md overflow-hidden&quot; aria-hidden=&quot;true&quot;&gt;<br>
                 &lt;div class=&quot;banner__figure width-100%&quot; style=&quot;background-image: url(@if ($link->getFirstMediaUrl('covers')) {{ $link->getFirstMediaUrl('covers') }} @else {{ $link->getFirstMediaUrl('bracelets') }} @endif);&quot;&gt;&lt;/div&gt;<br>
@@ -72,7 +72,7 @@
                 &lt;/figure&gt;
 
                 &lt;div class=&quot;text-component text-space-y-sm&quot;&gt;
-                &lt;p class=&quot;text-base font-bold&quot;&gt;&lt;a class=&quot;color-contrast-higher list-v3__link&quot; href=&quot;{{ $domain }}/{{ $category }}/{{ $link->slug }}&quot;&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;&lt;/p&gt;
+                &lt;p class=&quot;text-base font-bold&quot;&gt;&lt;a class=&quot;color-contrast-higher list-v3__link&quot; href=&quot;{{ $domain }}/{{ $category }}{{ $link->slug }}&quot;&gt;@if($linkText){{ $linkText }}@else{{ $link->name }}@endif&lt;/a&gt;&lt;/p&gt;
                 &lt;p class=&quot;text-sm color-contrast-medium&quot;&gt;Lorem ipsum dolor sit amet consectetur adipisicing elit&lt;/p&gt;
                 &lt;/div&gt;
             &lt;/li&gt;
