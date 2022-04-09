@@ -124,7 +124,7 @@
                                                 <option value="average_grade" @if($rating->type_grade == 'average_grade') selected @endif>Общий рейтинг</option>
                                                 <option value="average_swim_grade" @if($rating->type_grade == 'average_swim_grade') selected @endif>Плавание</option>
                                                 <option value="average_pulse_grade" @if($rating->type_grade == 'average_pulse_grade') selected @endif>Точность пульсометра</option>
-                                                <option value="average_pedometr_grade" @if($rating->type_grade == 'average_pedometr_grade') selected @endif>Точность шагомера</option>
+                                                <option value="average_pedometer_grade" @if($rating->type_grade == 'average_pedometer_grade') selected @endif>Точность шагомера</option>
                                                 <option value="average_smart_grade" @if($rating->type_grade == 'average_smart_grade') selected @endif>Умный будильник</option>
                                                 <option value="average_pressure_grade" @if($rating->type_grade == 'average_pressure_grade') selected @endif>Измерение давления</option>
                                             </select>

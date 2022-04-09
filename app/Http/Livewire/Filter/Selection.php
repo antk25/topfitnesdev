@@ -4,20 +4,24 @@ namespace App\Http\Livewire\Filter;
 
 use Livewire\Component;
 use App\Models\Bracelet;
-use App\ResourceFiltering\QueryFilters;
-use App\ResourceFiltering\ProductFilters\ProductFiltersPreset;
+use App\Filters\BraceletCheckedFilter;
+use App\Filters\BraceletJsonFieldsFilter;
+use App\Filters\BraceletPriceRangeFilter;
+use App\Filters\MinRatingsFilter;
+use Pricecurrent\LaravelEloquentFilters\EloquentFilters;
 
 class Selection extends Component
 {
 //    public $disp_tech, $heart_rate, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $disp_sens, $nfc, $min_rating, $protect_stand, $minPrice, $maxPrice, $brand, $budget, $step;
 
-    public $minPrice, $maxPrice, $step, $budget, $compatibility, $protect_stand;
+    public $minPrice, $maxPrice, $step, $budget, $compatibility, $protect_stand, $destination;
 
     protected $queryString = [
         'step',
         'budget',
         'compatibility',
-        'protect_stand'
+        'protect_stand',
+        'destination'
     ];
 
     public function mount()
@@ -36,7 +40,7 @@ class Selection extends Component
     }
 
 
-    public function render(ProductFiltersPreset $preset)
+    public function render()
 
     {
 //        $brand = $this->brand;
@@ -55,6 +59,7 @@ class Selection extends Component
         $budget = $this->budget;
         $compatibility = $this->compatibility;
         $protect_stand = $this->protect_stand;
+        $destination = $this->destination;
 
         switch ($budget) {
             case 'low':
@@ -82,8 +87,14 @@ class Selection extends Component
                 break;
         }
 
+        $filters = EloquentFilters::make([
+            // new MinRatingsFilter($min_rating),
+            // new BraceletCheckedFilter($disp_aod, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $send_messages, $stress, $player_control),
+            new BraceletJsonFieldsFilter($protect_stand, $compatibility, $destination),
+            new BraceletPriceRangeFilter($maxPrice)
+          ]);
 
-        $bracelets = Bracelet::with('sellers', 'media', 'brands')->where('selection', 1)->filter($preset->getForSelection($protect_stand, $compatibility, $minPrice, $maxPrice, ))->get();
+        $bracelets = Bracelet::with('sellers', 'media', 'brand')->filter($filters)->paginate(15);
 
         return view('livewire.selection', compact('bracelets'));
 
