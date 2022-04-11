@@ -3,24 +3,72 @@
     <section class="grid grid-gap-sm margin-y-md">
         <div class="col-9@md">
             @foreach ($bracelet->grades as $grade)
-                @if ($grade->id != 5)
-                <div
-                    class="progress-bar progress-bar--color-update js-progress-bar flex flex-column items-center margin-y-xxs">
-                    <p class="sr-only" aria-live="polite" aria-atomic="true">Оценка составляет
-                        <span
-                            class="js-progress-bar__aria-value">{{ $grade->pivot->value * 10 }}%</span>
-                    </p>
+                @switch($typeGrade)
+                    @case('average_swim_grade')
 
-                    <div class="margin-y-xxs width-100%">{{ $grade->name }} <span
-                            class="text-bold float-right">{{ number_format($grade->pivot->value, 1) }}</span>
-                    </div>
+                        @if ($grade->id < 5)
+                            @include('components.cards.parts.progress-bar')
+                        @elseif ($grade->id == 10)
 
-                    <div class="progress-bar__bg width-100%" aria-hidden="true">
-                        <div class="progress-bar__fill"
-                             style="width: {{ $grade->pivot->value * 10 }}%;"></div>
-                    </div>
-                </div>
-                @endif
+                            @include('components.cards.parts.progress-bar')
+
+                        @endif
+                      @break
+
+                      @case('average_pulse_grade')
+
+                        @if ($grade->id < 5)
+                            @include('components.cards.parts.progress-bar')
+
+                        @elseif ($grade->id == 9)
+
+                            @include('components.cards.parts.progress-bar')
+
+                        @endif
+                        @break
+
+                    @case('average_pedometer_grade')
+
+                    @if ($grade->id < 5)
+                        @include('components.cards.parts.progress-bar')
+
+                    @elseif ($grade->id == 8)
+
+                        @include('components.cards.parts.progress-bar')
+
+                    @endif
+                    @break
+
+                    @case('average_smart_grade')
+
+                    @if ($grade->id < 5)
+                        @include('components.cards.parts.progress-bar')
+
+                    @elseif ($grade->id == 7)
+
+                        @include('components.cards.parts.progress-bar')
+
+                    @endif
+                    @break
+
+                    @case('average_pressure_grade')
+
+                    @if ($grade->id < 5)
+                        @include('components.cards.parts.progress-bar')
+
+                    @elseif ($grade->id == 6)
+
+                        @include('components.cards.parts.progress-bar')
+
+                    @endif
+                    @break
+
+                    @default
+                    @if ($grade->id < 5)
+                        @include('components.cards.parts.progress-bar')
+                    @endif
+
+                @endswitch
             @endforeach
         </div>
         <div class="col-3@md margin-y-auto text-center">
