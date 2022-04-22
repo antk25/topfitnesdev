@@ -8,19 +8,28 @@ use Pricecurrent\LaravelEloquentFilters\AbstractEloquentFilter;
 
 class BraceletPriceRangeFilter extends AbstractEloquentFilter
 {
-    // protected $minPrice;
-    protected $max_price;
+    protected $minPrice;
+    protected $maxPrice;
 
-    public function __construct($max_price)
+    public function __construct($maxPrice, $minPrice)
     {
-        $this->max_price = $max_price;
+        $this->maxPrice = $maxPrice;
+        $this->minPrice = $minPrice;
+    }
+
+    public function isApplicable(): bool
+    {
+        return is_numeric($this->maxPrice);
     }
 
     public function apply(Builder $builder): Builder
     {
         return $builder
-        ->when($this->max_price, function ($query) {
-            $query->where('avg_price', '<=', $this->max_price);
+        ->when($this->minPrice, function ($query) {
+            $query->where('avg_price', '>=', $this->minPrice);
+        })
+        ->when($this->maxPrice, function ($query) {
+            $query->where('avg_price', '<=', $this->maxPrice);
         });
     }
 

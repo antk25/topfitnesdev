@@ -128,7 +128,7 @@
                 </div>
               </div>
 
-              <x-datepicker date="{{ $comment->created_at->format('d/m/Y H:m:s') }}">
+              <x-datepicker date="{{ $comment->created_at->format('Y-m-d H:m:s') }}">
               </x-datepicker>
 
             </fieldset>

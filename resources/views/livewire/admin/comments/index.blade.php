@@ -84,7 +84,7 @@
 
                             <label for="created_at" class="form-label margin-bottom-xxs">Выбрать дату</label>
 
-                            <x-admin.flatpickr wire:model.lazy="created_at" placeholder="DD/MM/YYYY"/>
+                            <x-admin.flatpickr wire:model.lazy="created_at" placeholder="YYYY-MM-DD HH:mm:ss"/>
 
                         </div>
 

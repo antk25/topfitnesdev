@@ -22,7 +22,7 @@ class Bracelets extends Component
     public $name, $disp_aod, $blood_oxy,
         $blood_pressure, $smart_alarm,
         $gps, $nfc, $min_rating, $protect_stand,
-        $max_price, $brand, $send_messages, $compatibility, $destination, $player_control, $stress, $heart_rate;
+        $maxPrice, $minPrice, $brand, $send_messages, $compatibility, $destination, $player_control, $stress, $heart_rate;
 
     public $page = 1;
 
@@ -51,7 +51,7 @@ class Bracelets extends Component
         'brand' => ['except' => ''],
         'disp_aod' => ['except' => false],
         'protect_stand' => ['except' => ''],
-        'max_price' => ['except' => ''],
+        'maxPrice' => ['except' => ''],
         'min_rating' => ['except' => ''],
         'compatibility' => ['except' => ''],
         'destination' => ['except' => ''],
@@ -60,7 +60,7 @@ class Bracelets extends Component
         'send_messages' => ['except' => false],
     ];
 
-    // protected $queryString = ['heart_rate', 'disp_tech', 'protect_stand', 'max_price', 'min_price', 'blood_oxy', 'blood_pressure', 'smart_alarm', 'gps', 'disp_sens', 'nfc', 'brand'];
+    // protected $queryString = ['heart_rate', 'disp_tech', 'protect_stand', 'max$maxPrice', 'min_price', 'blood_oxy', 'blood_pressure', 'smart_alarm', 'gps', 'disp_sens', 'nfc', 'brand'];
 
 
     public function render()
@@ -78,7 +78,8 @@ class Bracelets extends Component
         $player_control = $this->player_control;
         $stress = $this->stress;
         $min_rating = $this->min_rating;
-        $max_price = $this->max_price;
+        $maxPrice = $this->maxPrice;
+        $minPrice = $this->minPrice;
         $send_messages = $this->send_messages;
         $compatibility = $this->compatibility;
         $destination = $this->destination;
@@ -89,11 +90,11 @@ class Bracelets extends Component
                                           new MinRatingsFilter($min_rating),
                                           new BraceletCheckedFilter($disp_aod, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $send_messages, $stress, $player_control),
                                           new BraceletJsonFieldsFilter($protect_stand, $compatibility, $destination),
-                                          new BraceletPriceRangeFilter($max_price)
+                                          new BraceletPriceRangeFilter($maxPrice, $minPrice)
                                         ]);
 
 
-        $bracelets = Bracelet::with('sellers', 'media', 'brand')->filter($filters)->paginate(15);
+        $bracelets = Bracelet::filter($filters)->with('sellers', 'media', 'brand')->paginate(15);
 
         $brands = Brand::whereIn('name', ['Xiaomi','Honor','Huawei','Redmi','Samsung','Garmin','Realme','Oppo','Fitbit'])->pluck('id', 'name')->all();
 

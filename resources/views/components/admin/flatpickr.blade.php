@@ -2,7 +2,7 @@
 <div
     x-data="{ value: @entangle($attributes->wire('model')) }"
     x-on:change="value = $event.target.value"
-    x-init="new Pikaday({ field: $refs.input, format: 'DD/MM/YYYY HH:mm:ss' });">
+    x-init="new Pikaday({ field: $refs.input, format: 'YYYY-MM-DD HH:mm:ss' });">
     <div class="relative mt-2">
         <input
             class="form-control"

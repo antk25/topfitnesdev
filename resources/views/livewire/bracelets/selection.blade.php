@@ -11,19 +11,23 @@
                 <p class="text-sm"><a href="katalog/{{ $bracelet->slug }}" class="product-card-v2__title">{{ $bracelet->subtitle }}</a></p>
                 <div class="text-sm text-left margin-top-sm">
                     @if ($bracelet->avg_price != '')
-                <span class="color-contrast-medium">Средняя цена:</span> {{ $bracelet->avg_price }}<br> 
+                <span class="color-contrast-medium">Средняя цена:</span> {{ $bracelet->avg_price }}<br>
                     @endif
-        
+
                     @if ($bracelet->nfc != '')
                 <span  class="badge badge--primary-light text-sm margin-right-xs">NFC</span>
                     @endif
                     @if ($bracelet->oxy_permanent == 1)
                 <span  class="badge badge--primary-light text-sm margin-right-xs">Пульсоксиметр</span>
                     @endif
-        
+
                     @if ($bracelet->ad_permanent == 1)
                 <span  class="badge badge--primary-light text-sm margin-right-xs">Измерение давления</span>
                     @endif
+
+                    @foreach ($bracelet->compatibility as $item)
+                       {{ $item }},
+                    @endforeach
             </div>
         </div>
     </div>

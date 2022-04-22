@@ -186,7 +186,7 @@
             </div>
 
             <div class="col-6@lg">
-              <input class="form-control width-100%" type="text" readonly name="created_at" id="created_at" value="{{ now()->format('d/m/Y H:m:s') }}">
+              <input class="form-control width-100%" type="text" readonly name="created_at" id="created_at" value="{{ now()->format('Y-m-d H:m:s') }}">
             </div>
           </div>
         </div>

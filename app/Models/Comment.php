@@ -84,11 +84,11 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id', 'id');
     }
 
-    public function setCreatedAtAttribute($value)
+    // public function setCreatedAtAttribute($value)
 
-    {
-        $this->attributes['created_at'] = Carbon::createFromFormat('d/m/Y H:m:s', $value)->format('Y-m-d H:m:s');
-    }
+    // {
+    //     $this->attributes['created_at'] = Carbon::createFromFormat('d/m/Y H:m:s', $value)->format('Y-m-d H:m:s');
+    // }
 
     // public function getCreatedAtAttribute($value)
     // {

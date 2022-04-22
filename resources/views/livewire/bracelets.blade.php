@@ -49,16 +49,16 @@
         <div class="text-sm margin-top-xxxs">Цена:</div>
             <ul class="text-sm">
                 <li>
-                    <input class="radio radio--bg" wire:model="max_price" type="radio" name="radio-8" id="radio-8" value="3000">
+                    <input class="radio radio--bg" wire:model="maxPrice" type="radio" name="radio-8" id="radio-8" value="3000">
                     <label for="radio-8">До 3 000 руб.</label>
                 </li>
                 <li>
-                    <input class="radio radio--bg" type="radio" name="radio-9" id="radio-9" wire:model="max_price" value="5000">
+                    <input class="radio radio--bg" type="radio" name="radio-9" id="radio-9" wire:model="maxPrice" value="5000">
                     <label for="radio-9">До 5 000 руб.</label>
                 </li>
 
                 <li>
-                    <input class="radio radio--bg" type="radio" wire:model="max_price" name="radio-10" id="radio-10" value="7000">
+                    <input class="radio radio--bg" type="radio" wire:model="maxPrice" name="radio-10" id="radio-10" value="7000">
                     <label for="radio-10">До 7 000 руб.</label>
                 </li>
             </ul>

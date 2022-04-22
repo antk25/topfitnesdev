@@ -17,7 +17,8 @@
     <script>
         var picker = new Pikaday({
             field: document.getElementById('datepicker{{ $datePickerId }}'),
-            format: 'DD/MM/YYYY HH:mm:ss',
+            // format: 'DD/MM/YYYY HH:mm:ss',
+            format: 'YYYY-MM-DD HH:mm:ss',
         });
     </script>
 @endpush
