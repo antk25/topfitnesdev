@@ -14,10 +14,10 @@ class BraceletDispColorFilter extends AbstractEloquentFilter
         $this->dispColor = $dispColor;
     }
 
-    public function isApplicable(): bool
-    {
-        return is_bool($this->dispColor);
-    }
+    // public function isApplicable(): bool
+    // {
+    //     return $this->dispColor && is_bool($this->dispColor);
+    // }
 
     public function apply(Builder $query): Builder
     {

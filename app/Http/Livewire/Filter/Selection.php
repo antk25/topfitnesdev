@@ -132,12 +132,14 @@ class Selection extends Component
                 # code...
                 break;
         }
+
         if ($dispColor == 'color') {
            $dispColor = true;
         }
         else {
             $dispColor = false;
         }
+
         switch ($dispDpi) {
             case 'low':
                 $minDispDpi = 0;
