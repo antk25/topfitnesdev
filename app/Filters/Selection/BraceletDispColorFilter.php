@@ -21,6 +21,8 @@ class BraceletDispColorFilter extends AbstractEloquentFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->where('disp_color', $this->dispColor);
+        return $query->when(!is_null($this->dispColor), function ($query) {
+            $query->where('disp_color', $this->dispColor);
+        });
     }
 }
