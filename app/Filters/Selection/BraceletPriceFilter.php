@@ -23,6 +23,11 @@ class BraceletPriceFilter extends AbstractEloquentFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereBetween('avg_price', [$this->minPrice, $this->maxPrice]);
+        return $query->when($this->maxPrice, function ($query) {
+
+            $query->whereBetween('avg_price', [$this->minPrice, $this->maxPrice]);
+
+        });
+
     }
 }

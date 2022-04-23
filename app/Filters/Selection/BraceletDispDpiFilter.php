@@ -23,6 +23,11 @@ class BraceletDispDpiFilter extends AbstractEloquentFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereBetween('disp_ppi', [$this->minDispDpi, $this->maxDispDpi]);
+        return $query->when($this->minDispDpi, function ($query) {
+
+            $query->whereBetween('disp_ppi', [$this->minDispDpi, $this->maxDispDpi]);
+
+        });
+
     }
 }

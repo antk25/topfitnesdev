@@ -23,6 +23,11 @@ class BraceletDispSizeFilter extends AbstractEloquentFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereBetween('disp_diag', [$this->minDispSize, $this->maxDispSize]);
+
+        return $query->when($this->minDispSize, function ($query) {
+
+            $query->whereBetween('disp_diag', [$this->minDispSize, $this->maxDispSize]);
+
+        });
     }
 }
