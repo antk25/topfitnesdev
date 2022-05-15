@@ -53,6 +53,13 @@
       @endforeach
       @endif<br>
       <span class="color-contrast-medium">Постоянное измерение пульса:</span> @if ($bracelet->heart_rate != '') Да @else Нет @endif<br>
+
+          @if ($bracelet->protect_stand != null)
+              @foreach ($bracelet->protect_stand as $item)
+                 <strong>{{ $item }},</strong>
+              @endforeach
+          @endif
+
       </div>
     </div>
   </div>

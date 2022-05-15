@@ -2,7 +2,6 @@
 
 namespace App\Filters;
 
-use App\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Pricecurrent\LaravelEloquentFilters\AbstractEloquentFilter;
 
@@ -15,8 +14,8 @@ class NameFilter extends AbstractEloquentFilter
         $this->name = $name;
     }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-        return $builder->where('name', 'like', "{$this->name}%");
+        return $query->where('name', 'like', "{$this->name}%");
     }
 }

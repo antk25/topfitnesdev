@@ -21,9 +21,9 @@ class BraceletPriceSelectFilter extends AbstractEloquentFilter
         return is_numeric($this->minPrice) & is_numeric($this->maxPrice);
     }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-        return $builder->whereBetween('avg_price', [$this->minPrice, $this->maxPrice]);
+        return $query->whereBetween('avg_price', [$this->minPrice, $this->maxPrice]);
     }
 
 }

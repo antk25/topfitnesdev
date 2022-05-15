@@ -2,7 +2,6 @@
 
 namespace App\Filters;
 
-use App\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Pricecurrent\LaravelEloquentFilters\AbstractEloquentFilter;
 
@@ -15,9 +14,9 @@ class MinRatingsFilter extends AbstractEloquentFilter
         $this->min_rating = $min_rating;
     }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-        return $builder
+        return $query
         ->when($this->min_rating, function ($query) {
             $query->where('average_grade', '>=', $this->min_rating);
         });

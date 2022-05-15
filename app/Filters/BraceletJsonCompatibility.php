@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filters\Selection;
+namespace App\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Pricecurrent\LaravelEloquentFilters\AbstractEloquentFilter;
 
-class BraceletCompatibilityFilter extends AbstractEloquentFilter
+class BraceletJsonCompatibility extends AbstractEloquentFilter
 {
     protected $compatibility;
 

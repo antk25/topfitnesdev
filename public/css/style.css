@@ -17310,6 +17310,54 @@ Usage: codyhouse.co/license
 }
 /* --------------------------------
 
+File#: _1_link-card
+Title: Link Card
+Descr: Link card for app UI
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.link-card {
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--inner-glow), var(--shadow-xs);
+  transition: 0.3s;
+}
+.link-card:hover {
+  box-shadow: var(--inner-glow), var(--shadow-sm);
+}
+
+.link-card__footer {
+  position: relative;
+  overflow: hidden;
+  height: 60px;
+}
+.link-card__footer > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+}
+.link-card__footer > *:last-child {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.link-card:hover .link-card__footer > *:first-child {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.link-card:hover .link-card__footer > *:last-child {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* --------------------------------
+
 File#: _1_link-effects
 Title: Link Effects
 Descr: A collection of link effects

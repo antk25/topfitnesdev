@@ -32,9 +32,9 @@ class BraceletDopFuncFilter extends AbstractEloquentFilter
         $this->send_messages = $send_messages;
     }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-      return $builder
+      return $query
         ->when($this->disp_aod, function ($builder) {
             $builder->where('disp_aod', $this->disp_aod);
         })

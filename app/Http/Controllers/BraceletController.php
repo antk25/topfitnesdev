@@ -17,9 +17,7 @@ class BraceletController extends Controller
 
     public function index()
     {
-
         return view('bracelets.index');
-
     }
 
     public function show($slug) {

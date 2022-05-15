@@ -4,25 +4,40 @@ namespace App\Http\Livewire\Product;
 
 use App\Filters\BraceletBrandFilter;
 use App\Filters\BraceletCheckedFilter;
-use App\Filters\BraceletJsonFieldsFilter;
+use App\Filters\BraceletJsonCompatibility;
+use App\Filters\BraceletJsonDestinationFilter;
+use App\Filters\BraceletJsonProtectFilter;
 use App\Filters\BraceletPriceRangeFilter;
 use App\Filters\MinRatingsFilter;
-use App\Filters\NameFilter;
 use Livewire\WithPagination;
 use Livewire\Component;
-use Illuminate\Http\Request;
 use App\Models\Bracelet;
 use App\Models\Brand;
 use Pricecurrent\LaravelEloquentFilters\EloquentFilters;
+use Throwable;
 
 class Bracelets extends Component
 {
     use WithPagination;
 
-    public $name, $disp_aod, $blood_oxy,
-        $blood_pressure, $smart_alarm,
-        $gps, $nfc, $min_rating, $protect_stand,
-        $maxPrice, $minPrice, $brand, $send_messages, $compatibility, $destination, $player_control, $stress, $heart_rate;
+    public $name;
+    public $disp_aod;
+    public $blood_oxy;
+    public $blood_pressure;
+    public $smart_alarm;
+    public $gps;
+    public $nfc;
+    public $min_rating;
+    public $protect_stand;
+    public $maxPrice;
+    public $minPrice;
+    public $brand;
+    public $send_messages;
+    public $compatibility;
+    public $destination;
+    public $player_control;
+    public $stress;
+    public $heart_rate;
 
     public $page = 1;
 
@@ -60,13 +75,12 @@ class Bracelets extends Component
         'send_messages' => ['except' => false],
     ];
 
-    // protected $queryString = ['heart_rate', 'disp_tech', 'protect_stand', 'max$maxPrice', 'min_price', 'blood_oxy', 'blood_pressure', 'smart_alarm', 'gps', 'disp_sens', 'nfc', 'brand'];
-
-
+    /**
+     * @throws Throwable
+     */
     public function render()
     {
         $brand = $this->brand;
-        $name = $this->name;
         $disp_aod = $this->disp_aod;
         $heart_rate = $this->heart_rate;
         $blood_oxy = $this->blood_oxy;
@@ -85,19 +99,18 @@ class Bracelets extends Component
         $destination = $this->destination;
 
         $filters = EloquentFilters::make([
-                                          new BraceletBrandFilter($brand),
-                                          new NameFilter($name),
-                                          new MinRatingsFilter($min_rating),
-                                          new BraceletCheckedFilter($disp_aod, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $send_messages, $stress, $player_control),
-                                          new BraceletJsonFieldsFilter($protect_stand, $compatibility, $destination),
-                                          new BraceletPriceRangeFilter($maxPrice, $minPrice)
-                                        ]);
-
+            new BraceletBrandFilter($brand),
+            new MinRatingsFilter($min_rating),
+            new BraceletCheckedFilter($disp_aod, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $send_messages, $stress, $player_control),
+            new BraceletJsonProtectFilter($protect_stand),
+            new BraceletJsonDestinationFilter($destination),
+            new BraceletJsonCompatibility($compatibility),
+            new BraceletPriceRangeFilter($maxPrice, $minPrice),
+        ]);
 
         $bracelets = Bracelet::filter($filters)->with('sellers', 'media', 'brand')->paginate(15);
 
-        $brands = Brand::whereIn('name', ['Xiaomi','Honor','Huawei','Redmi','Samsung','Garmin','Realme','Oppo','Fitbit'])->pluck('id', 'name')->all();
-
+        $brands = Brand::whereIn('name', ['Xiaomi', 'Honor', 'Huawei', 'Redmi', 'Samsung', 'Garmin', 'Realme', 'Oppo', 'Fitbit'])->pluck('id', 'name')->all();
 
         return view('livewire.bracelets', compact('bracelets', 'brands'));
     }

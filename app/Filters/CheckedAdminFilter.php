@@ -36,9 +36,9 @@ class CheckedAdminFilter extends AbstractEloquentFilter
     //     });
     // }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-        return $builder->when($this->published, function($query)
+        return $query->when($this->published, function($query)
         {
             $query->where('published', $this->published);
         })

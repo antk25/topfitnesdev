@@ -115,23 +115,23 @@
                     <div class="col-6">
                         <ul>
                             <li class="margin-bottom-sm">
-                                <input class="checkbox" type="checkbox" name="player_control" id="player_control"  wire:model="player_control">
+                                <input class="checkbox" type="checkbox" name="player_control" id="player_control" wire:model="player_control">
                                 <label for="player_control">Управление плеером</label>
                             </li>
                             <li class="margin-bottom-sm">
-                                <input class="checkbox" type="checkbox" name="send_messages" id="send_messages"  wire:model="send_messages">
+                                <input class="checkbox" type="checkbox" name="send_messages" id="send_messages" wire:model="send_messages">
                                 <label for="send_messages">Отправка сообщений</label>
                             </li>
                             <li class="margin-bottom-sm">
-                                <input class="checkbox" type="checkbox" name="disp_aod" id="disp_aod"  wire:model="disp_aod">
+                                <input class="checkbox" type="checkbox" name="disp_aod" id="disp_aod" wire:model="disp_aod">
                                 <label for="disp_aod">Always on Display (AoD)</label>
                             </li>
                             <li class="margin-bottom-sm">
-                                <input class="checkbox" type="checkbox" name="gps" id="gps"  wire:model="gps">
+                                <input class="checkbox" type="checkbox" name="gps" id="gps" wire:model="gps">
                                 <label for="gps">GPS</label>
                             </li>
                             <li class="margin-bottom-sm">
-                                <input class="checkbox" type="checkbox" name="nfc" id="nfc"  wire:model="nfc">
+                                <input class="checkbox" type="checkbox" name="nfc" id="nfc" wire:model="nfc">
                                 <label for="nfc">NFC</label>
                             </li>
                         </ul>

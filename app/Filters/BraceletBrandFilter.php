@@ -15,9 +15,9 @@ class BraceletBrandFilter extends AbstractEloquentFilter
         $this->brand = $brand;
     }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-        return $builder
+        return $query
         ->when($this->brand, function ($query) {
             $query->where('brand_id', $this->brand);
         });

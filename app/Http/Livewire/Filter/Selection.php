@@ -17,20 +17,46 @@ use Pricecurrent\LaravelEloquentFilters\EloquentFilters;
 
 class Selection extends Component
 {
-    public $minPrice, $maxPrice, $step, $budget, $compatibility, $protect_stand, $selectedDestination = [];
-
-    public $disp_aod, $blood_oxy, $blood_pressure, $smart_alarm, $gps, $nfc, $send_messages, $player_control, $stress, $heart_rate;
-
-    public $dispSize, $minDispSize, $maxDispSize, $dispColor, $dispDpi, $minDispDpi, $maxDispDpi;
-
+    public $step;
+    public $minPrice;
+    public $maxPrice;
+    public $budget;
+    public $compatibility;
+    public $selectedDestination = [];
+    public $disp_aod;
+    public $blood_oxy;
+    public $blood_pressure;
+    public $smart_alarm;
+    public $gps;
+    public $nfc;
+    public $send_messages;
+    public $player_control;
+    public $stress;
+    public $heart_rate;
+    public $dispSize;
+    public $minDispSize;
+    public $maxDispSize;
+    public $dispColor;
+    public $dispDpi;
+    public $minDispDpi;
+    public $maxDispDpi;
     public $protect;
 
     protected $queryString = [
         'step',
         'budget',
         'compatibility',
-        'protect_stand',
         'selectedDestination',
+        'disp_aod',
+        'blood_oxy',
+        'blood_pressure',
+        'smart_alarm',
+        'gps',
+        'nfc',
+        'send_messages',
+        'player_control',
+        'stress',
+        'heart_rate',
         'dispSize',
         'dispColor',
         'dispDpi',
@@ -65,7 +91,6 @@ class Selection extends Component
         $maxPrice = $this->maxPrice;
         $budget = $this->budget;
         $compatibility = $this->compatibility;
-        $protect_stand = $this->protect_stand;
         $selectedDestination = $this->selectedDestination;
         $disp_aod = $this->disp_aod;
         $heart_rate = $this->heart_rate;
@@ -73,7 +98,6 @@ class Selection extends Component
         $blood_pressure = $this->blood_pressure;
         $smart_alarm = $this->smart_alarm;
         $gps = $this->gps;
-        $protect_stand = $this->protect_stand;
         $nfc = $this->nfc;
         $player_control = $this->player_control;
         $stress = $this->stress;
@@ -109,8 +133,6 @@ class Selection extends Component
             break;
 
             default:
-               $maxPrice = 100000;
-               $minPrice = 0;
                 break;
         }
 
@@ -129,7 +151,6 @@ class Selection extends Component
                 break;
 
             default:
-                # code...
                 break;
         }
 
@@ -139,7 +160,6 @@ class Selection extends Component
         elseif ($dispColor == 'mono') {
             $dispColor = 0;
         }
-
 
         switch ($dispDpi) {
             case 'low':
@@ -161,7 +181,6 @@ class Selection extends Component
         }
 
         $filters = EloquentFilters::make([
-            // new MinRatingsFilter($min_rating),
             new BraceletDopFuncFilter($disp_aod, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $send_messages, $stress, $player_control),
             new BraceletCompatibilityFilter($compatibility),
             new BraceletPriceFilter($minPrice, $maxPrice),
@@ -175,8 +194,6 @@ class Selection extends Component
         $bracelets = Bracelet::filter($filters)->where('selection', 1)->with('sellers', 'media', 'brand')->get();
 
         $dest = collect(Spec::where('name', 'destination')->pluck('value'))->all();
-
-        // $destination = $destination->toArray();
 
         return view('livewire.selection', compact('bracelets', 'dest'));
 

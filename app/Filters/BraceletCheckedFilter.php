@@ -2,7 +2,6 @@
 
 namespace App\Filters;
 
-use App\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Pricecurrent\LaravelEloquentFilters\AbstractEloquentFilter;
 
@@ -33,38 +32,38 @@ class BraceletCheckedFilter extends AbstractEloquentFilter
         $this->send_messages = $send_messages;
     }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-      return $builder
-        ->when($this->disp_aod, function ($builder) {
-            $builder->where('disp_aod', $this->disp_aod);
+      return $query
+        ->when($this->disp_aod, function ($query) {
+            $query->where('disp_aod', $this->disp_aod);
         })
-        ->when($this->heart_rate, function ($builder) {
-            $builder->where('heart_rate', $this->heart_rate);
+        ->when($this->heart_rate, function ($query) {
+            $query->where('heart_rate', $this->heart_rate);
         })
-        ->when($this->blood_pressure, function ($builder) {
-            $builder->where('blood_pressure', $this->blood_pressure);
+        ->when($this->blood_pressure, function ($query) {
+            $query->where('blood_pressure', $this->blood_pressure);
         })
-        ->when($this->smart_alarm, function ($builder) {
-            $builder->where('smart_alarm', $this->smart_alarm);
+        ->when($this->smart_alarm, function ($query) {
+            $query->where('smart_alarm', $this->smart_alarm);
         })
-        ->when($this->gps, function ($builder) {
-            $builder->where('gps', $this->gps);
+        ->when($this->gps, function ($query) {
+            $query->where('gps', $this->gps);
         })
-        ->when($this->blood_oxy, function ($builder) {
-            $builder->where('blood_oxy', $this->blood_oxy);
+        ->when($this->blood_oxy, function ($query) {
+            $query->where('blood_oxy', $this->blood_oxy);
         })
-        ->when($this->nfc, function ($builder) {
-            $builder->where('nfc', '!=', '');
+        ->when($this->nfc, function ($query) {
+            $query->where('nfc', '!=', '');
         })
-        ->when($this->stress, function ($builder) {
-            $builder->where('stress', '!=', '');
+        ->when($this->stress, function ($query) {
+            $query->where('stress', '!=', '');
         })
-        ->when($this->player_control, function ($builder) {
-            $builder->where('player_control', '!=', '');
+        ->when($this->player_control, function ($query) {
+            $query->where('player_control', '!=', '');
         })
-        ->when($this->send_messages, function ($builder) {
-            $builder->where('send_messages', $this->send_messages);
+        ->when($this->send_messages, function ($query) {
+            $query->where('send_messages', $this->send_messages);
         });
     }
 }

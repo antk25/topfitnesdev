@@ -17,12 +17,15 @@ class BraceletProtectFilter extends AbstractEloquentFilter
     public function apply(Builder $query): Builder
     {
         return $query
-        ->when($this->protect == 'high', function ($builder) {
-                $builder->whereJsonContains('protect_stand', ['WR50', 'IP68']);
+            ->when($this->protect == 'high', function ($query) {
+                $query->whereJsonContains('protect_stand', ['WR50', 'IP68']);
             })
-            ->when($this->protect == 'medium', function ($builder) {
-                $builder->whereJsonContains('protect_stand', 'IP65')
-                ->orWherejsonContains('protect_stand', 'IP67');
+            ->when($this->protect == 'medium', function ($query) {
+                $query->where(function($query)
+                {
+                    $query->whereJsonContains('protect_stand', 'IP65')
+                        ->orWherejsonContains('protect_stand', 'IP67');
+                });
             });
     }
 }

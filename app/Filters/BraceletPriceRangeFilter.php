@@ -2,7 +2,6 @@
 
 namespace App\Filters;
 
-use App\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Pricecurrent\LaravelEloquentFilters\AbstractEloquentFilter;
 
@@ -22,9 +21,9 @@ class BraceletPriceRangeFilter extends AbstractEloquentFilter
         return is_numeric($this->maxPrice);
     }
 
-    public function apply(Builder $builder): Builder
+    public function apply(Builder $query): Builder
     {
-        return $builder
+        return $query
         ->when($this->minPrice, function ($query) {
             $query->where('avg_price', '>=', $this->minPrice);
         })
