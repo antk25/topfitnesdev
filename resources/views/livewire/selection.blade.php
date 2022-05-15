@@ -5,39 +5,6 @@
         <h1>Подбор фитнес-браслета</h1>
       </div>
 
-      <div class="grid justify-center margin-y-md">
-      <div class="col-6">
-        <a class="link-card flex flex-column bg-light radius-md" href="#0" aria-label="Link label">
-          <div class="padding-md">
-            <div class="flex flex-wrap gap-xs items-center">
-              <figure>
-                <svg class="block color-primary" width="72" height="72" viewBox="0 0 72 72">
-                  <circle fill="currentColor" opacity="0.15" cx="36" cy="36" r="36"/>
-                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                    <path d="M45,49h6V43.562a2,2,0,0,0-1.515-1.941l-5.833-1.458a1,1,0,0,1-.747-.829l-.412-2.881A6,6,0,0,0,46,31V28.252A6.167,6.167,0,0,0,40.185,22,5.973,5.973,0,0,0,37,22.8"/><path d="M39.549,43.586l-4.925-1.408a1,1,0,0,1-.716-.82l-.415-2.9S37.219,38.734,39,37a10.227,10.227,0,0,1-2-6.738,6.185,6.185,0,0,0-5.761-6.257,6,6,0,0,0-6.234,5.756c0,.08,0,.159,0,.239a10.45,10.45,0,0,1-2,7c1.781,1.734,5.507,1.453,5.507,1.453l-.415,2.9a1,1,0,0,1-.716.82l-4.925,1.408A2,2,0,0,0,21,45.509V49H41V45.509A2,2,0,0,0,39.549,43.586Z"/>
-                  </g>
-                </svg>
-              </figure>
-
-              <div class="line-height-xs">
-                <p class="text-lg font-semibold color-contrast-higher">{{ $bracelets->count() }}</p>
-                <p class="color-contrast-low margin-top-xxxs">{{ trans_choice('Браслет|Браслета|Браслетов', $bracelets->count()) }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="link-card__footer margin-top-auto border-top border-contrast-lower">
-            <p class="text-sm">Посмотреть браслеты</p>
-
-            <div>
-              <svg class="icon icon--sm" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12" /><polyline points="15 6 21 12 15 18"/></g></svg>
-            </div>
-          </div>
-        </a>
-      </div>
-      </div>
-
-
     <div class="steps text-sm@md margin-y-lg" aria-label="Multi-step indicator">
   <ol class="steps__list">
 
@@ -589,18 +556,29 @@
     <div class="col-6">
         <a class="btn btn--sm btn--primary flex-grow flex-grow-0@md" wire:click.prevent="nextStep">Следующий шаг &rarr;</a>
     </div>
+
   </div>
 </div>
   </form>
 @endif
 
+        <div class="margin-y-sm">
+            @if($bracelets->count())
+                По вашим требованиям найдено {{ $bracelets->count() }} {{ trans_choice('браслет|браслета|браслетов', $bracelets->count()) }}
+              @else
+                <p class="text-md color-error">Браслетов не найдено, измените условия поиска!</p>
+            @endif
+        </div>
 
-<section class="margin-y-md">
-                @foreach ($bracelets as $bracelet)
 
-                @include('livewire.bracelets.selection', ['bracelet' => $bracelet])
+        <section class="margin-y-md">
+    <div class="grid">
+         @foreach ($bracelets as $bracelet)
 
-                @endforeach
+           @include('livewire.bracelets.selection', ['bracelet' => $bracelet])
+
+         @endforeach
+    </div>
 </section>
     </div>
 </div>

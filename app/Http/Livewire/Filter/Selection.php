@@ -14,6 +14,7 @@ use App\Filters\Selection\BraceletDopFuncFilter;
 use App\Filters\Selection\BraceletPriceFilter;
 use App\Filters\Selection\BraceletProtectFilter;
 use Pricecurrent\LaravelEloquentFilters\EloquentFilters;
+use Throwable;
 
 class Selection extends Component
 {
@@ -83,7 +84,9 @@ class Selection extends Component
         $this->step = $numberStep;
     }
 
-
+    /**
+     * @throws Throwable
+     */
     public function render()
 
     {
@@ -113,24 +116,24 @@ class Selection extends Component
 
         switch ($budget) {
             case 'low':
-               $maxPrice = 3000;
-               $minPrice = 100;
-            break;
+                $maxPrice = 3000;
+                $minPrice = 100;
+                break;
 
             case 'middle':
-               $maxPrice = 6000;
-               $minPrice = 3000;
-            break;
+                $maxPrice = 6000;
+                $minPrice = 3000;
+                break;
 
             case 'high':
-               $maxPrice = 10000;
-               $minPrice = 6000;
-            break;
+                $maxPrice = 10000;
+                $minPrice = 6000;
+                break;
 
             case 'premium':
-               $maxPrice = 100000;
-               $minPrice = 10000;
-            break;
+                $maxPrice = 100000;
+                $minPrice = 10000;
+                break;
 
             default:
                 break;
@@ -155,9 +158,8 @@ class Selection extends Component
         }
 
         if ($dispColor == 'color') {
-           $dispColor = 1;
-        }
-        elseif ($dispColor == 'mono') {
+            $dispColor = 1;
+        } elseif ($dispColor == 'mono') {
             $dispColor = 0;
         }
 
@@ -181,7 +183,18 @@ class Selection extends Component
         }
 
         $filters = EloquentFilters::make([
-            new BraceletDopFuncFilter($disp_aod, $heart_rate, $blood_pressure, $smart_alarm, $gps, $blood_oxy, $nfc, $send_messages, $stress, $player_control),
+            new BraceletDopFuncFilter(
+                $disp_aod,
+                $heart_rate,
+                $blood_pressure,
+                $smart_alarm,
+                $gps,
+                $blood_oxy,
+                $nfc,
+                $send_messages,
+                $stress,
+                $player_control
+            ),
             new BraceletCompatibilityFilter($compatibility),
             new BraceletPriceFilter($minPrice, $maxPrice),
             new BraceletDestinationFilter($selectedDestination),
@@ -189,7 +202,7 @@ class Selection extends Component
             new BraceletDispColorFilter($dispColor),
             new BraceletDispDpiFilter($minDispDpi, $maxDispDpi),
             new BraceletProtectFilter($protect),
-          ]);
+        ]);
 
         $bracelets = Bracelet::filter($filters)->where('selection', 1)->with('sellers', 'media', 'brand')->get();
 
